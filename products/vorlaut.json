@@ -3,6 +3,7 @@
   "accent": "#9B7BFF",
   "schemes": "dark",
   "state": false,
-  "out": "static/tokens.css",
-  "note": "Commits to a dark ground and says so with color-scheme, so only the dark scheme is emitted. Its face on the shared mark winks and its mouth is open — the one deliberate divergence in the family, and it belongs to the product called vorlaut."
+  "transport": "file",
+  "out": ["static/tokens.css"],
+  "note": "The one product with no package.json and no build step, so the file is copied in rather than imported. Commits to a dark ground, so only that scheme is emitted. If vorlaut becomes a Vite page like its siblings, it moves to npm and this transport goes away."
 }

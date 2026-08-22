@@ -3,6 +3,6 @@
   "accent": "#ff6b35",
   "schemes": "both",
   "state": false,
-  "out": "src/styles/tokens.css",
-  "note": "Follows the OS. The accent is the brand orange; every other value below is derived from it."
+  "transport": "npm",
+  "note": "Follows the OS. Consumes tokens/bildhaft.css through the package, the way it already consumes @lautstark/bildquelle."
 }

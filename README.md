@@ -81,23 +81,40 @@ will do; the page is three files and imports nothing from the network.
 
 ## How a change reaches the products
 
-Not by a package, and not by a stylesheet over the network. All three products run
-offline — bildhaft entirely in the browser, mitreden on a phone on a home network,
-vorlaut with nothing behind it at all — and a CDN request would cost them that. Two
-of the three deliberately have no dependencies to add one to.
+By npm, for anything with a build step — as a `github:` dependency, which is how
+this family already shares code (`@lautstark/bildquelle`, `@lautstark/stimmquelle`):
 
-So the token file is **generated and committed into each product**, carrying a
-header naming the commit it came from. When this repository moves, CI regenerates
-and opens a pull request against each product. Merging it is how a product adopts
-the new version — which keeps the decision where §4.2 puts it, with the product.
+```json
+"@lautstark/design": "github:Lautstark/design#v1.0.0"
+```
 
-Each output goes where that product's stack wants it:
+```css
+@import '@lautstark/design/tokens/bildhaft.css';
+```
 
-| product | file | why |
+Vite resolves the bare specifier, so there is no plugin and no copy step. The pin
+is a real pin, `npm update` is the whole update story, and `prepare` regenerates
+`tokens/` from source on install rather than trusting what was committed — which
+costs nothing, because the generator has no dependencies.
+
+Not by a CDN. All three products run offline, and a stylesheet fetched from a
+remote host at page load would cost them that. npm is a build-time fetch that
+leaves a local file; a `<link>` to another origin is a runtime dependency. Those
+are different things.
+
+**For what cannot import**, CI regenerates the file and opens a pull request
+against the product. Today that is vorlaut, which has no `package.json` and no
+build step, and mitreden's hand-built `ui.html`, which is still the live page
+while its React rewrite lands. Both carry a header naming the version they came
+from. This is the fallback, not the mechanism, and both cases are expected to
+retire.
+
+| product | how | where |
 | --- | --- | --- |
-| bildhaft | `src/styles/tokens.css` | imported by `app.css` |
-| vorlaut | `static/tokens.css` | linked ahead of `ui.css` |
-| mitreden | inlined into `ui.html` | the repository is one Python file and the page it serves; a second request would be a dependency it does not have |
+| bildhaft | npm | `@import` in `src/styles/app.css` |
+| mitreden | npm | `@import` in `src/styles/app.css` |
+| mitreden | sync | inlined into `ui.html` until that page retires |
+| vorlaut | sync | `static/tokens.css`, linked ahead of `ui.css` |
 
 ## What is not shared
 

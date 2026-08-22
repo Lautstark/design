@@ -1,7 +1,13 @@
 name: sync
 
-# When this repository moves, regenerate each product's token file and open a pull
-# request against that product.
+# When this repository moves, regenerate the token files for the products that
+# cannot import the package, and open a pull request against each.
+#
+# bildhaft and mitreden's React front end are NOT here: they take
+# `@lautstark/design` as a github: dependency and update with a version pin, the
+# way they already take @lautstark/bildquelle and @lautstark/stimmquelle. This
+# workflow is the fallback for what is left — vorlaut, which has no build step,
+# and mitreden's hand-built ui.html, which is still the live page.
 #
 # A pull request rather than a push, deliberately. §4.2 of the rule set puts the
 # values with the product, and a token change is therefore a *proposal* to it, not
@@ -31,7 +37,8 @@ jobs:
       # repositories and a broken checkout of one says nothing about the rest.
       fail-fast: false
       matrix:
-        product: [bildhaft, mitreden, vorlaut]
+        # Only the products with file targets in products/*.json.
+        product: [mitreden, vorlaut]
 
     steps:
       # Until the secret exists this workflow has nothing it can do, and a run
@@ -73,7 +80,7 @@ jobs:
       - name: Generate
         if: steps.guard.outputs.ok == 'true'
         working-directory: design
-        run: node build.js ${{ matrix.product }}
+        run: node build.js --sync ${{ matrix.product }}
 
       - name: Open a pull request
         if: steps.guard.outputs.ok == 'true'
@@ -94,6 +101,10 @@ jobs:
           body: |
             Regenerated from
             [Lautstark/design@${{ github.sha }}](https://github.com/Lautstark/design/commit/${{ github.sha }}).
+
+            This path exists for what cannot import the package. Anything in this
+            repository that runs through a build step should take
+            `@lautstark/design` as a dependency and drop out of this workflow.
 
             Every value in the changed file follows from this product's one declared
             accent and was contrast-checked before it was written — `build.js`

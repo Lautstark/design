@@ -3,7 +3,8 @@
   "accent": "#ff8bc7",
   "schemes": "both",
   "state": true,
-  "out": "ui.html",
+  "transport": "npm",
+  "out": ["ui.html", "docs/index.html"],
   "inline": true,
-  "note": "Tokens are inlined into ui.html between markers rather than linked: the repository is deliberately one Python file and the page it serves, and a second request would be a dependency it does not have. `state` is on because mitreden tracks recorded / changed / not yet recorded per sentence."
+  "note": "Two front ends at once while the React rewrite lands: src/ imports the package, and the hand-built ui.html - still the live page - keeps its inlined block. The inline targets retire with that page, not before. `state` is on because mitreden tracks recorded / changed / not yet recorded per sentence."
 }

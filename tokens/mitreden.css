@@ -1,0 +1,90 @@
+/*
+ * Generated from Lautstark/design@v1.0.0 (051486f) — do not edit.
+ *
+ * Every value below follows from one input, mitreden's accent #ff8bc7, and is
+ * regenerated whenever the design repository moves. Editing this file by hand
+ * survives exactly until the next sync and silently drops the contrast
+ * guarantees, which are checked at generation time and not at runtime.
+ *
+ * To change a value here, change the rule that produces it.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Ground and surfaces */
+  --bg: #fbf8f9;
+  --surface: #ffffff;
+  --surface-2: #f3eff1;
+  --surface-3: #ebe4e7;
+  --line: #e0d8dc;
+
+  /* Text */
+  --text: #1d191b;
+  --text-dim: #6a6064;
+  --text-faint: #756b6f;
+
+  /* Accent */
+  --accent: #ff8bc7;
+  --accent-ink: #442033;
+  --accent-strong: #b14581;
+  --accent-hover: #ef7db9;
+  --accent-soft: #ffedf5;
+
+  /* Danger */
+  --danger: #ad332c;
+  --danger-ink: #fff6f4;
+  --danger-soft: #ffebe8;
+
+  /* Per-item state */
+  --ok: #0a7e3a;
+  --warn: #9b6800;
+  --miss: #756b6f;
+
+  /* Shape and type */
+  --radius: 14px;
+  --radius-sm: 9px;
+  --radius-pill: 999px;
+  --radius-item: 7px;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(28, 26, 23, .05);
+  --shadow: 0 2px 6px rgba(28, 26, 23, .06), 0 12px 32px rgba(28, 26, 23, .08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Ground and surfaces */
+    --bg: #181516;
+    --surface: #211e1f;
+    --surface-2: #2b2729;
+    --surface-3: #353133;
+    --line: #3e393b;
+
+    /* Text */
+    --text: #f0e9ec;
+    --text-dim: #a3999d;
+    --text-faint: #978c91;
+
+    /* Accent */
+    --accent-strong: #ff8bc7;
+    --accent-hover: #ffaed5;
+    --accent-soft: #2d1923;
+
+    /* Danger */
+    --danger: #f17265;
+    --danger-ink: #330f0c;
+    --danger-soft: #341b18;
+
+    /* Per-item state */
+    --ok: #54b66e;
+    --warn: #e8aa4e;
+    --miss: #978c91;
+
+    /* Shadow */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+    --shadow: 0 2px 6px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .4);
+  }
+}
