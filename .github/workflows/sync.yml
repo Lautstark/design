@@ -34,12 +34,29 @@ jobs:
         product: [bildhaft, mitreden, vorlaut]
 
     steps:
+      # Until the secret exists this workflow has nothing it can do, and a run
+      # that fails at checkout leaves the repository permanently red for a reason
+      # that is not a fault. Check first and skip quietly instead.
+      - name: Is the sync token configured?
+        id: guard
+        env:
+          TOKEN: ${{ secrets.DESIGN_SYNC_TOKEN }}
+        run: |
+          if [ -n "$TOKEN" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::DESIGN_SYNC_TOKEN is not set, so nothing was synced. Add a fine-grained PAT with Contents and Pull requests write on the product repositories to turn this on."
+          fi
+
       - name: Check out the design repository
+        if: steps.guard.outputs.ok == 'true'
         uses: actions/checkout@v4
         with:
           path: design
 
       - name: Check out ${{ matrix.product }}
+        if: steps.guard.outputs.ok == 'true'
         uses: actions/checkout@v4
         with:
           repository: Lautstark/${{ matrix.product }}
@@ -47,16 +64,19 @@ jobs:
           path: ${{ matrix.product }}
 
       - uses: actions/setup-node@v4
+        if: steps.guard.outputs.ok == 'true'
         with:
           node-version: '20'
 
       # build.js resolves each product as a sibling of the design repository, which
       # is exactly how the two checkouts above sit in the workspace.
       - name: Generate
+        if: steps.guard.outputs.ok == 'true'
         working-directory: design
         run: node build.js ${{ matrix.product }}
 
       - name: Open a pull request
+        if: steps.guard.outputs.ok == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.DESIGN_SYNC_TOKEN }}
