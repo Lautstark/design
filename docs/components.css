@@ -1,0 +1,204 @@
+/*
+ * The components layer: a button, a field, a chip, a menu, a sheet and the
+ * focus policy, each written once against the token names, for every product
+ * to import beside its token file.
+ *
+ * This file exists because the products were retyping it. vorlaut and mitreden
+ * carried the identical button.primary rule; bildhaft carried the same values
+ * under .btn--primary; bildhaft's one-line focus policy reached mitreden by
+ * hand-copy, in a commit that says it is doing so. Shared in fact, unshared in
+ * name — which is how a rule drifts.
+ *
+ * Two rules govern what is in here:
+ *
+ * - Only what the products demonstrably duplicated. Product layout — vorlaut's
+ *   tile grid, mitreden's phrase list, bildhaft's print styles — is identity,
+ *   not vocabulary, and stays home. So do list rows: separator-rows against
+ *   cards is density, and density is per product (design.md §2).
+ *
+ * - Colour comes only from the tokens. There is no literal in this file, so it
+ *   renders contrast-checked under any accent the generator accepts.
+ *
+ * The class vocabulary is the agreement's, not any one product's: a base class
+ * and plain modifier words, the way vorlaut and mitreden already speak.
+ * bildhaft migrates its BEM names (.btn--primary becomes class="btn primary")
+ * when it adopts. Everything is opt-in by class; importing this file restyles
+ * nothing by itself except :focus-visible — deliberately, because the one rule
+ * that was already true everywhere should not be optional.
+ */
+
+/* ------------------------------------------------------------------- focus */
+
+/* Never removed, never replaced by a border change alone. Fields add a lift
+   and an accent border on :focus below; the ring itself is this rule's. */
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ----------------------------------------------------------------- buttons */
+
+/* Three tiers, no more. Primary takes the accent fill and there is one per
+   view. The unmodified base is the normal tier. Quiet is transparent.
+   Destructive is not a fourth tier but a colour on a quiet button; only the
+   confirm button of a destructive dialog takes .filled. */
+.btn {
+  font: inherit; font-size: 14px; font-weight: 600;
+  border-radius: var(--radius-sm); padding: 9px 16px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--text);
+  cursor: pointer;
+}
+.btn:hover:not(:disabled) { background: var(--surface-3); }
+.btn:disabled { opacity: .4; cursor: default; }
+
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+.btn.primary:hover:not(:disabled) { background: var(--accent-hover); }
+
+.btn.quiet { background: transparent; border-color: transparent; color: var(--text-dim); }
+.btn.quiet:hover:not(:disabled) { background: var(--surface-2); color: var(--text); }
+
+.btn.destructive { background: transparent; border-color: transparent; color: var(--danger); }
+.btn.destructive:hover:not(:disabled) { background: var(--danger-soft); }
+
+/* The filled confirm holds its fill under the pointer: there is no
+   --danger-hover token, and inventing the shade here is how 2.48:1 happened. */
+.btn.destructive.filled { background: var(--danger); color: var(--danger-ink); border-color: transparent; }
+.btn.destructive.filled:hover:not(:disabled) { background: var(--danger); }
+
+/* An icon-only button is a normal or quiet button at pill radius. */
+.btn.icon { border-radius: var(--radius-pill); padding: 8px 11px; line-height: 1; }
+
+/* ------------------------------------------------------------------ fields */
+
+/* A field is a fill, not a hole: --surface-2 at rest with a transparent
+   border, lifting to --surface with an accent border on any focus. The ring
+   arrives only via :focus-visible — a mouse click gets the lift without the
+   ring, which is the behaviour bildhaft already has and design.md intends.
+   font: inherit, always: a sentence typed in must look like the same sentence
+   read back out. */
+.field {
+  font: inherit; font-size: 15px; width: 100%;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  padding: 10px 13px;
+}
+.field::placeholder { color: var(--text-faint); }
+.field:focus { background: var(--surface); border-color: var(--accent); }
+
+.lbl { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 7px; }
+
+/* ------------------------------------------------------------------- chips */
+
+/* Filters are pills, actions are boxes. A chip changes what is shown, never
+   what is stored. Selected takes the accent tint, never the full fill — the
+   full fill belongs to the primary action alone. The state lives on
+   aria-pressed rather than a class, because a filter a screen reader cannot
+   hear toggling is not a filter; mitreden's .chip.on migrates to the
+   attribute. */
+.chip {
+  font: inherit; font-size: 13px; cursor: pointer;
+  background: transparent; color: var(--text-dim);
+  border: 1px solid transparent; border-radius: var(--radius-pill);
+  padding: 6px 13px;
+}
+.chip:hover { background: var(--surface-2); color: var(--text); }
+.chip .n { opacity: .55; font-variant-numeric: tabular-nums; margin-left: 5px; }
+.chip[aria-pressed="true"] {
+  background: var(--accent-soft); color: var(--accent-strong); font-weight: 600;
+}
+
+/* ---------------------------------------------------------- overflow menu */
+
+/* The closest agreement in the audit: the two products differed by one glyph,
+   10px of width and 2px of radius. This is the agreed one. Destructive rows
+   sit last, in --danger, over --danger-soft. The trigger carries aria-haspopup
+   and a live aria-expanded; the popup carries role="menu", its rows
+   role="menuitem". */
+.menu {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  padding: 6px; min-width: 196px;
+}
+.menu button {
+  display: block; width: 100%; text-align: left; white-space: nowrap;
+  font: inherit; font-size: 14px; cursor: pointer;
+  background: none; border: none; color: var(--text);
+  border-radius: var(--radius-item); padding: 8px 11px;
+}
+.menu button:hover { background: var(--surface-2); }
+.menu hr { border: none; border-top: 1px solid var(--line); margin: 5px 0; }
+.menu button.danger { color: var(--danger); }
+.menu button.danger:hover { background: var(--danger-soft); }
+
+/* Anchored under its trigger with a 6px gap, right-aligned to it. The
+   geometry lives on the wrapper so a menu can also stand alone — the gallery
+   shows one unanchored. */
+.menu-anchor { position: relative; }
+.menu-anchor .menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; }
+
+/* ------------------------------------------------------------------- sheet */
+
+/* The dialog silhouette both products drew, with bildhaft's head/body/foot
+   anatomy — adopted because it survives a dialog growing a second action.
+   Works on a <div> or a native <dialog>; the plumbing (backdrop, focus trap,
+   scrolling) stays per product, and the backdrop weight is deliberately not
+   settled here — the audit left that fork open. A sheet with both a corner ✕
+   and a footer dismiss must not give them the same accessible name. */
+.sheet {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 22px; max-width: 520px;
+}
+.sheet .head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 8px;
+}
+.sheet :is(h2, h3, h4) { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+.sheet .body { color: var(--text-dim); font-size: 14px; }
+.sheet .body p { margin: 0; }
+.sheet .body p + p { margin-top: 10px; }
+.sheet .foot {
+  display: flex; align-items: center; gap: 9px; justify-content: flex-end;
+  border-top: 1px solid var(--line); margin-top: 18px; padding-top: 14px;
+}
+
+/* ------------------------------------------------------------ empty states */
+
+/* An empty state teaches the one thing the user does not yet know; a
+   filtered-empty is a different, shorter sentence and must never be confused
+   with the first. */
+.empty {
+  text-align: center; padding: 34px 20px;
+  border: 1px dashed var(--line); border-radius: var(--radius-sm);
+  color: var(--text-dim);
+}
+.empty b { display: block; color: var(--text); font-size: 15px; margin-bottom: 5px; }
+.empty small { font-size: 13px; color: var(--text-faint); }
+
+/* --------------------------------------------------------------- messages */
+
+/* Three kinds of message, three treatments (design.md §4.3). The notice is
+   the outcome line: it stays until something replaces it, and is never
+   auto-dismissed if it names a failure or a number. The toast is the aside —
+   an acknowledgement of something already visible — and may clear itself. */
+.notice {
+  border-radius: var(--radius-sm); padding: 11px 14px; font-size: 14px;
+  background: var(--accent-soft); color: var(--accent-strong);
+}
+.notice.bad { background: var(--danger-soft); color: var(--danger); }
+
+.toast {
+  display: inline-block;
+  background: var(--text); color: var(--bg);
+  border-radius: var(--radius-pill); padding: 9px 17px;
+  font-size: 14px; box-shadow: var(--shadow);
+}
+
+/* ------------------------------------------------------------------ motion */
+
+/* 130ms ease for a colour or fill change. Nothing in this file changes size
+   or position, so the 220ms tier does not appear; a product that adds motion
+   of its own must not invent a third duration. */
+.btn, .chip, .menu button { transition: background .13s ease, color .13s ease; }
+.field { transition: background .13s ease, border-color .13s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .chip, .menu button, .field { transition: none; }
+}

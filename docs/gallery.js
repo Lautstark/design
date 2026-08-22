@@ -40,7 +40,7 @@ function swatch(name, value, tokens) {
   const el = document.createElement('div');
   el.className = 'swatch';
   el.innerHTML = `
-    <div class="chip" style="background:${ground}"><span style="color:${ink}">Aa</span></div>
+    <div class="sample" style="background:${ground}"><span style="color:${ink}">Aa</span></div>
     <div class="meta"><div class="name">--${name}</div><div class="val">${value}</div></div>`;
   return el;
 }
@@ -120,9 +120,9 @@ $('scheme').addEventListener('click', () => { document.documentElement.dataset.u
 
 /* Chips are a filter demo: one at a time, and clicking one is not an action. */
 $('chips').addEventListener('click', (e) => {
-  const b = e.target.closest('.chip-f');
+  const b = e.target.closest('.chip');
   if (!b) return;
-  for (const c of $('chips').querySelectorAll('.chip-f')) c.setAttribute('aria-pressed', String(c === b));
+  for (const c of $('chips').querySelectorAll('.chip')) c.setAttribute('aria-pressed', String(c === b));
 });
 
 render();

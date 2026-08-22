@@ -19,6 +19,10 @@ decided.
   glossary so the same thing has the same name in every product.
 - **[docs/index.html](docs/index.html)** — the gallery. Every component drawn with
   live tokens, a light/dark switch, and an accent picker.
+- **[docs/components.css](docs/components.css)** — the components layer. The
+  button tiers, fields, chips, the focus policy, the overflow menu, the sheet
+  skeleton and the message furniture, written once against the token names. The
+  gallery imports it, and a product imports it beside its token file.
 - **[docs/lib/](docs/lib/)** — the generator. Colour maths, the derivation, and the
   emitter. No dependencies.
 - **[products/](products/)** — one small JSON file per product.
@@ -90,6 +94,7 @@ this family already shares code (`@lautstark/bildquelle`, `@lautstark/stimmquell
 
 ```css
 @import '@lautstark/design/tokens/bildhaft.css';
+@import '@lautstark/design/components.css';
 ```
 
 Vite resolves the bare specifier, so there is no plugin and no copy step. The pin
@@ -133,9 +138,16 @@ a `package.json` was the whole of what anybody wanted.
 
 The accent hue, by design — it is what tells three otherwise identical-looking
 programs apart. Whether a product follows the OS or commits to one ground. Its
-navigation shell. Its density. And no code: not a component, not a stylesheet, not a
-utility. What travels between the repositories is the document and the generated
-file.
+navigation shell. Its density — list rows stay per product, because a 200-row
+archive and a dozen worked-on cards want different furniture.
+
+"And no code" used to end this list. It stopped being true the day the copying
+became measurable: vorlaut and mitreden carried the identical `button.primary`
+rule, bildhaft carried the same values under its own class names, and the
+one-line focus policy travelled between repositories by hand. Those components
+now cross deliberately, as `components.css`, by the same road the tokens take.
+What travels between the repositories is the document, the generated file and
+that one stylesheet — always by version pin, never by hand.
 
 ## Licence
 

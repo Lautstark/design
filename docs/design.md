@@ -24,10 +24,10 @@ words for the same things. The method is a written rule set plus one generated t
 file per product. No component, no stylesheet and no runtime dependency crosses
 between the repositories.
 
-## Two claims this document used to make
+## Three claims this document used to make
 
-Both were true when written and are not now. They are corrected here rather than
-quietly patched, because both were load-bearing:
+All were true when written and are not now. They are corrected here rather than
+quietly patched, because each was load-bearing:
 
 - **"Nothing here has been applied."** The token names went in on both sides. The
   comment at the top of mitreden's `ui.html` points back at this document by name.
@@ -35,6 +35,13 @@ quietly patched, because both were load-bearing:
   scheme, and its own comment now says dark "is no longer the only thing there is".
   The rule in §4.4 survives — *a product commits to a ground and states it* — but
   mitreden is no longer the example of committing to dark. vorlaut is.
+- **"No code crosses between the repositories."** The generated token file bent
+  this rule; the components file breaks it, deliberately. Three products drew
+  the same button three times — two of them byte-alike, the third under its own
+  class names — and the focus policy crossed by hand-copy, which is the worst
+  of both arrangements: shared in fact, unshared in name. `components.css` now
+  crosses by the road the tokens already take, a version pin. What survives of
+  the rule: no *product* code crosses, and nothing crosses by hand. See §9.
 
 The container that the Ground rules section treats as mitreden's delivery mechanism
 is also gone; the website is the whole product now. Anything below that reasons
@@ -1357,3 +1364,70 @@ CI runs a year to find nothing — these files change roughly twice.
 Both were elaborate answers to a question npm already answered. The lesson is not
 about tokens or schedules: a delivery mechanism should be sized to how often the
 thing is delivered, and this thing is delivered almost never.
+
+---
+
+## 9. The components file
+
+§4.3 wrote the components down as prose, and every product implemented the
+prose again by hand. That produced the evidence this section acts on: vorlaut
+and mitreden carry the identical `button.primary` rule, retyped; bildhaft
+carries the same values under `.btn--primary`, plus a base the others lack (a
+pill radius, disabled at opacity .4); and the one-line focus policy travelled
+from bildhaft into mitreden by hand, in a commit that says it is doing so.
+Hand-copying is how a rule drifts: three products, three class names, one
+button.
+
+So the components that have demonstrably been copied are one file now,
+`components.css`, imported beside the token file and travelling the same way:
+
+```css
+@import '@lautstark/design/tokens/<product>.css';
+@import '@lautstark/design/components.css';
+```
+
+It is plain CSS written entirely against the token names — no literal colour,
+no JavaScript, no framework assumption, because bildhaft is React, the other
+two are vanilla DOM, and a class vocabulary is the one thing all three can
+consume. Under any accent the generator accepts, the file renders
+contrast-checked by construction, since every colour in it is a token the
+audit already measured.
+
+**What is in it.** The focus policy; the three button tiers with the
+destructive colouring, `.filled` for the confirm of a destructive dialog, and
+the icon variant; fields and their labels; filter chips; the overflow menu and
+its anchoring geometry; the sheet skeleton with bildhaft's head/body/foot
+anatomy (§5 item 8 already adopted it for mitreden); empty states; the notice
+line and the toast; and the two motion durations behind
+`prefers-reduced-motion`.
+
+**What is not.** Anything §2 found to be a real difference rather than an
+accident. List rows — separator-rows against cards is density, and density is
+per product. The navigation shell. Product layout: vorlaut's tile grid,
+mitreden's phrase list, bildhaft's print styles. And the dialog backdrop
+weight, which §2 left unresolved (.6 opaque against .38 with blur) and a
+shared file must not settle by side effect.
+
+**The vocabulary is the agreement's, not any one product's.** A base class and
+plain modifier words, the way vorlaut and mitreden already speak: `.btn`,
+`.btn.primary`, `.btn.quiet`, `.btn.destructive`, `.btn.destructive.filled`,
+`.btn.icon`; `.field` and `.lbl`; `.chip` with its `.n` count, selected on
+`aria-pressed="true"` rather than a class, because a filter a screen reader
+cannot hear toggling is not a filter; `.menu` inside a `.menu-anchor`;
+`.sheet` with `.head`, `.body` and `.foot`; `.empty`; `.notice` and
+`.notice.bad`; `.toast`. Everything is opt-in by class — importing the file
+restyles nothing by itself except `:focus-visible`, which is the one rule that
+was already true everywhere and should not be optional.
+
+Adoption is per product, as token adoption was. bildhaft migrates its BEM
+names (`.btn--primary` becomes `class="btn primary"`) and retires its own
+copies; vorlaut and mitreden add the base class their bare `button` selectors
+never needed, and delete the rules the file now owns. mitreden's `.chip.on`
+moves to the attribute. None of that happens in this repository.
+
+The gallery imports the file. That is not a convenience; it is §7.5 applied to
+components: a gallery that redrew the button with private classes would be a
+picture of the components exactly as a markdown table is a picture of the
+tokens. `docs/index.html` links `components.css` ahead of its own chrome, so
+the button it shows under any accent the picker can produce is the shipped
+button.

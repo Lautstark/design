@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Lautstark design</title>
 <link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="gallery.css">
 
 <div class="bar">
@@ -43,7 +44,7 @@
   </div>
 
   <div class="group spacer">
-    <button class="spec quiet" id="scheme" aria-pressed="false">Dark</button>
+    <button class="btn quiet" id="scheme" aria-pressed="false">Dark</button>
   </div>
 </div>
 
@@ -55,7 +56,9 @@
       page is drawn with the tokens shown below it, so what you see is the output
       and not a picture of it. Pick a hue in the bar — including one no product uses
       yet — and the planes, the three text weights, the accent family and the
-      danger family are all re-derived, contrast-solved, and re-checked live.
+      danger family are all re-derived, contrast-solved, and re-checked live. The
+      components are no more a picture than the tokens are: this page imports the
+      same <code>components.css</code> a product imports beside its token file.
     </p>
   </section>
 
@@ -116,16 +119,16 @@
     <div class="panel">
       <h3>Tiers</h3>
       <div class="row">
-        <button class="spec primary">Generate</button>
-        <button class="spec">Import backup</button>
-        <button class="spec quiet">Cancel</button>
-        <button class="spec" disabled>Nothing selected</button>
+        <button class="btn primary">Generate</button>
+        <button class="btn">Import backup</button>
+        <button class="btn quiet">Cancel</button>
+        <button class="btn" disabled>Nothing selected</button>
       </div>
       <div class="row">
-        <button class="spec destructive">Delete set</button>
-        <button class="spec destructive filled">Delete 12 sentences</button>
-        <button class="spec icon" aria-label="More">⋯</button>
-        <button class="spec icon quiet" aria-label="Settings">⚙</button>
+        <button class="btn destructive">Delete set</button>
+        <button class="btn destructive filled">Delete 12 sentences</button>
+        <button class="btn icon" aria-label="More">⋯</button>
+        <button class="btn icon quiet" aria-label="Settings">⚙</button>
       </div>
     </div>
   </section>
@@ -162,10 +165,10 @@
     </p>
     <div class="panel">
       <div class="row" id="chips">
-        <button class="chip-f" aria-pressed="true">All <span class="n">128</span></button>
-        <button class="chip-f" aria-pressed="false">Essen <span class="n">24</span></button>
-        <button class="chip-f" aria-pressed="false">Spielen <span class="n">17</span></button>
-        <button class="chip-f" aria-pressed="false">Nicht aufgenommen <span class="n">3</span></button>
+        <button class="chip" aria-pressed="true">All <span class="n">128</span></button>
+        <button class="chip" aria-pressed="false">Essen <span class="n">24</span></button>
+        <button class="chip" aria-pressed="false">Spielen <span class="n">17</span></button>
+        <button class="chip" aria-pressed="false">Nicht aufgenommen <span class="n">3</span></button>
       </div>
     </div>
   </section>
@@ -184,12 +187,12 @@
           <div class="item">
             <div class="txt"><b>Ich möchte noch ein Stück Kuchen.</b><small>Essen · 2.4 s</small></div>
             <span class="state">recorded</span>
-            <button class="spec icon quiet" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
+            <button class="btn icon quiet" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
           </div>
           <div class="item">
             <div class="txt"><b>Können wir rausgehen?</b><small>Spielen · 1.8 s</small></div>
             <span class="state">changed</span>
-            <button class="spec icon quiet" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
+            <button class="btn icon quiet" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
           </div>
         </div>
         <div class="menu" role="menu">
@@ -237,12 +240,14 @@
     </p>
     <div class="panel">
       <div class="sheet">
-        <h4>Delete 12 sentences?</h4>
-        <p>Their recordings go too. This cannot be undone — a backup exported before
-           now is the only way back.</p>
-        <div class="actions">
-          <button class="spec quiet">Cancel</button>
-          <button class="spec destructive filled">Delete 12 sentences</button>
+        <div class="head"><h4>Delete 12 sentences?</h4></div>
+        <div class="body">
+          <p>Their recordings go too. This cannot be undone — a backup exported
+             before now is the only way back.</p>
+        </div>
+        <div class="foot">
+          <button class="btn quiet">Cancel</button>
+          <button class="btn destructive filled">Delete 12 sentences</button>
         </div>
       </div>
     </div>
@@ -256,7 +261,7 @@
     </p>
     <div class="panel">
       <div class="row" style="margin-bottom:14px">
-        <button class="spec primary" id="copy">Copy CSS</button>
+        <button class="btn primary" id="copy">Copy CSS</button>
         <span class="state" id="copied" hidden>Copied.</span>
       </div>
       <pre class="out" id="css"></pre>
