@@ -66,6 +66,11 @@
 /* An icon-only button is a normal or quiet button at pill radius. */
 .btn.icon { border-radius: var(--radius-pill); padding: 8px 11px; line-height: 1; }
 
+/* This file sets display on .btn and .toast, and an author display rule beats
+   the browser's own [hidden] { display: none } — so the file that takes
+   hidden's meaning away must give it back. */
+.btn[hidden], .toast[hidden] { display: none; }
+
 /* ------------------------------------------------------------------ fields */
 
 /* A field is a fill, not a hole: --surface-2 at rest with a transparent
