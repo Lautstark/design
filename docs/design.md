@@ -833,8 +833,10 @@ focus ring appears. Placeholder is `--text-faint`. `font: inherit`, always — a
 sentence typed into the product must look like the same sentence when it is read
 back out of the list.
 
-**Chips.** Pill radius, `--text-dim` on transparent, with an optional count set at
-`opacity: .55` and `font-variant-numeric: tabular-nums`. Selected takes the accent
+**Chips.** Pill radius, `--text-dim` on transparent, with an optional count in
+tabular numerals — at full opacity, a correction to the `.55` this rule first
+named: fading a token re-breaks the contrast it was solved for, and the faded
+count measured 2.91:1 over `--accent-soft` in the product that checked. Selected takes the accent
 tint. A chip is a **filter**: it changes what is shown and never what is stored.
 This is mitreden's rule and it is written into `ui.html` in as many words —
 *filters are pills, actions are boxes* — and it should hold in both products.

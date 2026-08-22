@@ -27,6 +27,21 @@
         "--strictPort"
       ],
       "port": 5199
+    },
+    {
+      "name": "mitreden",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/stefaniegrewenig/Code/mitreden",
+        "run",
+        "dev",
+        "--",
+        "--port",
+        "5198",
+        "--strictPort"
+      ],
+      "port": 5198
     }
   ]
 }

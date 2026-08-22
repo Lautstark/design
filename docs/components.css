@@ -100,7 +100,11 @@
   padding: 6px 13px;
 }
 .chip:hover { background: var(--surface-2); color: var(--text); }
-.chip .n { opacity: .55; font-variant-numeric: tabular-nums; margin-left: 5px; }
+/* The count is NOT faded. The .55 the audit once blessed re-breaks the very
+   contrast the tokens are solved for: mitreden measured a faded count at
+   2.91:1 over --accent-soft, and took the fade out. Tokens carry the
+   hierarchy; opacity would undo their guarantee. */
+.chip .n { font-variant-numeric: tabular-nums; margin-left: 5px; }
 .chip[aria-pressed="true"] {
   background: var(--accent-soft); color: var(--accent-strong); font-weight: 600;
 }
@@ -146,7 +150,7 @@
 .sheet {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); box-shadow: var(--shadow);
-  padding: 22px; max-width: 520px;
+  padding: 22px; max-width: 600px;
 }
 .sheet .head {
   display: flex; align-items: center; justify-content: space-between;
