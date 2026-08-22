@@ -8,8 +8,25 @@
 
 <div class="bar">
   <h1>
+    <!-- All three hues at once, matching icon.svg. Every product fills this same
+         path with its own accent and that is what tells them apart; this
+         repository is not a product, so it has the set rather than a hue of its
+         own. It deliberately does NOT follow the accent picker — the picker
+         changes which product you are looking at, and the thing in the corner is
+         not one of them. Hard stops, because the rule is that the hues stay
+         distinct. -->
     <svg viewBox="0 0 512 512" aria-hidden="true">
-      <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="var(--accent)"/>
+      <defs>
+        <linearGradient id="markHues" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0"    stop-color="#ff6b35"/>
+          <stop offset=".333" stop-color="#ff6b35"/>
+          <stop offset=".333" stop-color="#ff8bc7"/>
+          <stop offset=".667" stop-color="#ff8bc7"/>
+          <stop offset=".667" stop-color="#9B7BFF"/>
+          <stop offset="1"    stop-color="#9B7BFF"/>
+        </linearGradient>
+      </defs>
+      <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="url(#markHues)"/>
       <circle cx="200" cy="178" r="22" fill="#fff"/>
       <circle cx="312" cy="178" r="22" fill="#fff"/>
       <path d="M 190 226 C 190 288 322 288 322 226" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/>
