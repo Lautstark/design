@@ -1,0 +1,8 @@
+{
+  "product": "bildhaft",
+  "accent": "#ff6b35",
+  "schemes": "both",
+  "state": false,
+  "out": "src/styles/tokens.css",
+  "note": "Follows the OS. The accent is the brand orange; every other value below is derived from it."
+}

@@ -1,0 +1,263 @@
+/*
+ * The gallery's own chrome, and the components it demonstrates.
+ *
+ * Everything below the "specimens" rule uses only tokens. That is the point: the
+ * page is not a picture of the design system, it is the design system, running.
+ * If a rule here needs a literal colour to look right, the token set is missing
+ * a token and the fix belongs in derive.js, not in this file.
+ */
+
+:root { color-scheme: light dark; }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ------------------------------------------------------------ the control bar */
+
+.bar {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+  padding: 12px clamp(16px, 4vw, 48px);
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
+.bar h1 {
+  font-size: 17px; font-weight: 650; letter-spacing: -.02em; margin: 0;
+  display: flex; align-items: center; gap: 9px;
+}
+.bar h1 svg { width: 22px; height: 22px; flex: none; }
+
+.bar .group { display: flex; align-items: center; gap: 7px; }
+.bar .group > span { font-size: 12px; color: var(--text-dim); }
+.bar .spacer { margin-left: auto; }
+
+/* A product swatch. The ring, not a border colour change, marks the current one
+   — a border swap would move the layout by a pixel on every click. */
+.hue {
+  width: 27px; height: 27px; border-radius: var(--radius-pill);
+  border: none; cursor: pointer; padding: 0;
+  box-shadow: 0 0 0 2px var(--surface), 0 0 0 2px transparent;
+  transition: box-shadow .12s;
+}
+.hue[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--text); }
+.hue:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+input[type="color"] {
+  width: 27px; height: 27px; padding: 0; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--radius-pill);
+  background: none; overflow: hidden;
+}
+input[type="color"]::-webkit-color-swatch-wrapper { padding: 2px; }
+input[type="color"]::-webkit-color-swatch { border: none; border-radius: var(--radius-pill); }
+input[type="color"]::-moz-color-swatch { border: none; border-radius: var(--radius-pill); }
+
+/* ----------------------------------------------------------------- layout */
+
+main { max-width: 940px; margin: 0 auto; padding: 0 clamp(16px, 4vw, 48px) 96px; }
+
+section { margin-top: 56px; }
+section > h2 {
+  font-size: 13px; font-weight: 650; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--text-dim); margin: 0 0 6px;
+}
+section > .note { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; max-width: 62ch; }
+
+.panel {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 22px;
+}
+.panel + .panel { margin-top: 14px; }
+.panel > h3 {
+  font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--text-faint); margin: 0 0 14px;
+}
+
+.row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.row + .row { margin-top: 12px; }
+.stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* -------------------------------------------------------------- swatches */
+
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
+
+.swatch {
+  border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden;
+  background: var(--surface);
+}
+.swatch .chip { height: 52px; display: flex; align-items: center; justify-content: center; }
+.swatch .chip span { font-size: 12px; font-weight: 600; }
+.swatch .meta { padding: 7px 9px; }
+.swatch .name { font-size: 12px; font-weight: 600; }
+.swatch .val {
+  font: 11px/1.4 var(--mono); color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------- buttons */
+
+button.spec {
+  font: inherit; font-size: 14px; font-weight: 600;
+  border-radius: var(--radius-sm); padding: 9px 16px;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--text);
+  cursor: pointer;
+}
+button.spec:hover { background: var(--surface-3); }
+button.spec:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button.spec:disabled { opacity: .4; cursor: default; }
+button.spec:disabled:hover { background: var(--surface-2); }
+
+button.spec.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+button.spec.primary:hover { background: var(--accent-hover); }
+
+button.spec.quiet { background: transparent; border-color: transparent; color: var(--text-dim); }
+button.spec.quiet:hover { background: var(--surface-2); color: var(--text); }
+
+button.spec.destructive { background: transparent; border-color: transparent; color: var(--danger); }
+button.spec.destructive:hover { background: var(--danger-soft); }
+
+button.spec.destructive.filled {
+  background: var(--danger); color: var(--danger-ink); border-color: transparent;
+}
+
+button.spec.icon {
+  border-radius: var(--radius-pill); padding: 8px 11px; line-height: 1;
+}
+
+/* ---------------------------------------------------------------- fields */
+
+/* A field is a fill, not a hole: --surface-2 at rest with a transparent border,
+   lifting to --surface on focus so the ring has something to sit against. */
+.field {
+  font: inherit; font-size: 15px; width: 100%;
+  background: var(--surface-2); color: var(--text);
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  padding: 10px 13px;
+}
+.field::placeholder { color: var(--text-faint); }
+.field:focus {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+  background: var(--surface); border-color: var(--accent);
+}
+
+label.lbl { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 7px; }
+
+/* ----------------------------------------------------------------- chips */
+
+/* Filters are pills, actions are boxes. */
+.chip-f {
+  font: inherit; font-size: 13px; cursor: pointer;
+  background: transparent; color: var(--text-dim);
+  border: 1px solid transparent; border-radius: var(--radius-pill);
+  padding: 6px 13px;
+}
+.chip-f:hover { background: var(--surface-2); color: var(--text); }
+.chip-f:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chip-f .n { opacity: .55; font-variant-numeric: tabular-nums; margin-left: 5px; }
+.chip-f[aria-pressed="true"] {
+  background: var(--accent-soft); color: var(--accent-strong); font-weight: 600;
+}
+
+/* ------------------------------------------------------------- list rows */
+
+.list { border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden; }
+.item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; background: var(--surface);
+}
+.item + .item { border-top: 1px solid var(--line); }
+.item:hover { background: var(--surface-2); }
+.item .txt { flex: 1; min-width: 0; }
+.item .txt b { font-weight: 550; font-size: 15px; }
+.item .txt small { display: block; color: var(--text-faint); font-size: 12.5px; }
+.item .state { font-size: 12px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ menu */
+
+.menu {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow);
+  padding: 6px; min-width: 196px;
+}
+.menu button {
+  display: block; width: 100%; text-align: left; white-space: nowrap;
+  font: inherit; font-size: 14px; cursor: pointer;
+  background: none; border: none; color: var(--text);
+  border-radius: var(--radius-item); padding: 8px 11px;
+}
+.menu button:hover { background: var(--surface-2); }
+.menu hr { border: none; border-top: 1px solid var(--line); margin: 5px 0; }
+.menu button.danger { color: var(--danger); }
+.menu button.danger:hover { background: var(--danger-soft); }
+
+/* ---------------------------------------------------------------- states */
+
+.empty {
+  text-align: center; padding: 34px 20px;
+  border: 1px dashed var(--line); border-radius: var(--radius-sm);
+  color: var(--text-dim);
+}
+.empty b { display: block; color: var(--text); font-size: 15px; margin-bottom: 5px; }
+.empty small { font-size: 13px; color: var(--text-faint); }
+
+.toast {
+  display: inline-block;
+  background: var(--text); color: var(--bg);
+  border-radius: var(--radius-pill); padding: 9px 17px;
+  font-size: 14px; box-shadow: var(--shadow);
+}
+
+.notice {
+  border-radius: var(--radius-sm); padding: 11px 14px; font-size: 14px;
+  background: var(--accent-soft); color: var(--accent-strong);
+}
+.notice.bad { background: var(--danger-soft); color: var(--danger); }
+
+/* --------------------------------------------------------------- dialogs */
+
+.sheet {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); box-shadow: var(--shadow);
+  padding: 22px; max-width: 420px;
+}
+.sheet h4 { margin: 0 0 8px; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+.sheet p { margin: 0 0 18px; color: var(--text-dim); font-size: 14px; }
+.sheet .actions { display: flex; gap: 9px; justify-content: flex-end; }
+
+/* ----------------------------------------------------------- audit table */
+
+table.audit { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.audit th {
+  text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .06em;
+  color: var(--text-faint); font-weight: 600; padding: 0 10px 9px 0;
+}
+table.audit td { padding: 8px 10px 8px 0; border-top: 1px solid var(--line); }
+table.audit code { font: 12.5px/1 var(--mono); color: var(--text-dim); }
+table.audit .ratio { font-variant-numeric: tabular-nums; font-weight: 600; }
+table.audit .verdict { font-size: 12px; font-weight: 600; }
+table.audit .pass .verdict { color: var(--ok, var(--text-dim)); }
+table.audit .fail .ratio, table.audit .fail .verdict { color: var(--danger); }
+
+/* ------------------------------------------------------------------- CSS */
+
+pre.out {
+  background: var(--surface-2); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: 16px;
+  font: 12.5px/1.65 var(--mono); overflow-x: auto; margin: 0;
+}
+pre.out .tok { color: var(--accent-strong); }
+pre.out .cm { color: var(--text-faint); }
+
+footer {
+  margin-top: 72px; padding-top: 22px; border-top: 1px solid var(--line);
+  color: var(--text-faint); font-size: 13px;
+}
+footer a { color: var(--accent-strong); }

@@ -1,0 +1,24 @@
+name: check
+
+# The audit, on every change to the generator or to a product's declaration.
+# Catching a contrast regression here costs one red tick; catching it after the
+# sync has opened three pull requests costs three.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # No install step: the generator has no dependencies, which is the same
+      # property the products are protecting.
+      - run: node build.js --check

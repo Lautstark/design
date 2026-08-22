@@ -1,0 +1,91 @@
+name: sync
+
+# When this repository moves, regenerate each product's token file and open a pull
+# request against that product.
+#
+# A pull request rather than a push, deliberately. §4.2 of the rule set puts the
+# values with the product, and a token change is therefore a *proposal* to it, not
+# a fact about it — merging is how a product adopts a version. It also means a
+# regenerated file is looked at by a person once before it lands in a thing that
+# children use to speak.
+#
+# Needs a secret, DESIGN_SYNC_TOKEN: a fine-grained personal access token with
+# Contents: read and write and Pull requests: read and write on the three product
+# repositories. The default GITHUB_TOKEN cannot do this — its scope stops at this
+# repository.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/lib/**'
+      - 'products/**'
+      - 'build.js'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    strategy:
+      # One product's failure must not cancel the others: they are independent
+      # repositories and a broken checkout of one says nothing about the rest.
+      fail-fast: false
+      matrix:
+        product: [bildhaft, mitreden, vorlaut]
+
+    steps:
+      - name: Check out the design repository
+        uses: actions/checkout@v4
+        with:
+          path: design
+
+      - name: Check out ${{ matrix.product }}
+        uses: actions/checkout@v4
+        with:
+          repository: Lautstark/${{ matrix.product }}
+          token: ${{ secrets.DESIGN_SYNC_TOKEN }}
+          path: ${{ matrix.product }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # build.js resolves each product as a sibling of the design repository, which
+      # is exactly how the two checkouts above sit in the workspace.
+      - name: Generate
+        working-directory: design
+        run: node build.js ${{ matrix.product }}
+
+      - name: Open a pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.DESIGN_SYNC_TOKEN }}
+          path: ${{ matrix.product }}
+          branch: design-sync
+          # Reuse the one branch: a design repository that moves three times before
+          # anybody looks should leave one current pull request, not three stale ones.
+          base: main
+          title: 'Take the current tokens from Lautstark/design'
+          commit-message: |
+            Take the current tokens from Lautstark/design
+
+            Generated from ${{ github.sha }}. Every value follows from this
+            product's declared accent; nothing here was chosen by hand.
+          body: |
+            Regenerated from
+            [Lautstark/design@${{ github.sha }}](https://github.com/Lautstark/design/commit/${{ github.sha }}).
+
+            Every value in the changed file follows from this product's one declared
+            accent and was contrast-checked before it was written — `build.js`
+            refuses to write a file that fails, so a failing ratio cannot reach here
+            through this path.
+
+            Worth a look at the diff anyway: the derivation can change what a value
+            *is* without changing whether it passes, and this repository is the one
+            that decides whether the new value is right for this product.
+
+            See the [gallery](https://lautstark.github.io/design/) to compare the two
+            side by side, and [the rule
+            set](https://github.com/Lautstark/design/blob/main/docs/design.md) for
+            what each token means.
+          delete-branch: true

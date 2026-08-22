@@ -1,0 +1,9 @@
+{
+  "product": "mitreden",
+  "accent": "#ff8bc7",
+  "schemes": "both",
+  "state": true,
+  "out": "ui.html",
+  "inline": true,
+  "note": "Tokens are inlined into ui.html between markers rather than linked: the repository is deliberately one Python file and the page it serves, and a second request would be a dependency it does not have. `state` is on because mitreden tracks recorded / changed / not yet recorded per sentence."
+}

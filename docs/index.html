@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lautstark design</title>
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="stylesheet" href="gallery.css">
+
+<div class="bar">
+  <h1>
+    <svg viewBox="0 0 512 512" aria-hidden="true">
+      <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="var(--accent)"/>
+      <circle cx="200" cy="178" r="22" fill="#fff"/>
+      <circle cx="312" cy="178" r="22" fill="#fff"/>
+      <path d="M 190 226 C 190 288 322 288 322 226" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/>
+    </svg>
+    Lautstark design
+  </h1>
+
+  <div class="group" role="group" aria-label="Accent">
+    <span>Accent</span>
+    <button class="hue" data-hue="#ff6b35" title="bildhaft — #ff6b35"></button>
+    <button class="hue" data-hue="#ff8bc7" title="mitreden — #ff8bc7"></button>
+    <button class="hue" data-hue="#9B7BFF" title="vorlaut — #9B7BFF"></button>
+    <input type="color" id="pick" value="#ff6b35" title="Any hue — try one no product uses yet">
+  </div>
+
+  <div class="group spacer">
+    <button class="spec quiet" id="scheme" aria-pressed="false">Dark</button>
+  </div>
+</div>
+
+<main>
+  <section>
+    <h2>What this is</h2>
+    <p class="note">
+      One accent hue in, a whole token set out, for both schemes. Everything on this
+      page is drawn with the tokens shown below it, so what you see is the output
+      and not a picture of it. Pick a hue in the bar — including one no product uses
+      yet — and the planes, the three text weights, the accent family and the
+      danger family are all re-derived, contrast-solved, and re-checked live.
+    </p>
+  </section>
+
+  <section>
+    <h2>Planes</h2>
+    <p class="note">
+      Each plane sits on the one before it. The hue is the product's own, held at a
+      very low chroma, so the neutrals read as one material rather than as grey with
+      a cast dropped over it.
+    </p>
+    <div class="panel"><div class="swatches" id="sw-planes"></div></div>
+  </section>
+
+  <section>
+    <h2>Text</h2>
+    <p class="note">
+      <code>--text</code> is a fixed point on the ramp. <code>--text-dim</code> and
+      <code>--text-faint</code> are <em>solved</em> against <code>--surface-2</code>
+      — the fill of every field, and the tightest ground either really sits on.
+      Solving against <code>--bg</code> instead is what once shipped a
+      <code>--text-faint</code> that measured 3.92:1 where it was checked and 3.18:1
+      where it was printed.
+    </p>
+    <div class="panel"><div class="swatches" id="sw-text"></div></div>
+  </section>
+
+  <section>
+    <h2>Accent and danger</h2>
+    <p class="note">
+      <code>--accent</code> is exactly what the product declared and is never
+      adjusted. The other four follow from it. <code>--accent-ink</code> tries both
+      near-black and near-white and keeps whichever wins on that hue — hardcoding
+      one is how a delete-everything button shipped at 2.48:1.
+    </p>
+    <div class="panel"><div class="swatches" id="sw-accent"></div></div>
+  </section>
+
+  <section>
+    <h2>Contrast audit</h2>
+    <p class="note">
+      Every pairing the token table promises will clear AA, measured on the values
+      above. <code>build.js</code> runs this same check and refuses to write a file
+      that fails, so a ratio can only regress if somebody hand-edits generated CSS.
+    </p>
+    <div class="panel"><table class="audit"><thead><tr>
+      <th>Foreground</th><th>Ground</th><th>Ratio</th><th>Needs</th><th></th>
+    </tr></thead><tbody id="audit"></tbody></table></div>
+  </section>
+
+  <section>
+    <h2>Buttons</h2>
+    <p class="note">
+      Three tiers, no more. <em>Primary</em> takes the accent fill and there is one
+      per view. <em>Normal</em> is <code>--surface-2</code>. <em>Quiet</em> is
+      transparent. Destructive is not a fourth tier but a colour applied to a quiet
+      or normal button — only the confirm button of a destructive dialog is filled.
+    </p>
+    <div class="panel">
+      <h3>Tiers</h3>
+      <div class="row">
+        <button class="spec primary">Generate</button>
+        <button class="spec">Import backup</button>
+        <button class="spec quiet">Cancel</button>
+        <button class="spec" disabled>Nothing selected</button>
+      </div>
+      <div class="row">
+        <button class="spec destructive">Delete set</button>
+        <button class="spec destructive filled">Delete 12 sentences</button>
+        <button class="spec icon" aria-label="More">⋯</button>
+        <button class="spec icon quiet" aria-label="Settings">⚙</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Fields</h2>
+    <p class="note">
+      A field is a fill, not a hole. At rest it is <code>--surface-2</code> with a
+      transparent border; on focus the fill lifts to <code>--surface</code>, the
+      border takes the accent, and the ring appears. <code>font: inherit</code>,
+      always — a sentence typed in must look like the same sentence read back out.
+    </p>
+    <div class="panel">
+      <div class="stack">
+        <div>
+          <label class="lbl" for="f1">Sentence</label>
+          <input class="field" id="f1" value="Ich möchte noch ein Stück Kuchen.">
+        </div>
+        <div>
+          <label class="lbl" for="f2">Search</label>
+          <input class="field" id="f2" placeholder="Type to filter symbols…">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Chips</h2>
+    <p class="note">
+      Filters are pills, actions are boxes. A chip changes what is shown and never
+      what is stored. The count sits at <code>opacity: .55</code> in tabular
+      numerals; the selected one takes the accent tint, never the full fill — the
+      full fill belongs to the primary action alone.
+    </p>
+    <div class="panel">
+      <div class="row" id="chips">
+        <button class="chip-f" aria-pressed="true">All <span class="n">128</span></button>
+        <button class="chip-f" aria-pressed="false">Essen <span class="n">24</span></button>
+        <button class="chip-f" aria-pressed="false">Spielen <span class="n">17</span></button>
+        <button class="chip-f" aria-pressed="false">Nicht aufgenommen <span class="n">3</span></button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Rows and the overflow menu</h2>
+    <p class="note">
+      A row shows its content and one <code>⋯</code>. What it says <em>about</em>
+      itself may be clickable, but everything you can <em>do</em> to it lives behind
+      that one trigger — and never behind hover, because these products are used on
+      touch screens. Destructive rows sit last.
+    </p>
+    <div class="panel">
+      <div class="row" style="align-items:flex-start;gap:22px">
+        <div class="list" style="flex:1;min-width:260px">
+          <div class="item">
+            <div class="txt"><b>Ich möchte noch ein Stück Kuchen.</b><small>Essen · 2.4 s</small></div>
+            <span class="state">recorded</span>
+            <button class="spec icon quiet" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
+          </div>
+          <div class="item">
+            <div class="txt"><b>Können wir rausgehen?</b><small>Spielen · 1.8 s</small></div>
+            <span class="state">changed</span>
+            <button class="spec icon quiet" aria-label="More" aria-haspopup="true" aria-expanded="false">⋯</button>
+          </div>
+        </div>
+        <div class="menu" role="menu">
+          <button role="menuitem">Rename</button>
+          <button role="menuitem">Move to group…</button>
+          <button role="menuitem">Re-record</button>
+          <hr>
+          <button role="menuitem" class="danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Messages and empty states</h2>
+    <p class="note">
+      Three kinds of message, three treatments. <em>Progress</em> belongs to the
+      control that started it. <em>Outcome</em> stays until something replaces it and
+      is never auto-dismissed if it names a failure or a number. <em>Aside</em>
+      acknowledges something already visible and may clear itself. An empty list
+      teaches; a filtered-empty is a different, shorter sentence.
+    </p>
+    <div class="panel">
+      <div class="stack">
+        <div class="notice">4 of 12 sentences still need a recording.</div>
+        <div class="notice bad">2 sentences could not be generated: the voice is unavailable.</div>
+        <div><span class="toast">Backup exported.</span></div>
+        <div class="empty">
+          <b>No sentences yet</b>
+          <small>Type one above. Each line becomes its own audio file.</small>
+        </div>
+        <div class="empty">
+          <b>Nothing matches „kuch"</b>
+          <small>Clear the filter to see all 128.</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Destructive confirmation</h2>
+    <p class="note">
+      Name what is lost and label the button with the act, never "OK". The body
+      states the count and what does not come back.
+    </p>
+    <div class="panel">
+      <div class="sheet">
+        <h4>Delete 12 sentences?</h4>
+        <p>Their recordings go too. This cannot be undone — a backup exported before
+           now is the only way back.</p>
+        <div class="actions">
+          <button class="spec quiet">Cancel</button>
+          <button class="spec destructive filled">Delete 12 sentences</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The generated file</h2>
+    <p class="note">
+      What <code>build.js</code> writes into each product, header and all. Nothing
+      here is hand-maintained.
+    </p>
+    <div class="panel">
+      <div class="row" style="margin-bottom:14px">
+        <button class="spec primary" id="copy">Copy CSS</button>
+        <span class="state" id="copied" hidden>Copied.</span>
+      </div>
+      <pre class="out" id="css"></pre>
+    </div>
+  </section>
+
+  <footer>
+    The mark, the token names and the rules are the agreement; every value is
+    derived from one accent and checked before it ships. Full rule set in
+    <a href="https://github.com/Lautstark/design/blob/main/docs/design.md">design.md</a>.
+  </footer>
+</main>
+
+<script type="module" src="gallery.js"></script>
+</html>

@@ -1,0 +1,8 @@
+{
+  "product": "vorlaut",
+  "accent": "#9B7BFF",
+  "schemes": "dark",
+  "state": false,
+  "out": "static/tokens.css",
+  "note": "Commits to a dark ground and says so with color-scheme, so only the dark scheme is emitted. Its face on the shared mark winks and its mouth is open — the one deliberate divergence in the family, and it belongs to the product called vorlaut."
+}
