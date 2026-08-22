@@ -69,7 +69,15 @@ section > h2 {
   font-size: 13px; font-weight: 650; text-transform: uppercase; letter-spacing: .08em;
   color: var(--text-dim); margin: 0 0 6px;
 }
-section > .note { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; max-width: 62ch; }
+/* No measure: the prose shares its right edge with the panel it introduces, so a
+   section reads as one block rather than as a paragraph with a column of nothing
+   beside it. What bounds the line is main's 940px, not a rule here.
+
+   The previous `max-width: 62ch` was wrong twice over. It bore no relation to the
+   panel width, and `ch` is the width of the zero glyph, not of a character: this
+   font averages 6.92px against a 8.67px `ch`, so 62ch set 75 characters. If a
+   measure ever comes back, it belongs in a unit that means what it says. */
+section > .note { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; }
 
 .panel {
   background: var(--surface); border: 1px solid var(--line);
