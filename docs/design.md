@@ -888,6 +888,36 @@ is one of the strongest existing family resemblances.
 **Files that leave carry the product's name**: `mitreden-…`, `bildhaft-…`, followed
 by what it is and, where a version matters, a date stamp.
 
+**Prose that denies must also disclose.** A product that tells the reader what it
+does not send has to say, in the same breath, what it does. Both of these shipped
+in one week, from opposite directions. bildhaft's footer said it runs entirely in
+the browser, which is true and let a reader conclude nothing leaves — a word goes
+to ARASAAC on every lookup. mitreden's about said the voice is downloaded once and
+then stays on the machine, every word true, and left the same conclusion standing
+where "this is the one request we make" should have been. Neither was a false
+claim. Each was a true claim occupying the place of a missing one, which is the
+contrast rule above one level up: the value is fine and the pairing is what fails.
+
+**Check it against the wire, not against the code.** Whether a claim like that is
+still true cannot be read out of the source. onnxruntime assembles its wasm URL at
+runtime, so no grep can find the filename, and a model fetched inside a worker
+never appears in a network panel watching the page — a check that reads either one
+will confidently report the opposite of the truth. Clear the storage, reload, do
+the thing the product is for, and read what actually went out. Assumption is the
+failure mode here and it runs both ways: mitreden deliberately ships no non-SIMD
+onnxruntime fallback, and the reasonable guess is that such a browser fetches it
+from a CDN. It does not. The bundle names no CDN, so the name resolves against the
+product's own origin and 404s. It fails rather than phones out — better than the
+guess, and only knowable by looking.
+
+**A green test you have not seen fail is not yet a test.** Break the thing each
+check protects and watch that check go red before it is allowed to count. This is
+not caution, it is the only evidence that a check is wired to anything: a
+mitreden offline check passed because its injected script tag anchored on a
+`</head>` the generated page does not contain, and three bildhaft regression
+checks passed because reverting the fix broke the build and the test server kept
+serving the previous bundle. All four were green, all four were measuring nothing.
+
 ### 4.4 What is explicitly *not* shared
 
 - **The accent hue.** By design.
