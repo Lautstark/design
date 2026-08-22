@@ -95,7 +95,16 @@ section > .note { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; }
 
 /* -------------------------------------------------------------- swatches */
 
-.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 10px; }
+/* auto-fit, not auto-fill: auto-fill keeps the tracks it laid out even when
+   nothing lands in them, so the three text swatches sat in five tracks and
+   trailed off two-fifths short of the panel edge. auto-fit collapses the empty
+   ones and the remaining swatches stretch to the edge.
+
+   The trade is that a short row's swatches come out wider than a full row's —
+   260px here against 152px above. Sharing the edge is worth more than matching
+   the neighbouring row's tile width; the label and the hex are what is being
+   read, and both are left-aligned in the tile either way. */
+.swatches { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px, 1fr)); gap: 10px; }
 
 .swatch {
   border: 1px solid var(--line); border-radius: var(--radius-sm); overflow: hidden;
