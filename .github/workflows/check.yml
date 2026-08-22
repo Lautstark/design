@@ -22,3 +22,16 @@ jobs:
       # No install step: the generator has no dependencies, which is the same
       # property the products are protecting.
       - run: node build.js --check
+
+      # tokens/ is committed and consumers read it straight off the package, so a
+      # stale commit would ship stale values. There is no `prepare` script to
+      # regenerate them on install, deliberately — this family allowlists install
+      # scripts, and a token set that is static CSS has no business running code
+      # on someone else's machine. This check is what replaces it.
+      - name: Are the committed tokens current?
+        run: |
+          node build.js
+          git diff --exit-code tokens/ || {
+            echo "::error::tokens/ is stale. Run 'node build.js' and commit the result."
+            exit 1
+          }

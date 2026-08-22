@@ -18,13 +18,14 @@
  * in by CI, with a header saying where they came from. It is the fallback, not
  * the mechanism.
  *
- * `prepare` runs `node build.js` on install, so a consumer of the github:
- * dependency regenerates tokens/ from source rather than trusting what was
- * committed. Nothing is fetched to do it: the generator has no dependencies.
+ * There is deliberately no `prepare` script. A consumer reads tokens/ straight
+ * off the package and nothing runs on their machine at install time — this
+ * family allowlists install scripts, and a token set that is static CSS has no
+ * business asking for an exemption. CI checks the committed files are current
+ * instead, which is why the header names a version and not a commit.
  */
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs';
-import { execSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -46,11 +47,14 @@ const check = args.includes('--check');
 const sync = args.includes('--sync');
 const only = args.filter((a) => !a.startsWith('--'));
 
+/*
+ * The header names the version and nothing else. It used to carry the commit sha
+ * too, which made the output different on every commit — and therefore made
+ * "are the committed tokens current?" impossible to answer by regenerating and
+ * diffing, because the answer was always no. tokens/ is now a pure function of
+ * products/*.json, the derivation, and this version.
+ */
 const version = JSON.parse(readFileSync(join(HERE, 'package.json'), 'utf8')).version;
-const sha = (() => {
-  try { return execSync('git rev-parse --short HEAD', { cwd: HERE, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim(); }
-  catch { return null; }
-})();
 
 let failures = 0;
 let written = 0;
@@ -97,7 +101,7 @@ function writeFile(target, css, label) {
 }
 
 for (const cfg of configs) {
-  const opts = { ok: cfg.state, source: sha ? `v${version} (${sha})` : `v${version}` };
+  const opts = { ok: cfg.state, source: `v${version}` };
   const schemes = cfg.schemes === 'both' ? ['light', 'dark'] : [cfg.schemes];
 
   /* Audit first, always — including in write mode. A file that fails is never

@@ -1,6 +1,6 @@
 {
   "name": "@lautstark/design",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "description": "The look the Lautstark AAC tools share: one accent hue per product, every other token derived from it and contrast-checked before it ships.",
   "license": "MIT",
@@ -9,7 +9,13 @@
     "url": "git+https://github.com/Lautstark/design.git"
   },
   "homepage": "https://lautstark.github.io/design/",
-  "keywords": ["design-tokens", "css-custom-properties", "contrast", "oklch", "aac"],
+  "keywords": [
+    "design-tokens",
+    "css-custom-properties",
+    "contrast",
+    "oklch",
+    "aac"
+  ],
   "sideEffects": [
     "*.css"
   ],
@@ -29,7 +35,6 @@
   "scripts": {
     "build": "node build.js",
     "check": "node build.js --check",
-    "sync": "node build.js --sync",
-    "prepare": "node build.js"
+    "sync": "node build.js --sync"
   }
 }
