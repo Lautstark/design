@@ -544,6 +544,17 @@ author prefers it, the collision in point 1 is the thing that would have to be
 solved first — probably by renaming bildhaft's *symbol sources* rather than its
 groupings.
 
+**Settled, and the word is now spent.** bildhaft uses *Sammlung* for the grouping
+throughout its interface, so the word is claimed and cannot be borrowed back for
+anything else in these products. That includes the obvious temptation: the family
+of tools itself. Writing "Werkzeuge derselben Sammlung" in bildhaft's about text
+put the same word on a group of sentences and a group of programs on one screen,
+which is how the collision arrives in practice rather than in theory. The family
+has a name already — Lautstark — and prose that needs to point at it should say
+that, or say "die übrigen Werkzeuge". The symbol sets remain the other pressure on
+this word; point 1's suggestion of *Symbolquelle* still stands and would leave
+*Sammlung* doing exactly one job.
+
 ### 3.2 The thing being grouped
 
 | | mitreden | bildhaft |
