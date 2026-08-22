@@ -14,9 +14,13 @@
  *
  * `--sync` exists for the products that cannot do that. Today that is vorlaut,
  * which has no package.json, plus mitreden's hand-built ui.html, which is still
- * the live page while its React rewrite lands. Those get the same bytes copied
- * in by CI, with a header saying where they came from. It is the fallback, not
- * the mechanism.
+ * the live page while its rewrite lands.
+ *
+ * Note who runs it: not this repository. vorlaut's own workflow clones this one
+ * and runs `--sync vorlaut` against its own checkout, so nothing here needs
+ * write access to anywhere else and there is no cross-repository token to keep.
+ * See vorlaut/.github/workflows/design-tokens.yml. It is the fallback, not the
+ * mechanism, and it is pulled rather than pushed.
  *
  * There is deliberately no `prepare` script. A consumer reads tokens/ straight
  * off the package and nothing runs on their machine at install time — this

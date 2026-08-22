@@ -1327,3 +1327,40 @@ default. It needs a solved value, and against `--surface-2`.
   colour, and it has nothing to do with any of this.
 - `pre.log`'s `#101216`. It is a plane *below* `--bg`, which this document has no
   name for. Either it gains one or the log keeps its literal.
+
+### 7.6 How a change travels, and why nothing holds a key
+
+Two mechanisms, and neither one reaches into another repository.
+
+**Products with a build step import the package.** `@lautstark/design` is a
+`github:` dependency pinned to a tag, the way `@lautstark/bildquelle` and
+`@lautstark/stimmquelle` already are, and the CSS is `@import`ed out of
+`node_modules`. That is bildhaft today and mitreden as soon as its rewrite lands.
+
+There is deliberately no `prepare` script. `tokens/` is committed, so a consumer
+reads static CSS and nothing runs on their machine at install time. This family
+allowlists install scripts, whitelists what `static/` may serve, and audits what
+leaves the browser; a token set is static CSS and has no business asking for an
+exemption. CI regenerates and diffs instead, which is why the header names a
+version and not a commit — a commit sha changes every commit and would make
+"are the committed tokens current?" impossible to answer by regenerating.
+
+**Products without one fetch.** vorlaut's own workflow clones this repository —
+public, so anonymously — runs the generator against its own checkout, and pushes
+a branch.
+
+The direction is the point. The obvious design has the design repository push
+outward, and that needs a personal access token with write access to two other
+repositories, living in a secret readable by every workflow in whichever repo
+holds it. A long-lived cross-repository credential, for a file of colour values.
+Pulling needs none: the only write is a repository writing to itself with the
+automatic `GITHUB_TOKEN`, scoped to that repository and gone when the job ends.
+
+And the pulling workflow pushes a **branch** rather than opening the pull
+request. Two reasons, and the second matters more. Actions is not permitted to
+open pull requests in these repositories, and granting that to every workflow to
+save one click is a poor trade. But also: GitHub does not run workflows on a pull
+request opened by `GITHUB_TOKEN` — it would let a workflow trigger itself
+forever — so a robot's pull request arrives with nothing run against it. Opening
+it by hand is what makes the product's own tests run on the change. The
+constraint and the correct design happen to agree.
