@@ -1328,39 +1328,32 @@ default. It needs a solved value, and against `--surface-2`.
 - `pre.log`'s `#101216`. It is a plane *below* `--bg`, which this document has no
   name for. Either it gains one or the log keeps its literal.
 
-### 7.6 How a change travels, and why nothing holds a key
+### 7.6 How a change travels
 
-Two mechanisms, and neither one reaches into another repository.
-
-**Products with a build step import the package.** `@lautstark/design` is a
+One mechanism: a version pin in a `package.json`. `@lautstark/design` is a
 `github:` dependency pinned to a tag, the way `@lautstark/bildquelle` and
-`@lautstark/stimmquelle` already are, and the CSS is `@import`ed out of
-`node_modules`. That is bildhaft today and mitreden as soon as its rewrite lands.
+`@lautstark/stimmquelle` already are.
+
+Products with a build step `@import` the CSS out of `node_modules`. vorlaut has
+no build step — it serves plain ES modules — so it keeps its copy committed and
+refreshes it with a one-line `cp` script. The page still runs for anyone who
+never touches npm; npm holds the pin, nothing more.
 
 There is deliberately no `prepare` script. `tokens/` is committed, so a consumer
 reads static CSS and nothing runs on their machine at install time. This family
 allowlists install scripts, whitelists what `static/` may serve, and audits what
 leaves the browser; a token set is static CSS and has no business asking for an
 exemption. CI regenerates and diffs instead, which is why the header names a
-version and not a commit — a commit sha changes every commit and would make
-"are the committed tokens current?" impossible to answer by regenerating.
+version and not a commit — a sha changes every commit and would make "are the
+committed tokens current?" impossible to answer by regenerating.
 
-**Products without one fetch.** vorlaut's own workflow clones this repository —
-public, so anonymously — runs the generator against its own checkout, and pushes
-a branch.
+**Two designs were tried and thrown away**, and both failed the same way. The
+first had this repository push outward into the products, which needs a personal
+access token with write access to them, stored here and readable by every
+workflow here. The second had each product clone this repository on a weekly
+schedule and push a branch, which removed the credential but spent about fifty
+CI runs a year to find nothing — these files change roughly twice.
 
-The direction is the point. The obvious design has the design repository push
-outward, and that needs a personal access token with write access to two other
-repositories, living in a secret readable by every workflow in whichever repo
-holds it. A long-lived cross-repository credential, for a file of colour values.
-Pulling needs none: the only write is a repository writing to itself with the
-automatic `GITHUB_TOKEN`, scoped to that repository and gone when the job ends.
-
-And the pulling workflow pushes a **branch** rather than opening the pull
-request. Two reasons, and the second matters more. Actions is not permitted to
-open pull requests in these repositories, and granting that to every workflow to
-save one click is a poor trade. But also: GitHub does not run workflows on a pull
-request opened by `GITHUB_TOKEN` — it would let a workflow trigger itself
-forever — so a robot's pull request arrives with nothing run against it. Opening
-it by hand is what makes the product's own tests run on the change. The
-constraint and the correct design happen to agree.
+Both were elaborate answers to a question npm already answered. The lesson is not
+about tokens or schedules: a delivery mechanism should be sized to how often the
+thing is delivered, and this thing is delivered almost never.

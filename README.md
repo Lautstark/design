@@ -102,32 +102,32 @@ remote host at page load would cost them that. npm is a build-time fetch that
 leaves a local file; a `<link>` to another origin is a runtime dependency. Those
 are different things.
 
-**For what cannot import**, the product fetches. vorlaut has no `package.json`
-and no build step, so a workflow in *its* repository clones this one (public, so
-anonymously), runs the generator, and pushes a branch you open a pull request
-from. See
-[vorlaut/.github/workflows/design-tokens.yml](https://github.com/Lautstark/vorlaut/blob/main/.github/workflows/design-tokens.yml).
+**Every product pins a version.** vorlaut has no build step and never gained
+one — it serves plain ES modules — so it keeps `static/tokens.css` committed and
+refreshes it with a one-line script:
+
+```json
+"scripts": { "tokens": "cp node_modules/@lautstark/design/tokens/vorlaut.css static/tokens.css" }
+```
+
+The page still runs for anyone who never touches npm; npm is only there to hold
+the pin.
 
 Nothing here reaches into another repository, and there is no secret anywhere.
-An earlier version of this repo did push outward, which needed a personal access
-token with write access to two other repositories, stored here and readable by
-every workflow in this repo — a long-lived cross-repository credential for a file
-of colour values. Inverting it costs a scheduled run and removes the credential
-entirely.
-
-The pulling workflow pushes a branch rather than opening the pull request itself.
-Actions is not permitted to open pull requests in these repositories, and
-granting that to every workflow to save one click is a poor trade — and a robot's
-pull request arrives with no CI run against it anyway, because GitHub will not
-run workflows on one. Opening it by hand is what makes the product's own tests
-run.
+An earlier version pushed outward, which needed a personal access token with
+write access to two other repositories, stored here and readable by every
+workflow in this repo — a long-lived cross-repository credential for a file of
+colour values. The one after that had each product clone this repo on a weekly
+schedule, which removed the credential but spent about fifty CI runs a year to
+find nothing: these files change roughly twice. Both are gone. A version pin in
+a `package.json` was the whole of what anybody wanted.
 
 | product | how | where |
 | --- | --- | --- |
-| bildhaft | npm | `@import` in `src/main.tsx` |
-| mitreden | npm, once its rewrite lands | `src/` |
+| bildhaft | `@import` | `src/main.tsx` |
+| mitreden | `@import`, once its rewrite lands | `src/` |
 | mitreden | inline | `ui.html`, by hand until that page retires |
-| vorlaut | pull | `static/tokens.css`, weekly, no secret |
+| vorlaut | `npm run tokens` | copied to `static/tokens.css`, committed |
 
 ## What is not shared
 
