@@ -40,6 +40,7 @@
    Destructive is not a fourth tier but a colour on a quiet button; only the
    confirm button of a destructive dialog takes .filled. */
 .btn {
+  display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
   font: inherit; font-size: 14px; font-weight: 600;
   border-radius: var(--radius-sm); padding: 9px 16px;
   border: 1px solid var(--line); background: var(--surface-2); color: var(--text);
@@ -122,10 +123,11 @@
   background: none; border: none; color: var(--text);
   border-radius: var(--radius-item); padding: 8px 11px;
 }
-.menu button:hover { background: var(--surface-2); }
+.menu button:hover:not(:disabled) { background: var(--surface-2); }
+.menu button:disabled { opacity: .4; cursor: default; }
 .menu hr { border: none; border-top: 1px solid var(--line); margin: 5px 0; }
 .menu button.danger { color: var(--danger); }
-.menu button.danger:hover { background: var(--danger-soft); }
+.menu button.danger:hover:not(:disabled) { background: var(--danger-soft); }
 
 /* Anchored under its trigger with a 6px gap, right-aligned to it. The
    geometry lives on the wrapper so a menu can also stand alone — the gallery
