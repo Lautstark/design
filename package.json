@@ -1,6 +1,6 @@
 {
   "name": "@lautstark/design",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "type": "module",
   "description": "The look the Lautstark AAC tools share: one accent hue per product, every other token derived from it and contrast-checked before it ships.",
   "license": "MIT",
@@ -25,7 +25,8 @@
     "docs/lib",
     "docs/design.md",
     "build.js",
-    "products"
+    "products",
+    "pins.js"
   ],
   "exports": {
     ".": "./docs/lib/derive.js",
@@ -40,6 +41,7 @@
   },
   "scripts": {
     "build": "node build.js",
-    "check": "node build.js --check"
+    "check": "node build.js --check",
+    "pins": "node pins.js"
   }
 }

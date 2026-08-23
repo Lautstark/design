@@ -97,10 +97,36 @@ this family already shares code (`@lautstark/bildquelle`, `@lautstark/stimmquell
 @import '@lautstark/design/components.css';
 ```
 
-Vite resolves the bare specifier, so there is no plugin and no copy step. The pin
-is a real pin, `npm update` is the whole update story, and `prepare` regenerates
-`tokens/` from source on install rather than trusting what was committed — which
-costs nothing, because the generator has no dependencies.
+Vite resolves the bare specifier, so there is no plugin and no copy step, and the
+pin is a real pin.
+
+Nothing runs on a consumer's machine at install time. There is deliberately no
+`prepare` script: this family allowlists install scripts, and a token set that is
+static CSS has no business asking for an exemption. What ships is what was
+committed, and CI checks the committed files are current instead — which is why
+the header in every token file names a version. (This paragraph used to claim the
+opposite, that `prepare` regenerated `tokens/` on install. It never has; `build.js`
+has said so in its header the whole time.)
+
+### Keeping the pin current
+
+An exact tag means an install can never move the build on its own. It also means
+nothing notices when a pin stops being current — which is how vorlaut came to sit
+on 1.5.0 while its two siblings were still on 1.4.3.
+
+```
+node node_modules/@lautstark/design/pins.js
+```
+
+Reads the calling repository's own `package.json`, resolves the latest release of
+every `github:Lautstark/*` package it pins, and says which are behind. It also
+flags a pin that is a range or a branch rather than a tag, since that is the rule
+it is checking.
+
+It warns and does not fail. Being a patch behind is not a reason to block a deploy
+that fixes something else, and a check that can stop an urgent release for a
+cosmetic reason is a check people learn to route around. `--strict` exits non-zero
+for anybody who wants the opposite.
 
 Not by a CDN. All three products run offline, and a stylesheet fetched from a
 remote host at page load would cost them that. npm is a build-time fetch that
