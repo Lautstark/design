@@ -141,8 +141,16 @@
 /* Anchored under its trigger with a 6px gap, right-aligned to it. The
    geometry lives on the wrapper so a menu can also stand alone — the gallery
    shows one unanchored. */
-.menu-anchor { position: relative; }
+.menu-anchor { position: relative; display: inline-flex; flex: none; }
 .menu-anchor .menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; }
+
+/* Right-aligned suits a trigger sitting at the right edge of a row, which is
+   where the overflow ⋯ lives and why it is the default. A trigger at the left
+   of a wide panel — a settings row's language or rendering picker — wants the
+   opposite, or the list hangs leftward off the panel it belongs to. Same
+   promotion as .dropdown above: mitreden wrote it, vorlaut is the second
+   product to need it. */
+.menu-anchor.start > .menu { left: 0; right: auto; }
 
 /* The trigger that opens one: a button with a chevron, because pressing it asks
    a question rather than doing the thing. mitreden wrote this first and said in
