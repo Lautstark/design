@@ -170,6 +170,14 @@
  * quietly taking the sheet body's colour, its font size and its padding. The
  * vocabulary is deliberately small and reused, which is exactly why it has to
  * be scoped.
+ *
+ * The other half of that rule belongs to the products: a name this file owns
+ * must not double as a JavaScript hook. mitreden carried a paragraph marked
+ * class="sub body" only so its code could find it, and it wore the sheet
+ * body's font size from the day it adopted this file — invisibly, because a
+ * name that appears solely inside a querySelector cannot be found by reading
+ * stylesheets. Worth checking for directly: every .head, .body or .foot inside
+ * a .sheet whose parent is not that sheet.
  */
 .sheet > .head {
   display: flex; align-items: center; justify-content: space-between;
@@ -289,6 +297,12 @@
  * A summary may not contain a button: a control nested in it would toggle the
  * panel when clicked, and reads as two things at once. Actions belong in the
  * body.
+ *
+ * The heading must say something from the first frame. A state fetched from a
+ * database or a network answer leaves the summary blank until it arrives —
+ * which is this component's one promise broken at the exact moment somebody is
+ * reading it. Where the value cannot be known synchronously, say that instead:
+ * "Wird geladen …" is a state, empty is not.
  */
 .panel { border-top: 1px solid var(--line); }
 .panel:last-of-type { border-bottom: 1px solid var(--line); }
