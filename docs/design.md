@@ -1401,7 +1401,8 @@ the icon variant; fields and their labels; filter chips; the overflow menu and
 its anchoring geometry; the sheet skeleton with bildhaft's head/body/foot
 anatomy (§5 item 8 already adopted it for mitreden); empty states; the notice
 line and the toast; the two motion durations behind `prefers-reduced-motion`;
-and — since v1.2.0 — the footer shell with its `.linklike` treatment. §2
+the footer shell with its `.linklike` treatment; the segmented control; and
+the folded panel. §2
 called the footers "not comparable" and it was right at the time; then
 mitreden's rewrite grew legal pages, needed a footer after all, and built it
 by copying bildhaft's values with a comment saying so, which is this file's
@@ -1427,11 +1428,23 @@ cannot hear toggling is not a filter; `.menu` inside a `.menu-anchor`;
 restyles nothing by itself except `:focus-visible`, which is the one rule that
 was already true everywhere and should not be optional.
 
-Adoption is per product, as token adoption was. bildhaft migrates its BEM
-names (`.btn--primary` becomes `class="btn primary"`) and retires its own
-copies; vorlaut and mitreden add the base class their bare `button` selectors
-never needed, and delete the rules the file now owns. mitreden's `.chip.on`
-moves to the attribute. None of that happens in this repository.
+Adoption is per product, as token adoption was, and it has now happened
+twice. bildhaft renamed its BEM classes (`.btn--primary` became
+`class="btn primary"`); mitreden added the base class its bare `button`
+selectors never needed and moved `.chip.on` to `aria-pressed`; both deleted
+the rules the file owns, and both replaced their settings tabs with panels.
+
+vorlaut is the one left, and its migration carries a trap worth naming
+before it starts rather than during: vorlaut's panel bodies are
+`<div class="field">`, and `.field` here is the text-input style. Adopting
+without renaming would give every panel body in the product an input's fill,
+border and padding — which would read as the adoption having been a mistake
+rather than as one name colliding. It is the same error mitreden made in
+miniature, with a paragraph marked `class="sub body"` whose `body` existed
+only as a JavaScript hook, and the same check finds both: enumerate the
+elements carrying a shared name whose role in the markup is not the
+component's. Reading stylesheets cannot find either, because neither name is
+in one.
 
 The gallery imports the file. That is not a convenience; it is §7.5 applied to
 components: a gallery that redrew the button with private classes would be a

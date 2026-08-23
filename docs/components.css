@@ -176,8 +176,12 @@
  * class="sub body" only so its code could find it, and it wore the sheet
  * body's font size from the day it adopted this file — invisibly, because a
  * name that appears solely inside a querySelector cannot be found by reading
- * stylesheets. Worth checking for directly: every .head, .body or .foot inside
- * a .sheet whose parent is not that sheet.
+ * stylesheets. The check has to be a live one, and it generalises past this
+ * component: for any name here, enumerate the elements carrying it whose role
+ * in the markup is not the component's — a .body whose parent is not the
+ * sheet, a .field on a <div> that wraps other elements. The narrow version of
+ * this check, written first, was scoped to sheet regions and would have missed
+ * the second of those.
  */
 .sheet > .head {
   display: flex; align-items: center; justify-content: space-between;
