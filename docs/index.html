@@ -268,10 +268,12 @@
   <section>
     <h2>Messages and empty states</h2>
     <p class="note">
-      Three kinds of message, three treatments. <em>Progress</em> belongs to the
+      Four kinds of message, four treatments. <em>Progress</em> belongs to the
       control that started it. <em>Outcome</em> stays until something replaces it and
       is never auto-dismissed if it names a failure or a number. <em>Aside</em>
-      acknowledges something already visible and may clear itself. An empty list
+      acknowledges something already visible and may clear itself. A
+      <em>standing</em> line reports a condition that persists between visits — the
+      only one that can change while nobody is looking. An empty list
       teaches; a filtered-empty is a different, shorter sentence.
     </p>
     <div class="specimen">
@@ -287,6 +289,38 @@
           <b>Nothing matches „kuch"</b>
           <small>Clear the filter to see all 128.</small>
         </div>
+      </div>
+    </div>
+
+    <p class="note">
+      The standing line, in every state it has. The dot answers one question —
+      <em>is it writing?</em> — so there is no amber: permission that needs
+      re-confirming means nothing is being written, which is the same news as a
+      failure. Both of those states carry the age of the last good copy, because
+      „it is not working" is a sentence somebody can put off and „nothing saved
+      for eleven days" is not. <code>data-state</code> takes
+      <code>@lautstark/sicherung</code>'s status kind verbatim.
+    </p>
+    <div class="specimen">
+      <div class="stack">
+        <p class="standing" data-state="off">
+          <span class="dot"></span><span>No folder chosen yet.</span>
+        </p>
+        <p class="standing" data-state="idle">
+          <span class="dot"></span><span>Folder „Sicherungen" ·
+            <span class="age">saved 3 minutes ago</span></span>
+        </p>
+        <p class="standing" data-state="saving">
+          <span class="dot"></span><span>Saving …</span>
+        </p>
+        <p class="standing" data-state="needs-permission">
+          <span class="dot"></span><span>Access to „Sicherungen" must be confirmed —
+            <span class="age">last saved 11 days ago</span>.</span>
+        </p>
+        <p class="standing" data-state="failed">
+          <span class="dot"></span><span>Backup failed: no space left on device —
+            <span class="age">last saved 11 days ago</span>.</span>
+        </p>
       </div>
     </div>
   </section>

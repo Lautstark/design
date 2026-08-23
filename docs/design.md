@@ -606,6 +606,46 @@ case. Both would move slightly: bildhaft relabels one button, mitreden gains a
 concept it does not have. Both filename conventions already agree —
 `<produkt>-<was>-…` — and that convention should be written down.
 
+#### The standing Sicherung
+
+There is now a fourth thing, and it is a **Sicherung that keeps itself**: a
+folder chosen once, written to unattended from then on, via
+`@lautstark/sicherung`. It is not a fifth word — it is the same act as
+„Sicherung", with the manual step removed — so it takes the same word and does
+not get one of its own.
+
+Two things follow, and both are why it is written down here rather than left to
+each product.
+
+**It is an addition, never a replacement.** The folder picker exists only on
+Chromium on the desktop; `showDirectoryPicker` is absent from Safari and
+Firefox everywhere, and from every browser on Android. The one-file
+„Sicherung" download stays exactly where it is in all three products, and the
+folder block appears above it only where the browser has the picker. A tablet
+must never be shown a backup story it cannot have.
+
+**The state is a sentence, and it always carries the age.** §3.4 already asks a
+settings block to state its status in a sentence before it offers a control;
+this is that rule in the one place where the status can change while nobody is
+looking. The `.standing` component carries it. All three products say the same
+five things, so that a carer who has seen one has seen them all:
+
+| state | German |
+| --- | --- |
+| `off` | „Noch kein Ordner gewählt." |
+| `idle` | „Ordner „«name»" · gesichert «vor 3 Minuten»" |
+| `saving` | „Wird gesichert …" |
+| `needs-permission` | „Zugriff auf „«name»" muss bestätigt werden — zuletzt gesichert «vor 11 Tagen»." |
+| `failed` | „Sicherung fehlgeschlagen: «grund» — zuletzt gesichert «vor 11 Tagen»." |
+
+The age is not decoration and is not optional. „Es funktioniert nicht" is a
+sentence somebody can put off; „seit elf Tagen nichts gesichert" is not. The
+two states that mean *nothing is being written* must both carry it, which is
+why neither is allowed to degrade to a bare error string.
+
+The filenames follow the convention above unchanged: `<produkt>-aktuell.json`
+for the current copy, `<produkt>-<datum>.json` for the dated ones.
+
 ### 3.4 Settings
 
 Both say **Einstellungen**, so the word is settled. The placement is not: mitreden

@@ -262,6 +262,78 @@
   font-size: 14px; box-shadow: var(--shadow);
 }
 
+/* -------------------------------------------------------------- standing */
+
+/*
+ * The state of a standing arrangement — something set up once that then runs
+ * unattended, and can therefore stop without anybody being told. Today that is
+ * the backup folder in all three products; @lautstark/sicherung drives it.
+ *
+ * A fourth kind of message, and it earns the place §4.3 does not yet give it.
+ * A .notice is the outcome of an action just taken and a .toast is an aside
+ * about something already visible — both are about a moment. This is about a
+ * condition that persists between visits, which is exactly the thing neither
+ * of them can say. It is not called .status: mitreden already owns that name
+ * for its inline message line (design.md §2, "Status and toast"), and two
+ * meanings on one class in one file is how a rule drifts.
+ *
+ * ## The dot answers one question: is it writing?
+ *
+ * Three colours, no more, and the restraint is the point rather than a budget.
+ * The tempting palette here is a four-state traffic light — green, amber, red,
+ * grey — which would need --ok and --warn, a trio that only mitreden declares
+ * and that exists for per-item state (recorded / changed / not yet recorded),
+ * not for this.
+ *
+ * It is also the wrong model. "Permission needs re-confirming" feels like an
+ * amber, but what it MEANS is that nothing is being written — the same as a
+ * failure, from the only point of view that matters. A backup that has quietly
+ * stopped is worse than no backup, because it manufactures confidence, and
+ * painting that amber is how it gets read as fine. So:
+ *
+ *   accent-strong  it is writing
+ *   danger         it is not writing, and you would not otherwise know
+ *   text-faint     it is off, and you knew that
+ *
+ * Every one of those pairings against --bg is in the generator's audit, so
+ * this file adds no ratio the tokens do not already guarantee.
+ *
+ * ## data-state takes the Status kind verbatim
+ *
+ * The attribute values ARE @lautstark/sicherung's `Status['kind']`, passed
+ * through with no translation table in between. A mapping in each product is
+ * three chances to disagree about what "failed" looks like, and the drift
+ * would be invisible until the day it mattered. The cost is that a new kind in
+ * the package is a breaking change for the CSS too — which RELEASING.md says
+ * out loud, because an unstyled state falls back to the grey "off" dot and
+ * would read as *deliberately not set up*.
+ */
+.standing {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 13px; line-height: 1.45; color: var(--text-dim);
+}
+
+/* Baseline-aligned text needs the dot nudged onto the x-height by hand; it has
+   no baseline of its own to align. */
+.standing .dot {
+  flex: none; width: 8px; height: 8px; border-radius: var(--radius-pill);
+  background: var(--text-faint); transform: translateY(-1px);
+}
+
+.standing[data-state="idle"] .dot,
+.standing[data-state="saving"] .dot { background: var(--accent-strong); }
+
+.standing[data-state="needs-permission"],
+.standing[data-state="failed"] { color: var(--danger); }
+.standing[data-state="needs-permission"] .dot,
+.standing[data-state="failed"] .dot { background: var(--danger); }
+
+/* The age of the last good copy, which is the one number that tells somebody
+   whether they are safe. Never faded: it is most worth reading in the states
+   that are already coloured, and an opacity on top of a solved token is how
+   the family broke contrast three times (§1.1). */
+.standing .age { color: inherit; font-variant-numeric: tabular-nums; }
+
 /* --------------------------------------------------------------- segmented */
 
 /*
