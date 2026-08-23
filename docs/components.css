@@ -144,6 +144,32 @@
 .menu-anchor { position: relative; }
 .menu-anchor .menu { position: absolute; right: 0; top: calc(100% + 6px); z-index: 30; }
 
+/* The trigger that opens one: a button with a chevron, because pressing it asks
+   a question rather than doing the thing. mitreden wrote this first and said in
+   the margin that it became shared the day a second product needed the same
+   trigger; vorlaut's language and rendering pickers are that day, so here it is.
+
+   Masked rather than drawn as a background image, so the mark takes the
+   button's own colour in both schemes instead of needing a second SVG per
+   scheme — design.md §8.1's desync trap, of which vorlaut's select chevron was
+   the last example. The hex inside the URI is the one literal in this file and
+   it never renders: a mask uses the shape and throws the colour away, which is
+   the whole reason it is a mask.
+
+   It must not restate the button's shape. An earlier version of this rule also
+   set border-radius and padding, which silently outranked .btn — the trigger
+   drew itself at 999px while a plain .btn beside it drew itself at 9px. A
+   trigger adds an affordance to a button; it does not redraw one. */
+.dropdown {
+  --chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.dropdown::after {
+  content: ""; width: 10px; height: 7px; flex: none; background: currentColor;
+  -webkit-mask: var(--chevron) no-repeat center/10px 7px;
+  mask: var(--chevron) no-repeat center/10px 7px;
+}
+.dropdown[aria-expanded="true"] { background: var(--surface-2); color: var(--text); }
+
 /* ------------------------------------------------------------------- sheet */
 
 /* The dialog silhouette both products drew, with bildhaft's head/body/foot
