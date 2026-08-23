@@ -1,9 +1,8 @@
 {
   "product": "vorlaut",
   "accent": "#9B7BFF",
-  "schemes": "dark",
+  "schemes": "both",
   "state": false,
-  "transport": "file",
-  "out": ["static/tokens.css"],
-  "note": "The one product with no package.json and no build step, so the file is copied in rather than imported. Commits to a dark ground, so only that scheme is emitted. If vorlaut becomes a Vite page like its siblings, it moves to npm and this transport goes away."
+  "transport": "npm",
+  "note": "Follows the OS. Consumed through the package, like its siblings - the \"no package.json, no build step, file copied in\" note this used to carry described the pre-Vite page and stopped being true when vorlaut moved to npm. It committed to a dark ground for as long as it was the one product that did; nothing about the accent required it."
 }
