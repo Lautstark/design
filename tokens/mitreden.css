@@ -91,22 +91,22 @@
 
 /* A choice, where the two rules above are the absence of one. Nothing sets this
    attribute unless somebody picked a scheme in that product's settings; with it
-   unset the media query is still the whole story, which is what "follows the OS"
-   has always meant here and stays the default.
- *
- * An attribute selector rather than light-dark(). Both express one rule instead
- * of two, and light-dark() would express it without repeating a single value —
- * but it fails as one piece: a browser that cannot parse it drops every
- * declaration holding it, and the page comes up with no tokens at all rather
- * than with the wrong scheme. These products run on donated and hand-me-down
- * tablets that cannot take a current OS, and a scheme toggle is not worth
- * trading a blank page for. The repetition below is in generated output, where
- * it costs nothing and nobody maintains it.
- *
- * color-scheme is re-declared in each, and it is the half that is easy to drop:
- * without it the browser keeps drawing its own furniture — scrollbars, the open
- * list of a select, a date picker — in the scheme the OS asked for, and a page
- * set to light grows a black scrollbar down the side of it. */
+   unset the media query is still the whole story, which is what "follows the
+   OS" has always meant here and stays the default.
+
+   An attribute selector rather than light-dark(). Both express one rule instead
+   of two, and light-dark() would express it without repeating a single value —
+   but it fails as one piece: a browser that cannot parse it drops every
+   declaration holding it, and the page comes up with no tokens at all rather
+   than with the wrong scheme. These products run on donated and hand-me-down
+   tablets that cannot take a current OS, and a scheme toggle is not worth
+   trading a blank page for. The repetition below is in generated output, where
+   it costs nothing and nobody maintains it.
+
+   color-scheme is re-declared in each, and it is the half that is easy to drop:
+   without it the browser keeps drawing its own furniture — scrollbars, the open
+   list of a select, a date picker — in the scheme the OS asked for, and a page
+   set to light grows a black scrollbar down the side of it. */
 :root[data-theme="light"] {
   color-scheme: light;
 
