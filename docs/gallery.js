@@ -118,6 +118,13 @@ matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
 });
 $('scheme').addEventListener('click', () => { document.documentElement.dataset.userSet = '1'; });
 
+/* A segmented control is exclusive by definition: exactly one is pressed. */
+$('seg').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  for (const s of $('seg').querySelectorAll('button')) s.setAttribute('aria-pressed', String(s === b));
+});
+
 /* Chips are a filter demo: one at a time, and clicking one is not an action. */
 $('chips').addEventListener('click', (e) => {
   const b = e.target.closest('.chip');

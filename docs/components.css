@@ -208,6 +208,57 @@
   font-size: 14px; box-shadow: var(--shadow);
 }
 
+/* --------------------------------------------------------------- segmented */
+
+/*
+ * One row of mutually exclusive choices with the live one lifted out of the
+ * track. Both products drew it and one of them says in a comment that it took
+ * the other's shape, which is this file's admission bar met out loud.
+ *
+ * The grounds were settled by looking, not by taste. The track is --bg and the
+ * lifted segment is --surface, because "a raised plane sitting on --bg" is what
+ * --surface *means* — and it is the only pairing that reads as raised in both
+ * schemes. Marking selection with --surface-3 over a --surface-2 track lifts in
+ * dark and sinks in light, because the plane ladder runs darker in light and
+ * lighter in dark; a shadow under a segment that looks pressed in is the tell.
+ * It also spends --surface-3, which §4.2 reserves for "under the pointer, never
+ * at rest", and a selected tab is a rest state.
+ *
+ * Selection rides aria-pressed. Watch for the helper that writes a boolean true
+ * as a bare attribute: aria-pressed="" matches nothing here and is invalid to a
+ * screen reader — a selection that silently never shows, which has now happened
+ * in this family twice.
+ */
+.segmented {
+  display: flex; gap: 2px; padding: 3px;
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+}
+.segmented button {
+  flex: 1; padding: 6px 10px;
+  border: none; border-radius: var(--radius-pill);
+  background: transparent; color: var(--text-dim);
+  font: inherit; font-size: 13.5px; cursor: pointer;
+  transition: background .13s ease, color .13s ease;
+}
+.segmented button:hover { color: var(--text); }
+.segmented button[aria-pressed="true"] {
+  background: var(--surface); color: var(--text);
+  font-weight: 600; box-shadow: var(--shadow-sm);
+}
+
+/* Labels long enough to need a second row — four German compound nouns will —
+   wrap into two columns rather than crushing, and the track gives up its pill
+   radius, which reads wrong drawn around two rows. */
+@media (max-width: 560px) {
+  .segmented { flex-wrap: wrap; border-radius: var(--radius); }
+  .segmented button { flex: 1 1 45%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segmented button { transition: none; }
+}
+
 /* ------------------------------------------------------------------ panels */
 
 /*

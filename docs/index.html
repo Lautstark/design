@@ -134,6 +134,25 @@
   </section>
 
   <section>
+    <h2>Segmented</h2>
+    <p class="note">
+      One row of mutually exclusive choices, the live one lifted out of the
+      track. The track is <code>--bg</code> and the lifted segment is
+      <code>--surface</code> — the only pairing that reads as raised in both
+      schemes, because that is precisely what <code>--surface</code> means.
+      Selection rides <code>aria-pressed</code>; below 560px the row wraps into
+      two columns rather than crushing its labels.
+    </p>
+    <div class="specimen">
+      <div class="segmented" id="seg">
+        <button aria-pressed="true">Symbole</button>
+        <button aria-pressed="false">Mein Wörterbuch</button>
+        <button aria-pressed="false">Daten</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>Fields</h2>
     <p class="note">
       A field is a fill, not a hole. At rest it is <code>--surface-2</code> with a
