@@ -84,12 +84,15 @@ section > h2 {
    measure ever comes back, it belongs in a unit that means what it says. */
 section > .note { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; }
 
-.panel {
+/* The box a specimen sits in. It was called .panel until components.css took
+   that name for the folded section — the gallery's own chrome yields to the
+   shared vocabulary, which is the direction that has to hold. */
+.specimen {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); padding: 22px;
 }
-.panel + .panel { margin-top: 14px; }
-.panel > h3 {
+.specimen + .specimen { margin-top: 14px; }
+.specimen > h3 {
   font-size: 12px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
   color: var(--text-faint); margin: 0 0 14px;
 }
@@ -139,6 +142,17 @@ section > .note { color: var(--text-dim); font-size: 14px; margin: 0 0 20px; }
 .item .txt b { font-weight: 550; font-size: 15px; }
 .item .txt small { display: block; color: var(--text-faint); font-size: 12.5px; }
 .item .state { font-size: 12px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+/* The panels are the component; the surface they sit on is gallery chrome —
+   in a product they line a sheet, and here they need something to line. */
+/* Panels line a sheet edge to edge, so this specimen gives them an edge to
+   line rather than the usual padded box. */
+.panel-demo {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); overflow: hidden;
+}
+.panel-demo > .panel:first-of-type { border-top: none; }
+.panel-demo > .panel:last-of-type { border-bottom: none; }
 
 /* ----------------------------------------------------------- audit table */
 

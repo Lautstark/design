@@ -202,6 +202,75 @@
   font-size: 14px; box-shadow: var(--shadow);
 }
 
+/* ------------------------------------------------------------------ panels */
+
+/*
+ * A folded section whose heading carries its state, so a look is enough and
+ * opening is a decision. vorlaut built this first and got it right; it is
+ * here rather than hand-copied into the second product, which is the whole
+ * point of this file.
+ *
+ *   <details class="panel">
+ *     <summary><span class="section">…</span><span class="state">…</span></summary>
+ *     <div class="body">…</div>
+ *   </details>
+ *
+ * Native <details>, so this component asks nothing of a product's JavaScript:
+ * the browser owns the toggle, the keyboard behaviour and the semantics — the
+ * same bargain <dialog> makes for the sheet. It is also what §3.4 asks for
+ * structurally ("a settings block states its status in a sentence before it
+ * offers a control") rather than as something each author must remember.
+ *
+ * A summary may not contain a button: a control nested in it would toggle the
+ * panel when clicked, and reads as two things at once. Actions belong in the
+ * body.
+ */
+.panel { border-top: 1px solid var(--line); }
+.panel:last-of-type { border-bottom: 1px solid var(--line); }
+
+.panel > summary {
+  display: flex; align-items: baseline; gap: 10px;
+  padding: 14px 16px; cursor: pointer;
+  list-style: none;
+}
+/* Safari draws its own triangle in front of the row, on top of the one below. */
+.panel > summary::-webkit-details-marker { display: none; }
+.panel > summary:hover { background: var(--surface-2); }
+
+.panel > summary .section { flex: none; font-size: 14px; font-weight: 600; }
+/* The state gives way before the heading does: it is the line that can be
+   long, and truncating it costs less than wrapping the row. */
+.panel > summary .state {
+  flex: 1 1 auto; min-width: 0;
+  color: var(--text-dim); font-size: 12px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* The chevron, in the corner, pointing the way the panel will move. Two
+   borders and a rotation — no SVG and no data URI, so it takes its colour
+   from the token instead of from a hex baked into a URL that cannot read
+   one (§8.1's desync trap, in the one place it keeps appearing). */
+.panel > summary::after {
+  content: ""; flex: none; width: 7px; height: 7px; margin-left: auto;
+  border-right: 1.6px solid var(--text-dim);
+  border-bottom: 1.6px solid var(--text-dim);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .12s ease;
+}
+.panel[open] > summary::after { transform: translateY(1px) rotate(-135deg); }
+
+/* Accent tint means "this one" (§4.3), and "the current source" is named in
+   that rule. aria-current carries it, so the state is in the markup rather
+   than in a class the assistive layer cannot see. */
+.panel > summary[aria-current="true"] { background: var(--accent-soft); }
+.panel > summary[aria-current="true"] .section { color: var(--accent-strong); }
+
+.panel > .body { padding: 2px 16px 18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel > summary::after { transition: none; }
+}
+
 /* ------------------------------------------------------------------ footer */
 
 /* The footer joined this file late, and on evidence: design.md's audit called

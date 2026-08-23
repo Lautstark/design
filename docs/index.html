@@ -69,7 +69,7 @@
       very low chroma, so the neutrals read as one material rather than as grey with
       a cast dropped over it.
     </p>
-    <div class="panel"><div class="swatches" id="sw-planes"></div></div>
+    <div class="specimen"><div class="swatches" id="sw-planes"></div></div>
   </section>
 
   <section>
@@ -82,7 +82,7 @@
       <code>--text-faint</code> that measured 3.92:1 where it was checked and 3.18:1
       where it was printed.
     </p>
-    <div class="panel"><div class="swatches" id="sw-text"></div></div>
+    <div class="specimen"><div class="swatches" id="sw-text"></div></div>
   </section>
 
   <section>
@@ -93,7 +93,7 @@
       near-black and near-white and keeps whichever wins on that hue — hardcoding
       one is how a delete-everything button shipped at 2.48:1.
     </p>
-    <div class="panel"><div class="swatches" id="sw-accent"></div></div>
+    <div class="specimen"><div class="swatches" id="sw-accent"></div></div>
   </section>
 
   <section>
@@ -103,7 +103,7 @@
       above. <code>build.js</code> runs this same check and refuses to write a file
       that fails, so a ratio can only regress if somebody hand-edits generated CSS.
     </p>
-    <div class="panel"><table class="audit"><thead><tr>
+    <div class="specimen"><table class="audit"><thead><tr>
       <th>Foreground</th><th>Ground</th><th>Ratio</th><th>Needs</th><th></th>
     </tr></thead><tbody id="audit"></tbody></table></div>
   </section>
@@ -116,7 +116,7 @@
       transparent. Destructive is not a fourth tier but a colour applied to a quiet
       or normal button — only the confirm button of a destructive dialog is filled.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <h3>Tiers</h3>
       <div class="row">
         <button class="btn primary">Generate</button>
@@ -141,7 +141,7 @@
       border takes the accent, and the ring appears. <code>font: inherit</code>,
       always — a sentence typed in must look like the same sentence read back out.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <div class="stack">
         <div>
           <label class="lbl" for="f1">Sentence</label>
@@ -163,7 +163,7 @@
       numerals; the selected one takes the accent tint, never the full fill — the
       full fill belongs to the primary action alone.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <div class="row" id="chips">
         <button class="chip" aria-pressed="true">All <span class="n">128</span></button>
         <button class="chip" aria-pressed="false">Essen <span class="n">24</span></button>
@@ -181,7 +181,7 @@
       that one trigger — and never behind hover, because these products are used on
       touch screens. Destructive rows sit last.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <div class="row" style="align-items:flex-start;gap:22px">
         <div class="list" style="flex:1;min-width:260px">
           <div class="item">
@@ -207,6 +207,46 @@
   </section>
 
   <section>
+    <h2>Folded panels</h2>
+    <p class="note">
+      A settings block states its status in a sentence before it offers a
+      control — so the heading carries the state, a look is enough, and opening
+      is a decision. Native <code>&lt;details&gt;</code>, which is why this
+      component needs no JavaScript from the product at all. The accent tint
+      marks the current one, and a summary never holds a button: a control
+      nested in it would toggle the panel it sits in.
+    </p>
+    <div class="panel-demo">
+      <details class="panel" open>
+        <summary aria-current="true">
+          <span class="section">ARASAAC</span>
+          <span class="state">Aktive Quelle · rund 13.000 Piktogramme</span>
+        </summary>
+        <div class="body">
+          <p class="note" style="margin:0">
+            Free pictograms, nothing to set up. The body is where the controls
+            live.
+          </p>
+        </div>
+      </details>
+      <details class="panel">
+        <summary>
+          <span class="section">METACOM</span>
+          <span class="state">67952 Symbole · METACOM_9_Desktop</span>
+        </summary>
+        <div class="body"><p class="note" style="margin:0">Licensed, read locally.</p></div>
+      </details>
+      <details class="panel">
+        <summary>
+          <span class="section">Funktionswörter</span>
+          <span class="state">128 Wörter</span>
+        </summary>
+        <div class="body"><p class="note" style="margin:0">One word per line.</p></div>
+      </details>
+    </div>
+  </section>
+
+  <section>
     <h2>Messages and empty states</h2>
     <p class="note">
       Three kinds of message, three treatments. <em>Progress</em> belongs to the
@@ -215,7 +255,7 @@
       acknowledges something already visible and may clear itself. An empty list
       teaches; a filtered-empty is a different, shorter sentence.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <div class="stack">
         <div class="notice">4 of 12 sentences still need a recording.</div>
         <div class="notice bad">2 sentences could not be generated: the voice is unavailable.</div>
@@ -238,7 +278,7 @@
       Name what is lost and label the button with the act, never "OK". The body
       states the count and what does not come back.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <div class="sheet">
         <div class="head"><h4>Delete 12 sentences?</h4></div>
         <div class="body">
@@ -259,7 +299,7 @@
       What <code>build.js</code> writes into each product, header and all. Nothing
       here is hand-maintained.
     </p>
-    <div class="panel">
+    <div class="specimen">
       <div class="row" style="margin-bottom:14px">
         <button class="btn primary" id="copy">Copy CSS</button>
         <span class="state" id="copied" hidden>Copied.</span>
