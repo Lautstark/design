@@ -163,15 +163,23 @@
      content deal with the width it gets. */
   min-width: 0;
 }
-.sheet .head {
+/*
+ * The three regions are the sheet's OWN children, and the selectors have to
+ * say so. As descendants they reached anything nested that happened to share
+ * a name — and a panel's body is a .body, so every panel inside a sheet was
+ * quietly taking the sheet body's colour, its font size and its padding. The
+ * vocabulary is deliberately small and reused, which is exactly why it has to
+ * be scoped.
+ */
+.sheet > .head {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; margin-bottom: 8px;
 }
-.sheet :is(h2, h3, h4) { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
-.sheet .body { color: var(--text-dim); font-size: 14px; }
-.sheet .body p { margin: 0; }
-.sheet .body p + p { margin-top: 10px; }
-.sheet .foot {
+.sheet > .head :is(h2, h3, h4) { margin: 0; font-size: 17px; font-weight: 650; letter-spacing: -.01em; }
+.sheet > .body { color: var(--text-dim); font-size: 14px; }
+.sheet > .body > p { margin: 0; }
+.sheet > .body > p + p { margin-top: 10px; }
+.sheet > .foot {
   display: flex; align-items: center; gap: 9px; justify-content: flex-end;
   border-top: 1px solid var(--line); margin-top: 18px; padding-top: 14px;
 }
@@ -322,7 +330,11 @@
 .panel > summary[aria-current="true"] { background: var(--accent-soft); }
 .panel > summary[aria-current="true"] .section { color: var(--accent-strong); }
 
-.panel > .body { padding: 2px 16px 18px; }
+/* The body is a region of its own, and needs to read as one: air under the
+   heading it belongs to, and more under its last control than a hairline's
+   width, since what follows is the next panel's edge. The 2px this started
+   with was measured for a scroll container's clipping, not for reading. */
+.panel > .body { padding: 10px 16px 22px; }
 
 /* Narrow: the state gets its own line rather than an ellipsis. Truncating it
    would break the one promise this component makes — that the heading tells
