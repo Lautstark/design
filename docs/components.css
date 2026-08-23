@@ -118,9 +118,17 @@
 
 /* The closest agreement in the audit: the two products differed by one glyph,
    10px of width and 2px of radius. This is the agreed one. Destructive rows
-   sit last, in --danger, over --danger-soft. The trigger carries aria-haspopup
-   and a live aria-expanded; the popup carries role="menu", its rows
-   role="menuitem". */
+   sit last, in --danger, over --danger-soft. The trigger carries
+   aria-haspopup="menu" and a live aria-expanded; the popup carries
+   role="menu", its rows role="menuitem" — or role="menuitemradio" where the
+   menu is a set of alternatives rather than a list of commands, in which case
+   exactly one carries aria-checked="true".
+
+   The keyboard half of that contract is not drawing and so is not in this
+   file, but it is part of the same pattern and the products got it wrong
+   separately: opening a menu moves focus to its first enabled row, the arrows
+   and Home/End walk them, and Escape closes and hands focus back to the
+   trigger. A popup nobody can reach is styled, not built. */
 .menu {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius-sm); box-shadow: var(--shadow);
@@ -137,6 +145,20 @@
 .menu hr { border: none; border-top: 1px solid var(--line); margin: 5px 0; }
 .menu button.danger { color: var(--danger); }
 .menu button.danger:hover:not(:disabled) { background: var(--danger-soft); }
+
+/* The visible half of menuitemradio, and the reason it is here rather than in
+   a product: aria-checked said which alternative was in force and nothing said
+   it to anyone not using a reader. vorlaut shipped two such menus that way —
+   the selection could only be inferred from the trigger behind the open list —
+   and mitreden's language menu was about to be a third.
+
+   The accent, because "the one in force" already looks like this everywhere
+   else in this family: it is what the voice picker's selected row uses. Space
+   is reserved on every row of a radio menu rather than only the checked one,
+   so the labels do not shift by 19px when the choice moves. */
+.menu button[role="menuitemradio"] { position: relative; padding-right: 30px; }
+.menu button[aria-checked="true"] { color: var(--accent-strong); font-weight: 650; }
+.menu button[aria-checked="true"]::after { content: "\2713"; position: absolute; right: 11px; }
 
 /* Anchored under its trigger with a 6px gap, right-aligned to it. The
    geometry lives on the wrapper so a menu can also stand alone — the gallery

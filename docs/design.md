@@ -370,6 +370,18 @@ The closest agreement in the entire comparison. Side by side:
 They differ by one character of glyph, 10px of width, 2px of radius and an ARIA
 role. This pattern is effectively already shared and only needs writing down.
 
+The ARIA row is settled as of design v1.10.0, and it took longer than the table
+suggests. Writing the drawing down did not write the behaviour down: all three
+products kept their own copy of the open/close code, vorlaut fixed the roles and
+the focus in its copy, and the fix never travelled — so mitreden opened a menu
+and left focus on the trigger, which is the one arrangement under which a menu
+is open to a reader and to nobody else. The agreed answer is
+`aria-haspopup="menu"` on the trigger, `role="menu"` on the popup, `menuitem`
+on a command and `menuitemradio` with `aria-checked` on an alternative, focus
+into the first enabled row on open, arrows and Home/End to walk, and Escape to
+close and hand focus back. components.css carries the half that is drawing and
+names the other half in its margin.
+
 mitreden does one thing bildhaft does not: a **second level in the same popup** —
 "Stimme ändern" replaces the menu's contents with the voice list rather than opening
 a submenu, on the reasoning that seventeen voices have no place in a bar but are
