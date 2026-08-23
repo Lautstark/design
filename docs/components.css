@@ -273,6 +273,23 @@
 
 .panel > .body { padding: 2px 16px 18px; }
 
+/* Narrow: the state gets its own line rather than an ellipsis. Truncating it
+   would break the one promise this component makes — that the heading tells
+   you the state — and a phone is exactly where opening every panel to find
+   out costs the most. Grid, because in a wrapped flex row the chevron would
+   follow the state onto a third line instead of staying with the heading. */
+@media (max-width: 560px) {
+  .panel > summary {
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px;
+    align-items: center;
+  }
+  .panel > summary .state {
+    grid-column: 1;
+    white-space: normal; overflow: visible; text-overflow: clip;
+  }
+  .panel > summary::after { grid-column: 2; grid-row: 1 / -1; margin-left: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .panel > summary::after { transition: none; }
 }
