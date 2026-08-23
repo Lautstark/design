@@ -1400,8 +1400,14 @@ destructive colouring, `.filled` for the confirm of a destructive dialog, and
 the icon variant; fields and their labels; filter chips; the overflow menu and
 its anchoring geometry; the sheet skeleton with bildhaft's head/body/foot
 anatomy (§5 item 8 already adopted it for mitreden); empty states; the notice
-line and the toast; and the two motion durations behind
-`prefers-reduced-motion`.
+line and the toast; the two motion durations behind `prefers-reduced-motion`;
+and — since v1.2.0 — the footer shell with its `.linklike` treatment. §2
+called the footers "not comparable" and it was right at the time; then
+mitreden's rewrite grew legal pages, needed a footer after all, and built it
+by copying bildhaft's values with a comment saying so, which is this file's
+admission bar met exactly. It is centred by decision. The content stays per
+product: bildhaft's attribution is a licence obligation, and what a footer
+may claim is §4.3's disclosure rule.
 
 **What is not.** Anything §2 found to be a real difference rather than an
 accident. List rows — separator-rows against cards is density, and density is

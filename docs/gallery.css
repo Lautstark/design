@@ -164,8 +164,5 @@ pre.out {
 pre.out .tok { color: var(--accent-strong); }
 pre.out .cm { color: var(--text-faint); }
 
-footer {
-  margin-top: 72px; padding-top: 22px; border-top: 1px solid var(--line);
-  color: var(--text-faint); font-size: 13px;
-}
-footer a { color: var(--accent-strong); }
+/* The page footer is the component; only where it sits is gallery chrome. */
+footer.footer { margin-top: 72px; border-top: 1px solid var(--line); }
