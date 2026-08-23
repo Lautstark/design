@@ -107,16 +107,12 @@ remote host at page load would cost them that. npm is a build-time fetch that
 leaves a local file; a `<link>` to another origin is a runtime dependency. Those
 are different things.
 
-**Every product pins a version.** vorlaut has no build step and never gained
-one — it serves plain ES modules — so it keeps `static/tokens.css` committed and
-refreshes it with a one-line script:
-
-```json
-"scripts": { "tokens": "cp node_modules/@lautstark/design/tokens/vorlaut.css static/tokens.css" }
-```
-
-The page still runs for anyone who never touches npm; npm is only there to hold
-the pin.
+**Every product pins a version, and every product imports.** That was not
+always true: vorlaut served plain ES modules with `static/tokens.css`
+committed, and mitreden inlined the tokens into a hand-built `ui.html`. Both
+pages are gone, so the `--sync` flag that copied files into them is gone too,
+along with the `out` and `inline` fields it read. It had been addressing paths
+that no longer existed, and nothing caught that, because no check ever ran it.
 
 Nothing here reaches into another repository, and there is no secret anywhere.
 An earlier version pushed outward, which needed a personal access token with
@@ -129,10 +125,9 @@ a `package.json` was the whole of what anybody wanted.
 
 | product | how | where |
 | --- | --- | --- |
-| bildhaft | `@import` | `src/main.tsx` |
-| mitreden | `@import`, once its rewrite lands | `src/` |
-| mitreden | inline | `ui.html`, by hand until that page retires |
-| vorlaut | `npm run tokens` | copied to `static/tokens.css`, committed |
+| bildhaft | `import` | `src/main.ts` |
+| mitreden | `import` | `src/main.ts` |
+| vorlaut | `import` | `src/main.ts` |
 
 ## What is not shared
 

@@ -4,23 +4,22 @@
  *
  *   node build.js            audit, then write tokens/<product>.css
  *   node build.js --check    audit only, write nothing, non-zero on failure
- *   node build.js --sync     also copy into products that cannot import
  *   node build.js vorlaut    one product
  *
- * tokens/ is the deliverable and it is committed. Products that have a build
- * step take it through the package — `@lautstark/design` is a github: dependency
- * exactly like @lautstark/bildquelle and @lautstark/stimmquelle already are, so
- * a version pin is a real pin and `npm update` is the whole update story.
+ * tokens/ is the deliverable and it is committed. Every product takes it
+ * through the package — `@lautstark/design` is a github: dependency exactly
+ * like @lautstark/bildquelle and @lautstark/stimmquelle already are, so a
+ * version pin is a real pin and `npm update` is the whole update story.
  *
- * `--sync` exists for the products that cannot do that. Today that is vorlaut,
- * which has no package.json, plus mitreden's hand-built ui.html, which is still
- * the live page while its rewrite lands.
- *
- * Note who runs it: not this repository. vorlaut's own workflow clones this one
- * and runs `--sync vorlaut` against its own checkout, so nothing here needs
- * write access to anywhere else and there is no cross-repository token to keep.
- * See vorlaut/.github/workflows/design-tokens.yml. It is the fallback, not the
- * mechanism, and it is pulled rather than pushed.
+ * There was a `--sync` that copied the file into the products that could not
+ * import it: vorlaut before it had a package.json, and mitreden's hand-built
+ * ui.html. Both of those pages are gone, so the flag spent its last stretch
+ * addressing files that no longer existed — `npm run sync` failed on two
+ * missing paths, and no check ran it, so nothing said so. It is removed, along
+ * with the `out` and `inline` fields it read. That makes three delivery
+ * mechanisms this repository has now deleted for being elaborate answers to a
+ * question npm had already answered; the rule they keep teaching is that a
+ * delivery mechanism should be sized to how often the thing is delivered.
  *
  * There is deliberately no `prepare` script. A consumer reads tokens/ straight
  * off the package and nothing runs on their machine at install time — this
@@ -30,7 +29,7 @@
  */
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { derive } from './docs/lib/derive.js';
@@ -38,17 +37,9 @@ import { toCss, toCssSingle } from './docs/lib/emit.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const TOKENS = join(HERE, 'tokens');
-const SIBLINGS = resolve(HERE, '..');
-
-/* Markers for the targets that inline their tokens. Everything between them is
-   replaced; everything outside is left exactly as it was, so a page keeps its
-   own hand-written CSS in the same <style> block. */
-const OPEN = '/* >>> lautstark-design: generated tokens */';
-const CLOSE = '/* <<< lautstark-design */';
 
 const args = process.argv.slice(2);
 const check = args.includes('--check');
-const sync = args.includes('--sync');
 const only = args.filter((a) => !a.startsWith('--'));
 
 /*
@@ -71,26 +62,6 @@ const configs = readdirSync(join(HERE, 'products'))
 if (!configs.length) {
   console.error(only.length ? `no such product: ${only.join(', ')}` : 'no products declared');
   process.exit(1);
-}
-
-/** Replace the marked block inside an existing file, leaving the rest alone. */
-function inlineInto(target, css, label) {
-  if (!existsSync(target)) { console.error(`  ✗ ${label} missing`); failures++; return; }
-  const src = readFileSync(target, 'utf8');
-  const from = src.indexOf(OPEN);
-  const to = src.indexOf(CLOSE);
-  if (from === -1 || to === -1 || to < from) {
-    console.error(`  ✗ ${label} has no ${OPEN} … ${CLOSE} block — add one where the tokens belong`);
-    failures++;
-    return;
-  }
-  const indent = src.slice(src.lastIndexOf('\n', from) + 1, from);
-  const body = css.split('\n').map((l) => (l ? indent + l : l)).join('\n');
-  const next = `${src.slice(0, from)}${OPEN}\n${body}\n${indent}${src.slice(to)}`;
-  if (next === src) { console.log(`  = ${label} already current`); return; }
-  writeFileSync(target, next);
-  written++;
-  console.log(`  → ${label}`);
 }
 
 function writeFile(target, css, label) {
@@ -130,20 +101,6 @@ for (const cfg of configs) {
 
   /* The package's own copy. This is what an importing product resolves. */
   writeFile(join(TOKENS, `${cfg.product}.css`), css, `tokens/${cfg.product}.css`);
-
-  if (!sync || !cfg.out?.length) continue;
-
-  /* And the copies for whatever cannot import. */
-  const root = join(SIBLINGS, cfg.product);
-  if (!existsSync(root)) {
-    console.log(`  … ${cfg.product} not checked out beside this repo, nothing copied`);
-    continue;
-  }
-  for (const out of cfg.out) {
-    const label = `${cfg.product}/${out}`;
-    if (cfg.inline) inlineInto(join(root, out), css, label);
-    else writeFile(join(root, out), css, label);
-  }
 }
 
 if (failures) {

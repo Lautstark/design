@@ -1343,10 +1343,11 @@ One mechanism: a version pin in a `package.json`. `@lautstark/design` is a
 `github:` dependency pinned to a tag, the way `@lautstark/bildquelle` and
 `@lautstark/stimmquelle` already are.
 
-Products with a build step `@import` the CSS out of `node_modules`. vorlaut has
-no build step — it serves plain ES modules — so it keeps its copy committed and
-refreshes it with a one-line `cp` script. The page still runs for anyone who
-never touches npm; npm holds the pin, nothing more.
+Every product imports the CSS out of `node_modules`. Two of them once could
+not: vorlaut served plain ES modules and kept a committed copy, and mitreden
+inlined the tokens into a hand-built `ui.html`. Both pages retired, and the
+`--sync` flag that fed them retired with them — it had been pointing at files
+that no longer existed, which nothing noticed, because no check ran it.
 
 There is deliberately no `prepare` script. `tokens/` is committed, so a consumer
 reads static CSS and nothing runs on their machine at install time. This family

@@ -40,7 +40,6 @@
   },
   "scripts": {
     "build": "node build.js",
-    "check": "node build.js --check",
-    "sync": "node build.js --sync"
+    "check": "node build.js --check"
   }
 }

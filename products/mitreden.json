@@ -4,7 +4,5 @@
   "schemes": "both",
   "state": true,
   "transport": "npm",
-  "out": ["ui.html", "docs/index.html"],
-  "inline": true,
-  "note": "Two front ends at once while the React rewrite lands: src/ imports the package, and the hand-built ui.html - still the live page - keeps its inlined block. The inline targets retire with that page, not before. `state` is on because mitreden tracks recorded / changed / not yet recorded per sentence."
+  "note": "Follows the OS and consumes the package like its siblings. It used to inline the tokens into a hand-built ui.html and a page generated from it; both retired with the Vite rewrite, and the copy-in path went with them. `state` is on because mitreden tracks recorded / changed / not yet recorded per sentence."
 }

@@ -1,8 +1,8 @@
 name: check
 
 # The audit, on every change to the generator or to a product's declaration.
-# Catching a contrast regression here costs one red tick; catching it after the
-# sync has opened three pull requests costs three.
+# Catching a contrast regression here costs one red tick; catching it after a
+# tag has gone out and three products have pinned it costs three bumps.
 
 on:
   push:
