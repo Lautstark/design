@@ -1,5 +1,5 @@
 /*
- * Generated from Lautstark/design@v1.4.3 — do not edit.
+ * Generated from Lautstark/design@v1.6.0 — do not edit.
  *
  * Every value below follows from one input, bildhaft's accent #ff6b35, and is
  * regenerated whenever the design repository moves. Editing this file by hand
@@ -77,4 +77,82 @@
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
     --shadow: 0 2px 6px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .4);
   }
+}
+
+/* A choice, where the two rules above are the absence of one. Nothing sets this
+   attribute unless somebody picked a scheme in that product's settings; with it
+   unset the media query is still the whole story, which is what "follows the OS"
+   has always meant here and stays the default.
+ *
+ * An attribute selector rather than light-dark(). Both express one rule instead
+ * of two, and light-dark() would express it without repeating a single value —
+ * but it fails as one piece: a browser that cannot parse it drops every
+ * declaration holding it, and the page comes up with no tokens at all rather
+ * than with the wrong scheme. These products run on donated and hand-me-down
+ * tablets that cannot take a current OS, and a scheme toggle is not worth
+ * trading a blank page for. The repetition below is in generated output, where
+ * it costs nothing and nobody maintains it.
+ *
+ * color-scheme is re-declared in each, and it is the half that is easy to drop:
+ * without it the browser keeps drawing its own furniture — scrollbars, the open
+ * list of a select, a date picker — in the scheme the OS asked for, and a page
+ * set to light grows a black scrollbar down the side of it. */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Ground and surfaces */
+  --bg: #fbf8f8;
+  --surface: #ffffff;
+  --surface-2: #f4efed;
+  --surface-3: #ece5e2;
+  --line: #e0d9d6;
+
+  /* Text */
+  --text: #1d1918;
+  --text-dim: #6b605d;
+  --text-faint: #766b68;
+
+  /* Accent */
+  --accent-strong: #c44100;
+  --accent-hover: #ef5c23;
+  --accent-soft: #ffefea;
+
+  /* Danger */
+  --danger: #ad332c;
+  --danger-ink: #fff6f4;
+  --danger-soft: #ffebe8;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(28, 26, 23, .05);
+  --shadow: 0 2px 6px rgba(28, 26, 23, .06), 0 12px 32px rgba(28, 26, 23, .08);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Ground and surfaces */
+  --bg: #181615;
+  --surface: #221e1d;
+  --surface-2: #2b2726;
+  --surface-3: #36312f;
+  --line: #3e3937;
+
+  /* Text */
+  --text: #f0eae8;
+  --text-dim: #a59995;
+  --text-faint: #988c89;
+
+  /* Accent */
+  --accent-strong: #ff6b35;
+  --accent-hover: #ff906a;
+  --accent-soft: #2f1a14;
+
+  /* Danger */
+  --danger: #f17265;
+  --danger-ink: #330f0c;
+  --danger-soft: #341b18;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+  --shadow: 0 2px 6px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .4);
 }
