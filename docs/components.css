@@ -156,6 +156,12 @@
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); box-shadow: var(--shadow);
   padding: 22px; max-width: 600px;
+  /* A sheet is usually a grid or flex item, and such an item's automatic
+     minimum size is its content's min-content width — so one long unbroken
+     line inside inflates the whole dialog past the space it was given, and it
+     hangs off the side of a phone. It must clamp to its container and let the
+     content deal with the width it gets. */
+  min-width: 0;
 }
 .sheet .head {
   display: flex; align-items: center; justify-content: space-between;
