@@ -36,6 +36,11 @@ decided.
   Every word comes from the caller, including "Cancel" and the name of the ✕,
   because two of the three products are bilingual and the third is German by
   policy.
+- **`@lautstark/design/rename`** — the work head's name field: `renameField`,
+  debounced while typing, written on blur and on Enter, never written when the
+  value has not moved. Its `refresh` is the only way to assign the field, which
+  is the point — all three products had a repaint that assigned it directly and
+  so could put the stored name back over what somebody was typing.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton and the message furniture, written once against the token names. The
