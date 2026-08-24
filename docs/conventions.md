@@ -532,14 +532,16 @@ true home.
 The numbering is not tidy on purpose: 5a and 5b are what came out of #5 once it
 was designed on paper, and #5 itself is struck through below with the reasoning
 that killed it. Renumbering them 6 and 7 would leave nothing pointing at the
-question, which is the part worth keeping.
+question, which is the part worth keeping. #4 is struck through the same way and
+for a related reason — designing it on paper is what showed there was nothing
+left to extract, and what the real risk turned out to be instead.
 
 | # | what | where | rough effort | |
 | --- | --- | --- | --- | --- |
 | 1 | menu helper | `@lautstark/design/menu` | **S** — half a day | done |
 | 2 | dialog layer | `@lautstark/design/dialog` | **M** — one to two days | done |
 | 3 | `touched()` + `slug`/`safeName` | with the storage work | **S**, as a rider | done |
-| 4 | backupFolder panel | `@lautstark/sicherung/ui` | **M** — needs a text seam | |
+| ~~4~~ | ~~backupFolder panel~~ | — | — | **not doing** |
 | 5a | the name field | `@lautstark/design/rename` | **S** | done |
 | 5b | the Sammlung rows | `@lautstark/design/collections` | **S** | done |
 | ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
@@ -564,12 +566,37 @@ exactly the hang that guard prevents. It carries mitreden's move off native
 earns a package; they ride along with the storage work §2.1 implies and should
 not be a task of their own.
 
-**4. The backupFolder panel.** Less duplicated than three ~150-line files
-suggest: `@lautstark/sicherung/ui` already owns the real logic — which actions
-apply to which status, and the "vor 3 Minuten" formatting. What is copied three
-times is the rendering and the wording around it, so the extracted panel has to
-take its strings from the caller. Worth doing once the pattern for that is set
-by #2.
+**~~4. The backupFolder panel.~~ Not doing, 2026-08-24.** The entry above was
+right that it is less duplicated than three ~150-line files suggest, and
+measuring it after #2 showed how much less. Comments stripped, the three files
+are 67, 61 and 77 lines of code, and **twelve lines are identical across all
+three — half of them closing braces.** The two most similar, mitreden's and
+vorlaut's, share 27 lines and differ on 74.
+
+The reason is that the extraction already happened, in pieces and under other
+names. `@lautstark/sicherung/ui` took the action table at v1.1.0, `ago()` with
+it, and `needsAttention()` at v1.2.0; `components.css` styles the panel by
+`status.kind` verbatim. What is left is a product's own words and its own way of
+getting nodes onto a page — bildhaft builds and hands back a node, the other two
+paint into markup that is already there — and design.md §4.4 puts that on the
+identity side of the line. `@lautstark/sicherung/ui`'s own header says the same
+in more detail, and says why the package refuses to render text: bildhaft has no
+`t()`, deliberately, because it turns *German* sentences into pictograms. A
+shared panel would hand it exactly the indirection it exists to refuse, in
+exchange for twelve lines.
+
+What was actually worth doing came out of designing it: **one contract really
+was written three times with nothing checking the three agree** — that
+`needs-permission` and `failed` both carry the age of the last real copy. Both
+mean no backup is being written and it will not resume by itself, and the age is
+what makes that a deadline rather than a complaint somebody can put off. All
+three now have a test over their own `sentence()` holding it. That is the risk
+the extraction was for, met at a cost the extraction could not have matched.
+
+One thing that test learned the hard way is worth carrying: vorlaut's first
+version ran only in whichever language the runner picked, so taking `{age}` out
+of the German string left it green. A product with two languages has to assert
+in both.
 
 **5a. The name field.** `@lautstark/design/rename`. Renaming is typing in the
 title (§1.6), and the timing under that was written three times: debounce, write
