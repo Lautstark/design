@@ -102,8 +102,15 @@ getting back to what you were doing, and after a handful of Sammlungen creation
 order reliably puts that at the bottom. It also gives `updatedAt` a reader,
 which is what stops it being a field that is written and never used.
 
-**Diverging: mitreden** and **vorlaut** (creation order; neither keeps an
-`updatedAt` yet).
+**Diverging: mitreden** (creation order; it keeps no `updatedAt` at all).
+
+vorlaut was named here too, and the entry was true the moment it was written:
+this document audited a vorlaut that had one board, and one board has no order.
+It grew a list the same afternoon — `updatedAt`, this rule, and a strictly
+increasing stamp so that two writes inside one millisecond still have an order —
+about an hour after the audit was filed. Left standing as long as it was because
+a divergence list only means anything while somebody re-reads it against the
+code.
 
 ### 1.5 A new Sammlung is named for the day, and the name is selected
 
@@ -205,9 +212,22 @@ request — a digest, a fetch, a timer — commits it underneath code that belie
 it is still inside one. `idb` does not remove the rule, but it is one place
 where the rule is understood rather than three.
 
-**Diverging: vorlaut** (hand-rolled request callbacks) and **mitreden** (uses
-`idb`, but keeps collections and phrases as two JSON arrays under keys in a
-`meta` store, so it has the library it declared and none of the indexes).
+**Diverging: mitreden** (uses `idb`, but keeps collections and phrases as two
+JSON arrays under keys in a `meta` store, so it has the library it declared and
+none of the indexes).
+
+vorlaut moved on 2026-08-24, from hand-rolled request callbacks and a single
+`content` store holding the registry as one record with every layout beside it
+under a `layout:<id>` key. It has a store per Sammlung and a store per layout
+now, and the index this rule asks for is on `updatedAt`, with the two readers
+that make it worth having: §1.4's order is a walk from one end of it and the
+next stamp is one cursor step to the other. The typed schema paid for itself
+twice on the way in — a `StoreName` member named a store that was not in the
+database, so any call using it would have thrown at run time, and `updatedAt`
+was optional while being an index key, which does not mis-sort a record, it
+leaves it out of the index. Neither is a thing a hand-rolled store could have
+said. There was no migration and no carrying-across: the upgrade drops every
+store it finds, which is the rule about the rules above.
 
 ### 2.2 Every write that changes what a Sicherung holds says so, at the write
 
@@ -520,11 +540,14 @@ Last because it is the largest and its interface is the least settled, not
 because it is blocked: §4.1 and §4.2 settle the arity question it depends on,
 and design.md §4.4 no longer exempts the shell.
 
-**Related, and not an extraction.** §2.1 asks two products to move to `idb` with
-real stores. Nothing shared comes out of it, so it is not on this list, but #5
-wants it done first — a shared shell that has to work against both a store-per-
-kind and a JSON-array-under-a-key would be carrying the difference it exists to
-remove.
+**Related, and not an extraction.** §2.1 asked two products to move to `idb`
+with real stores; vorlaut did on 2026-08-24 and mitreden has not. Nothing shared
+comes out of it, so it is not on this list, but #5 wants it done first — a shared
+shell that has to work against both a store-per-kind and a JSON-array-under-a-key
+would be carrying the difference it exists to remove. Which is the state #5 is
+now in rather than a reason to wait: two of the three are on the shape the
+adapter would be written against, and mitreden's storage is the thing to fix
+before it adopts the shell, not the thing to design around.
 
 ---
 
