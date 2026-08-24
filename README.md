@@ -41,9 +41,16 @@ decided.
   value has not moved. Its `refresh` is the only way to assign the field, which
   is the point — all three products had a repaint that assigned it directly and
   so could put the stored name back over what somebody was typing.
+- **`@lautstark/design/collections`** — the sidebar's Sammlung rows:
+  `drawCollections(container, {rows, open, onPick})`, with `.collections` in
+  components.css beside it. Carries the two things a row was getting wrong
+  separately — `aria-current` on the open one, and which modifier means "and
+  also this one" (conventions.md §4.2). The sidebar around the rows is not
+  here, because all three are genuinely different objects.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
-  skeleton and the message furniture, written once against the token names. The
+  skeleton, the Sammlung rows and the message furniture, written once against
+  the token names. The
   gallery imports it, and a product imports it beside its token file.
 - **[docs/lib/](docs/lib/)** — the generator. Colour maths, the derivation, and the
   emitter. No dependencies.
