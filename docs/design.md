@@ -16,7 +16,7 @@ child speaks through uses the same voice. *bildhaft* takes a German sentence and
 gives back a row of AAC pictograms to correct and print. *vorlaut* is a five-key
 talker you build yourself, and the workshop page that fills it. Same author, same
 field, same mark — a speech bubble, byte-identical path data in `icon.svg` here,
-`src/ui/Logo.tsx` there and `assets/icon.svg` in the third — filled pink, orange
+`src/ui/logo.ts` there and `public/icon.svg` in the third — filled pink, orange
 and purple.
 
 The goal is that they read as siblings: same look, same interaction patterns, same
@@ -43,9 +43,10 @@ quietly patched, because each was load-bearing:
   crosses by the road the tokens already take, a version pin. What survives of
   the rule: no *product* code crosses, and nothing crosses by hand. See §9.
 
-The container that the Ground rules section treats as mitreden's delivery mechanism
-is also gone; the website is the whole product now. Anything below that reasons
-about "container impact" should be read as spent.
+The Ground rules section was rewritten on 2026-08-24 for the same reason these
+three are here: it described mitreden as one HTML file served out of a container
+and bildhaft as React, and both had stopped being true. Anything further down
+that reasons about "container impact" is spent, and §5 says so at its head.
 
 ## The thesis
 
@@ -66,10 +67,10 @@ decides the outcome. Section 6 collects those costs.
 
 | Question | Decision |
 | --- | --- |
-| What is a group of sentences called? | **Sammlung** / *Collection*, in both |
+| What is a group of sentences called? | **Sammlung** / *Collection*, in all three |
 | Can a sentence be in several? | **Where the model allows** (§3.1). mitreden yes, bildhaft no, vorlaut cannot |
 | Light or dark? | **Both, in both.** One token set, two schemes, `prefers-color-scheme` |
-| Confirmations and editing | **Real in-page dialogs.** mitreden drops native `confirm()` / `prompt()` |
+| Confirmations and editing | **Real in-page dialogs.** Done: `@lautstark/design/dialog`, and editing happens in the field showing the value |
 | Page layout | **A sidebar shell in all three**, so they open looking like one application |
 
 One consequence worth naming up front: bildhaft renames its symbol sets to
@@ -89,40 +90,51 @@ decisions would be different if it stopped being true.
 These are constraints, not preferences. Every proposal below is measured against
 them.
 
-**No code crosses between the repositories.** Not a component, not a stylesheet,
-not a utility. bildhaft is React + TypeScript + Vite with a build step; mitreden is
-one HTML file, `ui.html`, with inline CSS and inline JS, no npm, no framework, no
-preprocessor, no CDN. That is deliberate on mitreden's side and this document does
-not argue with it. What travels between the two is *this document*.
+**Rewritten 2026-08-24.** Three of the four rules that stood here described a
+world that has gone: mitreden was one HTML file served by `mitreden.py` out of a
+container, bildhaft was React, and no code crossed between the repositories. All
+three are false now, and they were the premises the rest of this document was
+measured against, so leaving them was worse than any single wrong sentence
+further down. What they said is in the history; what is true is below.
 
-**`ui.html` ships in the container.** `mitreden.py` reads it off disk on every
-request (see `UI = ROOT / "ui.html"`), so editing it locally needs no restart — but
-the file is `COPY . .`'d into the image, which means any interface change reaches
-every NAS running `ghcr.io/steffipetaffy/mitreden` on the next `docker compose
-pull`. There is no staged rollout and no way for a user to keep the old interface
-short of pinning an image tag. That is the container impact every item on the
-change list has to answer for.
+**Code crosses, by version pin and never by hand.** There are four shared
+packages — `@lautstark/design` (these tokens, `components.css`, and the theme,
+menu and dialog modules), `@lautstark/bildquelle`, `@lautstark/stimmquelle` and
+`@lautstark/sicherung`. Each product pins an exact release tag, and
+`node pins.js` says out loud when one has fallen behind. What still does not
+cross is *product* code: a tile grid, a phrase list, a print sheet. The test is
+the one `components.css` states — only what the products demonstrably
+duplicated.
 
-**`ui.html` also ships as a website.** `tools/build-site.py` builds
-`docs/index.html` from the same file, and `docs/backend-local.js` answers
-the same routes out of the browser with no server at all. So an interface change
-lands in *two* places, and anything marked *server-shaped* below has to work in
-both or be gated. (This was written when that build lived only on a branch; it is
-now on the same branch as this document, so the conditional is spent.)
+**All three are browser-only TypeScript, built by Vite.** No server, no
+container, no accounts. mitreden's Python half and its image are gone; bildhaft
+is no longer React — its `ui/dom.ts` is the whole of what is left of a
+framework; vorlaut's `app.py` went the same way. Each is a static site deployed
+from `main` to GitHub Pages, so an interface change reaches everybody on the
+next deploy and there is no staged rollout and nothing to pin.
 
-**mitreden's interface is bilingual, bildhaft's is not.** Every user-facing string
-in mitreden lives in `lang/de.json` and `lang/en.json` with English keys, and there
-is a language picker. bildhaft's German strings are literals inside `.tsx` files
-with no i18n layer. Any vocabulary decision therefore costs mitreden one JSON edit
-per language and costs bildhaft a hunt through components — the opposite of the
-usual asymmetry, and it is why several vocabulary recommendations below land on
-bildhaft.
+**Two of the three are bilingual, bildhaft is not.** Every user-facing string in
+mitreden lives in `src/i18n/de.json` and `src/i18n/en.json` with English keys,
+and vorlaut carries both languages in `src/core/boot_data.ts`; both have a
+language picker. bildhaft's German strings are literals where they are used, and
+its `ui/dom.ts` says why: bildhaft turns *German* sentences into pictograms, so
+an English shell would front a program that only understands German input. A
+vocabulary decision therefore costs the two bilingual products a table edit each
+and costs bildhaft a hunt — which is why several vocabulary recommendations
+below land on bildhaft, and why every shared module takes its words from the
+caller rather than carrying any.
 
 ---
 
 ## 1. Token audit
 
-Extracted values, both sides, as of this writing.
+Extracted values, both sides, as of this writing — and this one is history in
+the strictest sense. The values below were read out of two products' stylesheets
+in order to argue for one generated set; that set exists, `tokens/<product>.css`
+is generated from a single accent per product, and `build.js --check` holds
+every contrast pairing. Nothing here should be consulted for what a colour *is*
+today. The file paths named are the ones the values came from and several of
+them no longer exist.
 
 ### 1.1 Colour
 
@@ -267,6 +279,14 @@ support being universal; collapsing it to one rule is a pure simplification.
 
 For each shared concept: what mitreden does, what bildhaft does, how far apart.
 
+**Read as of its date.** This section is the measurement that argued for a
+shared layer, and it was taken before there was one. Where it contrasts two
+implementations of the same control, the answer in most cases is now
+`components.css` and the modules beside it: both products import the same
+button, field, chip, menu, sheet and focus policy. The contrasts are kept
+because they are the evidence, not because they are current. Where a bullet has
+since become wrong about what a product *does*, it says so underneath.
+
 ### Buttons
 
 - **mitreden.** One `button` base: `font: inherit`, weight 600, radius 10px, padding
@@ -341,6 +361,12 @@ For each shared concept: what mitreden does, what bildhaft does, how far apart.
   weight (.6 opaque versus .38 + blur). The head/body/foot split is bildhaft's and
   is genuinely better once a dialog has more than one action; mitreden's settings
   sheet has one and does not need it yet.
+- **Since:** bildhaft's hand-built `.overlay` is gone — it is a native `<dialog>`
+  shown with `showModal()`, like the other two, and the four things it could not
+  hand-roll are why. The head/body/foot split went into `components.css`, and the
+  behaviour underneath went into `@lautstark/design/dialog` at v1.12.0 with
+  bildhaft's as the base. All three now open the same sheet and ask the same
+  question through it.
 
 One defect here is worth naming because sighted review cannot see it: bildhaft's
 dialogs carried **two buttons with the same accessible name** — the close ✕ and a
@@ -350,7 +376,10 @@ this.
 
 ### Overflow (`⋯`) menus
 
-The closest agreement in the entire comparison. Side by side:
+The closest agreement in the entire comparison — and, because of that, the first
+thing extracted: the behaviour is `@lautstark/design/menu` since v1.11.0 and all
+three import it, so the two columns below are one implementation now. Side by
+side, as they were:
 
 | | mitreden `.menu` | bildhaft `.menu__pop` |
 | --- | --- | --- |
@@ -452,6 +481,13 @@ set.
   place where mitreden's constraint bites hardest: a styled confirm dialog is real
   hand-written JS in a no-build file, and native `confirm`/`prompt` cost nothing and
   never break. See §5 for how I would split this.
+- **Since:** the constraint went with the rewrite, and so did the gap. mitreden's
+  three `confirm()` calls are `confirmDialog()` from
+  `@lautstark/design/dialog`, and each grew the three parts a sheet has — a
+  title that asks, a body that names the thing and counts what goes, a button
+  labelled with the act. The claim about `prompt()` for editing was true of the
+  `ui.html` mitreden and is not true of any version since: editing a sentence
+  and renaming a Sammlung both happen in place, in the field showing the value.
 
 ### Footers
 
@@ -465,6 +501,9 @@ set.
   it. mitreden has no attribution obligation in the interface. A footer added to
   mitreden purely for symmetry would be furniture; the one line it might honestly
   carry is the same reassurance bildhaft ends on — that nothing leaves the machine.
+- **Since:** mitreden has one. Not for symmetry: the rewrite made it a published
+  website, which owes an Impressum and a Datenschutz reachable from every
+  screen, and a footer is where those live. All three carry the same row now.
 
 ---
 
@@ -571,7 +610,7 @@ Reasons, in order of weight:
 3. **The change is cheap in the direction it falls.** mitreden would have to rename
    a persisted field (`tags`), a CLI flag (`--tags`), a JSON key documented in the
    README, and ~15 strings in two language files. bildhaft has to rename German
-   labels in `.tsx` — `Sammlungen`, `+ Neue Sammlung`, `Name der Sammlung`,
+   labels where they are used — `Sammlungen`, `+ Neue Sammlung`, `Name der Sammlung`,
    `Sammlung exportieren`, `Sammlung löschen`, and a handful of confirmation bodies.
    Its *code* keeps `Collection` and `collectionId`, because bildhaft's code is
    English by policy, exactly like mitreden's. Nothing persisted moves, and the
@@ -617,7 +656,7 @@ Three different acts that both products currently blur.
 | act | mitreden today | bildhaft today |
 | --- | --- | --- |
 | get the produced artefact out | „Als MP3 herunterladen" / „Als WAV herunterladen"; ZIP named `mitreden-{n}-{fmt}.zip` | „Drucken" (browser print, no file) |
-| hand a subset to someone | CLI only: `mitreden.py export nursery ~/Desktop/nursery` | „Sammlung exportieren"; file `bildhaft-{name}-{stamp}.json` |
+| hand a subset to someone | „Sammlung exportieren" in the ⋯ beside the name; file `mitreden-{name}.json` | „Sammlung exportieren"; file `bildhaft-{name}-{stamp}.json` |
 | protect against total loss | not in the interface at all; README says back up `phrases.json` yourself | „Sicherung" — Einstellungen → Daten → „Alles exportieren" |
 
 **Recommended rule, three words, no overlap:**
@@ -681,7 +720,7 @@ for the current copy, `<produkt>-<datum>.json` for the dated ones.
 ### 3.4 Settings
 
 Both say **Einstellungen**, so the word is settled. The placement is not: mitreden
-puts a `⚙` next to the title, on the reasoning written into `ui.html` that "beside
+puts a `⚙` next to the title, on the reasoning it wrote down at the time that "beside
 the title is where a page-wide setting belongs — not down at the list, which would
 suggest it changes something about the list." bildhaft puts a text button
 „Einstellungen" at the bottom of the sidebar.
@@ -751,9 +790,11 @@ build-side rules that grew out of the same reading are in
 ## 4. The shared design language
 
 What follows is the deliverable: named tokens and rules concrete enough to be
-implemented independently in a React app with a build step and in a single
-dependency-free HTML file. Nothing here requires either repository to look at the
-other's source.
+implemented independently, in whatever each product is built out of — which at
+the time of writing was a React app with a build step and a single
+dependency-free HTML file, and is now three Vite-built TypeScript sites. That
+they could be implemented independently is the point, and it is what made
+sharing them later a decision rather than a necessity.
 
 ### 4.1 The mark
 
@@ -924,8 +965,8 @@ tabular numerals — at full opacity, a correction to the `.55` this rule first
 named: fading a token re-breaks the contrast it was solved for, and the faded
 count measured 2.91:1 over `--accent-soft` in the product that checked. Selected takes the accent
 tint. A chip is a **filter**: it changes what is shown and never what is stored.
-This is mitreden's rule and it is written into `ui.html` in as many words —
-*filters are pills, actions are boxes* — and it should hold in both products.
+This is mitreden's rule, written in as many words in the `ui.html` it came from
+— *filters are pills, actions are boxes* — and it should hold in all three.
 
 **The overflow menu.** One pattern, already near-identical: anchored under its
 trigger with a 6px gap and right-aligned to it, min-width 190–200px, `--surface`
@@ -1038,14 +1079,26 @@ sidebar is shared; what stays exempt is below, and it is narrower.
 
 ## 5. Prioritised change list for mitreden
 
+**Overtaken, and kept for the reasoning.** This list was written for the
+`ui.html` mitreden and costed against shipping a container image. mitreden has
+since been rewritten as a browser-only TypeScript app, and most of the list
+landed with the rewrite rather than off it: the tokens, both schemes, the
+sidebar shell, the `⋯`, the Sammlung vocabulary, the in-page dialogs, the
+Sicherung, and a footer it turned out to owe. What is worth reading here is not
+the ordering but the arguments — several of them are the only written record of
+why a thing is the way it is. Every "effort" and every "container impact" below
+is spent; read them as history.
+
 Each item: **effort** (small / medium / large), **container impact**, and whether it
 is *visual*, *vocabulary*, or *both*.
 
-A note that applies to every item: because `mitreden.py` reads `ui.html` fresh per
-request, none of these need a restart in development — but all of them ship in the
-image and reach every running NAS on the next pull. There is no partial rollout.
-That argues for doing the cheap invisible ones (1–4) in one release and letting the
-behavioural ones (7, 9) stand alone so a regression has one suspect.
+A note that applied to every item, and no longer does: `mitreden.py` read
+`ui.html` fresh per request, so none of these needed a restart in development —
+but all of them shipped in the image and reached every running NAS on the next
+pull. There is no image now, and no NAS: mitreden is a static site deployed from
+`main`. The advice the note carried still holds for a different reason — group
+the invisible changes, let a behavioural one stand alone so a regression has one
+suspect — because that is about reading a failure, not about shipping.
 
 ### Tier 1 — tokens only, no behaviour change
 
@@ -1146,6 +1199,11 @@ from the existing „herunterladen" for audio.
 `ui.html`. It is also the item that makes the least sense in a hypothetical
 browser-only build of mitreden, where there is no `phrases.json` on a disk to send.
 Both.*
+**Done, and the hypothetical is what happened.** All three products carry a
+Sicherung, written by `@lautstark/sicherung` into a folder the person picks.
+There is no `phrases.json` on a disk and no endpoint: the browser holds the
+library and writes the file itself, which is the arrangement this item guessed
+would make the least sense and turned out to be the only one available.
 This is the strongest *product* argument in the whole document, quite apart from
 sibling-feel: mitreden's README already says `phrases.json` is the only thing that
 cannot be recreated, and today the interface offers no way to get it. Someone
