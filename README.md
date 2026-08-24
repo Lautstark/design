@@ -52,6 +52,11 @@ decided.
   skeleton, the Sammlung rows and the message furniture, written once against
   the token names. The
   gallery imports it, and a product imports it beside its token file.
+- **[tests/](tests/)** — the four behaviour modules above, under vitest with
+  happy-dom. `npm test`. happy-dom rather than jsdom because jsdom has no
+  `HTMLDialogElement.showModal`, which would have left the one module whose
+  subject is the native `<dialog>` unrunnable. The generator's own CI job still
+  installs nothing; this is a second job.
 - **[docs/lib/](docs/lib/)** — the generator. Colour maths, the derivation, and the
   emitter. No dependencies.
 - **[products/](products/)** — one small JSON file per product.

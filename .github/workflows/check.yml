@@ -1,8 +1,15 @@
 name: check
 
-# The audit, on every change to the generator or to a product's declaration.
-# Catching a contrast regression here costs one red tick; catching it after a
-# tag has gone out and three products have pinned it costs three bumps.
+# Two jobs, and they are separate on purpose.
+#
+# The audit is the generator and the token sets, and it installs nothing —
+# build.js has no dependencies, which is the property the three products are
+# protecting when they pin this package. Adding a test runner must not quietly
+# cost that, so the runner lives in the second job and the first still proves
+# the generator runs on a bare node.
+#
+# Catching either kind of regression here costs one red tick; catching it after
+# a tag has gone out and three products have pinned it costs three bumps.
 
 on:
   push:
@@ -35,3 +42,24 @@ jobs:
             echo "::error::tokens/ is stale. Run 'node build.js' and commit the result."
             exit 1
           }
+
+  # docs/lib/'s four behaviour modules: ./menu, ./dialog, ./rename and
+  # ./collections. Each exists because three products got the same thing subtly
+  # wrong, and a change to one of them lands in all three at once behind a tag —
+  # which is the whole reason they are worth a runner and the colour maths is
+  # not the only thing checked here any more.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      # Only devDependencies: nothing here ships. The published package still
+      # has no dependencies of its own, and `files` does not carry tests/.
+      - run: npm ci
+
+      - run: npm test
