@@ -345,6 +345,43 @@ design.md §3.6 settles the glyph.
 **Diverging: nobody** on the glyph. On the contents, **vorlaut** keeps its
 export in a settings panel.
 
+### 3.7 A folder the browser has taken access to is a warning, not a note
+
+Two different things in this family hand a product a folder: `@lautstark/sicherung`
+for the backup, `@lautstark/bildquelle` for a licensed symbol collection. Both
+store a handle, and both meet the same state — **the handle is still there and
+the browser has withdrawn the permission on it.** Chromium does this between
+visits; it is ordinary, and it is not an error.
+
+It is still the state in which *the thing is not working*: nothing is being
+backed up, or no symbol resolves. So it is drawn as a warning
+(`components.css`'s `.notice.bad`), never as another line of grey prose beside
+the descriptive ones, and it says three things in this order:
+
+1. **What is true** — the folder is remembered, nothing has been lost.
+2. **What the browser did** — it reset access, and it does that between visits.
+   Without this the message reads as the product having mislaid something.
+3. **What one press does** — re-confirms the stored handle. No re-picking. The
+   button takes `requestPermission()` on what is stored and only falls back to
+   a picker when there is nothing stored.
+
+And the heading above it carries a *state* — "Zugriff bestätigen" — not the
+instruction. A summary is one line and truncates; design.md §2 settles that a
+heading says what a section is set to.
+
+**Diverging: all three, on the backup folder** — each writes its own sentence
+and none of them marks it. **bildhaft, on symbols.** vorlaut's symbols panel is
+the only one of the five doing it.
+
+**Why this is not left to the convention alone.** A rule that five surfaces have
+to remember is a rule four of them will forget — that is what happened here, and
+it is what happened to two of design.md's decisions before that. The durable fix
+is that the packages already own the decision next door: `sicherung/ui`'s
+`actionsFor()` says *what to offer* in each state, and the same module should say
+*whether the state needs attention*, so a product draws the warning by reading
+rather than by judging. `bildquelle`'s status wants the same field. Then a fifth
+surface gets it right by construction.
+
 ---
 
 ## 4. Differences that are correct
