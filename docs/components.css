@@ -528,14 +528,58 @@
 }
 .linklike:hover { color: var(--text); }
 
+/* -------------------------------------------------------- the Sammlung list
+
+   The rows down the side: a name, how much is in it, and which are open. The
+   behaviour is docs/lib/collections.js; this is what draws it.
+
+   Called `.collections` rather than the `.list__item` two products had, and the
+   gallery is why: gallery.css uses `.list` and `.item` for a demo of *sentence*
+   rows, so a `.list` rule here would reach into a different component that
+   happens also to be a list. A name generic enough to collide once will do it
+   again. See the head of collections.js. */
+.collections { display: flex; flex-direction: column; gap: 1px; }
+
+.collections__item {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; text-align: left; padding: 8px 10px;
+  border: 0; border-radius: var(--radius-sm); background: none;
+  color: var(--text-dim); font: inherit; cursor: pointer;
+}
+.collections__item:hover { background: var(--surface-2); color: var(--text); }
+
+/* The accent, not another grey. All three marked the open row this way -
+   --accent-soft behind --accent-strong - and a row differing from its
+   neighbours only by being a slightly lighter grey is one to look at twice. */
+.collections__item--active {
+  background: var(--accent-soft); color: var(--accent-strong); font-weight: 600;
+}
+
+/* A long name truncates rather than wrapping the row to two lines: the rows are
+   read as a column of names, and an uneven column is harder to scan than a
+   clipped one. The whole name is in the work head of whichever is open. */
+.collections__name {
+  flex: 1; min-width: 0; font-size: 14px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* No colour of its own: it inherits the row, so the count follows the name into
+   the accent when the row is the open one. Tabular figures so a column of them
+   lines up. */
+.collections__count {
+  flex: none; font-size: 12px; font-variant-numeric: tabular-nums;
+}
+
 /* ------------------------------------------------------------------ motion */
 
 /* 130ms ease for a colour or fill change. Nothing in this file changes size
    or position, so the 220ms tier does not appear; a product that adds motion
    of its own must not invent a third duration. */
-.btn, .chip, .menu button, .linklike { transition: background .13s ease, color .13s ease; }
+.btn, .chip, .menu button, .linklike, .collections__item {
+  transition: background .13s ease, color .13s ease;
+}
 .field { transition: background .13s ease, border-color .13s ease; }
 
 @media (prefers-reduced-motion: reduce) {
-  .btn, .chip, .menu button, .linklike, .field { transition: none; }
+  .btn, .chip, .menu button, .linklike, .field, .collections__item { transition: none; }
 }
