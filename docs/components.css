@@ -563,9 +563,14 @@
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
-/* No colour of its own: it inherits the row, so the count follows the name into
-   the accent when the row is the open one. Tabular figures so a column of them
-   lines up. */
+/* No colour of its own, and no opacity either: it inherits the row, so the
+   count follows the name into the accent when the row is the open one.
+
+   The opacity half is a measured finding rather than a preference, carried here
+   from bildhaft's sheet so that it is not re-discovered a fourth time: at .7
+   over --accent-soft this fell to 2.91:1, under the 4.5 the tokens are checked
+   against. A dimmed count is the obvious thing to reach for and it is the one
+   thing that cannot be done here. Tabular figures so a column of them lines up. */
 .collections__count {
   flex: none; font-size: 12px; font-variant-numeric: tabular-nums;
 }
