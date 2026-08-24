@@ -1,6 +1,6 @@
 {
   "name": "@lautstark/design",
-  "version": "1.12.0",
+  "version": "1.13.0",
   "type": "module",
   "description": "The look the Lautstark AAC tools share: one accent hue per product, every other token derived from it and contrast-checked before it ships.",
   "license": "MIT",
@@ -46,6 +46,10 @@
     "./dialog": {
       "types": "./docs/lib/dialog.d.ts",
       "default": "./docs/lib/dialog.js"
+    },
+    "./rename": {
+      "types": "./docs/lib/rename.d.ts",
+      "default": "./docs/lib/rename.js"
     }
   },
   "scripts": {
