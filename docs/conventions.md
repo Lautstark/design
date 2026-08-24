@@ -329,7 +329,12 @@ attribute rather than a script, in the same spirit as `showModal()` doing the
 focus trap. A browser too old for it degrades to independent panels, which is
 where all three were anyway.
 
-**Diverging: mitreden and bildhaft.**
+**Diverging: nobody**, as of 2026-08-24. vorlaut had it; mitreden and bildhaft
+adopted it the same day, one attribute each — five characters of markup in
+mitreden's `index.html`, one `attrs` entry in the builder bildhaft makes its
+panels with. All three carry a test that opens a second panel and asserts the
+first closed, because nothing else in a suite references an attribute like this
+one and a green suite is what let two of them go without it for so long.
 
 ### 3.6 The overflow menu is `⋯`, and it holds what acts on the whole Sammlung
 
