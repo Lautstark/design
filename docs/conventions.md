@@ -29,6 +29,22 @@ the reason it existed is discovered afterwards.
 design.md settles the vocabulary — the word is **Sammlung**, and §3.6 carries
 the full glossary. Nothing here re-decides it.
 
+### The divergence lists go stale in hours, not months
+
+Every "Diverging:" line is an audit, and an audit is a photograph. While the
+three products are moving at the rate they are, the shelf life of one is
+measured in hours: §1.4 named vorlaut for keeping no `updatedAt`, which was true
+when it was written at 12:52 on 2026-08-24 and false by 14:06, when vorlaut
+grew a list of Sammlungen and the ordering with it. Nobody was wrong; the
+document was 74 minutes old.
+
+So a divergence line is a lead, not a fact. Read it against the code before
+acting on it, and when it turns out to be spent, say so on the page rather than
+deleting it quietly — a list that is only ever corrected in silence gives no
+sign of how much of the rest of it is also a photograph. Three of the entries
+below now carry the date they were settled and what settled them, which is what
+that looks like.
+
 ### One rule about the rules
 
 **Every decision here is made on merits, and nothing is justified by the cost of
@@ -90,8 +106,11 @@ whichever Sammlung happens to be first.
 re-make every visit; and having decided §1.2, a second answer for a second
 preference is how a settings record stops being the settings.
 
-**Diverging: mitreden** (`localStorage`, key `mitreden.rail`) and **vorlaut**
-(has no collapse at all).
+**Diverging: mitreden** (`localStorage`, key `mitreden.rail`).
+
+vorlaut was named here for having no collapse at all. It has one, in the
+settings record beside every other preference, and it arrived with the sidebar
+this section describes. Another photograph — see the note at the top.
 
 ### 1.4 Ordering is last-edited first
 
@@ -123,7 +142,13 @@ selecting is the half that is easy to leave out and is the whole difference
 between a suggestion and a thing that has to be deleted first: an unselected
 default name is a small chore charged on every creation.
 
-**Diverging: vorlaut** (`"Board 1"`, focused but not selected).
+**Diverging: nobody**, as of 2026-08-24. vorlaut was named here for `"Board 1"`,
+focused but not selected; it names for the day and selects, and did so from the
+commit that gave it a list of Sammlungen to name at all — the same one that
+spent §1.4's entry. It uniquifies by minting a fresh id rather than by ` (2)`,
+because two of its Sammlungen may genuinely share a name and the identity is
+never the name (§1.1); what the rule is about is the suggestion, not the
+uniqueness.
 
 ### 1.6 Renaming is typing in the title, never a dialog
 
@@ -162,7 +187,11 @@ number that appears for the first time at the moment of deletion. The argument
 against it — that at the moment of reading a list the question is only *which*
 one — is true of the first read and wrong from the second onwards.
 
-**Diverging: vorlaut** (name only; this reverses an earlier decision there).
+**Diverging: nobody**, as of 2026-08-24. vorlaut was named here for drawing the
+name alone, which reversed an earlier decision of its own; its rows carry the
+count, and the count is what §1.7's question is asked with. All three draw it
+through `@lautstark/design/collections` now (§5 5b), so it is one row rather
+than three that could drift apart again.
 
 ### 1.9 There is always one
 
@@ -490,18 +519,26 @@ three `package.json`s, and `pins.js` noticing when one is behind. They are the
 work itself, not a migration — an extraction replaces the copies in the same
 change that publishes the shared one.
 
-Everything in 1–2 belongs in **`@lautstark/design`**, beside `./theme`, which
-already ships behaviour rather than only CSS, and beside `components.css`, which
-already styles `.menu`, `.menu-anchor` and `.sheet`. Putting the JS next to the
-CSS that draws it is the smallest true home.
+Everything in 1, 2, 5a and 5b belongs in **`@lautstark/design`**, beside
+`./theme`, which already ships behaviour rather than only CSS, and beside
+`components.css`, which already styles `.menu`, `.menu-anchor`, `.sheet` and now
+`.collections`. Putting the JS next to the CSS that draws it is the smallest
+true home.
 
-| # | what | where | rough effort |
-| --- | --- | --- | --- |
-| 1 | menu helper | `@lautstark/design/menu` | **S** — half a day |
-| 2 | dialog layer | `@lautstark/design/dialog` | **M** — one to two days |
-| 3 | `touched()` + `slug`/`safeName` | with the storage work | **S**, as a rider |
-| 4 | backupFolder panel | `@lautstark/sicherung/ui` | **M** — needs a text seam |
-| 5 | the Sammlung shell | new package | **L** |
+The numbering is not tidy on purpose: 5a and 5b are what came out of #5 once it
+was designed on paper, and #5 itself is struck through below with the reasoning
+that killed it. Renumbering them 6 and 7 would leave nothing pointing at the
+question, which is the part worth keeping.
+
+| # | what | where | rough effort | |
+| --- | --- | --- | --- | --- |
+| 1 | menu helper | `@lautstark/design/menu` | **S** — half a day | done |
+| 2 | dialog layer | `@lautstark/design/dialog` | **M** — one to two days | done |
+| 3 | `touched()` + `slug`/`safeName` | with the storage work | **S**, as a rider | done |
+| 4 | backupFolder panel | `@lautstark/sicherung/ui` | **M** — needs a text seam | |
+| 5a | the name field | `@lautstark/design/rename` | **S** | done |
+| 5b | the Sammlung rows | `@lautstark/design/collections` | **S** | done |
+| ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are
 already near-identical files in mitreden and vorlaut; bildhaft's `actionMenu` is
@@ -530,24 +567,96 @@ times is the rendering and the wording around it, so the extracted panel has to
 take its strings from the caller. Worth doing once the pattern for that is set
 by #2.
 
-**5. The Sammlung shell.** The registry, the sidebar list with counts, the
-active item, create-with-a-date-name, the debounced title rename, the delete
-confirm, "there is always one", collapse-and-remember — parameterised by an
-adapter saying what is inside one and what its counts mean. Structurally this is
-what vorlaut's `core/editor.ts` already does inside one product.
+**5a. The name field.** `@lautstark/design/rename`. Renaming is typing in the
+title (§1.6), and the timing under that was written three times: debounce, write
+on the way out, and a repaint that must not assign over somebody mid-word. Done
+2026-08-24, and it is #2-shaped rather than #1-shaped — `refresh()` is the only
+way the field can be assigned, so the guard holds by construction instead of
+being remembered at each repaint. Three separate failures came out of reading the
+three copies against each other: mitreden's blur re-armed its debounce instead of
+writing, so a name clicked away from was lost unless nothing navigated in the
+next beat; bildhaft's blur wrote unconditionally, which in vorlaut would have
+been a sidebar reorder and a backup announcement per visit to the field; and
+bildhaft's guard was a value comparison that only held because it echoed each
+keystroke into its own state first.
 
-Last because it is the largest and its interface is the least settled, not
-because it is blocked: §4.1 and §4.2 settle the arity question it depends on,
-and design.md §4.4 no longer exempts the shell.
+**5b. The Sammlung rows.** `@lautstark/design/collections`, with `.collections`
+in components.css beside it. The rows — name, count, ellipsis, tabular figures,
+the accent behind the open one — were the part of the three sidebars that
+genuinely matched. Done 2026-08-24. It carries `aria-current`, which two of the
+three were missing, so the one fact the list exists to convey was not there for
+anyone not looking at the accent; and it owns the Cmd-or-Ctrl chord §4.2
+settles, which only mitreden's arity uses but which all three would otherwise
+have had a chance to get differently.
+
+The class names became `.collections__*` rather than the `.list__item` two of
+the three already shared. Standardising on the majority name would have moved
+one product instead of three, and it was still wrong: this package's own gallery
+uses `.list` and `.item` for a demo of *sentence* rows, so a `.list` rule in
+components.css reached straight into a different component that happened also to
+be a list. bildhaft's sidebar makes the same point at run time — its search
+results are a `.list` too. A name generic enough to collide once will do it
+again.
+
+### ~~5. The Sammlung shell~~ — and why it is not being extracted
+
+The row above this one used to be a single **L**: the registry, the sidebar list
+with counts, the active item, create-with-a-date-name, the debounced rename, the
+delete confirm, "there is always one", collapse-and-remember, behind an adapter
+saying what is inside a Sammlung. It was designed on paper first, and the paper
+is the reason it is not being built. This is the most useful thing in §5, because
+without it somebody re-proposes the shell in six months from the same audit that
+suggested it the first time.
+
+**The adapter does not come out small.** Written honestly it is `list`,
+`create`, `rename`, `remove`, `count`, `activate`, `collapsed.read`,
+`collapsed.write` — eight methods — plus a bag of strings and a flag for arity.
+It can be made to *look* like five by saying "pass your existing repo object"
+for the first four, since all three have one; that changes the field count and
+not what a product has to supply, so it is not an answer.
+
+**Three things do not fit in an adapter at all.**
+
+*The sidebars are not the same object.* bildhaft's holds a search over every
+sentence whose results replace the list; mitreden's is a drawer with a scrim
+below 820px; vorlaut's is neither. "The sidebar list" is a shared thing living
+inside three sidebars that are not.
+
+*The three disagree about who owns the DOM.* bildhaft's sidebar is already
+`sidebar(handlers) → {node, render(state)}` — props in, node out, which is the
+shape an extracted shell would have. vorlaut and mitreden reach into
+`getElementById` for a page they do not own and repaint imperatively. A shared
+shell has to pick one, and picking bildhaft's means the other two restructure
+their page wiring — work the **L** did not include. §3.1 settles that the page
+*is* a sidebar shell and says nothing about this.
+
+*There is a live layering disagreement underneath it.* Create-with-a-date-name
+is one of the eight things the shell was to own, and it lives in the **repo** in
+mitreden and bildhaft and in the **shell** in vorlaut — whose own comment
+explains why it had to move up there, since the storage layer has no language to
+name anything in. That is a disagreement about where the seam goes, not about
+packaging, and an adapter written over it would freeze one product's answer into
+the other two.
+
+**What was actually shared is 5a and 5b**, which are both **S**, both landed
+independently, and neither needed the arity question, the DOM-ownership question
+or the layering question answered first. What is left of the old #5 after them —
+create, the delete confirm, "there is always one", collapse-and-remember — is
+four call sites per product, and they are mostly wording and storage, which is
+exactly where §1.3, §1.7 and §4.3 already record the differences as correct.
+
+**If somebody wants to revisit this**, the thing that would change the answer is
+not more agreement about rows. It is the DOM-ownership question being settled in
+§3, and mitreden's storage moving to §2.1. Those are worth doing on their own
+merits; the shell is not the reason to do them.
 
 **Related, and not an extraction.** §2.1 asked two products to move to `idb`
 with real stores; vorlaut did on 2026-08-24 and mitreden has not. Nothing shared
-comes out of it, so it is not on this list, but #5 wants it done first — a shared
-shell that has to work against both a store-per-kind and a JSON-array-under-a-key
-would be carrying the difference it exists to remove. Which is the state #5 is
-now in rather than a reason to wait: two of the three are on the shape the
-adapter would be written against, and mitreden's storage is the thing to fix
-before it adopts the shell, not the thing to design around.
+comes out of it, so it is not on this list. It used to be filed here as
+something the Sammlung shell wanted done first, which no longer means anything
+now that the shell is not being built — but mitreden's storage is still owed on
+§2.1's own argument, and it is one of the two things above that would reopen
+this question.
 
 ---
 
