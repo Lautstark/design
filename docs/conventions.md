@@ -369,18 +369,31 @@ And the heading above it carries a *state* — "Zugriff bestätigen" — not the
 instruction. A summary is one line and truncates; design.md §2 settles that a
 heading says what a section is set to.
 
-**Diverging: all three, on the backup folder** — each writes its own sentence
-and none of them marks it. **bildhaft, on symbols.** vorlaut's symbols panel is
-the only one of the five doing it.
+**Diverging: nobody**, as of 2026-08-24. All five surfaces draw it.
 
-**Why this is not left to the convention alone.** A rule that five surfaces have
-to remember is a rule four of them will forget — that is what happened here, and
-it is what happened to two of design.md's decisions before that. The durable fix
-is that the packages already own the decision next door: `sicherung/ui`'s
-`actionsFor()` says *what to offer* in each state, and the same module should say
-*whether the state needs attention*, so a product draws the warning by reading
-rather than by judging. `bildquelle`'s status wants the same field. Then a fifth
-surface gets it right by construction.
+**And the rule is not what holds it.** A rule that five surfaces have to
+remember is a rule four of them will forget — that is what happened here, and it
+is what happened to two of design.md's decisions before that. What holds it is
+that the packages answer the question:
+
+- `@lautstark/sicherung/ui` v1.2.0 — `needsAttention(status)`, beside the
+  `actionsFor()` that already said *what to offer* in each state. True for
+  `needs-permission` and `failed`: the two where nothing is being written and
+  nothing resumes by itself. `off` is false, because nobody has chosen a folder
+  and nothing is owed.
+- `@lautstark/bildquelle` v1.5.0 — the same name over its own status. True for
+  `permission-needed` and `error`; false for `no-folder`, which is somebody who
+  has not set METACOM up and may never want to, and false for `loading`, which
+  ends on its own.
+
+So a product draws the warning by *reading* rather than by *judging*, and a
+sixth surface gets it right by construction. What stays with the product is the
+words, because two of the three are bilingual and the third is German by
+policy — and the sentence has to cover the three things above, in that order.
+
+Both packages carry a test that anything needing attention also offers something
+to press. A panel that says something is wrong and hands nobody a button is the
+failure the pair exists to make impossible.
 
 ---
 
