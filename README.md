@@ -26,6 +26,11 @@ decided.
   here.
 - **[docs/index.html](docs/index.html)** — the gallery. Every component drawn with
   live tokens, a light/dark switch, and an accent picker.
+- **`@lautstark/design/menu`** — the overflow menu's behaviour, beside the CSS
+  that draws it: `menuOn(trigger, build)`, `closeMenus()`, and the item options
+  whose field names stopped two copies of this function meaning opposite things
+  by the same third argument. Importing it attaches two document listeners, so
+  that a press outside or Escape closes whatever is open.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton and the message furniture, written once against the token names. The
