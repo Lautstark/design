@@ -310,7 +310,28 @@ the page, and what the person sees is a button that did nothing.
 **Diverging: mitreden** (native `confirm()` for destructive acts and native
 `prompt()` for editing).
 
-### 3.5 The overflow menu is `⋯`, and it holds what acts on the whole Sammlung
+### 3.5 One settings panel is open at a time
+
+The settings sheet is a column of folded `<details class="panel">`, each with
+its state in its own heading. They are one exclusive group: opening one closes
+the rest.
+
+**Why.** The state in the heading is the whole reason the panels are folded —
+which voice, whether Azure has a key, which folder is connected — and it is
+readable at a glance only while the column is a list of headings. Left
+independent, a sheet of nine panels becomes a scroll through everything
+anybody has ever opened, and a person looking for one setting reads past four
+they are not interested in.
+
+**How.** `name="settings"` on every `<details>` in the sheet. A named group is
+the platform's own accordion — it behaves like a radio group — so this is an
+attribute rather than a script, in the same spirit as `showModal()` doing the
+focus trap. A browser too old for it degrades to independent panels, which is
+where all three were anyway.
+
+**Diverging: mitreden and bildhaft.**
+
+### 3.6 The overflow menu is `⋯`, and it holds what acts on the whole Sammlung
 
 Anchored to its trigger, `role="menu"`, focus moves into it on open and returns
 to the trigger on Escape or on choosing. Contents, in order: export, then
