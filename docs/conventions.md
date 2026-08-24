@@ -336,7 +336,11 @@ in the page header instead is one the reader has to connect to its object by
 inference — and in a page that can switch Sammlung, that inference is exactly
 the one that goes wrong.
 
-**Diverging: vorlaut** (its transfer button is in the page header).
+**Diverging: nobody**, as of 2026-08-24. vorlaut's transfer button was in the
+page header when this was written; it now sits in the work head's third slot,
+which is also where its device preview went, and there is no page header left
+for it to sit in — §3.1's rule that the topbar is hidden on desktop took the
+header away, and the two acts had nowhere else to go.
 
 ### 3.4 Dialogs are native `<dialog>` with `showModal()`
 
