@@ -24,6 +24,7 @@
     "docs/components.css",
     "docs/lib",
     "docs/design.md",
+    "docs/conventions.md",
     "build.js",
     "products",
     "pins.js"

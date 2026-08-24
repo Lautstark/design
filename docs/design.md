@@ -67,10 +67,10 @@ decides the outcome. Section 6 collects those costs.
 | Question | Decision |
 | --- | --- |
 | What is a group of sentences called? | **Sammlung** / *Collection*, in both |
-| Can a sentence be in several? | **Yes, in both.** bildhaft relaxes `collectionId` to a list |
+| Can a sentence be in several? | **Where the model allows** (§3.1). mitreden yes, bildhaft no, vorlaut cannot |
 | Light or dark? | **Both, in both.** One token set, two schemes, `prefers-color-scheme` |
 | Confirmations and editing | **Real in-page dialogs.** mitreden drops native `confirm()` / `prompt()` |
-| Page layout | **A sidebar shell in both**, so the two open looking like one application |
+| Page layout | **A sidebar shell in all three**, so they open looking like one application |
 
 One consequence worth naming up front: bildhaft renames its symbol sets to
 **Symbolquellen**, which frees *Sammlung* for the thing both products actually
@@ -521,18 +521,38 @@ tags and can be in several groups at once, and the chips combine with OR. In
 bildhaft `Sentence.collectionId` is a single string, so a sentence is in exactly one
 collection and the sidebar single-selects to match.
 
-**Decided: `Sammlung`, and a sentence can be in several. Both products change.**
+**Decided: `Sammlung`. Arity is per product — many-to-many where the model
+allows it.**
 
 *The recommendation below was `Gruppe`; it was overruled. The reasoning is kept
-because points 1 and 3 are still costs someone pays.* Point 2 does not survive
+because point 1 is a real collision and is still open.* Point 2 does not survive
 scrutiny: a song sits in several playlists and a photo in several albums, and
-nobody reads that as three copies. Arity was the real question hiding behind the
-word, and it is settled by making both many-to-many — which is what bildhaft's own
-"the sentence is the unit of reuse" principle already asks for, and which a single
-`collectionId` quietly contradicts. Point 1 is a genuine collision and is paid by
-renaming bildhaft's symbol sets to **Symbolquellen**; that is a smaller change than
-renaming the concept the two products share. Point 3's cost is avoided entirely by
-leaving `tags` alone in `phrases.json` and on the CLI, and changing only labels.
+nobody reads that as three copies. Point 1 is answered by renaming bildhaft's
+symbol sets to **Symbolquellen** — not because that is the cheaper edit, but
+because it is the right one: *Sammlung* should name one thing, and a symbol set
+is a source you draw from rather than a grouping you put work into.
+
+**Amended 2026-08-24, when vorlaut joined this concept.** This section used to
+end "and a sentence can be in several. Both products change", making
+many-to-many a family rule that bildhaft owed a migration on. Three products in,
+that is wrong — not expensive, wrong. Arity is not a house style, it is a fact
+about what a product holds:
+
+- **mitreden: many.** A sentence genuinely belongs in the morning Sammlung and
+  in the nursery one, and there is one recording behind both. Its sidebar
+  multi-selects for exactly this reason.
+- **bildhaft: one.** Whether a sentence should live in several was asked on its
+  merits and answered no. A Sammlung there is a book or a topic — "Der
+  Grüffelo" — and a line translated for one book is not thereby part of another.
+  The unit-of-reuse principle argues for reusing the *translation*, which
+  `findByNormalized` already does across every Sammlung, and not for the row
+  appearing in two places at once.
+- **vorlaut: one, necessarily.** A Sammlung there is a whole layout. It cannot
+  be in two Sammlungen because it *is* the contents of one.
+
+So the rule is: many-to-many where the model allows it, and the sidebar's
+selection follows the arity rather than the other way round. See
+[conventions.md §4.1](conventions.md).
 
 The superseded argument:
 
@@ -664,8 +684,16 @@ Both say **Einstellungen**, so the word is settled. The placement is not: mitred
 puts a `⚙` next to the title, on the reasoning written into `ui.html` that "beside
 the title is where a page-wide setting belongs — not down at the list, which would
 suggest it changes something about the list." bildhaft puts a text button
-„Einstellungen" at the bottom of the sidebar. mitreden's reasoning is the better
-one and it is already written down; bildhaft should adopt the gear beside the mark.
+„Einstellungen" at the bottom of the sidebar.
+
+**Decided 2026-08-24: the foot of the sidebar, and mitreden moves.** This is the
+one rule in this document that is arbitrary and should say so. mitreden's
+reasoning is good and bildhaft's placement is deliberate, and neither is wrong;
+what is wrong is three products with two answers. The foot wins because two of
+the three are already there, because a sidebar that ends in the way out of the
+page reads the same in all three, and because the objection it has to answer —
+"down at the list suggests it changes the list" — is answered by the separator
+and the gap that already sit above it.
 
 Inside, both organise the same way — a card or block per external thing you can
 switch on, with its current state stated in words before any control ("Schlüssel ist
@@ -696,18 +724,24 @@ oversight. So the rule to write down is not "never a save button" but:
 
 ### 3.6 Summary table
 
+Three rows were amended on 2026-08-24, when vorlaut joined the concept and the
+recommendations were re-read against three products rather than two: arity
+(§3.1), the selection that follows from it, and where Einstellungen lives. The
+build-side rules that grew out of the same reading are in
+[conventions.md](conventions.md).
+
 | concept | mitreden today | bildhaft today | recommended | who moves |
 | --- | --- | --- | --- | --- |
 | a stored utterance | Satz | Satz / Zeile | **Satz** | bildhaft |
 | light or dark | dark only | light-first, dark supported | **both, in both** | mitreden — done |
 | a named grouping of them | Gruppe / `tags` | Sammlung | **Sammlung** / `collections` | mitreden |
-| can it be in several at once | yes | no | **yes** | bildhaft (`collectionId` → list) |
-| making a grouping current | filter chips („Alle") | sidebar selection | **multi-select sidebar** | both |
+| can it be in several at once | yes | no | **per product — many where the model allows** (§3.1) | nobody |
+| making a grouping current | filter chips („Alle") | sidebar selection | **sidebar; multi-select only where a thing can be in several** | both — to a sidebar, single-select in bildhaft |
 | the produced artefact leaving | herunterladen | drucken | **herunterladen** | neither |
 | a subset leaving as data | export (CLI only) | „Sammlung exportieren" (in the ⋯ menu beside the name) | **Sammlung exportieren** | mitreden |
 | everything leaving as data | — | „Alles exportieren" (called Sicherung in prose) | **Sicherung** | both |
 | the symbol sets bildhaft draws from | — | Symbolsammlung | **Symbolquelle**, to free *Sammlung* | bildhaft |
-| the settings surface | Einstellungen (⚙ beside title) | Einstellungen (sidebar foot; inside the panel on mobile) | **Einstellungen, ⚙ beside the mark** | bildhaft |
+| the settings surface | Einstellungen (⚙ beside title) | Einstellungen (sidebar foot) | **Einstellungen, at the foot of the sidebar** | mitreden |
 | more actions on a thing | ⋮ | ⋯ | one glyph, pick **⋯** | mitreden (one character) |
 | a destructive confirmation | native confirm, „OK" | dialog, button named for the act and counting what goes | **name the act on the button** | mitreden |
 | saving | implicit | implicit, stated | **implicit, stated, one exception** | mitreden states it |
@@ -981,11 +1015,21 @@ serving the previous bundle. All four were green, all four were measuring nothin
 
 ### 4.4 What is explicitly *not* shared
 
+**The navigation shell left this list on 2026-08-24.** It read "a sidebar, a
+chip row, or nothing", and it was written when two products had independently
+invented a sidebar and it looked like a coincidence. Three have now, with the
+same rows, the same counts and the same button under them — at which point
+"not shared" describes three copies rather than a freedom anybody is using. The
+sidebar is shared; what stays exempt is below, and it is narrower.
+
 - **The accent hue.** By design.
 - **Light or dark.** A product commits to a ground and states it. bildhaft follows
   the OS; mitreden is dark and sets `color-scheme: dark` so the browser's own
   widgets follow. Converging here would cost more than it buys — see §5.
-- **The navigation shell.** A sidebar, a chip row, or nothing. See §5.
+- **What fills the third slot of the work head.** The row itself is shared —
+  name, count, one action, `⋯` — and the action is the product's: *Drucken* in
+  bildhaft, *Herunterladen* in mitreden, *Aufs Gerät übertragen* in vorlaut.
+  Sharing the row does not oblige them to share the verb.
 - **Density.** bildhaft is a desktop tool with card rows and hover-revealed actions.
   mitreden runs on a phone on a home network. A shared token set does not oblige
   them to the same row height.
@@ -1138,10 +1182,11 @@ effort grounds.
 *Decided the other way: both products get the sidebar shell.* The objections above
 are not wrong, they are the specification for doing it properly:
 
-- **The rail must multi-select**, because both products are now many-to-many. A
-  Sammlung in the rail is a toggle, not a destination, and several can be lit at
-  once. That is the chip row's semantics in a vertical arrangement — which is the
-  point, since the semantics were never the thing that differed.
+- **The rail multi-selects in mitreden**, because a mitreden sentence is in
+  several Sammlungen and the chips it replaces already combined with OR. It does
+  not elsewhere: §3.1 makes arity a fact about the product, and a rail that
+  toggles where nothing can be in two places is a control with one reachable
+  state. The selection follows the arity, not the other way round.
 - **It collapses below 820px**, exactly as bildhaft's already does, so the phone
   case mitreden sells keeps the single column it has today.
 - **It folds past a dozen**, carrying over the existing `+ n more` behaviour rather
@@ -1465,7 +1510,8 @@ may claim is §4.3's disclosure rule.
 
 **What is not.** Anything §2 found to be a real difference rather than an
 accident. List rows — separator-rows against cards is density, and density is
-per product. The navigation shell. Product layout: vorlaut's tile grid,
+per product. What fills the third slot of the work head. Product layout:
+vorlaut's tile grid,
 mitreden's phrase list, bildhaft's print styles. And the dialog backdrop
 weight, which §2 left unresolved (.6 opaque against .38 with blur) and a
 shared file must not settle by side effect.

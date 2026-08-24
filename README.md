@@ -11,12 +11,19 @@ decided.
 
 **[The gallery →](https://lautstark.github.io/design/)**
 · **[The rule set →](docs/design.md)**
+· **[The conventions →](docs/conventions.md)**
 
 ## What is here
 
 - **[docs/design.md](docs/design.md)** — the agreement. Token names, the three
   button tiers, fields, chips, menus, dialogs, empty states, and a vocabulary
   glossary so the same thing has the same name in every product.
+- **[docs/conventions.md](docs/conventions.md)** — how the products are *built*,
+  where design.md is how they look. What a Sammlung is, where a preference is
+  kept, which library talks to IndexedDB, how a dialog resolves — and the list
+  of differences that are correct and must not be tidied up. It exists so that
+  moving between the three repositories never means working out how it is done
+  here.
 - **[docs/index.html](docs/index.html)** — the gallery. Every component drawn with
   live tokens, a light/dark switch, and an accent picker.
 - **[docs/components.css](docs/components.css)** — the components layer. The
