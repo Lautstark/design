@@ -31,6 +31,11 @@ decided.
   whose field names stopped two copies of this function meaning opposite things
   by the same third argument. Importing it attaches two document listeners, so
   that a press outside or Escape closes whatever is open.
+- **`@lautstark/design/dialog`** — the modal sheet's behaviour: `openDialog`,
+  `confirmDialog`, and the press-outside dismissal the platform does not give.
+  Every word comes from the caller, including "Cancel" and the name of the ✕,
+  because two of the three products are bilingual and the third is German by
+  policy.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton and the message furniture, written once against the token names. The
