@@ -25,7 +25,34 @@
  * off the package and nothing runs on their machine at install time — this
  * family allowlists install scripts, and a token set that is static CSS has no
  * business asking for an exemption. CI checks the committed files are current
- * instead, which is why the header names a version and not a commit.
+ * instead, by regenerating them and diffing.
+ *
+ * ## A generated file may only contain what its inputs determine
+ *
+ * That check is the whole reason for the rule, and this file has now broken it
+ * twice in opposite directions, so it is written down rather than rediscovered.
+ *
+ * The header used to name the commit sha. That made the output different on
+ * every commit, so "are the committed tokens current?" could never be answered
+ * by regenerating and diffing — the answer was always no. It was replaced with
+ * the package version, which is stabler and still not an input: a version bump
+ * changes the file without changing anything the file is derived from, so the
+ * check went red on the release after every release and stayed red through six
+ * of them. Nobody read it, which is what a check that is always failing buys.
+ * A date would have been the same defect a third time, and worse — it moves
+ * without a commit at all.
+ *
+ * So the header names the generator and the input accent, both of which are
+ * intrinsic, and nothing else. tokens/ is a pure function of products/*.json
+ * and the derivation, and the check is answerable forever.
+ *
+ * Where a file came from, when that is genuinely the question: `git log -1
+ * tokens/<product>.css` in here, and the pin in a consumer's package.json,
+ * which is the authoritative answer and cannot disagree with what is installed.
+ * A stamp in the file can, and did, for six releases.
+ *
+ * conventions.md §7 states this as the family rule. tests/generated.test.js
+ * enforces it here.
  */
 
 import { readFileSync, writeFileSync, readdirSync, existsSync, mkdirSync } from 'node:fs';
@@ -41,15 +68,6 @@ const TOKENS = join(HERE, 'tokens');
 const args = process.argv.slice(2);
 const check = args.includes('--check');
 const only = args.filter((a) => !a.startsWith('--'));
-
-/*
- * The header names the version and nothing else. It used to carry the commit sha
- * too, which made the output different on every commit — and therefore made
- * "are the committed tokens current?" impossible to answer by regenerating and
- * diffing, because the answer was always no. tokens/ is now a pure function of
- * products/*.json, the derivation, and this version.
- */
-const version = JSON.parse(readFileSync(join(HERE, 'package.json'), 'utf8')).version;
 
 let failures = 0;
 let written = 0;
@@ -76,7 +94,7 @@ function writeFile(target, css, label) {
 }
 
 for (const cfg of configs) {
-  const opts = { ok: cfg.state, source: `v${version}` };
+  const opts = { ok: cfg.state };
   const schemes = cfg.schemes === 'both' ? ['light', 'dark'] : [cfg.schemes];
 
   /* Audit first, always — including in write mode. A file that fails is never
