@@ -150,7 +150,18 @@ export function menuOn(button, build) {
     if (opts.checked !== undefined) item.setAttribute('aria-checked', String(opts.checked));
     if (opts.danger) item.className = 'danger';
     if (opts.disabled) item.disabled = true;
-    item.onclick = (event) => { event.stopPropagation(); run(); };
+    /* Closed before the item runs, not left to the item.
+     *
+     * Every call site in all three products opened with closeMenus() as its
+     * first statement, which is a line repeated a dozen times and silent when
+     * it is forgotten - the menu stays open, usually over the dialog the item
+     * just opened. Dismissing on activation is part of the pattern rather than
+     * a decision an item gets to make, so it belongs here. bildhaft's copy
+     * already did it this way.
+     *
+     * Before rather than after: an item that opens a dialog would otherwise
+     * have the list disappear from behind it a frame later. */
+    item.onclick = (event) => { event.stopPropagation(); closeMenus(); run(); };
     menu.appendChild(item);
   });
 

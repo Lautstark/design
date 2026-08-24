@@ -30,7 +30,10 @@ export interface ItemOpts {
   disabled?: boolean;
 }
 
-/** What `build` is handed. Call it once per item, in the order they appear. */
+/** What `build` is handed. Call it once per item, in the order they appear.
+ *
+ * `run` is called with the menu already closed, so an item never has to dismiss
+ * the list it is in. */
 export type AddItem = (label: string, run: () => void, opts?: ItemOpts) => void;
 
 /**
