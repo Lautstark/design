@@ -709,3 +709,43 @@ old text can see what moved and why.
 4. **§4.4 — the navigation shell.** Was exempt from sharing. Now shared; the
    exemption narrows to density and to what fills the third slot of the work
    head.
+
+---
+
+## 7. A generated file may only contain what its inputs determine
+
+No version, no commit sha, no date, no build number — nothing that changes when
+the thing it is derived from has not.
+
+**Why.** Because the only way to know a committed generated file is current is
+to regenerate it and compare, and anything extrinsic in the output makes that
+comparison always fail. The check then goes red permanently, and a check that is
+always red is one people learn to scroll past — so the mechanism meant to catch
+a stale file is the first casualty of the stamp, and the staleness it was there
+to catch goes with it.
+
+This is written down because `@lautstark/design` broke it twice, in opposite
+directions, and neither break was noticed by anybody reading. `tokens/*.css`
+carried the generating commit's sha first, which made every commit produce a
+different file; that was replaced by the package version, which was stabler and
+still not an input — a release bumps it without changing anything the tokens are
+derived from, so the audit went red on the push after every release and stayed
+red through six of them. The fix both times looked like regenerating and
+committing. The actual fix was to stop stamping: the header names the generator
+and the accent it derived from, both intrinsic, and nothing else.
+
+**Where a file came from, when that is the real question.** `git log -1` on the
+file, in the repository that generates it; and in a consumer, the pin in
+`package.json`, which is authoritative and cannot disagree with what is
+installed. A stamp inside the file can disagree, and did, for six releases.
+
+**What this does not say.** Content is not the same as provenance: a generated
+file should absolutely name its generator and its inputs — `tokens/vorlaut.css`
+says it comes from Lautstark/design and follows from the accent `#9B7BFF`, and
+both of those are facts about what produced it rather than about when. The rule
+is about time-varying stamps, not about comments.
+
+**Diverging: nobody.** `@lautstark/design` enforces it on itself in
+`tests/generated.test.js`, which fails on the emitter rather than one release
+later on the committed files. Any product that grows a generator wants the same
+test; bildquelle's lemma tables are the next candidate.

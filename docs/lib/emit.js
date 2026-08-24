@@ -41,15 +41,18 @@ function block(tokens, indent, skip = null) {
 /**
  * @param {string} accent   the product's declared hue
  * @param {string} product  its name, for the header
- * @param {{ok?:boolean, source?:string}} opts  `source` is the design-repo commit
- *   this was generated from; build.js passes the real one
+ * @param {{ok?:boolean}} opts  passed through to derive()
+ *
+ * The header names the generator and the input, and nothing about *when* or
+ * *from which commit* this ran. See the head of build.js: a generated file may
+ * only carry what its inputs determine, and both of the stamps that have stood
+ * here broke the check that says the committed files are current.
  */
 export function toCss(accent, product, opts = {}) {
   const { light, dark } = derive(accent, opts);
-  const src = opts.source ? `Lautstark/design@${opts.source}` : 'Lautstark/design';
 
   return `/*
- * Generated from ${src} — do not edit.
+ * Generated from Lautstark/design — do not edit.
  *
  * Every value below follows from one input, ${product}'s accent ${accent}, and is
  * regenerated whenever the design repository moves. Editing this file by hand
@@ -109,10 +112,9 @@ ${block(dark.tokens, '', SCHEME_INVARIANT)}
  */
 export function toCssSingle(accent, product, scheme, opts = {}) {
   const { tokens } = derive(accent, opts)[scheme];
-  const src = opts.source ? `Lautstark/design@${opts.source}` : 'Lautstark/design';
 
   return `/*
- * Generated from ${src} — do not edit.
+ * Generated from Lautstark/design — do not edit.
  *
  * ${product} commits to a ${scheme} ground, so only that scheme is emitted. The
  * declaration below is what makes the browser draw its own furniture to match:
