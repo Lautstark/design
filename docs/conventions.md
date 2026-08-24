@@ -366,15 +366,19 @@ leave rows nothing can reach.
 Both are right for their model. What must stay the same is §1.7 — the question
 says which of the two is about to happen.
 
-### 4.4 Duplicate exists only in vorlaut
+### 4.4 Nothing duplicates a Sammlung
 
-Neither sibling has the concept. vorlaut needs it because `exchange/SPEC.md` §8
-gives a package a stable identity and requires a copy to mint a fresh one: a copy
-that kept its original's id silently overwrites that original on the viewer,
-taking a vocabulary somebody depends on with it.
+**Amended 2026-08-24.** This section said the opposite: that duplicate existed
+in vorlaut alone and was justified there by `exchange/SPEC.md` §8. Re-read, that
+argument does not hold up. §8 says what a copy *must do if one is made* — mint a
+fresh id, because a copy that kept its original's silently overwrites that
+original on the viewer — and none of the three products has a use for making
+one. vorlaut's was built because the rule existed, which is a feature satisfying
+a table rather than a person.
 
-Adding it to the other two for symmetry would be adding a feature to satisfy a
-table.
+The rule itself is untouched and still matters: it is why an id is minted in the
+storage layer and never derived from a name or a position, so that nothing here
+*can* hand two Sammlungen one identity. What went is the button.
 
 ### 4.5 And what design.md exempts
 
