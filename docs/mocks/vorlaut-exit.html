@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — the way out of the board</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="board.css">
+<link rel="stylesheet" href="exit.css">
+</head>
+<body style="--rows:3; --cols:5; --exitcol:18px">
+  <div class="variants">
+    <button aria-pressed="true"  data-v="edge">A · Kante</button>
+    <button aria-pressed="false" data-v="corner">B · Ecke</button>
+    <button aria-pressed="false" data-v="dot">C · Punkt</button>
+    <button aria-pressed="false" data-v="two">D · Zwei Finger</button>
+    <span class="note">Halten, nicht tippen — 1,2 s</span>
+  </div>
+
+  <div class="screen" style="height: calc(100vh - 52px)">
+    <div class="bar" id="bar" style="position:relative">
+      <span class="exit-hold exit-edge" id="v-edge" title="halten"></span>
+      <button class="page" disabled><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="said" id="said" style="position:relative">
+        <span class="exit-hold exit-corner" id="v-corner" hidden></span>
+        <span class="exit-hold exit-dot" id="v-dot" hidden></span>
+      </div>
+      <button class="page" disabled><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button class="ctl speak"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg><span>Sprechen</span></button>
+      <button class="ctl"><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2.5"/></svg><span>Rückgängig</span></button>
+      <button class="ctl"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 12h10l1-12"/></svg><span>Leeren</span></button>
+    </div>
+    <div class="grid">
+      <button class="cell" style="--tint:#fdfd96">
+        <img src="symbols/6632.png" alt=""><b>ich</b>
+      </button>
+      <button class="cell" style="--tint:#fdfd96">
+        <img src="symbols/6625.png" alt=""><b>du</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/5441.png" alt=""><b>will</b>
+      </button>
+      <button class="cell" style="--tint:#84b6f4">
+        <img src="symbols/5508.png" alt=""><b>mehr</b>
+      </button>
+      <button class="cell" style="--tint:#fdcae1">
+        <img src="symbols/5526.png" alt=""><b>nein</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/6456.png" alt=""><b>essen</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/6061.png" alt=""><b>trinken</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/23392.png" alt=""><b>spielen</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/8142.png" alt=""><b>gehen</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/6564.png" alt=""><b>sehen</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/2462.png" alt=""><b>Apfel</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/32464.png" alt=""><b>Wasser</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/2269.png" alt=""><b>Fußball</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/2458.png" alt=""><b>Mama</b>
+      </button>
+      <button class="cell" style="--tint:#fdcae1">
+        <img src="symbols/8195.png" alt=""><b>bitte</b>
+      </button>
+    </div>
+  </div>
+
+<script>
+const HOLD = 1200;
+let variant = 'edge';
+const els = { edge: v_edge, corner: v_corner, dot: v_dot };
+
+function show() {
+  const isEdge = variant === 'edge';
+  v_edge.style.display = isEdge ? '' : 'none';
+  // Only A takes width. Showing that honestly is half the comparison.
+  document.body.style.setProperty('--exitcol', isEdge ? '18px' : '0px');
+  v_corner.hidden = variant !== 'corner';
+  v_dot.hidden    = variant !== 'dot';
+}
+
+/* One hold routine for all four. The ring is the affordance: it starts the
+   instant a finger lands, so "keep holding" is learned rather than told. */
+function holdable(el, needsTwo) {
+  let raf = null, t0 = 0, fingers = 0;
+  const stop = () => { cancelAnimationFrame(raf); raf = null;
+                        el.dataset.holding = '0'; el.style.setProperty('--held', 0); };
+  const tick = () => {
+    const p = Math.min(1, (performance.now() - t0) / HOLD);
+    el.style.setProperty('--held', p);
+    if (p >= 1) { stop(); flash(); return; }
+    raf = requestAnimationFrame(tick);
+  };
+  const start = (e) => {
+    if (needsTwo && (e.touches ? e.touches.length : 1) < 2) return;
+    t0 = performance.now(); el.dataset.holding = '1'; raf = requestAnimationFrame(tick);
+  };
+  el.addEventListener('pointerdown', start);
+  el.addEventListener('pointerup', stop);
+  el.addEventListener('pointerleave', stop);
+  el.addEventListener('pointercancel', stop);
+}
+
+function flash() {
+  const n = document.createElement('div');
+  n.textContent = 'Sammlungen';
+  Object.assign(n.style, {
+    position:'fixed', inset:'0', display:'grid', placeItems:'center',
+    background:'rgba(0,0,0,.5)', color:'#fff', font:'600 30px var(--font)', zIndex:9,
+  });
+  document.body.appendChild(n);
+  setTimeout(() => n.remove(), 900);
+}
+
+holdable(v_edge, false);
+holdable(v_corner, false);
+holdable(v_dot, false);
+/* D has no element of its own: the whole bar is the target, and it takes two
+   fingers so that one finger anywhere on the bar still does nothing. */
+bar.classList.add('exit-hold');
+holdable(bar, true);
+
+document.querySelectorAll('.variants button').forEach(b => {
+  b.onclick = () => {
+    variant = b.dataset.v;
+    document.querySelectorAll('.variants button')
+      .forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+    show();
+  };
+});
+show();
+</script>
+</body>
+</html>

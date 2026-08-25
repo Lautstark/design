@@ -7,42 +7,64 @@
 <link rel="stylesheet" href="../../tokens/vorlaut.css">
 <link rel="stylesheet" href="../components.css">
 <link rel="stylesheet" href="screens.css">
+<link rel="stylesheet" href="pin.css">
 </head>
 <body>
-  <div class="appbar">
-    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"> <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="#9B7BFF" /> <circle cx="200" cy="174" r="22" fill="white" /> <path d="M 290 174 A 22 22 0 0 1 334 174" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" /> <ellipse cx="256" cy="256" rx="46" ry="38" fill="white" /> </svg> <b>vorlaut</b>
-  </div>
-
-  <div class="wrap">
-    <div style="filter:blur(2px);opacity:.45">
-    <button class="sammlung">
-      <span class="face"><img src="symbols/6456.png" alt=""></span>
-      <span><span class="name">Morgens</span><br><span class="sub">2 Tafeln · 5 Tasten · geändert 24.08.2026</span></span>
-      <span><span class="flag quiet">nicht weitergeben</span></span>
-      <span class="dots" role="button" aria-label="Mehr">⋯</span>
-    </button>
-
-    <button class="sammlung">
-      <span class="face"><img src="symbols/2462.png" alt=""></span>
-      <span><span class="name">Kernvokabular</span><br><span class="sub">1 Tafel · 15 Tasten · geändert 24.08.2026</span></span>
-      <span><span class="flag">2 Warnungen</span></span>
-      <span class="dots" role="button" aria-label="Mehr">⋯</span>
-    </button>
-
-    <button class="sammlung">
-      <span class="face"><img src="symbols/23392.png" alt=""></span>
-      <span><span class="name">Spielen</span><br><span class="sub">1 Tafel · 6 Tasten · geändert 22.08.2026</span></span>
-      <span></span>
-      <span class="dots" role="button" aria-label="Mehr">⋯</span>
-    </button>
-    </div>
-    <div class="scrim"><div class="sheet">
-      <div class="head"><h2>PIN wählen</h2></div>
-      <div class="body"><p>Mindestens vier Ziffern. Damit kommst du wieder aus der Tafel heraus, wenn das Tablet aus der Hand gegeben ist — nimm etwas, worüber du nicht nachdenken musst.</p><input class="pin" value="••••" readonly></div>
-      <div class="foot"><button class="btn quiet">Abbrechen</button><button class="btn primary">PIN setzen</button></div>
-    </div></div>
-  </div>
-
+  <div class="appbar"><svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"> <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="#9B7BFF" /> <circle cx="200" cy="174" r="22" fill="white" /> <path d="M 290 174 A 22 22 0 0 1 334 174" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" /> <ellipse cx="256" cy="256" rx="46" ry="38" fill="white" /> </svg> <b>vorlaut</b></div>
+  <div class="wrap"></div>
   <div class="footer"><button class="linklike">Einstellungen</button></div>
+
+  <div class="scrim"><div class="sheet" style="width:460px">
+    <div class="head"><h2>PIN wählen</h2></div>
+    <div class="body">
+      <p>Vier Ziffern. Damit kommst du wieder aus der Tafel heraus, wenn das Tablet aus der Hand gegeben ist — nimm etwas, worüber du nicht nachdenken musst.</p>
+      <div class="pinrow" id="row">
+          <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 1">
+          <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 2">
+          <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 3">
+          <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 4">
+      </div>
+      <div class="pinwrong" id="wrong" hidden>Das ist nicht die PIN.</div>
+    </div>
+    <div class="foot">
+      <button class="btn quiet">Abbrechen</button>
+      <button class="btn primary" id="go" disabled>PIN setzen</button>
+    </div>
+  </div></div>
+
+<script>
+const boxes = [...document.querySelectorAll('.pinbox')];
+const go = document.getElementById('go'), row = document.getElementById('row');
+function sync() {
+  boxes.forEach(b => b.dataset.filled = b.value ? '1' : '0');
+  go.disabled = boxes.some(b => !b.value);
+}
+boxes.forEach((b, i) => {
+  b.addEventListener('input', () => {
+    b.value = b.value.replace(/\D/g, '').slice(0, 1);
+    // Auto-advance: the point of four boxes is that the hand never has to aim.
+    if (b.value) {
+      b.dataset.reveal = '1';
+      clearTimeout(b._hide);
+      b._hide = setTimeout(() => { b.dataset.reveal = '0'; }, 700);
+    }
+    if (b.value && i < 3) boxes[i + 1].focus();
+    row.dataset.wrong = '0'; document.getElementById('wrong').hidden = true;
+    sync();
+  });
+  b.addEventListener('keydown', e => {
+    // Backspace steps back out of an empty box, so a mistyped digit is one key
+    // away rather than a hunt for the right box.
+    if (e.key === 'Backspace' && !b.value && i > 0) { boxes[i - 1].focus(); e.preventDefault(); }
+    if (e.key === 'ArrowLeft'  && i > 0) boxes[i - 1].focus();
+    if (e.key === 'ArrowRight' && i < 3) boxes[i + 1].focus();
+  });
+  b.addEventListener('paste', e => {
+    const d = (e.clipboardData.getData('text') || '').replace(/\D/g, '').slice(0, 4);
+    if (d) { d.split('').forEach((c, n) => boxes[n].value = c); sync(); boxes[Math.min(d.length,3)].focus(); e.preventDefault(); }
+  });
+});
+boxes[0].focus(); sync();
+</script>
 </body>
 </html>

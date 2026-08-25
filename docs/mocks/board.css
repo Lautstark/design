@@ -41,7 +41,7 @@ html, body {
    button they have to find again mid-thought. */
 .bar {
   display: grid;
-  grid-template-columns: auto 1fr auto auto auto auto;
+  grid-template-columns: var(--exitcol, 0px) auto 1fr auto auto auto auto;
   gap: var(--gap);
   align-items: stretch;
   height: var(--bar-h);

@@ -1,0 +1,85 @@
+/* Four ways out of the board, to be held rather than tapped.
+ *
+ * All four share one rule: at rest they take as little of the screen and as
+ * little of the eye as they can, and none of them looks like a button. A
+ * button is a thing a child presses, and the whole point of this control is
+ * that pressing it should not work.
+ *
+ * The feedback is the same in all four and is the actual affordance: the
+ * moment a finger lands, something starts filling, so the person holding
+ * learns "keep holding" without being told and without a word on screen.
+ */
+
+.exit-hold { position: relative; }
+
+/* The ring that draws while a finger is down. conic-gradient rather than an
+   SVG arc: one element, one custom property to animate, and it degrades to a
+   plain disc on a browser too old to know it — which is the failure mode you
+   want on a donated tablet. */
+.exit-hold::after {
+  content: "";
+  position: absolute; inset: 50% auto auto 50%;
+  width: 46px; height: 46px; margin: -23px 0 0 -23px;
+  border-radius: 999px;
+  background: conic-gradient(var(--accent) calc(var(--held, 0) * 360deg), transparent 0);
+  -webkit-mask: radial-gradient(circle, transparent 15px, #000 16px);
+          mask: radial-gradient(circle, transparent 15px, #000 16px);
+  opacity: var(--ring, 0);
+  pointer-events: none;
+  transition: opacity .12s;
+}
+.exit-hold[data-holding="1"]::after { opacity: 1; }
+
+/* -- A. Kante: a handle in a column of its own ---------------------------
+   The only variant that costs the bar any width: 18px against the 62px tile
+   it replaces, which is the complaint it exists to answer. It gets a column
+   rather than being laid over the back arrow, because a control hidden under
+   another control is worse than a wide one.
+
+   The visible pill is 6px and the target around it is the full bar height. A
+   6px button would be a cruelty; a 6px mark on an 18x132 target is a handle. */
+.exit-edge {
+  align-self: stretch;
+  display: grid; place-items: center;
+  cursor: pointer;
+}
+.exit-edge::before {
+  content: ""; width: 6px; height: 46px;
+  border-radius: 999px; background: var(--line);
+}
+.exit-edge:hover::before { background: var(--text-faint); }
+
+/* -- B. Ecke: nothing at rest, a hot corner of the bar -------------------- */
+.exit-corner {
+  position: absolute; left: 0; top: 0;
+  width: 74px; height: 74px;
+  border-radius: var(--radius) 0 999px 0;
+  cursor: pointer;
+}
+
+/* -- C. Punkt: one small dot in the bar's corner -------------------------- */
+.exit-dot {
+  position: absolute; left: 12px; top: 12px;
+  width: 9px; height: 9px; border-radius: 999px;
+  background: var(--text-faint); opacity: .5;
+  cursor: pointer;
+}
+.exit-dot:hover { opacity: 1; }
+
+/* -- D. Zwei Finger: nothing anywhere ------------------------------------- */
+/* No rule. That is the variant. */
+
+/* The switcher is mock furniture and is not part of any of them. */
+.variants {
+  display: flex; gap: 8px; align-items: center;
+  padding: 10px var(--gap); font-size: 13px; color: var(--text-dim);
+}
+.variants button {
+  font: inherit; font-size: 13px; cursor: pointer;
+  border-radius: var(--radius-pill); border: 1px solid transparent;
+  background: transparent; color: var(--text-dim); padding: 6px 13px;
+}
+.variants button[aria-pressed="true"] {
+  background: var(--accent-soft); color: var(--accent-strong); font-weight: 600;
+}
+.variants .note { margin-left: auto; color: var(--text-faint); }
