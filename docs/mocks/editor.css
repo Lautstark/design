@@ -255,7 +255,11 @@ html, body {
    where a tablet button's word class goes. Same slot in the same bar, the
    product's own answer in it. */
 .cell--setkey {
-  border-left: 5px solid var(--screen, var(--accent));
+  /* The whole border in the screen's colour, which is what the five-key editor
+     has always drawn round this tile - a rail down one side was the mock's
+     invention and looked like nothing in the product. Every other cell keeps
+     its own border. */
+  border: 3px solid var(--screen, var(--accent));
   background: var(--surface);
   /* Room for the eyebrow, rather than letting it sit under the picture. In
      the light scheme the pictogram's white canvas blends into the surface and
