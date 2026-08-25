@@ -32,6 +32,7 @@ const draw = (opts) => {
 const items = () => [...host.querySelectorAll('.collections__item')];
 const nameOf = (item) => item.querySelector('.collections__name').textContent;
 const countOf = (item) => item.querySelector('.collections__count').textContent;
+const subOf = (item) => item.querySelector('.collections__sub')?.textContent ?? null;
 
 const THREE = [
   { id: 'a', name: 'Küche', count: 3 },
@@ -88,6 +89,80 @@ describe('what it draws', () => {
   it('draws nothing for an empty list', () => {
     draw({ rows: [] });
     expect(items()).toHaveLength(0);
+  });
+});
+
+/* The second line, and mostly the absence of it.
+ *
+ * Only one of the three products has a second fact about a Sammlung, so the
+ * case that has to keep working is the one where nothing is passed - and the
+ * assertion worth making there is not "no text" but "no wrapper", because a
+ * .collections__text with one child is what quietly turns the other two
+ * products' rows into a different box with different alignment. §1.5's entry
+ * in conventions.md is the argument: a rule with two halves needs a test with
+ * two halves, and "it draws the subtitle" is the half that passes either way.
+ */
+describe('the second line', () => {
+  it('draws it under the name when a product passes one', () => {
+    draw({ rows: [{ id: 'a', name: 'Morgens', count: 5, subtitle: 'DIY-Talker' }] });
+    expect(subOf(items()[0])).toBe('DIY-Talker');
+  });
+
+  it('takes it exactly as given, deriving nothing', () => {
+    draw({ rows: [{ id: 'a', name: 'Spielen', count: 22, subtitle: 'vorlaut-App · 4 × 6' }] });
+    expect(subOf(items()[0])).toBe('vorlaut-App · 4 × 6');
+  });
+
+  it('keeps the name its own element beside it', () => {
+    draw({ rows: [{ id: 'a', name: 'Morgens', count: 5, subtitle: 'DIY-Talker' }] });
+    expect(nameOf(items()[0])).toBe('Morgens');
+    expect(countOf(items()[0])).toBe('5');
+  });
+
+  /* What mitreden and bildhaft get: the row they had before the field existed.
+   * Not merely no text - no wrapper, so the row is still name-then-count and
+   * the alignment rule keyed off .collections__sub cannot reach it. */
+  it('draws no second line, and no wrapper, when nothing is passed', () => {
+    draw({ rows: THREE });
+    for (const item of items()) {
+      expect(subOf(item)).toBeNull();
+      expect(item.querySelector('.collections__text')).toBeNull();
+      expect(item.children).toHaveLength(2);
+    }
+  });
+
+  it('treats null the same as absent', () => {
+    draw({ rows: [{ id: 'a', name: 'Küche', count: 3, subtitle: null }] });
+    expect(items()[0].querySelector('.collections__text')).toBeNull();
+  });
+
+  /* A product computing this line will hand over "" at some point - a lookup
+   * that missed, a Sammlung read before its layout was. An empty second line
+   * is a row taller than its neighbours for a reason nobody can see. */
+  it('treats an empty string the same as absent', () => {
+    draw({ rows: [{ id: 'a', name: 'Küche', count: 3, subtitle: '' }] });
+    expect(items()[0].querySelector('.collections__text')).toBeNull();
+    expect(items()[0].children).toHaveLength(2);
+  });
+
+  it('draws one where there is one and not where there is not, in one list', () => {
+    draw({ rows: [
+      { id: 'a', name: 'Morgens', count: 5, subtitle: 'DIY-Talker' },
+      { id: 'b', name: 'Beim Arzt', count: 14 },
+    ] });
+    expect(items().map(subOf)).toEqual(['DIY-Talker', null]);
+  });
+
+  /* The open row still says so. The wrapper sits between the row and the name,
+   * so anything keyed off the row that used to reach the name directly has a
+   * new element in the way. */
+  it('still marks the open row when that row has a second line', () => {
+    draw({
+      rows: [{ id: 'a', name: 'Morgens', count: 5, subtitle: 'DIY-Talker' }],
+      open: ['a'],
+    });
+    expect(items()[0].classList.contains('collections__item--active')).toBe(true);
+    expect(items()[0].getAttribute('aria-current')).toBe('true');
   });
 });
 

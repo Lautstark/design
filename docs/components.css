@@ -631,6 +631,44 @@
   flex: none; font-size: 12px; font-variant-numeric: tabular-nums;
 }
 
+/* The two-line row: a name with a second line under it, where a product passes
+   one. docs/mocks/vorlaut-sammlung-zeile.html is where this was argued out
+   against five other answers, and it carries the measurements.
+
+   Only .collections__text and .collections__sub came from that page. The mock
+   also defines .collections__mark, .collections__grid and .collections__unit;
+   those belong to candidates that lost and are deliberately not here. */
+.collections__text { flex: 1; min-width: 0; }
+.collections__text .collections__name { display: block; }
+.collections__sub {
+  display: block; font-size: 11.5px; line-height: 1.35; color: var(--text-faint);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* And the count sits on the name's line rather than in the middle of the block.
+
+   The rule above centres a row's contents, which is right while there is one
+   line: the middle of the block is the line. With two, the number drifts into
+   the gap and reads as belonging to the second line or to neither.
+
+   `baseline` and not `flex-start`, because the name is 14px and the count 12px
+   - aligning their boxes leaves the baselines about 3px apart, which is the
+   part the eye reads. Keyed off :has() rather than a modifier class, so the
+   second line and the alignment it forces stay one fact instead of two that
+   have to agree. */
+.collections__item:has(.collections__sub) { align-items: baseline; }
+
+/* The open row tints what is inside it, and the second line has to come along:
+   left at --text-faint it would be the one grey thing on an accented row.
+
+   Not dimmed to sit under the name, and that is measured rather than felt. At
+   11.5px this is text, so the bar is 4.5:1, and --accent-strong over
+   --accent-soft at .8 gives 3.20 in the light scheme and 3.83 in the dark. At
+   full strength: 4.52 and 5.20. The row is already the quiet end of the scale
+   and a second dimming puts it through the floor. */
+.collections__item--active .collections__sub { color: inherit; }
+
 /* ------------------------------------------------------------------ motion */
 
 /* 130ms ease for a colour or fill change. Nothing in this file changes size

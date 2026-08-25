@@ -44,6 +44,14 @@
  * is the only thing on the row saying "you are here" to somebody not looking at
  * the accent.
  *
+ * A second line under the name where a product passes one, and nothing at all
+ * where it does not - see `subtitle` on CollectionRow. What it says is the
+ * product's business: this file holds no vocabulary, which is the whole reason
+ * the field is a string rather than the `{ target, grid }` it was drawn as
+ * first. One product knows what a Sammlung is for; the other two do not have
+ * the question, and a field they had to answer would be this row acquiring
+ * somebody's model.
+ *
  * It does not draw the "+ Neue Sammlung" button under the list, the heading
  * over it, or the container itself. Those differ, and the container is the
  * caller's because the caller is what decides where in its sidebar this goes.
@@ -84,7 +92,35 @@ export function drawCollections(container, { rows, open, onPick }) {
     count.textContent = row.count === undefined || row.count === null
       ? '' : String(row.count);
 
-    node.append(name, count);
+    /* A second line, only where there is one to draw.
+     *
+     * Without a subtitle the row keeps the shape it has always had - name and
+     * count, no wrapper - so the two products that pass nothing get back byte
+     * for byte the DOM they got before this field existed. The wrapper only
+     * appears where it has something to hold, because it is what turns the
+     * left side into a block with two lines in it and there is nothing to
+     * stack when there is one.
+     *
+     * Empty string counts as absent. A product computing this line will hand
+     * over "" at some point - a lookup that missed, a Sammlung read before its
+     * layout was - and an empty second line is a row that is taller than its
+     * neighbours for no reason anybody can see. */
+    const subtitle = row.subtitle === undefined || row.subtitle === null
+      ? '' : String(row.subtitle);
+
+    if (subtitle) {
+      const text = document.createElement('span');
+      text.className = 'collections__text';
+      const sub = document.createElement('span');
+      sub.className = 'collections__sub';
+      // Drawn as handed over. The row has no idea what it says; see the field
+      // on CollectionRow for why that is the point rather than a shortcut.
+      sub.textContent = subtitle;
+      text.append(name, sub);
+      node.append(text, count);
+    } else {
+      node.append(name, count);
+    }
     node.addEventListener('click', (event) => {
       // Which modifier means "and also this one" is settled here rather than
       // three times. metaKey is the Mac chord and ctrlKey the other one; a
