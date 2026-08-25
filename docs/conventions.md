@@ -406,6 +406,18 @@ The foot wins because a sidebar that ends in the way out of the page reads the
 same in all three, and because the objection it has to answer is answered by the
 separator and the gap already above it.
 
+**And §3.10 takes the objection away rather than paying for it.** mitreden's
+argument was that a settings entry at the foot of the list suggests it changes
+something about the list. In vorlaut today it does: that sheet holds the open
+Sammlung's voice and the language the built device shows its own menu in, so
+somebody who read the entry as belonging to the list would have read it
+correctly. That is not a cost of the placement, it is two controls in the wrong
+sheet — and §3.10 is what moves them. Once they have moved, nothing behind the
+entry answers differently from one Sammlung to the next and the objection has
+nothing left to point at. One sentence was carrying two arguments, about where
+the entry sits and about what is behind it; separating them is what settles
+this section, and it settles it *for* the foot.
+
 **Diverging: nobody**, as of 2026-08-25. mitreden's `⚙` is at the foot of its
 rail. Another line that had been spent before it was read — the same lesson as
 §1.7.
@@ -530,12 +542,26 @@ one and a green suite is what let two of them go without it for so long.
 
 Anchored to its trigger, `role="menu"`, focus moves into it on open and returns
 to the trigger on Escape or on choosing. Contents, in order: export, then
-delete, marked destructive.
+whatever this Sammlung is itself set to, then delete, marked destructive.
 
 **Why.** The two acts that apply to a Sammlung as a whole are rare enough that
 neither earns a permanent button and consequential enough that neither should be
 hard to find; a menu beside the name is where a thing's own acts belong.
 design.md §3.6 settles the glyph.
+
+**And its own settings, not only its acts.** This section said *acts* from the
+day it was written, and a settings surface is not one — read strictly, what is
+true of one particular Sammlung had nowhere on the page to be, which is how it
+ends up in the app's sheet instead (§3.10). vorlaut's tablet editor has been
+stretching the sentence for as long as it has existed and the document never
+noticed: `collectionMenuExtras()` hands the shell a *Raster* card from
+`editor-app/editor.ts` — grid size, the shared first column, the colour of a
+word class — and the card's own note says why it belongs to the Sammlung and
+not to the page, because a key that lies in the same place on every page is a
+fact about the whole layout. That was right, and it is the shape the rest of it
+takes. So the menu holds what a Sammlung *is* as well as what can be done to it,
+and the ordering above is what keeps the two legible: the exports first, the
+settings under them, the delete last wherever it appears.
 
 **The keyboard contract, which no product implements and all three have.** A
 menu is not a `<div>` of buttons that happens to be visible: `@lautstark/design/menu`
@@ -750,6 +776,98 @@ this asks for: props in, node out (§5, #5). Neither of them has a second
 implementation of anything for a layers test to guard yet, which is the point —
 this is the rule for the day one of them does, and the couplings it is about are
 the ones that would be in place before that day arrives.
+
+### 3.10 A setting of the app is not a setting of whatever is open
+
+Three products disagreed about where a setting belongs, one product at a time,
+and the disagreement had one shape each time: a control that looks like a
+preference but edits the thing you happen to have open.
+
+The worked example is vorlaut's voice. `chooseVoice()` in `src/shell/voices.ts`
+is `state.layout.voice = id` and then `await save()`, and what it writes is the
+**open Sammlung's** `layout.json` — every recording in that Sammlung is spoken
+again on the next release, which the hint under the list says out loud. It sits
+in the sheet at the foot of the sidebar (§3.2), between the colour scheme and
+the Azure key. Open a different Sammlung, reopen the sheet, and the panel shows
+a different answer, because it is reading a different file.
+
+That is the test, and it is worth stating as a test rather than as a list of
+which settings go where:
+
+> **Does this setting's answer change when a different thing is selected? If it
+> does, it is not a setting of the app.**
+
+From which:
+
+- **The app's settings hold defaults for the next thing made.** They apply
+  forward and never reach back. mitreden already does this: `settings.voice` is
+  the voice the *next* sentence gets, and `build()` records each sentence with
+  `item.voice ?? voiceId`, so what has already been recorded keeps the voice it
+  was recorded in. Only an explicit *record again* moves it, which is somebody
+  pressing a button rather than a preference reaching backwards.
+- **A thing holds what is true of that thing**, reachable from its own `⋯`
+  (§3.6). Which thing that is differs per product, and §4.1 is the reason this
+  rule will not say: the thing that gets recorded carries its own. Naming the
+  Sammlung as the owner here would settle arity from the wrong end.
+- **Within one thing there is one voice and one symbol source** — "one thing"
+  being the level that product records at. In vorlaut that is the whole
+  Sammlung, because a Sammlung there *is* a layout: a child's device speaking in
+  three voices is a defect, and `exchange/SPEC.md` §5.1 lets a package declare
+  exactly one symbol collection. In mitreden it is the sentence, which carries
+  one `voice` and one recording however many Sammlungen it sits in.
+- **A setting that changes only what you see, and nothing you made, is exempt.**
+  bildhaft's active symbol provider is the case. A slot stores a concept key and
+  a choice *per provider*, overrides are keyed `${provider}:${token}`, and the
+  picture is resolved at render time — so switching source redraws the page and
+  disturbs nothing that was made, and switching back finds every manual
+  correction still there. A view setting is not a content setting.
+
+**Where the three stand**, in §4's shape. Only one of the three positions is
+forced:
+
+- **vorlaut: forced, and it is the one carrying the obligation.** It alone
+  *bakes* symbols into a file that leaves the machine. The DIY talker ships no
+  symbol library and a tablet package has to open on a device that never heard
+  of METACOM, so §5.1 is vorlaut's to keep — and `symbolSource()` in
+  `src/data/app_package.ts` keeps it, deriving the source from what the keys
+  actually reference and refusing a Sammlung that draws on two rather than
+  picking a winner. The voice is the same shape: what leaves is audio, already
+  spoken, so the choice has to belong to the thing it will be baked into.
+- **bildhaft: not forced, and deliberately the other way.** It references and
+  resolves, and its export notice promises what that buys — the file "kann
+  unabhängig davon geteilt werden, welche Symbolsammlung die Empfängerin oder
+  der Empfänger besitzt". The per-provider choice and the per-provider override
+  key are what make that true rather than hopeful: nothing in an exported file
+  names one library as *the* answer, so there is nothing for a per-Sammlung
+  symbol setting to be.
+- **mitreden: already there, and that is a choice too.** Nothing forces
+  `settings.voice` to be forward-only. It is forward-only because a recording is
+  a thing that was made, and the button that re-speaks the library is where
+  changing your mind about the whole of it belongs.
+
+**Diverging: vorlaut**, as of 2026-08-25, on two panels of one sheet. The voice
+(`state.layout.voice`) and the language the built device shows its own menu in
+(`state.layout.language`) are both written from the settings sheet and both land
+in the open Sammlung's layout — the second under a comment that already says it
+"is different from one Sammlung to the next", which is this section's test
+written out in the template that fails it. Both belong in the `⋯` beside the
+name, and the shape of the move is in the product already: that is where
+`collectionMenuExtras()` puts the tablet editor's *Raster* card (§3.6).
+
+**Diverging: nobody else**, read against the code the same day rather than
+inferred from vorlaut — §3.4's lesson about an audit that stops at its first
+hit. mitreden's five panels and bildhaft's five are about the installation
+throughout. bildhaft's print settings are the near miss and they pass rather
+than escape: they live in `AppSettings`, they are the same for every Sammlung,
+and they put nothing on a sentence.
+
+**One thing the same sweep turned up that is not this rule's**, recorded so the
+next reader does not have to find it twice: vorlaut's *Gerät* panel writes the
+open Sammlung's build into a folder, which is an act on one Sammlung rather
+than a setting of one, sitting in the sheet that §3.6 says such acts leave. Its
+own note argues it is the way in that stays open when the cable is wrong, which
+may well be an exception worth keeping. That is §3.6's question and not this
+one's, and it is written down here rather than answered.
 
 ---
 
