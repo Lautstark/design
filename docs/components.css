@@ -66,6 +66,17 @@
 /* An icon-only button is a normal or quiet button at pill radius. */
 .btn.icon { border-radius: var(--radius-pill); padding: 8px 11px; line-height: 1; }
 
+/* The small tier. All three products wrote `.btn.sm` in their markup and this
+   file never defined it, so each invented one: 6px 9px at 13px, 5px 11px at
+   13.5px, and - in the third - nothing at all, which meant the class was inert
+   and the button rendered full size. A 7px spread across the family, from a
+   class everybody thought they were using.
+
+   These are bildhaft's numbers. The horizontal padding stays proportional to
+   .btn's 16px, which is what keeps a small button reading as the same object
+   at a smaller size rather than as a differently shaped one. */
+.btn.sm { padding: 5px 11px; font-size: 13.5px; }
+
 /* This file sets display on .btn and .toast, and an author display rule beats
    the browser's own [hidden] { display: none } — so the file that takes
    hidden's meaning away must give it back. */
@@ -283,6 +294,51 @@
   border-radius: var(--radius-pill); padding: 9px 17px;
   font-size: 14px; box-shadow: var(--shadow);
 }
+
+/* Empty, it draws nothing - and it has to stay in the page while it is empty,
+   because it is a live region (§3.8). Not [hidden] and not display:none: both
+   take it out of the accessibility tree, which is the arrangement that made
+   every message in one of these products silent. Stripped of its fill and
+   padding an empty inline-block measures 0x0 and paints nothing.
+
+   The rule above this one - `.toast[hidden] { display: none }` - is the trap
+   next door. It exists because an author display rule beats the browser's own
+   [hidden], so the file that takes the attribute's meaning away has to give it
+   back; it must not be pointed at the region itself. */
+.toast:empty { background: none; box-shadow: none; padding: 0; }
+
+/* ---------------------------------------------------------------- rename */
+
+/*
+ * The name of the thing you are looking at, as the field that renames it.
+ *
+ * §1.6 settles that renaming is typing in the title, and @lautstark/design/rename
+ * owns the timing - the debounce, the write on the way out, the guard against a
+ * repaint typing over somebody mid-word. What was never shared is how it looks,
+ * so the three drifted to 19px, 17px and 15px, at two weights and two paddings:
+ * the same control, the same behaviour, three sizes.
+ *
+ * 17px is the middle of the three. A title field has to read as the page's
+ * heading without becoming a display size in a product whose work head is
+ * already a full-width band.
+ *
+ * It is a field that does not look like one until it is asked to. A border that
+ * appears on hover is what says "this is editable" without drawing a box around
+ * the page's title at rest.
+ */
+.title-input {
+  flex: 1; min-width: 0; margin: 0;
+  font: inherit; font-size: 17px; font-weight: 650;
+  padding: 4px 8px;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  background: none; color: var(--text);
+}
+.title-input:hover { border-color: var(--line); }
+.title-input:focus {
+  outline: none; border-color: var(--accent); background: var(--surface);
+}
+.title-input::placeholder { color: var(--text-dim); font-weight: 400; }
+.title-input:disabled { color: var(--text-dim); }
 
 /* -------------------------------------------------------------- standing */
 

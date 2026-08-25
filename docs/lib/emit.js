@@ -16,14 +16,14 @@ const ORDER = [
   ['Accent', ['accent', 'accent-ink', 'accent-strong', 'accent-hover', 'accent-soft']],
   ['Danger', ['danger', 'danger-ink', 'danger-soft']],
   ['Per-item state', ['ok', 'warn', 'miss']],
-  ['Shape and type', ['radius', 'radius-sm', 'radius-pill', 'radius-item', 'font', 'mono']],
+  ['Shape and type', ['radius', 'radius-sm', 'radius-pill', 'radius-item', 'font', 'mono', 'leading']],
   ['Shadow', ['shadow-sm', 'shadow']],
 ];
 
 /* Tokens whose value is the same in both schemes. Repeating them inside the dark
    block would imply they change there, and the next person would keep them in
    sync by hand forever. */
-const SCHEME_INVARIANT = new Set(['radius', 'radius-sm', 'radius-pill', 'radius-item', 'font', 'mono', 'accent', 'accent-ink']);
+const SCHEME_INVARIANT = new Set(['radius', 'radius-sm', 'radius-pill', 'radius-item', 'font', 'mono', 'leading', 'accent', 'accent-ink']);
 
 function block(tokens, indent, skip = null) {
   const out = [];
