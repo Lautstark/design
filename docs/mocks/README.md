@@ -133,3 +133,13 @@ for that; the one thing that would need one is „danach leeren“, which is
 representable as `actions: [":speak", ":clear"]` and which SPEC.md §7.4
 deliberately leaves undefined.
 
+The file opens with **the board before anything is open**, because that is what
+the sheet changes most. The cell stops being a field and goes back to being a
+button: with the sheet carrying the word, an input on the board would be a
+second way to do one thing, and a press would have to choose between focusing
+it and opening the sheet. The two in-cell tools and the property row go with
+it. Nothing is left on the board that is not the board.
+
+A page has no cell on a tablet, so the current tab carries a `⋯` that opens the
+page's own card. The talker needs none: there the set key *is* a cell.
+

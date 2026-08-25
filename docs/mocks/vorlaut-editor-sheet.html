@@ -51,6 +51,218 @@
     <code>editor.css</code>.
   </p>
 
+
+  <section class="panel">
+    <h2>Die Tafel, bevor etwas offen ist</h2>
+    <p>
+      Was übrig bleibt, wenn ein Druck ein Fenster öffnet: weniger als in beiden
+      Entwürfen davor. Die Zelle ist wieder ein Knopf — kein Feld, keine Werkzeuge,
+      keine Eigenschaftszeile darunter. Auf dem Brett steht nur noch das Brett.
+    </p>
+
+    <div class="three" style="grid-template-columns: repeat(auto-fit, minmax(430px, 1fr))">
+
+      <div class="case">
+        <h3><span class="who who--diy">Talker</span> 2 × 3</h3>
+        <div class="side" style="border:1px solid var(--line); border-radius:var(--radius); background:var(--bg)">
+          <div class="editor">
+            <div class="strip">
+              <button class="tab" type="button" aria-current="true" style="--screen:#159947">Morgens</button>
+              <button class="tab" type="button" style="--screen:#9B7BFF">Spielen</button>
+              <button class="btn quiet" type="button">+ Neue Seite</button>
+            </div>
+            <div class="grid" style="--cols:3; --rows:2">
+            <div class="cell cell--hole"><span>Lautsprecher</span></div>
+            <button class="cell cell--btn" type="button"><img class="cell__pic" src="symbols/6632.png" alt=""><span class="cell__word">ich</span></button>
+            <button class="cell cell--btn" type="button"><img class="cell__pic" src="symbols/6061.png" alt=""><span class="cell__word">Ich habe Durst</span></button>
+            <button class="cell cell--btn cell--setkey" type="button" style="--screen:#159947"><span class="cell__eyebrow">Seitentaste</span><img class="cell__pic" src="symbols/8195.png" alt=""><span class="cell__word">Morgens</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case">
+        <h3><span class="who who--app">Tablet</span> 3 × 5</h3>
+        <div class="side" style="border:1px solid var(--line); border-radius:var(--radius); background:var(--bg)">
+          <div class="editor">
+            <div class="strip"><button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Morgens<span class="tab__more" role="button" tabindex="0" aria-label="Seite bearbeiten">⋯</span></button><button class="tab" type="button" style="--screen:#159947">Essen</button><button class="btn quiet" type="button">+ Neue Seite</button></div>
+            <div class="grid" style="--cols:5; --rows:3">
+            <button class="cell cell--btn" type="button" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6632.png" alt=""><span class="cell__word">ich</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6625.png" alt=""><span class="cell__word">du</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/5441.png" alt=""><span class="cell__word">will</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6456.png" alt=""><span class="cell__word">essen</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6061.png" alt=""><span class="cell__word">trinken</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#84b6f4"><img class="cell__pic" src="symbols/5508.png" alt=""><span class="cell__word">mehr</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="note">
+      Die Seite hat auf dem Tablet keine eigene Zelle — Name und Farbe gehören zu
+      nichts auf dem Brett. Darum trägt der aktive Reiter das <code>⋯</code>, das
+      dieselbe Seiten-Karte öffnet. Beim Talker braucht es das nicht: dort
+      <em>ist</em> die Seitentaste eine Zelle, und ein Druck darauf öffnet sie.
+    </p>
+    <p class="note">
+      Eine leere Zelle legt beim Druck noch nichts an. Das Fenster geht auf, und
+      erst „Fertig“ macht die Taste — ein Fenster, das man schließt, kostet nichts.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Der Druck</h2>
+    <p>Dieselbe Tafel bei elf Spalten, und was ein Druck darauf öffnet.</p>
+
+    <div class="stage">
+      <div class="side" style="border:1px solid var(--line); border-radius:var(--radius); background:var(--bg)">
+        <div class="editor">
+          <div class="strip"><button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Morgens<span class="tab__more" role="button" tabindex="0" aria-label="Seite bearbeiten">⋯</span></button><button class="tab" type="button" style="--screen:#159947">Essen</button><button class="btn quiet" type="button">+ Neue Seite</button></div>
+          <div class="grid grid--dense" style="--cols:11; --rows:6">
+            <button class="cell cell--btn" type="button" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6632.png" alt=""><span class="cell__word">ich</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6625.png" alt=""><span class="cell__word">du</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/5441.png" alt=""><span class="cell__word">will</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6456.png" alt=""><span class="cell__word">essen</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6061.png" alt=""><span class="cell__word">trinken</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#84b6f4"><img class="cell__pic" src="symbols/5508.png" alt=""><span class="cell__word">mehr</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2462.png" alt=""><span class="cell__word">Apfel</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#ffda89"><img class="cell__pic" src="symbols/32464.png" alt=""><span class="cell__word">Wasser</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2458.png" alt=""><span class="cell__word">Mama</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#fdcae1"><img class="cell__pic" src="symbols/5526.png" alt=""><span class="cell__word">nein</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#fdcae1"><img class="cell__pic" src="symbols/8195.png" alt=""><span class="cell__word">bitte</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/23392.png" alt=""><span class="cell__word">spielen</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/8142.png" alt=""><span class="cell__word">gehen</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6564.png" alt=""><span class="cell__word">sehen</span></button>
+            <button class="cell cell--btn" type="button" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2269.png" alt=""><span class="cell__word">Fußball</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+            <button class="cell cell--btn cell--empty" type="button" aria-label="Taste anlegen"><span class="cell__add" aria-hidden="true">+</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="stage__scrim">
+        <div class="sheet sheet--button">
+          <div class="head"><h2>Taste</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+          <div class="body">
+            <div class="pick">
+              <div class="pick__preview"><img src="symbols/2462.png" alt=""></div>
+              <input class="field" type="search" value="Apfel" aria-label="Symbol suchen">
+              <div class="pick__results">
+                <button class="pick__hit" type="button" aria-pressed="true" aria-label="Apfel"><img src="symbols/2462.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="essen"><img src="symbols/6456.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="trinken"><img src="symbols/6061.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Wasser"><img src="symbols/32464.png" alt=""></button>
+              </div>
+              <button class="btn quiet" type="button">Eigenes Bild …</button>
+            </div>
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="b-label">Aufschrift</label>
+                <input class="field" id="b-label" value="Apfel">
+              </div>
+              <div class="form__row">
+                <label class="lbl" for="b-spoken">Gesprochen</label>
+                <div class="form__withplay">
+                  <input class="field" id="b-spoken" value="einen Apfel">
+                  <button class="btn" type="button" aria-label="Vorhören">▶</button>
+                </div>
+              </div>
+              <div class="form__row">
+                <label class="lbl" for="b-class">Wortart</label>
+                <select class="field" id="b-class"><option>Nomen</option><option>Verb</option></select>
+              </div>
+              <div class="form__row">
+                <span class="lbl">Beim Drücken</span>
+                <div class="does">
+                  <label class="does__opt"><input type="radio" name="does-b" checked>
+                    <b>Wort</b><small>Sagt sich und kommt in den Satz.</small></label>
+                  <label class="does__opt"><input type="radio" name="does-b">
+                    <b>Ausruf</b><small>Sagt sich, kommt aber nicht in den Satz.</small></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn destructive" type="button">Taste löschen</button>
+            <span class="foot__right">
+              <button class="btn quiet" type="button">Nächste Taste →</button>
+              <button class="btn primary" type="button">Fertig</button>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      Elf Spalten und drei Spalten sind derselbe Handgriff — das ist der ganze
+      Gewinn gegenüber der Eigenschaftszeile. Der Schleier ist dunkel, weil hinter
+      ihm ein Raster farbiger Zellen liegt: ein heller Schleier ließe die
+      Fitzgerald-Farben falsch aussehen statt aus dem Spiel.
+    </p>
+  </section>
+
   <section class="panel">
     <h2>Die drei Fälle</h2>
     <p>
