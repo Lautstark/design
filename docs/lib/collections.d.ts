@@ -11,6 +11,21 @@ export interface CollectionRow {
   /** How much is inside. Left off where it is not known yet — a row can exist
    *  before its number does, and drawing 0 would claim the Sammlung is empty. */
   count?: number | null;
+  /** A second line under the name, drawn exactly as passed.
+   *
+   *  The same rule `name` above carries, and for the same reason: nothing here
+   *  derives it. The row does not know what a Sammlung is *for*, and the one
+   *  product that has an answer — vorlaut, where a Sammlung is built either for
+   *  the DIY talker or for the tablet, and a tablet one has a page size —
+   *  writes the words in its own texts. A field of `{ target, grid }` was the
+   *  other candidate and is the reason this one is a string: it would have put
+   *  one product's model, and then its German, into a file the other two read.
+   *
+   *  Left off by the products that have no second fact about a Sammlung.
+   *  Absent draws no second line and no gap where one would have been — the row
+   *  is then exactly the row it was before this field existed, which is what
+   *  mitreden and bildhaft get without changing a caller. */
+  subtitle?: string | null;
 }
 
 export interface CollectionRowsOpts {
