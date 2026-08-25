@@ -104,3 +104,32 @@ word class. One position, one question, the product's own answer in it.
 
 Nothing here is built. `--rows` and `--cols` sit on each `.grid`, so any board
 in it can be re-shaped in place.
+
+### One button, one sheet
+
+`vorlaut-editor-sheet.html` is the second answer to the same question, and the
+simpler one: pressing a button opens a modal holding everything about it.
+
+It replaces the property row in `vorlaut-editor.html` rather than joining it.
+The row could only ever hold what fits on one line, which is why the picture
+and the sound had to stay in the cell and why a dense board had to give its
+tools up; a sheet has room at every board size, so eleven columns and three
+columns become the same handgrip.
+
+What it costs is the fast path — fifteen buttons is fifteen open-type-close
+cycles instead of fifteen presses and some typing — and the foot answers that
+with a way to step to the next key without closing.
+
+Three cases, one skeleton: a tablet button, a talker speech key, and the
+talker's set key. The left column is identical everywhere; the right carries
+only what that target has, which is four rows on a tablet and one on a talker.
+
+**It also corrects the action list**, which described a distinction that does
+not exist. „In die Satzleiste“ against „Sofort sprechen“ reads as silent
+against loud, and the viewer speaks both — `BoardViewModel` calls `utter()` for
+`Append` *and* for `SpeakImmediately`. The only difference is whether the word
+joins the sentence, and the four kinds now say so. No format change is needed
+for that; the one thing that would need one is „danach leeren“, which is
+representable as `actions: [":speak", ":clear"]` and which SPEC.md §7.4
+deliberately leaves undefined.
+

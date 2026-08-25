@@ -284,3 +284,115 @@ html, body {
    so the row stays one line and the destructive button is not pushed onto its
    own. */
 .props select.field { width: auto; padding: 9px 11px; }
+
+/* =========================================================== the button sheet
+
+   Everything about one button, in one modal, opened by pressing it.
+
+   This replaces the property row above rather than sitting beside it, and it
+   is the simpler answer: the row could only ever hold what fits on one line,
+   which is why the picture and the sound had to stay in the cell and why a
+   dense board had to give its tools up. A sheet has room for all of it at
+   every board size, so the eleven-column case stops being a degradation and
+   becomes the same interaction as the three-column one.
+
+   What it costs is the fast path: fifteen new buttons is fifteen open-type-
+   close cycles rather than fifteen presses and some typing. The mitigation is
+   in the sheet's foot - see the note there - and it is worth stating plainly
+   rather than hiding, because it is the one thing the property row did better.
+
+   The same skeleton serves all three cases. Left column: the picture, its
+   search and the upload, which is the one part that is identical everywhere.
+   Right column: only what that target actually has. */
+
+/* A width override on the shared component, not a redefinition of it: two
+   columns need more than the 600px a sheet of prose wants. Everything else -
+   the head, body and foot anatomy, the border, the shadow - stays
+   components.css's. */
+.sheet--button { max-width: 720px; width: 100%; }
+
+.sheet--button > .body {
+  display: grid; grid-template-columns: 200px 1fr; gap: 22px;
+  color: var(--text); font-size: inherit;
+  padding-top: 14px;
+}
+@media (max-width: 720px) { .sheet--button > .body { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------ the picture */
+
+.pick { display: grid; gap: 10px; align-content: start; }
+
+.pick__preview {
+  /* Wider than tall. A pictogram is square, but a preview that is also square
+     at column width takes a third of the sheet to show something the cell
+     behind the sheet is already showing. */
+  aspect-ratio: 4 / 3; display: grid; place-items: center; overflow: hidden;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: #fff;
+}
+.pick__preview img { width: 100%; height: 100%; object-fit: contain; }
+/* No picture yet. The same hint-contrast glyph the cell uses, at the size the
+   box happens to be - not a bordered placeholder announcing an absence. */
+.pick__preview--none { background: var(--surface-2); color: var(--text-faint); }
+.pick__preview--none svg { width: 40px; height: 40px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+
+/* minmax(0, 1fr) rather than 1fr: a grid track's automatic minimum is its
+   content's min-content width, and a pictogram's is its intrinsic pixel width
+   - so four of them inflated this grid past the column it was given and the
+   fourth hung under the fields beside it. The same trap .sheet's own comment
+   in components.css describes, one level in. */
+.pick__results {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
+  max-height: 150px; overflow-y: auto;
+}
+.pick__hit {
+  padding: 0; cursor: pointer; aspect-ratio: 1;
+  border: 2px solid transparent; border-radius: var(--radius-sm); background: #fff;
+}
+.pick__hit img { width: 100%; height: 100%; object-fit: contain; }
+.pick__hit[aria-pressed="true"] { border-color: var(--accent); }
+.pick__hit:hover { border-color: var(--line); }
+
+/* ------------------------------------------------------------- the fields */
+
+.form { display: grid; gap: 16px; align-content: start; }
+.form__row { display: grid; gap: 6px; }
+/* The spoken text sits next to the way to hear it, because they are one
+   question: does this say the right thing. */
+.form__withplay { display: flex; gap: 8px; align-items: center; }
+.form__withplay .field { flex: 1 1 auto; }
+.form__hint { font-size: 12.5px; color: var(--text-faint); }
+
+/* ----------------------------------------------------------- what it does */
+
+/* Four kinds rather than a flat list of seven, because the flat list mixed two
+   different questions - what a word does, and what a bar control does - and
+   put them in one dropdown where they read as alternatives to each other.
+
+   The first two are the correction this sheet is really making. Both speak;
+   the difference is only whether the word joins the sentence, which is what
+   the labels now say. "In die Satzleiste" against "Sofort sprechen" described
+   an axis that does not exist: the viewer utters an appending button too. */
+.does { display: grid; gap: 8px; }
+.does__opt {
+  display: grid; grid-template-columns: auto 1fr; gap: 3px 10px;
+  padding: 10px 12px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.does__opt:hover { border-color: var(--text-faint); }
+.does__opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.does__opt input { grid-row: span 2; align-self: center; accent-color: var(--accent-strong); }
+.does__opt b { font-size: 14px; font-weight: 600; }
+.does__opt small { font-size: 12.5px; color: var(--text-dim); }
+/* What a choice needs once it is chosen, tucked under it rather than in a
+   fifth control that is dead most of the time. */
+.does__more { grid-column: 2; display: none; gap: 8px; margin-top: 8px; }
+.does__opt:has(input:checked) .does__more { display: grid; }
+.does__more label { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-dim); }
+
+/* The foot carries the destructive act on the left, away from the confirming
+   one - and between them the way to keep going, because a board is built in
+   runs and the sheet should not make you re-open it fourteen more times. */
+.sheet--button > .foot { justify-content: space-between; }
+.foot__right { display: flex; align-items: center; gap: 9px; }

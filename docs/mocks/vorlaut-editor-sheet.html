@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — eine Taste, ein Fenster</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="editor.css">
+<style>
+/* The paper the sheets are pinned to. Not part of the proposal. */
+.sheet-wrap { max-width: 1760px; margin: 0 auto; padding: 40px 24px 80px; }
+.sheet-wrap h1 { font-size: 30px; margin: 0 0 10px; font-weight: 600; }
+.sheet-wrap .lede { max-width: 66ch; color: var(--text-dim); margin: 0 0 8px; font-size: 16px; }
+.panel { margin-top: 44px; }
+.panel > h2 {
+  font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-strong); margin: 0 0 4px;
+}
+.panel > p { margin: 0 0 18px; color: var(--text-dim); font-size: 15px; max-width: 70ch; }
+.three { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 24px; align-items: start; }
+.case { display: grid; gap: 10px; }
+.case > h3 {
+  margin: 0; font-size: 13px; font-weight: 600; color: var(--text-dim);
+  display: flex; align-items: center; gap: 9px;
+}
+.who {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: var(--radius-sm);
+}
+.who--diy { background: var(--surface-3); color: var(--text); }
+.who--app { background: var(--accent-soft); color: var(--accent-strong); }
+.note { font-size: 14px; color: var(--text-dim); margin: 16px 0 0; max-width: 78ch; }
+.note code { font-family: var(--mono); font-size: .92em; }
+.note + .note { margin-top: 8px; }
+.was { color: var(--text-faint); text-decoration: line-through; }
+</style>
+</head>
+<body>
+<div class="sheet-wrap">
+
+  <h1>Eine Taste, ein Fenster</h1>
+  <p class="lede">
+    Ein Druck auf eine Taste öffnet alles, was zu ihr gehört. Dasselbe Gerüst in
+    beiden Editoren: links das Bild mit seiner Suche, rechts nur das, was das
+    jeweilige Gerät wirklich hat, unten links das Löschen und unten rechts der
+    Weg weiter.
+  </p>
+  <p class="lede">
+    Nichts hiervon ist gebaut. Die Begründung zu jeder Regel steht in
+    <code>editor.css</code>.
+  </p>
+
+  <section class="panel">
+    <h2>Die drei Fälle</h2>
+    <p>
+      Der linke Teil ist überall derselbe. Der rechte trägt beim Talker eine
+      Zeile, beim Tablet vier — weil eine Talker-Taste keine Wortart hat (das
+      Gerät zeichnet eine Farbe um alle fünf Displays, nicht pro Taste) und keine
+      Satzleiste, in die sie etwas legen könnte.
+    </p>
+
+    <div class="three">
+
+      <!-- ============================================== tablet: a word -->
+      <div class="case">
+        <h3><span class="who who--app">Tablet</span> eine Taste</h3>
+        <div class="sheet sheet--button">
+          <div class="head"><h2>Taste</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+
+          <div class="body">
+            <div class="pick">
+              <div class="pick__preview"><img src="symbols/2462.png" alt=""></div>
+              <input class="field" type="search" value="Apfel" aria-label="Symbol suchen">
+              <div class="pick__results">
+                <button class="pick__hit" type="button" aria-pressed="true" aria-label="Apfel"><img src="symbols/2462.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="essen"><img src="symbols/6456.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="trinken"><img src="symbols/6061.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Wasser"><img src="symbols/32464.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="mehr"><img src="symbols/5508.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="bitte"><img src="symbols/8195.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Mama"><img src="symbols/2458.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Fußball"><img src="symbols/2269.png" alt=""></button>
+              </div>
+              <button class="btn quiet" type="button">Eigenes Bild …</button>
+            </div>
+
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="a-label">Aufschrift</label>
+                <input class="field" id="a-label" value="Apfel">
+              </div>
+
+              <div class="form__row">
+                <label class="lbl" for="a-spoken">Gesprochen</label>
+                <div class="form__withplay">
+                  <input class="field" id="a-spoken" value="einen Apfel">
+                  <button class="btn" type="button" aria-label="Vorhören">▶</button>
+                </div>
+                <span class="form__hint">Leer lassen: dann wird die Aufschrift gesagt.</span>
+              </div>
+
+              <div class="form__row">
+                <label class="lbl" for="a-class">Wortart</label>
+                <select class="field" id="a-class">
+                  <option>Nomen</option><option>Verb</option>
+                  <option>Beschreibung</option><option>Kategorie</option>
+                </select>
+              </div>
+
+              <div class="form__row">
+                <span class="lbl">Beim Drücken</span>
+                <div class="does">
+                  <label class="does__opt">
+                    <input type="radio" name="does-a" checked>
+                    <b>Wort</b>
+                    <small>Sagt sich und kommt in den Satz.</small>
+                  </label>
+                  <label class="does__opt">
+                    <input type="radio" name="does-a">
+                    <b>Ausruf</b>
+                    <small>Sagt sich, kommt aber nicht in den Satz. Für „Aua“ oder eine Begrüßung.</small>
+                  </label>
+                  <label class="does__opt">
+                    <input type="radio" name="does-a">
+                    <b>Zu einer Seite</b>
+                    <small>Führt weiter und sagt nichts.</small>
+                    <span class="does__more">
+                      <select class="field"><option>Essen</option><option>Morgens</option><option>Neue Seite …</option></select>
+                    </span>
+                  </label>
+                  <label class="does__opt">
+                    <input type="radio" name="does-a">
+                    <b>Satzleiste bedienen</b>
+                    <small>Eine Taste für den Satz selbst, nicht für ein Wort.</small>
+                    <span class="does__more">
+                      <select class="field"><option>Satz sprechen</option><option>Letztes zurück</option><option>Satz leeren</option><option>Zur Startseite</option></select>
+                      <label><input type="checkbox"> danach leeren</label>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="foot">
+            <button class="btn destructive" type="button">Taste löschen</button>
+            <span class="foot__right">
+              <button class="btn quiet" type="button">Nächste Taste →</button>
+              <button class="btn primary" type="button">Fertig</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================ talker: a speech key -->
+      <div class="case">
+        <h3><span class="who who--diy">Talker</span> eine Sprechtaste</h3>
+        <div class="sheet sheet--button">
+          <div class="head"><h2>Taste</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+
+          <div class="body">
+            <div class="pick">
+              <div class="pick__preview"><img src="symbols/6061.png" alt=""></div>
+              <input class="field" type="search" value="trinken" aria-label="Symbol suchen">
+              <div class="pick__results">
+                <button class="pick__hit" type="button" aria-pressed="true" aria-label="trinken"><img src="symbols/6061.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Wasser"><img src="symbols/32464.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="essen"><img src="symbols/6456.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="mehr"><img src="symbols/5508.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Apfel"><img src="symbols/2462.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="bitte"><img src="symbols/8195.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="nein"><img src="symbols/5526.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Mama"><img src="symbols/2458.png" alt=""></button>
+              </div>
+              <button class="btn quiet" type="button">Eigenes Bild …</button>
+            </div>
+
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="d-spoken">Was gesagt wird</label>
+                <div class="form__withplay">
+                  <input class="field" id="d-spoken" value="Ich habe Durst">
+                  <button class="btn" type="button" aria-label="Vorhören">▶</button>
+                </div>
+                <span class="form__hint">
+                  Das Gerät zeigt keine Aufschrift — auf der Taste ist nur das Bild.
+                  Darum ein Feld statt zwei.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="foot">
+            <button class="btn destructive" type="button">Taste leeren</button>
+            <span class="foot__right">
+              <button class="btn quiet" type="button">Nächste Taste →</button>
+              <button class="btn primary" type="button">Fertig</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================================================ talker: the set key -->
+      <div class="case">
+        <h3><span class="who who--diy">Talker</span> die Seitentaste</h3>
+        <div class="sheet sheet--button">
+          <div class="head"><h2>Seitentaste</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+
+          <div class="body">
+            <div class="pick">
+              <div class="pick__preview"><img src="symbols/8195.png" alt=""></div>
+              <input class="field" type="search" placeholder="Symbol suchen …" aria-label="Symbol suchen">
+              <div class="pick__results">
+                <button class="pick__hit" type="button" aria-pressed="true" aria-label="bitte"><img src="symbols/8195.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="spielen"><img src="symbols/23392.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="essen"><img src="symbols/6456.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="gehen"><img src="symbols/8142.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="sehen"><img src="symbols/6564.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Mama"><img src="symbols/2458.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="Fußball"><img src="symbols/2269.png" alt=""></button>
+                <button class="pick__hit" type="button" aria-label="nein"><img src="symbols/5526.png" alt=""></button>
+              </div>
+              <button class="btn quiet" type="button">Eigenes Bild …</button>
+            </div>
+
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="s-name">Name der Seite</label>
+                <input class="field" id="s-name" value="Morgens">
+                <span class="form__hint">
+                  Steht auf der Seitentaste und sagt, wo man gerade ist. Ein Druck
+                  darauf geht zur nächsten Seite.
+                </span>
+              </div>
+
+              <div class="form__row">
+                <span class="lbl">Farbe der Seite</span>
+                <div class="swatches">
+                  <button class="swatch" type="button" style="--pick:#3B5BDB" aria-label="Blau"></button>
+                  <button class="swatch" type="button" style="--pick:#159947" aria-pressed="true" aria-label="Grün"></button>
+                  <button class="swatch" type="button" style="--pick:#9B7BFF" aria-label="Violett"></button>
+                  <button class="swatch" type="button" style="--pick:#FF8BC7" aria-label="Rosa"></button>
+                  <button class="swatch" type="button" style="--pick:#FF6B35" aria-label="Orange"></button>
+                </div>
+                <span class="form__hint">Das Gerät zeichnet sie um alle fünf Displays.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="foot">
+            <button class="btn destructive" type="button">Seite löschen</button>
+            <span class="foot__right">
+              <button class="btn primary" type="button">Fertig</button>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="note">
+      <b>Was das Fenster kostet.</b> Fünfzehn Tasten anlegen sind jetzt fünfzehnmal
+      öffnen, tippen, schließen — statt fünfzehnmal drücken und tippen. Dagegen
+      steht „Nächste Taste →“ im Fuß: das Fenster bleibt offen und rückt eine Zelle
+      weiter, sodass ein Durchgang eine Kette bleibt statt fünfzehn Einzelbesuche.
+    </p>
+    <p class="note">
+      <b>Was es einbringt.</b> Die dichte Tafel hört auf, ein Sonderfall zu sein.
+      Bei elf Spalten ist die Zelle 91 px breit — für eine Eigenschaftszeile zu
+      wenig, für ein Fenster egal. Elf Spalten und drei Spalten sind derselbe
+      Handgriff.
+    </p>
+  </section>
+
+  <section class="panel">
+    <h2>Die Korrektur bei „Beim Drücken“</h2>
+    <p>
+      Die alte Liste hatte sieben Einträge in einem Auswahlfeld und beschrieb eine
+      Unterscheidung, die es nicht gibt.
+    </p>
+    <p class="note" style="max-width:78ch">
+      <span class="was">„In die Satzleiste“ gegen „Sofort sprechen“</span> — als wäre
+      das eine still und das andere laut. Der Viewer spricht beide:
+      <code>BoardViewModel</code> ruft <code>utter()</code> für <code>Append</code>
+      <em>und</em> für <code>SpeakImmediately</code>. Der Unterschied ist allein, ob
+      das Wort im Satz landet. Genau das sagen die Beschriftungen jetzt — und dafür
+      muss am Format nichts geändert werden.
+    </p>
+    <p class="note" style="max-width:78ch">
+      Die vier Arten trennen außerdem zwei Fragen, die vorher in einer Liste
+      nebeneinanderstanden: was ein <em>Wort</em> tut, und was eine Taste für den
+      <em>Satz</em> tut. „Satz sprechen“ und „Satz leeren“ waren Geschwister von
+      „Nomen anhängen“, was sie nicht sind.
+    </p>
+    <p class="note" style="max-width:78ch">
+      <b>Das eine, was wirklich neu wäre:</b> „danach leeren“. Als
+      <code>actions: [":speak", ":clear"]</code> ist es darstellbar und der Viewer
+      führt es aus — aber <code>SPEC.md</code> §7.4 definiert für mehrere Aktionen in
+      einer Taste ausdrücklich keine Bedeutung, und keine Fixture prüft es. Es
+      bräuchte einen Absatz in §7.4 und eine Fixture, bevor es gebaut wird.
+    </p>
+  </section>
+
+</div>
+</body>
+</html>
