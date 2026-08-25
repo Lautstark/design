@@ -343,6 +343,31 @@ since become wrong about what a product *does*, it says so underneath.
   pills that multi-select; bildhaft renders it as a vertical rail that
   single-selects. See §5 for why I do not recommend converging on the rail.
 
+**The fork closed, and §5 was decided the other way (read 2026-08-25).** Both
+products render a named grouping with a count as a sidebar row now, and the
+rows are the same rows — `@lautstark/design/collections`, with `.collections__*`
+in components.css (conventions.md §5, 5b). What each bullet above has lost:
+
+- **mitreden's chip row is gone entirely.** `CHIP_CAP`, the dashed `.chip.fold`
+  and the uppercase `.flabel` are not in the source any more. The Gruppen axis
+  became the rail; the Stimmen axis was not moved but **deleted**, because every
+  row already names the voice it was recorded in and a Sammlung is small enough
+  to read (`src/ui/state.ts`). Search still ANDs on top of whichever Sammlungen
+  are open, which is the one part of the sentence that survived the move.
+- **The multi-select outlived the pills.** It is on the rail now, and it is not
+  about arity — a mitreden sentence has been in exactly one Sammlung since
+  2026-08-25 and the rail still takes Cmd or Ctrl for "and also this one",
+  because the question is how many are *open* (conventions.md §4.2).
+- **`.chip` itself survives, in one place and shared.** It is a components.css
+  class, and mitreden's only remaining use is the row of language pills in the
+  settings voice picker — a filter over a catalogue rather than over the
+  library. The on-state moved with it: `aria-pressed="true"`, not `.chip.on`.
+- **bildhaft's two nearest things are both gone.** `.list__item` survives only
+  as a comment in `src/styles/app.css` explaining that the rows are not called
+  that any more, and `.tag` went when the symbol sources became components.css
+  panels whose heading carries the state — so the badge that pill was measured
+  against no longer exists either.
+
 ### Dialogs and sheets
 
 - **mitreden.** Native `<dialog class="sheet">` opened with `showModal()`. Radius
