@@ -536,6 +536,36 @@
       </div>
 
       <div class="case">
+        <h3><span class="who who--app">Tablet</span> dieselbe Karte auf der Startseite</h3>
+        <div class="sheet sheet--button" style="max-width:520px">
+          <div class="head"><h2>Seite</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+          <div class="body" style="grid-template-columns:1fr">
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="p-name3">Name der Seite</label>
+                <input class="field" id="p-name3" value="Morgens">
+              </div>
+              <div class="form__row">
+                <div class="notice">
+                  <b>⌂ Diese Seite ist die Startseite.</b> Das Tablet macht mit ihr auf,
+                  und eine „Zur Startseite“-Taste führt hierher.
+                </div>
+                <span class="form__hint">
+                  Löschen geht trotzdem: die Startseite rückt dann auf die erste
+                  verbleibende Seite.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn destructive" type="button">Seite löschen</button>
+            <span class="foot__right"><button class="btn primary" type="button">Fertig</button></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case">
         <h3><span class="who who--diy">Talker</span> aus dem ⋯ am Reiter, oder aus der Seitentaste</h3>
         <div class="sheet sheet--button" style="max-width:520px">
           <div class="head"><h2>Seite</h2>
@@ -566,6 +596,12 @@
 
     </div>
 
+    <p class="note">
+      <b>Auf der Startseite fehlt eine Zeile und steht eine andere da:</b> „Zur
+      Startseite machen“ wäre dort ein Knopf, der nichts tut, also sagt die Karte
+      stattdessen, dass sie es schon ist. Gelöscht werden darf sie — die Startseite
+      rückt dann auf die erste verbleibende Seite, was der Graph ohnehin so macht.
+    </p>
     <p class="note">
       <b>Dasselbe Gerüst wie bei einer Taste</b>, mit demselben Fuß: löschen links,
       fertig rechts. Was sich unterscheidet, ist eine Zeile — der Talker hat ein
