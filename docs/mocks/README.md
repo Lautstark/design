@@ -185,3 +185,19 @@ keeps its own, because that says *where* you are rather than *what* a word is.
 sheet, and one in the corner, which plays. A control inside a control is
 invalid markup and unreachable to a keyboard, which is what the first draft had.
 
+**A page gets a card of its own, and it is the button sheet's twin.** Its name
+and its delete lived in four different places between the two editors — a field
+and a red button in a row under the tablet's grid, a field in the talker's set
+tile and a red button below it. Both belong to the page, so both are in one
+card with the same foot as a button's: delete left, done right. The tablet's
+carries the start page, the talker's carries a picture, and that is the whole
+difference.
+
+Reached from the `⋯` on the current tab in both. On the talker the set key
+opens the same card, because that cell *is* the page — which is not the two
+doors conventions.md §3.2 forbids. That rule is about two places in the *chrome*
+pointing at one sheet; this is one object drawn twice, and both drawings lead to
+itself.
+
+With that, the last thing on either board that is not a cell is gone.
+

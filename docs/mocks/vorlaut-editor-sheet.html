@@ -87,7 +87,7 @@
         <h3><span class="who who--app">Tablet</span> 3 × 5</h3>
         <div class="side" style="border:1px solid var(--line); border-radius:var(--radius); background:var(--bg)">
           <div class="editor">
-            <div class="strip"><button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Morgens<span class="tab__more" role="button" tabindex="0" aria-label="Seite bearbeiten">⋯</span></button><button class="tab" type="button" style="--screen:#159947">Essen</button><button class="btn quiet" type="button">+ Neue Seite</button></div>
+            <div class="strip"><button class="tab" type="button" aria-current="true"><span class="home">⌂</span>Morgens<span class="tab__more" role="button" tabindex="0" aria-label="Seite bearbeiten">⋯</span></button><button class="tab" type="button">Essen</button><button class="btn quiet" type="button">+ Neue Seite</button></div>
             <div class="grid" style="--cols:5; --rows:3">
             <div class="cell" style="--tint:#fdfd96"><button class="cell__open" type="button" aria-label="ich bearbeiten"></button><img class="cell__pic" src="symbols/6632.png" alt=""><span class="cell__word">ich</span><button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button></div>
             <div class="cell" style="--tint:#fdfd96"><button class="cell__open" type="button" aria-label="du bearbeiten"></button><img class="cell__pic" src="symbols/6625.png" alt=""><span class="cell__word">du</span><button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button></div>
@@ -112,10 +112,15 @@
     </div>
 
     <p class="note">
-      Die Seite hat auf dem Tablet keine eigene Zelle — Name und Farbe gehören zu
-      nichts auf dem Brett. Darum trägt der aktive Reiter das <code>⋯</code>, das
-      dieselbe Seiten-Karte öffnet. Beim Talker braucht es das nicht: dort
-      <em>ist</em> die Seitentaste eine Zelle, und ein Druck darauf öffnet sie.
+      Der aktive Reiter trägt in beiden Editoren das <code>⋯</code>, und es öffnet
+      dieselbe Seiten-Karte — Name, Löschen, und beim Tablet die Startseite. Beim
+      Talker öffnet die Seitentaste dieselbe Karte, weil diese Zelle die Seite
+      <em>ist</em>.
+    </p>
+    <p class="note">
+      Der Talker zeichnet noch eine Farbschiene am Reiter, das Tablet nicht mehr:
+      dort ist die Seitenfarbe schon weg, und die des Talkers geht mit der Firmware
+      in einer eigenen Änderung.
     </p>
     <p class="note">
       Eine leere Zelle legt beim Druck noch nichts an. Das Fenster geht auf, und
@@ -130,7 +135,7 @@
     <div class="stage">
       <div class="side" style="border:1px solid var(--line); border-radius:var(--radius); background:var(--bg)">
         <div class="editor">
-          <div class="strip"><button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Morgens<span class="tab__more" role="button" tabindex="0" aria-label="Seite bearbeiten">⋯</span></button><button class="tab" type="button" style="--screen:#159947">Essen</button><button class="btn quiet" type="button">+ Neue Seite</button></div>
+          <div class="strip"><button class="tab" type="button" aria-current="true"><span class="home">⌂</span>Morgens<span class="tab__more" role="button" tabindex="0" aria-label="Seite bearbeiten">⋯</span></button><button class="tab" type="button">Essen</button><button class="btn quiet" type="button">+ Neue Seite</button></div>
           <div class="grid grid--dense" style="--cols:11; --rows:6">
             <div class="cell" style="--tint:#fdfd96"><button class="cell__open" type="button" aria-label="ich bearbeiten"></button><img class="cell__pic" src="symbols/6632.png" alt=""><span class="cell__word">ich</span><button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button></div>
             <div class="cell" style="--tint:#fdfd96"><button class="cell__open" type="button" aria-label="du bearbeiten"></button><img class="cell__pic" src="symbols/6625.png" alt=""><span class="cell__word">du</span><button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button></div>
@@ -401,7 +406,6 @@
                 </div>
                 <span class="form__hint">
                   Das Gerät zeigt keine Aufschrift — auf der Taste ist nur das Bild.
-                  Darum ein Feld statt zwei.
                 </span>
               </div>
             </div>
@@ -491,6 +495,94 @@
   </section>
 
 
+
+
+  <section class="panel">
+    <h2>Die Seite selbst</h2>
+    <p>
+      Name und Löschen standen bisher an vier verschiedenen Stellen: beim Tablet
+      als Feld und roter Knopf in einer Leiste unter dem Raster, beim Talker als
+      Feld in der Kachel und roter Knopf darunter. Beides gehört zur Seite, also
+      gehört beides in eine Karte — dieselbe Karte, an derselben Stelle im Fuß wie
+      bei einer Taste.
+    </p>
+
+    <div class="three" style="grid-template-columns: repeat(auto-fit, minmax(420px, 1fr))">
+
+      <div class="case">
+        <h3><span class="who who--app">Tablet</span> aus dem ⋯ am Reiter</h3>
+        <div class="sheet sheet--button" style="max-width:520px">
+          <div class="head"><h2>Seite</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+          <div class="body" style="grid-template-columns:1fr">
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="p-name">Name der Seite</label>
+                <input class="field" id="p-name" value="Morgens">
+                <span class="form__hint">Steht auf dem Reiter. Auf dem Tablet selbst steht er nirgends.</span>
+              </div>
+              <div class="form__row">
+                <button class="btn" type="button" style="justify-self:start">Zur Startseite machen</button>
+                <span class="form__hint">Die Startseite ist die, mit der das Tablet aufmacht — und wohin eine „Zur Startseite“-Taste führt.</span>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn destructive" type="button">Seite löschen</button>
+            <span class="foot__right"><button class="btn primary" type="button">Fertig</button></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case">
+        <h3><span class="who who--diy">Talker</span> aus dem ⋯ am Reiter, oder aus der Seitentaste</h3>
+        <div class="sheet sheet--button" style="max-width:520px">
+          <div class="head"><h2>Seite</h2>
+            <button class="btn icon" type="button" aria-label="Schließen">✕</button></div>
+          <div class="body">
+            <div class="pick">
+              <div class="pick__preview"><img src="symbols/8195.png" alt=""></div>
+              <input class="field" type="search" placeholder="Symbol suchen …" aria-label="Symbol suchen">
+              <button class="btn quiet" type="button">Eigenes Bild …</button>
+            </div>
+            <div class="form">
+              <div class="form__row">
+                <label class="lbl" for="p-name2">Name der Seite</label>
+                <input class="field" id="p-name2" value="Morgens">
+                <span class="form__hint">
+                  Steht auf dem Reiter und auf der Seitentaste — die zeigt am Gerät,
+                  wo man gerade ist.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn destructive" type="button">Seite löschen</button>
+            <span class="foot__right"><button class="btn primary" type="button">Fertig</button></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="note">
+      <b>Dasselbe Gerüst wie bei einer Taste</b>, mit demselben Fuß: löschen links,
+      fertig rechts. Was sich unterscheidet, ist eine Zeile — der Talker hat ein
+      Bild, weil seine Seite eine Taste hat, die eines zeigt; das Tablet hat eine
+      Startseite, weil es überhaupt eine gibt.
+    </p>
+    <p class="note">
+      <b>Zwei Türen beim Talker, und das ist keine.</b> Der Reiter und die
+      Seitentaste sind dieselbe Seite, zweimal gezeichnet — einmal als Karteireiter
+      und einmal als das, was am Gerät zu sehen ist. Beide führen zu der Sache
+      selbst. Was conventions.md §3.2 verbietet, ist etwas anderes: zwei Stellen im
+      Rahmen, die auf dasselbe Blatt zeigen.
+    </p>
+    <p class="note">
+      Damit verschwindet von beiden Brettern das Letzte, was keine Zelle ist: das
+      Namensfeld und der rote Knopf. Übrig bleiben Reiter und Raster.
+    </p>
+  </section>
 
   <section class="panel">
     <h2>Farbe nach Wortart, in drei Zuständen</h2>
