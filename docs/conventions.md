@@ -381,6 +381,19 @@ the page, and what the person sees is a button that did nothing.
 **Diverging: mitreden** (native `confirm()` for destructive acts and native
 `prompt()` for editing).
 
+vorlaut was recorded here as compliant and was not. Its set delete asked
+through `window.confirm` — one call site, in `src/editor-diy/editor.ts`, left
+behind when the rest of the product moved to `confirmDialog` — so the one
+surface in the family that no token reaches was still being drawn in the
+product this line said had nothing to fix. It failed §1.7 twice on the way:
+the question named the set and counted nothing inside it, which is the only
+fact in it that could change somebody's mind, and the confirming button said
+"OK". It is a `<dialog>` now, as of 2026-08-25, counting the keys with
+something on them rather than the four slots, which are always four. Left
+standing as long as it was for the reason §1.4 gives — a divergence list only
+means anything while somebody re-reads it against the code, and a line saying
+somebody complies is the one nobody thinks to re-read.
+
 ### 3.5 One settings panel is open at a time
 
 The settings sheet is a column of folded `<details class="panel">`, each with
@@ -520,6 +533,63 @@ exported Sammlung, a saved picture, a failed import, "Alle Daten gelöscht" —
 was silent until this rule was written. That it survived longest in the product
 whose users are the reason the family exists is the argument for the rule
 living here rather than in three commit messages.
+
+### 3.9 An import graph is not a dependency graph
+
+A test that reads the imports proves one kind of dependency, and it is not the
+kind that usually crosses a boundary. Element ids, text keys and event
+subscriptions are dependencies written as strings, and no module graph contains
+them. So what holds those is not a test at all, it is lifecycle: **a
+component's markup is mounted with the component and lives only while it is on
+screen**, so a reference into it from somewhere that has no business holding one
+throws the first time it is used instead of quietly resolving forever.
+
+**Why.** vorlaut carries `tests/unit/layers.test.ts`, and it is a good test: it
+holds that nothing outside an editor's directory may import out of one, and it
+exists because three shell modules — the save loop, the symbol picker and the
+voices — had each reached for one editor's renderer, one line each, and each of
+those lines made the shell unable to draw anything else. Then a second editor
+was written, which is the event the test was put there for, and five couplings
+between the shell and the first editor came out of the work. Not one of them was
+an import:
+
+- `core/save.ts` reaching for `$("releaseBtn")` inside `load()` — a button only
+  the DIY editor mounts, named from a shell module.
+- the function that verifies a save, shaped around one editor's layout, so that
+  it compared `{"sets":[]}` for every tablet Sammlung and was satisfied.
+- the sidebar counting what is inside every Sammlung with whichever editor
+  happened to be installed.
+- the composition root naming one editor at module level.
+- a subscription to a shell notifier that outlived the markup it wrote into —
+  found by running the page, not by reading it.
+
+The file was green through all five and would be green through the next five.
+That is not a defect in it; it is the distance between what it asserts and what
+it gets read as. A test that names a boundary is taken to be holding the
+boundary, and that is the specific way this one costs something — the seam
+looked watched, so nobody went and looked at it.
+
+**What to do about it is not a cleverer test.** A string coupling can be
+approximated by pattern-matching and never decided, and each cleverer version
+buys one more pattern at the price of a reader believing the rest are covered.
+The answer is the lifecycle above: vorlaut's `core/editor.ts` puts an editor's
+markup on the page when a Sammlung that needs it is opened and takes it off
+again, so a shell module reaching for another editor's element throws on the
+first Sammlung that uses it rather than on some later one, and a listener that
+outlives its own markup becomes a teardown the mount can ask for. That turns an
+invisible coupling into a loud one, which is the most a structure can do about a
+dependency written as a string.
+
+**Diverging: mitreden**, on the mitigation rather than on the test. Its page is
+one `index.html` carrying fifty-odd ids, all of them present from the first
+paint to the last, and `el()` throws only on an id that was never there — so an
+element reached for from the wrong layer resolves every time, for as long as the
+markup is one file, and nothing in the product can tell the difference between a
+reference that belongs and one that does not. bildhaft's sidebar is the shape
+this asks for: props in, node out (§5, #5). Neither of them has a second
+implementation of anything for a layers test to guard yet, which is the point —
+this is the rule for the day one of them does, and the couplings it is about are
+the ones that would be in place before that day arrives.
 
 ---
 
