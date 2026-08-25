@@ -593,6 +593,37 @@ So the rule is: many-to-many where the model allows it, and the sidebar's
 selection follows the arity rather than the other way round. See
 [conventions.md §4.1](conventions.md).
 
+**Amended again 2026-08-25, and this time mitreden moved.** Its `526905c` gave
+the voice to the Sammlung and gave the sentence one Sammlung with it: a Sammlung
+records in one voice, so a sentence in two of them has two answers to which
+voice records it and no way to choose between them. Both halves of the rule
+above are now wrong, and they are wrong in different ways.
+
+- **mitreden: one.** The morning sentence and the nursery one are two sentences
+  now, each with its own recording — two different sounds rather than one row
+  seen twice, and a Sammlung is handed to a device as a set of files. Nothing
+  was imposed from here: the product changed what it holds and the arity
+  followed, which is what "a fact about what a product holds" looks like when it
+  actually happens. With all three at one, the per-product framing is doing more
+  work rather than less — three answers that agree, each reached separately.
+- **The sidebar's selection never followed the arity.** Multi-select is about
+  how many Sammlungen may be *open at once*, which is a different question from
+  how many one sentence may be *in*. mitreden's arity went to one and its rail
+  multi-selects exactly as before. [conventions.md §4.2](conventions.md) carries
+  the corrected version.
+
+Two things this section says about mitreden in the present tense are
+archaeology: `phrases.json`, the flat file with a `tags` field, has been an
+IndexedDB store with one `collection` field for some time, and the chip row is a
+rail. Neither the original argument nor this amendment rests on them.
+
+The superseded argument below stays where it is, with one note. Point 2 rejected
+*Sammlung* because "Dieser Satz ist in drei Sammlungen" reads as if three copies
+exist. In mitreden three copies now do exist, on purpose — three rows and three
+recordings, because they are three different sounds. The decision is unchanged
+and this does not reopen it; the objection turned out to describe a model rather
+than to misread a word.
+
 The superseded argument:
 
 Reasons, in order of weight:
@@ -769,13 +800,18 @@ recommendations were re-read against three products rather than two: arity
 build-side rules that grew out of the same reading are in
 [conventions.md](conventions.md).
 
+Two of those three moved again on 2026-08-25: mitreden's arity is one (§3.1),
+and the selection follows nothing about arity — it follows how many Sammlungen
+are open at once ([conventions.md §4.2](conventions.md)). A "today" column is as
+of the last date beside its row, not as of reading.
+
 | concept | mitreden today | bildhaft today | recommended | who moves |
 | --- | --- | --- | --- | --- |
 | a stored utterance | Satz | Satz / Zeile | **Satz** | bildhaft |
 | light or dark | dark only | light-first, dark supported | **both, in both** | mitreden — done |
 | a named grouping of them | Gruppe / `tags` | Sammlung | **Sammlung** / `collections` | mitreden |
-| can it be in several at once | yes | no | **per product — many where the model allows** (§3.1) | nobody |
-| making a grouping current | filter chips („Alle") | sidebar selection | **sidebar; multi-select only where a thing can be in several** | both — to a sidebar, single-select in bildhaft |
+| can it be in several at once | no, since 2026-08-25 | no | **per product — many where the model allows; all three currently one** (§3.1) | nobody |
+| making a grouping current | sidebar, multi-selecting | sidebar selection | **sidebar; multi-select only where several can be open at once** (§4.2) | both — done, mitreden 2026-08-24 |
 | the produced artefact leaving | herunterladen | drucken | **herunterladen** | neither |
 | a subset leaving as data | export (CLI only) | „Sammlung exportieren" (in the ⋯ menu beside the name) | **Sammlung exportieren** | mitreden |
 | everything leaving as data | — | „Alles exportieren" (called Sicherung in prose) | **Sicherung** | both |
@@ -1245,6 +1281,16 @@ are not wrong, they are the specification for doing it properly:
   not elsewhere: §3.1 makes arity a fact about the product, and a rail that
   toggles where nothing can be in two places is a control with one reachable
   state. The selection follows the arity, not the other way round.
+
+  **The behaviour was right and the reason was not, 2026-08-25.** mitreden's
+  arity went to one and the rail still multi-selects, so the reason cannot have
+  been arity. It is the open set: several Sammlungen are worked across at a
+  sitting and the list shows the union of them, which is as useful now that a
+  sentence cannot be in both as it was when it could. Elsewhere the second
+  sentence still holds unchanged — a product that opens one at a time has one
+  reachable state to toggle. [conventions.md §4.2](conventions.md). Everything
+  above this line is the assessment as it stood, mitreden's many-to-many groups
+  included.
 - **It collapses below 820px**, exactly as bildhaft's already does, so the phone
   case mitreden sells keeps the single column it has today.
 - **It folds past a dozen**, carrying over the existing `+ n more` behaviour rather
