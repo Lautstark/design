@@ -128,6 +128,27 @@ code { font: 12.5px/1 var(--mono); background: var(--surface-2); padding: 2px 5p
 /* The two-line row. `.collections__name` keeps its own ellipsis, so the
    wrapper only has to stop the flex item growing past the rail. */
 .collections__text { flex: 1; min-width: 0; }
+
+/* And the count sits on the name's line, not in the middle of the block.
+
+   components.css centres a row's contents, which is right for the one-line row
+   it was written for: there is one line, so the middle of the block *is* the
+   line. The moment the left side becomes two lines that stops being true — the
+   number drifts down into the gap between the name and the second line and
+   reads as belonging to neither, or to the second one.
+
+   `baseline` rather than `flex-start`, because flex-start aligns the tops of
+   two boxes with different font sizes and the two numbers still fail to line
+   up: the name is 14px on a 1.55 line and the count is 12px, so their tops are
+   1.5px apart and their baselines 3px. Baseline alignment puts the count on
+   the name's baseline exactly, which is what "top aligned" means once the type
+   sizes differ.
+
+   Keyed off `:has()` rather than a modifier class the drawing code has to
+   remember to add: the second line and the alignment it forces are the same
+   fact, and two places that have to agree about one fact are what this
+   repository keeps writing rules about. */
+.collections__item:has(.collections__sub) { align-items: baseline; }
 .collections__text .collections__name { display: block; }
 .collections__sub {
   display: block; font-size: 11.5px; line-height: 1.35; color: var(--text-faint);

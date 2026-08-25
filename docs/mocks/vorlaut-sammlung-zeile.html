@@ -144,9 +144,10 @@
 
   <h2>Offen, nicht offen, und die Zeile ohne Zahl</h2>
   <p class="lede">
-    Links dreimal dieselbe Zeile in D — geschlossen, offen, und mit einem Namen,
-    der nicht passt. Rechts eine Liste ohne Gerät und ohne Raster: das ist,
-    was mitreden und bildhaft an dieselbe Funktion übergeben würden.
+    Beides in B, weil B gewählt ist. Links dieselbe Zeile geschlossen, offen und
+    mit einem Namen, der nicht passt. Rechts eine Liste, der niemand eine zweite
+    Zeile übergeben hat — das ist, was mitreden und bildhaft an dieselbe Funktion
+    übergeben würden, und die Zeile ist dort Pixel für Pixel die von heute.
   </p>
 
   <div class="strip" id="strip"></div>
@@ -198,15 +199,21 @@
     die es nie haben werden.
   </p>
   <p class="lede">
-    <code>CollectionRow</code> bekäme <b>ein</b> weiteres optionales Feld, kein
-    zweites. Es beschreibt, wofür die Sammlung gemacht ist, und trägt die
-    Rastergröße in sich statt daneben — ein <code>grid</code> ohne
-    <code>target</code> wäre ein Zustand, den es nicht gibt, und zwei getrennte
-    Felder wären zwei Gelegenheiten, ihn zu erzeugen. Fehlt das Feld, zeichnet
-    die Zeile genau das, was sie heute zeichnet: Name und Zahl, ohne Lücke, wo
-    ein Zeichen gestanden hätte. Es gibt <b>keinen</b> Vorgabewert und keine
-    Sorte „unbekannt“ — mitreden und bildhaft lassen es weg, so wie vorlaut
-    <code>count</code> weglässt, solange es nicht gezählt hat.
+    <b>Weil B gewählt ist, ist die Antwort eine andere als die, die auf dieser
+    Seite angefangen hat</b> — und eine billigere. C, D und F hätten ein
+    <em>Modell</em> gebraucht: ein Feld, das <code>target</code> und
+    <code>grid</code> zusammen trägt, damit die geteilte Funktion daraus ein
+    Zeichen rechnen kann. B rechnet nichts. B zeichnet eine zweite Textzeile,
+    und die kann fertig übergeben werden.
+  </p>
+  <p class="lede">
+    Damit ist die Ergänzung <b>ein optionaler String</b>, und sie hat ihren
+    Präzedenzfall schon in derselben Datei. <code>collections.d.ts</code> sagt
+    über <code>name</code>: „Exactly what to draw […] Nothing here derives a
+    display name.“ Die zweite Zeile bekommt genau diese Regel — was dasteht,
+    hat das Produkt geschrieben; die geteilte Zeile stellt es dar und deutet es
+    nicht. Fehlt der String, gibt es keine zweite Zeile, keine Lücke, und die
+    Zeile ist Pixel für Pixel die von heute.
   </p>
   <table>
     <thead>
@@ -215,8 +222,8 @@
     <tbody>
       <tr>
         <td><b>vorlaut</b></td>
-        <td>das Feld, aus <code>Made.target</code> und <code>Made.grid</code>, die es schon hat</td>
-        <td>nichts Neues — die Werte liegen bereits in der Sammlung</td>
+        <td>eine fertige Zeile — „DIY-Talker“, „App · 6 × 11“ — aus <code>Made.target</code> und <code>Made.grid</code>, die es schon hat</td>
+        <td>die Wörter, in vorlauts eigenem <code>TEXTS</code>, wo sein übriges Deutsch auch steht</td>
       </tr>
       <tr>
         <td><b>mitreden</b></td>
@@ -231,17 +238,43 @@
     </tbody>
   </table>
   <p class="note">
-    <b>Der ehrliche Preis ist nicht der Typ, sondern das Vokabular.</b>
-    „DIY-Talker“ und „App“ sind vorlauts Wörter, und sie stünden ab dann in
-    einer Datei, die drei Produkte lesen. Dagegen hilft, dass die geteilte
-    Funktion die Wörter nie selbst schreibt: sie zeichnet ein Zeichen und stellt
-    dar, was ihr übergeben wurde. Genau deshalb sind D und F billiger als B und E:
-    diese beiden verlangen von der geteilten Zeile deutsche Substantive, jene
-    beiden verlangen von ihr nur ein Raster und ein Loch.
+    <b>Das Vokabular war der teuerste Teil, und so kostet es nichts.</b>
+    „DIY-Talker“ und „App“ sind vorlauts Wörter; als Modell übergeben hätten
+    sie in einer Datei gestanden, die drei Produkte lesen, und die geteilte
+    Zeile hätte anfangen müssen, Deutsch zu sprechen — mitsamt der Frage, in
+    welcher Sprache sie es tut. Als fertiger String bleiben sie da, wo vorlaut
+    seine Sprachen ohnehin hält. <b>Das ist der Grund, aus dem B als
+    API-Ergänzung die kleinste der sechs ist</b>, auch wenn es auf der Zeile
+    die meiste Höhe kostet.
+  </p>
+  <p class="note">
+    <b>Und die zweite Zeile ist sichtbarer Text, also braucht sie kein ARIA.</b>
+    Sie steht im Knopf und gehört damit schon zum zugänglichen Namen; eine
+    <code>aria-description</code> daneben ließe die Zeile alles zweimal sagen.
+    Nur C, D und F hätten eine gebraucht, weil ihre Tatsache ausschließlich in
+    einer Zeichnung steckt. Ein Vorteil von B, der beim Zeichnen nicht zu sehen
+    ist.
   </p>
 
 
-  <h2>Empfehlung</h2>
+  <h2>Entschieden: B</h2>
+  <p class="lede">
+    <b>Gewählt ist B — das Gerät als Wort, auf einer zweiten Zeile</b>, mit der
+    Zahl auf der Grundlinie des Namens statt in der Mitte des Blocks. Was
+    darunter steht, ist die Empfehlung, mit der diese Seite in die Entscheidung
+    ging; sie bleibt stehen, weil sie festhält, was die anderen fünf gekostet
+    hätten, und weil die Messungen auch für B gelten.
+  </p>
+  <p class="lede">
+    Zwei Dinge, die B im Vergleich gewinnt und die in der Empfehlung unten zu
+    kurz kamen: es ist die <b>kleinste API-Ergänzung</b> der sechs — ein
+    optionaler String statt eines Modells, siehe den Abschnitt darüber — und es
+    ist das einzige, das <b>ohne Zeichen auskommt, das gelernt werden muss</b>.
+    Der Preis ist Höhe: die Liste wächst von 249 auf 342 Pixel, also um 37 %,
+    und das ist der Tausch, der bewusst gemacht wurde.
+  </p>
+
+  <h2>Die Empfehlung, die dieser Entscheidung vorausging</h2>
   <p class="lede">
     <b>F — das Gerät gezeichnet, das Raster gar nicht.</b> Zu Beginn dieser
     Seite stand D vorn, und die Messungen haben es umgedreht; das ist der Grund,
@@ -336,11 +369,15 @@ function mark(made, exact) {
    sagen, was es zeigt — sonst hört jemand mit Screenreader genau die Zeile,
    über die diese Seite sich beschwert. */
 function spoken(row, kind) {
-  if (kind === "A") return null;
   const made = row.made;
   if (!made) return null;
+  /* A sagt nichts Zusätzliches. B und E stehen als sichtbarer Text in der
+     Zeile — der ist schon Teil des zugänglichen Namens, und eine
+     aria-description daneben ließe die Zeile alles zweimal sagen. Nur wo die
+     Tatsache ausschließlich in einer Zeichnung steckt, muss sie nachgeliefert
+     werden. */
+  if (kind === "A" || kind === "B" || kind === "E") return null;
   if (made.target === "diy") return "DIY-Talker";
-  if (kind === "E") return null;
   if (kind === "F") return "App";
   return "App, " + made.grid.rows + " mal " + made.grid.columns;
 }
@@ -434,12 +471,12 @@ for (const [where, big] of [["zoom-small", false], ["zoom-big", true]]) {
 
 /* Der Streifen: die Zustände, und die Liste, die kein Gerät hat. */
 const STRIP = [
-  ["Geschlossen und offen", ROWS.slice(0, 3), "D"],
+  ["Geschlossen und offen", ROWS.slice(0, 3), "B"],
   ["Ohne Gerät — mitreden, bildhaft", [
     { id: "7", name: "Beim Arzt",              count: 14 },
     { id: "8", name: "Einkaufen mit Papa",     count: 3 },
     { id: "9", name: "Sammlung vom 25.08.2026" },
-  ], "D"],
+  ], "B"],
 ];
 const strip = document.getElementById("strip");
 for (const [title, rows, kind] of STRIP) {

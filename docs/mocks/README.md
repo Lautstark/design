@@ -283,5 +283,18 @@ arithmetic took an `opacity: .8` off the second line and the number pair, which
 were at 3.20 and 3.83 against a 4.5 : 1 bar. Everything in the row is now drawn
 at full strength, and that is not a preference.
 
-The recommendation is at the foot of the page, and the API addition it would
-need is described there in words only.
+**B is chosen** — the device on a second line, with the count on the name's
+baseline rather than centred in the block. The page keeps the losing candidates
+and the reasoning that ranked them, because what they cost is the record of why
+B was picked; the foot of the page says so and then leaves the earlier
+recommendation standing.
+
+Choosing B made the API addition smaller than the one this page set out to
+propose. A drawn mark would have needed a *model* — target and grid together, so
+the shared row could compute a shape from it. A second line of text needs only
+the line: one optional string, drawn exactly as passed, which is the rule
+`collections.d.ts` already states for `name` ("Exactly what to draw […] Nothing
+here derives a display name"). So vorlaut's German stays in vorlaut's `TEXTS`,
+the shared row never learns a vocabulary, and mitreden and bildhaft pass nothing
+and render precisely what they render today. Described in words only; nothing is
+implemented.
