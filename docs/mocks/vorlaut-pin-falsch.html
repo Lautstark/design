@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>vorlaut — PIN eingeben</title>
+<title>vorlaut — PIN falsch</title>
 <link rel="stylesheet" href="../../tokens/vorlaut.css">
 <link rel="stylesheet" href="../components.css">
 <link rel="stylesheet" href="screens.css">
@@ -18,13 +18,13 @@
     <div class="head"><h2>PIN eingeben</h2></div>
     <div class="body">
       <p>Damit wird die Tafel verlassen und das Tablet wieder freigegeben.</p>
-      <div class="pinrow" id="row">
+      <div class="pinrow" id="row" data-wrong="1">
           <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 1">
           <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 2">
           <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 3">
           <input class="pinbox" inputmode="numeric" maxlength="1" aria-label="Ziffer 4">
       </div>
-      <div class="pinwrong" id="wrong" hidden>Das ist nicht die PIN.</div>
+      <div class="pinwrong" id="wrong">Das ist nicht die PIN.</div>
     </div>
     <div class="foot">
       <button class="btn quiet">Abbrechen</button>

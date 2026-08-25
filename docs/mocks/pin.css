@@ -1,0 +1,43 @@
+/* A four-digit PIN as four boxes.
+ *
+ * One field with four characters in it asks the person to count what they have
+ * typed. Four boxes say how many are wanted before a digit is entered, show how
+ * many are in, and give the wrong one somewhere to be wrong — which matters
+ * because this is a control a caregiver reaches for one-handed with a child on
+ * their arm.
+ *
+ * The boxes are fields, and a field is a fill and not a hole (design.md §4.3):
+ * --surface-2 at rest, lifting to --surface with an accent border on focus.
+ */
+
+.pinrow { display: flex; gap: 12px; justify-content: center; margin-top: 18px; }
+
+.pinbox {
+  width: 66px; height: 80px;
+  font: inherit; font-size: 32px; font-weight: 600; text-align: center;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  caret-color: var(--accent);
+}
+.pinbox:focus {
+  background: var(--surface); border-color: var(--accent);
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+/* A box that has a digit in it reads as done, without shouting. */
+.pinbox[data-filled="1"] { background: var(--surface); border-color: var(--line); }
+
+/* Masked, because the person most likely to be watching this being typed is
+   the person it keeps out. The digit shows for a moment as it is entered —
+   long enough to confirm the finger landed on the right key, short enough that
+   a child across the table reads four dots rather than a PIN. */
+.pinbox { -webkit-text-security: disc; text-security: disc; }
+.pinbox[data-reveal="1"] { -webkit-text-security: none; text-security: none; }
+
+/* Wrong: every box, because the PIN is wrong rather than any one digit of it.
+   The boxes empty themselves at the same time, so the next attempt starts from
+   a clean row rather than from somebody else's mistake. */
+.pinrow[data-wrong="1"] .pinbox { border-color: var(--danger); background: var(--danger-soft); }
+
+.pinwrong { margin-top: 10px; text-align: center; font-size: 13.5px; color: var(--danger); }
+.pinwrong[hidden] { display: none; }

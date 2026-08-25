@@ -201,3 +201,41 @@ itself.
 
 With that, the last thing on either board that is not a cell is gone.
 
+
+## The way out of the board
+
+`vorlaut-exit.html` — four candidates, switchable, and holdable so the feel can
+be judged rather than described. They answer one complaint: the first version
+put the way out under the vorlaut mark in a 62px tile at the left of the bar,
+and the person who commissioned it read the commit and still had to ask what
+the icon was for.
+
+| | costs | at rest | risk |
+|---|---|---|---|
+| **A · Kante** | 18px of bar | a 6px pill in a column of its own | reads as a handle, which is the point |
+| **B · Ecke** | nothing | invisible | nobody finds it unaided |
+| **C · Punkt** | nothing | one 9px dot | easy to miss, easy to explain |
+| **D · Zwei Finger** | nothing | invisible | safest against a stray hand, needs teaching |
+
+All four share the feedback, and the feedback is the actual affordance: a ring
+begins filling the moment a finger lands, so *keep holding* is learned rather
+than read. None of them may push the bar's controls along — three cost no width
+at all, and A's 18px is shown honestly in the switcher so the comparison is
+between affordances rather than between layouts.
+
+## The PIN
+
+`vorlaut-pin-waehlen.html`, `vorlaut-pin-eingeben.html`,
+`vorlaut-pin-falsch.html` — four boxes, one digit each, auto-advancing, with
+backspace stepping back out of an empty box and paste filling all four.
+
+One field with four characters in it asks the person to count what they typed.
+Four boxes say how many are wanted before a digit is entered and how many are
+in. The confirm stays disabled until all four are there, so there is no such
+thing as submitting a short PIN.
+
+Masked, with the digit showing for 700ms as it is entered. The threat model is
+a child in the room: long enough to confirm the finger landed, short enough
+that somebody across the table reads four dots. A wrong PIN marks every box
+rather than any one of them — the PIN is wrong, not a digit — and empties the
+row so the next attempt starts clean.
