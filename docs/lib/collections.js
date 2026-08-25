@@ -23,15 +23,17 @@
  * The three active-state classes were three different words anyway — `.active`,
  * `.on`, `.list__item--active` — so nobody was going to keep theirs.
  *
- * ## Arity lives here, once
+ * ## How many are open lives here, once
  *
- * §4.1 settles that how many Sammlungen can be open at a time is a fact about
- * what a product holds: one in vorlaut, where a Sammlung *is* a layout; one in
- * bildhaft; many in mitreden, where a sentence belongs in the morning one and
- * the nursery one at the same time. So `open` is a set of ids rather than one,
- * and the press reports whether it carried Cmd or Ctrl (§4.2). A product with
- * one-at-a-time arity passes one id and ignores the flag; nothing here has to
- * know which kind it is talking to.
+ * §4.2: how many Sammlungen can be open at a time is a fact about the product,
+ * and a different question from how many a thing can be *in*, which is §4.1 and
+ * is one everywhere as of 2026-08-25. One is open at a time in vorlaut, where a
+ * Sammlung *is* a layout, and one in bildhaft; mitreden opens several, because
+ * sentences are worked on across Sammlungen at a sitting and the list shows the
+ * union. So `open` is a set of ids rather than one, and the press reports
+ * whether it carried Cmd or Ctrl. A product that opens one at a time passes one
+ * id and ignores the flag; nothing here has to know which kind it is talking
+ * to.
  *
  * Putting the modifier here rather than in each product is the small win: which
  * key means "and also this one" is a convention, and a convention implemented
@@ -124,7 +126,7 @@ export function drawCollections(container, { rows, open, onPick }) {
     node.addEventListener('click', (event) => {
       // Which modifier means "and also this one" is settled here rather than
       // three times. metaKey is the Mac chord and ctrlKey the other one; a
-      // product whose arity is one ignores the flag entirely.
+      // product that opens one Sammlung at a time ignores the flag entirely.
       onPick(row.id, event.metaKey || event.ctrlKey);
     });
     container.appendChild(node);

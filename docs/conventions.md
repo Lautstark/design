@@ -840,21 +840,36 @@ which settings go where:
 From which:
 
 - **The app's settings hold defaults for the next thing made.** They apply
-  forward and never reach back. mitreden already does this: `settings.voice` is
-  the voice the *next* sentence gets, and `build()` records each sentence with
-  `item.voice ?? voiceId`, so what has already been recorded keeps the voice it
-  was recorded in. Only an explicit *record again* moves it, which is somebody
-  pressing a button rather than a preference reaching backwards.
+  forward and never reach back. mitreden is still the worked case, one level up
+  from where this was written: `settings.voice` is the voice the next
+  *Sammlung* is made with — `createCollection` copies it in at creation, and
+  `saveVoice` writes the settings record and nothing else — so changing it
+  leaves every Sammlung that already exists recording in the voice it was given.
+  Only an explicit *record again* moves what has been made, which is somebody
+  pressing a button rather than a preference reaching backwards. **Corrected
+  2026-08-25:** this said the next *sentence*, and quoted `build()` recording
+  each one with `item.voice ?? voiceId`. The voice moved to the Sammlung
+  (§4.1, mitreden `e5a6449`) and `build()` now asks a sentence's Sammlung which
+  voice it records in. What the bullet claims did not move; the level the
+  default lands on did.
 - **A thing holds what is true of that thing**, reachable from its own `⋯`
-  (§3.6). Which thing that is differs per product, and §4.1 is the reason this
-  rule will not say: the thing that gets recorded carries its own. Naming the
-  Sammlung as the owner here would settle arity from the wrong end.
+  (§3.6). Which thing that is differs per product, and this rule will not say
+  which: naming one would settle another product's model from here.
+  **Corrected 2026-08-25.** The reason given used to be §4.1 — "the thing that
+  gets recorded carries its own", and naming the Sammlung as owner "would
+  settle arity from the wrong end". mitreden then named the Sammlung as the
+  owner of the voice, and its arity followed it (§4.1). The caution was right
+  and its reason was backwards: ownership is a fact about the model, and arity
+  is downstream of it rather than a constraint on it.
 - **Within one thing there is one voice and one symbol source** — "one thing"
   being the level that product records at. In vorlaut that is the whole
   Sammlung, because a Sammlung there *is* a layout: a child's device speaking in
   three voices is a defect, and `exchange/SPEC.md` §5.1 lets a package declare
-  exactly one symbol collection. In mitreden it is the sentence, which carries
-  one `voice` and one recording however many Sammlungen it sits in.
+  exactly one symbol collection. **In mitreden it is the Sammlung too, as of
+  2026-08-25**, where it used to be the sentence: a Sammlung records in one
+  voice, and each sentence keeps a note of the voice it was actually recorded in
+  so that staleness stays decidable. That note is a record, not a second answer
+  to the same question — `build()` alone writes it.
 - **A setting that changes only what you see, and nothing you made, is exempt.**
   bildhaft's active symbol provider is the case. A slot stores a concept key and
   a choice *per provider*, overrides are keyed `${provider}:${token}`, and the
@@ -883,7 +898,11 @@ forced:
 - **mitreden: already there, and that is a choice too.** Nothing forces
   `settings.voice` to be forward-only. It is forward-only because a recording is
   a thing that was made, and the button that re-speaks the library is where
-  changing your mind about the whole of it belongs.
+  changing your mind about the whole of it belongs. A Sammlung's own voice has
+  no editing surface yet — `createCollection` takes one and nothing in the
+  interface changes it afterwards (read 2026-08-25). When it gets one it belongs
+  on the `⋯` beside the name (§3.6) and not in the settings sheet, where a
+  control answering differently per Sammlung is exactly the divergence below.
 
 **Diverging: vorlaut**, as of 2026-08-25, on two panels of one sheet. The voice
 (`state.layout.voice`) and the language the built device shows its own menu in
@@ -1276,6 +1295,22 @@ old text can see what moved and why.
 4. **§4.4 — the navigation shell.** Was exempt from sharing. Now shared; the
    exemption narrows to density and to what fills the third slot of the work
    head.
+
+**And again on 2026-08-25**, when mitreden's model moved under two of them.
+1 and 2 are left as they stand: they record what the earlier amendment said,
+which is not the same as what is true now.
+
+5. **§3.1 and §3.6 — arity, a second time.** Was, after 1: per product, many
+   where the model allows, with mitreden the one product saying many. Now: still
+   per product, and all three answer one — a mitreden sentence carries one
+   Sammlung because the Sammlung carries the voice (§4.1 here).
+6. **§3.6 and §5 — the selection loses its derivation.** 2 above said
+   multi-select follows from 1, and design.md said the sidebar's selection
+   follows the arity "rather than the other way round". It follows neither way:
+   multi-select is about how many Sammlungen may be open at once (§4.2 here).
+   No product's behaviour changed — mitreden's arity went to one and its rail
+   still multi-selects, which is what showed the derivation was never load-
+   bearing.
 
 ---
 
