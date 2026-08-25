@@ -1,0 +1,125 @@
+/* The three screens that are not the board: Sammlungen, Warnungen, and the
+ * handover sheet.
+ *
+ * What is NOT in here matters more than what is. The button, the field, the
+ * empty state, the outcome notice, the dialog sheet and the footer all come
+ * from docs/components.css — that file exists because the products were
+ * retyping each other's rules, and a fourth product drawing its own lookalikes
+ * is the drift it was written to stop. A first pass at this file redefined
+ * .notice, .empty, .sheet and the footer before noticing they already existed.
+ *
+ * What is left here is vorlaut's own layout: a Sammlung row carrying a picture
+ * and a warning count, and the warning rows themselves. Product layout is
+ * identity, not vocabulary, and stays home.
+ *
+ * These screens are for the adult. The board gives up everything it can to the
+ * grid; these give up nothing, because reading is the whole task.
+ */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0; min-height: 100vh;
+  background: var(--bg); color: var(--text);
+  font: 15px/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+  display: grid; grid-template-rows: auto 1fr auto;
+}
+
+/* ----------------------------------------------------------------- app bar */
+
+/* Deliberately not called .head. components.css owns `.sheet > .head` and says
+   in as many words that its vocabulary is small, reused, and therefore has to
+   be scoped; a page-level .head is exactly the collision it warns about.
+   The mark and the wordmark, and nothing else — the product is the title, and
+   a heading naming the screen you are already looking at is furniture. */
+.appbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 18px 28px;
+}
+.appbar svg { width: 30px; height: 30px; display: block; }
+.appbar b { font-size: 19px; font-weight: 700; letter-spacing: -.02em; }
+.appbar .where {
+  margin-left: 14px; padding-left: 14px; border-left: 1px solid var(--line);
+  color: var(--text-dim);
+}
+
+.wrap { width: 100%; max-width: 860px; margin: 0 auto; padding: 0 28px 32px; }
+.wrap > .notice { margin-bottom: 16px; }
+.actions { display: flex; justify-content: flex-end; margin-top: 20px; }
+
+/* ------------------------------------------------------- a Sammlung row */
+
+/* A row shows its content and one ⋯ (design.md §4.3): everything you can *do*
+   to it lives behind that one trigger, so the row never grows a new control
+   each time the product grows a feature. The row itself is the open action,
+   and nothing is hidden behind hover — this is a touch screen.
+
+   Not .collections__item: that is the family's *sidebar* row, a name and a
+   count down the side. This is the main surface of a viewer whose whole job is
+   choosing between Sammlungen, so it carries a picture and what is wrong. */
+.sammlung {
+  display: grid; grid-template-columns: 56px 1fr auto auto; gap: 14px;
+  align-items: center;
+  width: 100%; text-align: left;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 14px 14px 14px 16px;
+  margin-bottom: 10px;
+  font: inherit; color: inherit; cursor: pointer;
+}
+.sammlung:hover { background: var(--surface-2); }
+
+/* A Sammlung is a set of pictures, so a picture introduces it. White ground:
+   a pictogram is a canvas, not a plane (design.md §8.2). */
+.sammlung .face {
+  width: 56px; height: 56px; border-radius: var(--radius-sm);
+  background: #fff; border: 1px solid var(--line); overflow: hidden;
+}
+.sammlung .face img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.sammlung .name { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
+/* Counts are everywhere, in tabular numerals, beside the name. */
+.sammlung .sub { font-size: 13.5px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+
+/* A fact about the row, not a filter and not an action — so it is not a .chip,
+   which design.md reserves for things that change what is shown. */
+.flag {
+  font-size: 13px; font-weight: 600; border-radius: var(--radius-pill);
+  padding: 4px 11px; font-variant-numeric: tabular-nums; white-space: nowrap;
+  background: var(--danger-soft); color: var(--danger);
+}
+.flag.quiet { background: var(--surface-2); color: var(--text-dim); }
+
+.dots {
+  border: 0; background: transparent; color: var(--text-dim);
+  font-size: 19px; line-height: 1; cursor: pointer;
+  border-radius: var(--radius-pill); padding: 8px 11px;
+}
+.dots:hover { background: var(--surface-2); color: var(--text); }
+
+/* ------------------------------------------------------------- warnings */
+
+.warn {
+  display: grid; grid-template-columns: 10px 1fr; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 13px 15px; margin-bottom: 8px;
+}
+/* The stripe carries the one distinction a caregiver acts on: whether a button
+   is marked on the board, or whether this is only worth telling whoever built
+   the Sammlung. */
+.warn i { border-radius: 999px; background: var(--line); }
+.warn.marks i { background: var(--danger); }
+.warn .at { font-family: var(--mono); font-size: 12.5px; color: var(--text-dim); margin-top: 3px; }
+
+/* ------------------------------------------------------------- the sheet */
+
+/* .sheet, its head/body/foot and the buttons in it are components.css's.
+   Only the PIN field is vorlaut's, because no sibling has one. */
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: grid; place-items: center; }
+.pin {
+  font: inherit; font-size: 30px; letter-spacing: .5em; text-align: center;
+  width: 100%; background: var(--surface-2); color: var(--text);
+  border: 1px solid transparent; border-radius: var(--radius-sm); padding: 12px 13px;
+  margin-top: 14px;
+}
+.pin:focus { background: var(--surface); border-color: var(--accent); outline: none; }

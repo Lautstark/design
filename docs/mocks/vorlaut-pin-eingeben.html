@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — PIN eingeben</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="screens.css">
+</head>
+<body>
+  <div class="appbar">
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"> <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="#9B7BFF" /> <circle cx="200" cy="174" r="22" fill="white" /> <path d="M 290 174 A 22 22 0 0 1 334 174" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" /> <ellipse cx="256" cy="256" rx="46" ry="38" fill="white" /> </svg> <b>vorlaut</b>
+  </div>
+
+  <div class="wrap">
+    <div style="filter:blur(2px);opacity:.45">
+    <button class="sammlung">
+      <span class="face"><img src="symbols/6456.png" alt=""></span>
+      <span><span class="name">Morgens</span><br><span class="sub">2 Tafeln · 5 Tasten · geändert 24.08.2026</span></span>
+      <span><span class="flag quiet">nicht weitergeben</span></span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
+
+    <button class="sammlung">
+      <span class="face"><img src="symbols/2462.png" alt=""></span>
+      <span><span class="name">Kernvokabular</span><br><span class="sub">1 Tafel · 15 Tasten · geändert 24.08.2026</span></span>
+      <span><span class="flag">2 Warnungen</span></span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
+
+    <button class="sammlung">
+      <span class="face"><img src="symbols/23392.png" alt=""></span>
+      <span><span class="name">Spielen</span><br><span class="sub">1 Tafel · 6 Tasten · geändert 22.08.2026</span></span>
+      <span></span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
+    </div>
+    <div class="scrim"><div class="sheet">
+      <div class="head"><h2>PIN eingeben</h2></div>
+      <div class="body"><p>Damit wird die Tafel verlassen und das Tablet wieder freigegeben.</p><input class="pin" value="•••" readonly></div>
+      <div class="foot"><button class="btn quiet">Abbrechen</button><button class="btn primary">Entsperren</button></div>
+    </div></div>
+  </div>
+
+  <div class="footer"><button class="linklike">Einstellungen</button></div>
+</body>
+</html>

@@ -44,3 +44,30 @@ keywords by hand. The first search hit was wrong for several of them —
 `will` resolved to a pictogram meaning *ich will **nicht***, and `mehr` to a
 map of a disability workshop. A board of placeholder squares would have hidden
 that, and would also have made any spacing look fine.
+
+## The other three screens
+
+`vorlaut-sammlungen.html`, `vorlaut-sammlungen-leer.html`,
+`vorlaut-warnungen.html`, `vorlaut-pin-waehlen.html`, `vorlaut-pin-eingeben.html`.
+
+These are the adult's screens. The board gives up everything it can to the
+grid; these give up nothing, because reading is the whole task.
+
+They import `components.css` and use it. The first pass at `screens.css`
+redefined `.notice`, `.empty`, `.sheet` and the footer before noticing all four
+were already in that file — which is the drift `components.css` was written to
+stop, arriving from a fourth product. What is left in `screens.css` is
+vorlaut's own layout: a Sammlung row carrying a picture and a warning count,
+and the warning rows. Product layout is identity, not vocabulary.
+
+Two names are deliberate. The page header is `.appbar` and not `.head`, because
+`components.css` owns `.sheet > .head` and says its vocabulary is small,
+reused, and has to be scoped. And a Sammlung row is `.sammlung` and not
+`.collections__item`, because that is the family's *sidebar* row — a name and a
+count down the side — where this is the main surface of a viewer whose whole
+job is choosing between Sammlungen.
+
+The wording is German throughout, matching the board. vorlaut is bilingual on
+the web (`TEXTS` in `boot_data.ts` carries `de` and `en` behind a picker) and
+the Android viewer currently is not: its chrome is hardcoded English over
+German package content. Whatever these screens become, they need the pair.
