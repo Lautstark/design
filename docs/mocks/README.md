@@ -157,3 +157,31 @@ pictures rather than a pair of numbers, since what is being chosen is how much
 fits on a page — and changed afterwards from the ⋯ beside the name. Growing
 stays free, shrinking still asks.
 
+Four things the sheet settles, three of them from how real AAC software already
+answers them. AsTeRICS Grid is the reference each time — the closest open-source
+relative, and ARASAAC hosts its German documentation.
+
+**The label is optional.** A button with a picture and no word is an ordinary
+symbol-only button, and nothing in `SPEC.md` needs it: §7.2 only asks that a
+button have *something*. The reverse is first-class too, and is the part that
+is easy to get wrong — AsTeRICS sets a text-only button at 35% of cell height
+against 15% with a picture, so the word takes the room the picture would have
+had rather than floating in an empty cell. There is no "kein Symbol"
+placeholder for the same reason: an empty slot on a board is furniture
+announcing an absence.
+
+**A label that does not fit clamps to two lines and then ellipses.**
+`TextConfig` offers three answers — shrink, truncate, ellipsis — and defaults
+to one line and shrink. Two lines wins here: a cell at eleven columns is 91px,
+shrinking a sentence to fit one line of that makes type nobody can read, and
+truncating loses the end with no sign anything is missing.
+
+**Word-class colour is a preference, not a rule.** Fläche, Rahmen or aus, one
+answer per Sammlung, beside the grid size — `colorSchemesActivated` next to a
+`colorMode` of background, border or both. "Aus" is not colourless: the page
+keeps its own, because that says *where* you are rather than *what* a word is.
+
+**A cell is not a button.** It holds two: one filling it, which opens the
+sheet, and one in the corner, which plays. A control inside a control is
+invalid markup and unreachable to a keyboard, which is what the first draft had.
+
