@@ -584,10 +584,21 @@ failure the pair exists to make impossible.
 
 ### 3.8 What the page reports, it reports out loud
 
-One live region per page — `role="status"`, which is `aria-live="polite"` — and
-it is **in the tree from the first paint, never hidden and never removed**. What
-changes is its text. Every act that reports an outcome writes there: what
-succeeded, what failed, how many arrived.
+A live region is `role="status"` — which is `aria-live="polite"` — and it is
+**in the tree from the first paint, never hidden and never removed**. What
+changes is what is *inside* it.
+
+**One for outcomes, and at most one more for conditions.** The outcome region is
+the page's single answer to "what just happened": what succeeded, what failed,
+how many arrived, and every act that reports one writes there. A page may have a
+second for a *condition* — something that is true for a while and is drawn while
+it lasts, like a source that cannot be read — because a condition is not an
+outcome and the two would overwrite each other. bildhaft has both: a toast and
+the host its banners are drawn into.
+
+Beyond those two, no. A region per message is how this goes wrong, and it goes
+wrong in the way below rather than by being noisy: three regions that each
+arrive with their text announce nothing at all, three times.
 
 **Why.** A live region announces a *change* in something the reader was already
 watching. It follows that the two natural ways to write one both produce
@@ -611,6 +622,11 @@ empty *before* any message, and that after one it is still **the same element**
 rather than a fresh node in its place. A test that only asserts the text is the
 test that let this through three times.
 
+For a condition region the second property is about the *contents*: the banner
+lands inside the host rather than in place of it, and the host keeps its role.
+And the banners themselves carry no role — a region nested inside a region
+announces twice, which is the failure on the other side of this one.
+
 **And empty, it has to cost nothing**, or the next person removes it again for
 the reason bildhaft had. mitreden's and vorlaut's are inline elements with no
 content, so they take no room by construction. A styled container does not:
@@ -628,7 +644,11 @@ attribute must not be used on the region itself.
 each fixed it. bildhaft's toast set its text, appended the node, and removed it
 again 3.2 seconds later, so every acknowledgement the product made — an
 exported Sammlung, a saved picture, a failed import, "Alle Daten gelöscht" —
-was silent until this rule was written. That it survived longest in the product
+was silent until this rule was written. Its banner host had the same defect one
+floor down and was found by fixing the toast: the same file, the same shape, and
+still not noticed until somebody went looking for the second instance of a bug
+they had just fixed. Two regions in one product is what this section allows;
+neither of them announcing is what it is against. That it survived longest in the product
 whose users are the reason the family exists is the argument for the rule
 living here rather than in three commit messages.
 
