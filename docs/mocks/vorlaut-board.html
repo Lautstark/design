@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — board screen</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="board.css">
+</head>
+<body style="--rows:3; --cols:5">
+  <div class="screen">
+
+    <!-- The sentence bar. Symbols, because the person reading it back may not
+         read. Each entry is the tile that was pressed, at a smaller size, in
+         the order it was pressed. -->
+    <div class="bar">
+      <div class="said">
+        <span class="entry" style="--tint:#fdfd96"><img src="symbols/6632.png" alt=""><b>ich</b></span>
+        <span class="entry" style="--tint:#fdfd96"><img src="symbols/6625.png" alt=""><b>du</b></span>
+        <span class="entry" style="--tint:#c7f3c7"><img src="symbols/5441.png" alt=""><b>will</b></span>
+      </div>
+      <div class="controls">
+        <button class="ctl speak"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg><span>Sprechen</span></button>
+        <button class="ctl"><svg viewBox="0 0 24 24"><path d="M20 6H9L3 12l6 6h11a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/><path d="M16 10l-4 4M12 10l4 4"/></svg><span>Zurück</span></button>
+        <button class="ctl"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 12h10l1-12"/></svg><span>Leeren</span></button>
+      </div>
+    </div>
+
+    <!-- 3x5, the size boot_data.ts starts a tablet Sammlung at. -->
+    <div class="grid">
+      <button class="cell" style="--tint:#fdfd96">
+        <img src="symbols/6632.png" alt="">
+        <b>ich</b>
+      </button>
+      <button class="cell" style="--tint:#fdfd96">
+        <img src="symbols/6625.png" alt="">
+        <b>du</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/5441.png" alt="">
+        <b>will</b>
+      </button>
+      <button class="cell" style="--tint:#84b6f4">
+        <img src="symbols/5508.png" alt="">
+        <b>mehr</b>
+      </button>
+      <button class="cell" style="--tint:#fdcae1">
+        <img src="symbols/5526.png" alt="">
+        <b>nein</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/6456.png" alt="">
+        <b>essen</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/6061.png" alt="">
+        <b>trinken</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/23392.png" alt="">
+        <b>spielen</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/8142.png" alt="">
+        <b>gehen</b>
+      </button>
+      <button class="cell" style="--tint:#c7f3c7">
+        <img src="symbols/6564.png" alt="">
+        <b>sehen</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/2462.png" alt="">
+        <b>Apfel</b>
+      </button>
+      <button class="cell degraded" style="--tint:#ffda89">
+        <img src="symbols/32464.png" alt="">
+        <b>Wasser</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/2269.png" alt="">
+        <b>Fußball</b>
+      </button>
+      <button class="cell" style="--tint:#ffda89">
+        <img src="symbols/2458.png" alt="">
+        <b>Mama</b>
+      </button>
+      <button class="cell" style="--tint:#fdcae1">
+        <img src="symbols/8195.png" alt="">
+        <b>bitte</b>
+      </button>
+    </div>
+
+  </div>
+</body>
+</html>

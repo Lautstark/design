@@ -1,0 +1,164 @@
+/* The vorlaut board screen.
+ *
+ * Drawn with tokens/vorlaut.css and nothing else — there is no literal colour
+ * in this file except the Fitzgerald key, which is not a theme colour but a
+ * meaning, and the white behind a pictogram, which is canvas rather than a
+ * plane (design.md §8.2: AAC symbols are drawn for white and need it in either
+ * scheme).
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0; height: 100%;
+  background: var(--bg); color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* The screen is the grid. Everything else is the sentence bar, and the bar is
+   pressable in every part of it. No title, no board name, no back arrow, no
+   status line — a heading is a row of pixels a child cannot use, taken off the
+   only thing they can. */
+.screen {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: var(--gap);
+  padding: var(--gap);
+}
+
+/* One number governs every gutter on the screen: between the bar and the grid,
+   between any two cells, and between the grid and every edge. The old build
+   set a padding on the grid AND a padding inside each cell, so the outer
+   columns carried both and sat further in than the inner ones. */
+:root { --gap: 10px; }
+
+/* ------------------------------------------------------------ sentence bar */
+
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--gap);
+  align-items: stretch;
+  min-height: 132px;
+}
+
+/* What has been said so far, as symbols. The entries are the same tiles as the
+   grid's, at a smaller size — that is the whole point: a person who cannot
+   read the sentence back can still recognise the pictures they just pressed,
+   in the order they pressed them. */
+.said {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: var(--gap);
+  display: flex; align-items: center; gap: var(--gap);
+  overflow-x: auto; overflow-y: hidden;
+  scrollbar-width: thin;
+}
+
+.said:empty::after {
+  content: "";
+  display: block; width: 100%; height: 100%;
+  border-radius: var(--radius-sm);
+  /* An empty bar is a shape, not a word. "…" is text, and text is the thing
+     this screen is for people who cannot use. */
+  background: repeating-linear-gradient(
+    -45deg, var(--surface-2) 0 10px, transparent 10px 20px);
+  opacity: .5;
+}
+
+.entry {
+  flex: 0 0 auto;
+  width: 96px;
+  border-radius: var(--radius-sm);
+  background: var(--tint, var(--surface-2));
+  padding: 6px 6px 4px;
+  display: grid; gap: 2px; justify-items: center;
+  border: 1px solid rgba(0,0,0,.06);
+}
+.entry img { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border-radius: 5px; }
+.entry b { font-size: 13px; font-weight: 600; color: #1a1a1d; letter-spacing: -.01em; }
+
+/* The bar's own controls. They belong to the bar because they act on the bar,
+   and putting them in the grid would spend three of a 3x5 board's fifteen
+   cells on punctuation. Speak is the primary and is the biggest thing on the
+   screen after a symbol; the two that take away are quiet and sit together. */
+.controls { display: grid; grid-template-columns: auto auto auto; gap: var(--gap); }
+
+.ctl {
+  border: 0; cursor: pointer; font: inherit;
+  border-radius: var(--radius);
+  display: grid; place-items: center; gap: 4px;
+  padding: 0 22px; min-width: 96px;
+  background: var(--surface-2); color: var(--text-dim);
+}
+.ctl svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 2.2;
+           stroke-linecap: round; stroke-linejoin: round; }
+.ctl span { font-size: 12px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.ctl:hover { background: var(--surface-3); color: var(--text); }
+
+/* One primary per view (design.md §4.3). On this screen it is Speak. */
+.ctl.speak {
+  background: var(--accent); color: var(--accent-ink);
+  min-width: 148px;
+}
+.ctl.speak:hover { background: var(--accent-hover); }
+.ctl.speak svg { stroke-width: 2.4; }
+
+/* --------------------------------------------------------------- the grid */
+
+.grid {
+  display: grid;
+  gap: var(--gap);
+  /* Rows and columns come from the board, not from a breakpoint. */
+  grid-template-columns: repeat(var(--cols), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
+  min-height: 0;
+}
+
+/* A cell is the symbol, with its word small underneath. The symbol takes all
+   the room that is left after the word, which is what "symbol dominant" means
+   in a layout that has to survive 6x11 as well as 3x5. */
+.cell {
+  border: 0; cursor: pointer; font: inherit;
+  border-radius: var(--radius);
+  background: var(--tint, var(--surface-2));
+  padding: 8px 8px 6px;
+  display: grid; grid-template-rows: 1fr auto; gap: 4px;
+  min-height: 0; min-width: 0;
+  /* The tint is the Fitzgerald class and carries meaning, so the resting cell
+     has no other colour on it — no border, no shadow, no gradient. */
+}
+.cell img {
+  width: 100%; height: 100%; min-height: 0;
+  object-fit: contain;
+  background: #fff; border-radius: var(--radius-sm);
+}
+.cell b {
+  font-size: clamp(11px, 1.35vw, 19px);
+  font-weight: 600; letter-spacing: -.01em;
+  color: #1a1a1d;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cell:hover { filter: brightness(.97); }
+.cell:active { filter: brightness(.94); }
+
+/* An empty cell keeps its place and is not pressable. */
+.cell.empty { background: var(--surface-2); opacity: .35; cursor: default; pointer-events: none; }
+
+/* Degraded: the picture was promised and is missing. The mark is a corner
+   wedge rather than a stand-in symbol — drawing a placeholder pictogram would
+   tell a child who cannot read that the button has a picture, which is the one
+   thing that has gone wrong with it. */
+.cell.degraded { position: relative; }
+.cell.degraded::after {
+  content: "!";
+  position: absolute; top: 6px; right: 6px;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--danger); color: var(--danger-ink);
+  font-size: 14px; font-weight: 700; line-height: 22px; text-align: center;
+}
+.cell.degraded img { opacity: 0; }
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
