@@ -11,85 +11,150 @@
   <div class="screen">
 
     <!-- The sentence bar. Symbols, because the person reading it back may not
-         read. Each entry is the tile that was pressed, at a smaller size, in
-         the order it was pressed. -->
+         read. The arrows are always present and disabled until the sentence is
+         longer than the bar, so nothing in here ever jumps sideways. -->
     <div class="bar">
-      <div class="said">
-        <span class="entry" style="--tint:#fdfd96"><img src="symbols/6632.png" alt=""><b>ich</b></span>
-        <span class="entry" style="--tint:#fdfd96"><img src="symbols/6625.png" alt=""><b>du</b></span>
-        <span class="entry" style="--tint:#c7f3c7"><img src="symbols/5441.png" alt=""><b>will</b></span>
-      </div>
-      <div class="controls">
-        <button class="ctl speak"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg><span>Sprechen</span></button>
-        <button class="ctl"><svg viewBox="0 0 24 24"><path d="M20 6H9L3 12l6 6h11a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/><path d="M16 10l-4 4M12 10l4 4"/></svg><span>Zurück</span></button>
-        <button class="ctl"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 12h10l1-12"/></svg><span>Leeren</span></button>
-      </div>
+      <button class="page" id="prev" aria-label="Zurückblättern" disabled><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="said" id="said"></div>
+      <button class="page" id="next" aria-label="Weiterblättern" disabled><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button class="ctl speak" id="speak" disabled><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg><span>Sprechen</span></button>
+      <button class="ctl" id="back" disabled><svg viewBox="0 0 24 24"><path d="M20 6H9L3 12l6 6h11a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z"/><path d="M16 10l-4 4M12 10l4 4"/></svg><span>Zurück</span></button>
+      <button class="ctl" id="clear" disabled><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 12h10l1-12"/></svg><span>Leeren</span></button>
     </div>
 
     <!-- 3x5, the size boot_data.ts starts a tablet Sammlung at. -->
-    <div class="grid">
-      <button class="cell" style="--tint:#fdfd96">
+    <div class="grid" id="grid">
+      <button class="cell" style="--tint:#fdfd96"
+              data-word="ich" data-id="6632" data-tint="#fdfd96">
         <img src="symbols/6632.png" alt="">
         <b>ich</b>
       </button>
-      <button class="cell" style="--tint:#fdfd96">
+      <button class="cell" style="--tint:#fdfd96"
+              data-word="du" data-id="6625" data-tint="#fdfd96">
         <img src="symbols/6625.png" alt="">
         <b>du</b>
       </button>
-      <button class="cell" style="--tint:#c7f3c7">
+      <button class="cell" style="--tint:#c7f3c7"
+              data-word="will" data-id="5441" data-tint="#c7f3c7">
         <img src="symbols/5441.png" alt="">
         <b>will</b>
       </button>
-      <button class="cell" style="--tint:#84b6f4">
+      <button class="cell" style="--tint:#84b6f4"
+              data-word="mehr" data-id="5508" data-tint="#84b6f4">
         <img src="symbols/5508.png" alt="">
         <b>mehr</b>
       </button>
-      <button class="cell" style="--tint:#fdcae1">
+      <button class="cell" style="--tint:#fdcae1"
+              data-word="nein" data-id="5526" data-tint="#fdcae1">
         <img src="symbols/5526.png" alt="">
         <b>nein</b>
       </button>
-      <button class="cell" style="--tint:#c7f3c7">
+      <button class="cell" style="--tint:#c7f3c7"
+              data-word="essen" data-id="6456" data-tint="#c7f3c7">
         <img src="symbols/6456.png" alt="">
         <b>essen</b>
       </button>
-      <button class="cell" style="--tint:#c7f3c7">
+      <button class="cell" style="--tint:#c7f3c7"
+              data-word="trinken" data-id="6061" data-tint="#c7f3c7">
         <img src="symbols/6061.png" alt="">
         <b>trinken</b>
       </button>
-      <button class="cell" style="--tint:#c7f3c7">
+      <button class="cell" style="--tint:#c7f3c7"
+              data-word="spielen" data-id="23392" data-tint="#c7f3c7">
         <img src="symbols/23392.png" alt="">
         <b>spielen</b>
       </button>
-      <button class="cell" style="--tint:#c7f3c7">
+      <button class="cell" style="--tint:#c7f3c7"
+              data-word="gehen" data-id="8142" data-tint="#c7f3c7">
         <img src="symbols/8142.png" alt="">
         <b>gehen</b>
       </button>
-      <button class="cell" style="--tint:#c7f3c7">
+      <button class="cell" style="--tint:#c7f3c7"
+              data-word="sehen" data-id="6564" data-tint="#c7f3c7">
         <img src="symbols/6564.png" alt="">
         <b>sehen</b>
       </button>
-      <button class="cell" style="--tint:#ffda89">
+      <button class="cell" style="--tint:#ffda89"
+              data-word="Apfel" data-id="2462" data-tint="#ffda89">
         <img src="symbols/2462.png" alt="">
         <b>Apfel</b>
       </button>
-      <button class="cell degraded" style="--tint:#ffda89">
+      <button class="cell degraded" style="--tint:#ffda89"
+              data-word="Wasser" data-id="32464" data-tint="#ffda89">
         <img src="symbols/32464.png" alt="">
         <b>Wasser</b>
       </button>
-      <button class="cell" style="--tint:#ffda89">
+      <button class="cell" style="--tint:#ffda89"
+              data-word="Fußball" data-id="2269" data-tint="#ffda89">
         <img src="symbols/2269.png" alt="">
         <b>Fußball</b>
       </button>
-      <button class="cell" style="--tint:#ffda89">
+      <button class="cell" style="--tint:#ffda89"
+              data-word="Mama" data-id="2458" data-tint="#ffda89">
         <img src="symbols/2458.png" alt="">
         <b>Mama</b>
       </button>
-      <button class="cell" style="--tint:#fdcae1">
+      <button class="cell" style="--tint:#fdcae1"
+              data-word="bitte" data-id="8195" data-tint="#fdcae1">
         <img src="symbols/8195.png" alt="">
         <b>bitte</b>
       </button>
     </div>
 
   </div>
+
+<script>
+/* Enough behaviour to feel the bar, and no more. This is a mock: nothing here
+   is the Compose implementation, it is the argument for what that should do. */
+const said = document.getElementById('said');
+const prev = document.getElementById('prev'), next = document.getElementById('next');
+const speak = document.getElementById('speak'), back = document.getElementById('back'), clear = document.getElementById('clear');
+
+function refresh() {
+  const n = said.children.length;
+  speak.disabled = back.disabled = clear.disabled = n === 0;
+  // A scrollable strip is the only reason an arrow is live.
+  const over = said.scrollWidth - said.clientWidth;
+  prev.disabled = said.scrollLeft <= 1;
+  next.disabled = said.scrollLeft >= over - 1;
+}
+
+/* A page minus one entry: one symbol stays on screen across the jump, so the
+   eye has an anchor instead of a whole new set of pictures. */
+function pageBy(dir) {
+  const step = said.clientWidth - 106;
+  said.scrollBy({ left: dir * Math.max(step, 106), behavior: 'smooth' });
+}
+
+document.getElementById('grid').addEventListener('click', e => {
+  const cell = e.target.closest('.cell'); if (!cell) return;
+  const el = document.createElement('span');
+  el.className = 'entry';
+  el.style.setProperty('--tint', cell.dataset.tint);
+  el.innerHTML = '<img src="symbols/' + cell.dataset.id + '.png" alt=""><b>' + cell.dataset.word + '</b>';
+  said.appendChild(el);
+  // Always follow the newest entry. A press has to show its own result, or the
+  // bar has stopped being the confirmation the child pressed the button for.
+  said.scrollTo({ left: said.scrollWidth, behavior: 'smooth' });
+  setTimeout(refresh, 320);
+});
+
+back.onclick  = () => { said.lastElementChild?.remove(); said.scrollTo({left: said.scrollWidth, behavior:'smooth'}); setTimeout(refresh, 320); };
+clear.onclick = () => { said.replaceChildren(); refresh(); };
+prev.onclick  = () => { pageBy(-1); setTimeout(refresh, 350); };
+next.onclick  = () => { pageBy(1);  setTimeout(refresh, 350); };
+said.addEventListener('scroll', () => refresh());
+
+/* Deep-link a starting sentence so a screenshot can show a given state:
+   ?s=ich,will,essen  —  and ?s=long for an overflowing one. */
+const q = new URLSearchParams(location.search).get('s');
+if (q) {
+  const words = q === 'long'
+    ? ['ich','will','mehr','Apfel','essen','du','spielen','Fußball','Mama','sehen','trinken','Wasser','gehen','bitte']
+    : q.split(',');
+  for (const w of words) document.querySelector('.cell[data-word="' + w + '"]')?.click();
+}
+refresh();
+</script>
 </body>
 </html>

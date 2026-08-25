@@ -36,26 +36,56 @@ html, body {
 
 /* ------------------------------------------------------------ sentence bar */
 
+/* Fixed height, always. The grid must never shift: a board is a page whose
+   shape a child learns, and a button that moves because the sentence grew is a
+   button they have to find again mid-thought. */
 .bar {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto auto auto auto;
   gap: var(--gap);
   align-items: stretch;
-  min-height: 132px;
+  height: var(--bar-h);
 }
 
-/* What has been said so far, as symbols. The entries are the same tiles as the
-   grid's, at a smaller size — that is the whole point: a person who cannot
-   read the sentence back can still recognise the pictures they just pressed,
-   in the order they pressed them. */
+:root { --bar-h: 132px; }
+
+/* The arrows are always here and never move. Reserving their space costs a
+   little width that is usually idle, and buys that the entries never jump
+   sideways the moment a sentence gets long enough to need them. Disabled is
+   the resting state on a short sentence, which is most sentences. */
+.page {
+  border: 0; cursor: pointer; font: inherit;
+  width: 62px; border-radius: var(--radius);
+  background: var(--surface-2); color: var(--text-dim);
+  display: grid; place-items: center;
+}
+.page svg { width: 30px; height: 30px; fill: none; stroke: currentColor;
+            stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.page:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
+.page:disabled { opacity: .32; cursor: default; }
+
+/* What has been said so far, as symbols. The entries are the grid's tiles at a
+   smaller size — that is the whole point: a person who cannot read the sentence
+   back can still recognise the pictures they pressed, in the order they pressed
+   them.
+
+   scroll-behavior is smooth so that a jump is followed by the eye rather than
+   teleporting; scroll-snap keeps a whole symbol at the left edge after one. */
 .said {
   background: var(--surface);
   border-radius: var(--radius);
   padding: var(--gap);
   display: flex; align-items: center; gap: var(--gap);
   overflow-x: auto; overflow-y: hidden;
-  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  /* No scroll-snap. Snapping gives a clean left edge, and a clean edge is
+     exactly what hides the fact that there is more sentence off to the left.
+     Letting a symbol be cut in half says "another picture is over there" to
+     somebody who cannot read the arrow that says the same thing. */
+  /* The scrollbar is furniture a child does not use and the arrows replace. */
+  scrollbar-width: none;
 }
+.said::-webkit-scrollbar { display: none; }
 
 .said:empty::after {
   content: "";
@@ -82,10 +112,7 @@ html, body {
 
 /* The bar's own controls. They belong to the bar because they act on the bar,
    and putting them in the grid would spend three of a 3x5 board's fifteen
-   cells on punctuation. Speak is the primary and is the biggest thing on the
-   screen after a symbol; the two that take away are quiet and sit together. */
-.controls { display: grid; grid-template-columns: auto auto auto; gap: var(--gap); }
-
+   cells on punctuation. */
 .ctl {
   border: 0; cursor: pointer; font: inherit;
   border-radius: var(--radius);
@@ -96,15 +123,16 @@ html, body {
 .ctl svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 2.2;
            stroke-linecap: round; stroke-linejoin: round; }
 .ctl span { font-size: 12px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
-.ctl:hover { background: var(--surface-3); color: var(--text); }
+.ctl:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
+.ctl:disabled { opacity: .32; cursor: default; }
 
-/* One primary per view (design.md §4.3). On this screen it is Speak. */
+/* One primary per view (design.md 4.3). On this screen it is Speak. */
 .ctl.speak {
   background: var(--accent); color: var(--accent-ink);
   min-width: 148px;
 }
-.ctl.speak:hover { background: var(--accent-hover); }
-.ctl.speak svg { stroke-width: 2.4; }
+.ctl.speak:hover:not(:disabled) { background: var(--accent-hover); }
+.ctl.speak:disabled { background: var(--surface-2); color: var(--text-dim); }
 
 /* --------------------------------------------------------------- the grid */
 
