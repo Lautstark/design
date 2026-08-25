@@ -476,6 +476,30 @@ standing as long as it was for the reason §1.4 gives — a divergence list only
 means anything while somebody re-reads it against the code, and a line saying
 somebody complies is the one nobody thinks to re-read.
 
+**And there was a second one, which is the more useful half of the story.** A
+later sweep found `window.confirm` still on vorlaut's whole-library restore, in
+`src/shell/settings.ts` — the act that replaces every Sammlung in the browser,
+asked in the browser's own chrome with "Fortfahren?" and naming none of what it
+would take. It failed §1.7 the same way the set delete did: a person with one
+Sammlung and a person with nine got the same sentence, when the number is the
+only thing in the question that could change a mind. It is a `<dialog>` that
+counts, as of 2026-08-25.
+
+Two call sites, two audits, and **each audit found one and stopped**. That is
+worth naming, because it is not the same mistake as a stale line: finding a
+violation feels like the answer to "does this rule hold?", and the sweep ends
+there. The first hit is not the last one — grep the whole family, read every
+hit, and only then write the line.
+
+The claim that was wrong here was mine to begin with: "there is no
+`window.confirm`, `window.prompt` or `window.alert` left in any of the three"
+was written after checking *one* of the three, because the divergence line above
+it named only that one. A line can be stale, which the top of this document
+covers. It can also be **wrong on the day it is written**, which nothing here
+covered until now, and it is the more expensive kind: a stale line was true once
+and gets re-checked eventually, while a line that was never true reads as
+settled and is the last place anybody looks.
+
 ### 3.5 One settings panel is open at a time
 
 The settings sheet is a column of folded `<details class="panel">`, each with
@@ -588,13 +612,21 @@ A live region is `role="status"` — which is `aria-live="polite"` — and it is
 **in the tree from the first paint, never hidden and never removed**. What
 changes is what is *inside* it.
 
-**One for outcomes, and at most one more for conditions.** The outcome region is
-the page's single answer to "what just happened": what succeeded, what failed,
-how many arrived, and every act that reports one writes there. A page may have a
-second for a *condition* — something that is true for a while and is drawn while
-it lasts, like a source that cannot be read — because a condition is not an
-outcome and the two would overwrite each other. bildhaft has both: a toast and
-the host its banners are drawn into.
+**One for outcomes, and one more for each context that cannot reach it.** The
+outcome region is the page's single answer to "what just happened": what
+succeeded, what failed, how many arrived, and every act that reports one writes
+there. Two things earn a second region, and both for the same reason — the first
+one is unreachable, not merely inconvenient:
+
+- **A condition**, something true for a while and drawn while it lasts, like a
+  source that cannot be read. It is not an outcome, and sharing one region means
+  each overwrites the other. bildhaft has this: a toast and the host its banners
+  are drawn into.
+- **A modal.** `showModal()` makes everything behind it inert, so the page's own
+  status line is not somewhere a reader can be told anything while a sheet is
+  open. A dialog that reports an outcome of its own needs its own region.
+  mitreden has this: the Azure probe line, which answers "does this key work?"
+  inside the settings sheet.
 
 Beyond those two, no. A region per message is how this goes wrong, and it goes
 wrong in the way below rather than by being noisy: three regions that each
@@ -640,15 +672,25 @@ reason — an author `display` rule beats the browser's own `[hidden]`, so the
 file that takes the attribute's meaning away has to give it back — but the
 attribute must not be used on the region itself.
 
-**Diverging: nobody**, as of 2026-08-25. mitreden and vorlaut each met this and
-each fixed it. bildhaft's toast set its text, appended the node, and removed it
+**Diverging: nobody**, as of 2026-08-25 — after a second pass, and the second
+pass is the point. mitreden and vorlaut each met this and each fixed it. bildhaft's toast set its text, appended the node, and removed it
 again 3.2 seconds later, so every acknowledgement the product made — an
 exported Sammlung, a saved picture, a failed import, "Alle Daten gelöscht" —
 was silent until this rule was written. Its banner host had the same defect one
 floor down and was found by fixing the toast: the same file, the same shape, and
 still not noticed until somebody went looking for the second instance of a bug
 they had just fixed. Two regions in one product is what this section allows;
-neither of them announcing is what it is against. That it survived longest in the product
+neither of them announcing is what it is against.
+
+mitreden's probe line was the third instance, and it was found the same way as
+the second — by re-reading a line that said nobody diverges. It was toggled with
+`probe.hidden = !azure`, so with no key stored the region left the tree and came
+back carrying its next message. It very nearly did not matter: the answer
+arrives from a promise, so by then the region was visible and empty and the
+change was noticed, and only the synchronous "asking …" was lost. Being right by
+timing rather than by construction is exactly what this rule exists to replace,
+and it is why the fix is to empty the text rather than to keep the toggle and
+argue that it works. That it survived longest in the product
 whose users are the reason the family exists is the argument for the rule
 living here rather than in three commit messages.
 
