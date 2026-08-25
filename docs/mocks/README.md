@@ -251,3 +251,37 @@ a child in the room: long enough to confirm the finger landed, short enough
 that somebody across the table reads four dots. A wrong PIN marks every box
 rather than any one of them — the PIN is wrong, not a digit — and empties the
 row so the next attempt starts clean.
+
+## Eine Zeile in der Sammlungsliste
+
+`vorlaut-sammlung-zeile.html` is a proposal rather than a screen, like the two
+editors above. The question is what the *sidebar* row can say: it carries a
+name and a count, and the count means Sets on the DIY talker and Tasten on a
+tablet with nothing on the row saying which.
+
+Six candidates over one list, at the real 268px, with the longest name open —
+because the open row is bold and therefore the one with least room. Nothing is
+implemented and `docs/lib/collections.js` is untouched; the page renders the
+real `.collections` from `components.css`, and the five new class names in
+`sammlung-zeile.css` are the whole proposal.
+
+Two things the page found that the idea it started from did not survive.
+
+**A drawn grid stops being a grid at 17px.** vorlaut's size presets draw one
+`<i>` per cell at 62px and caption them, and the obvious move was to shrink
+that into the row. Measured, a cell is 2.6px wide at 3 × 5 and 0.6px at 6 × 11,
+so the two large presets are indistinguishable — and because the 1px gaps stay
+whole pixels while the cells shrink, the mark *covers less* the finer the grid
+gets: 78% of its box for the talker, 57% at 3 × 5, 15% at 6 × 11. The Sammlung
+with the most buttons would get the faintest mark.
+
+**And the mark cannot whisper.** Drawn dimmed the way the preset row draws it,
+against this package's own tokens and with its own `contrast()`, it is 2.36 : 1
+light and 2.77 : 1 dark on a quiet row and 2.15 / 2.53 on the open one — all
+four under the 3 : 1 a graphic carrying information has to clear. The same
+arithmetic took an `opacity: .8` off the second line and the number pair, which
+were at 3.20 and 3.83 against a 4.5 : 1 bar. Everything in the row is now drawn
+at full strength, and that is not a preference.
+
+The recommendation is at the foot of the page, and the API addition it would
+need is described there in words only.

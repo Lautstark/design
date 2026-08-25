@@ -1,0 +1,173 @@
+/* A study page for one row in vorlaut's Sammlungsliste — the sidebar row, the
+ * one all three products draw through @lautstark/design/collections.
+ *
+ * What is NOT in here is the row. `.collections`, `.collections__item`,
+ * `.collections__name` and `.collections__count` come from components.css
+ * unchanged, because the whole question is what that shared row could gain,
+ * and a local copy of it would answer a different question. Grepped before
+ * writing, as rule 5 asks: `.collections__mark`, `.collections__grid`,
+ * `.collections__unit`, `.collections__text` and `.collections__sub` are the
+ * five names that are new, and they are the proposal.
+ *
+ * screens.css is deliberately not linked either. It sets a screen's body to a
+ * three-row grid, and this is not a screen — it is a page about a screen. The
+ * appbar and the Sammlung card in that file belong to the viewer.
+ */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg); color: var(--text);
+  font: 15px/1.55 var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+.paper { max-width: 940px; margin: 0 auto; padding: 32px 28px 72px; }
+
+h1 { font-size: 26px; font-weight: 700; letter-spacing: -.02em; margin: 0 0 14px; }
+h2 {
+  font-size: 18px; font-weight: 700; margin: 44px 0 10px;
+  padding-top: 20px; border-top: 1px solid var(--line);
+}
+h3 { font-size: 13.5px; font-weight: 700; margin: 0 0 4px; }
+p { margin: 0 0 12px; }
+.lede { color: var(--text-dim); max-width: 62ch; }
+code { font: 12.5px/1 var(--mono); background: var(--surface-2); padding: 2px 5px; border-radius: var(--radius-sm); }
+
+/* ------------------------------------------------------------ the schemes */
+
+/* Both schemes, one after the other rather than side by side, and the reason
+   is rule 4. tokens/vorlaut.css scopes its dark values to `:root[data-theme]`,
+   so a scheme cannot be nested in a div — putting two schemes on one screen
+   would mean hand-copying generated hexes into this file, which is the exact
+   move the header of every token file forbids. The toggle is also what the
+   products actually do, so what is on screen stays the output. */
+.scheme { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin: 20px 0 8px; }
+.segmented { display: inline-flex; border: 1px solid var(--line); border-radius: var(--radius-pill); padding: 2px; gap: 2px; }
+.segmented button {
+  border: 0; background: none; color: var(--text-dim); font: inherit; font-size: 13px;
+  padding: 5px 14px; border-radius: var(--radius-pill); cursor: pointer;
+}
+.segmented button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent-strong); font-weight: 600; }
+.scheme small { color: var(--text-faint); font-size: 12.5px; }
+
+/* --------------------------------------------------------------- the rails */
+
+/* Five candidates over one list. The band scrolls sideways rather than
+   reflowing, because a rail narrower than 268px would be a different question:
+   at 268px the crowding is vorlaut's real crowding. */
+/* Aus der Textbreite heraus auf die ganze Fensterbreite: fünf Leisten sind
+   1412 Pixel, und eine Spalte, die man wegscrollen muss, um sie mit der
+   ersten zu vergleichen, ist keine Gegenüberstellung. Schmaler als das
+   scrollt das Band, statt umzubrechen. */
+.band {
+  display: flex; gap: 18px; overflow-x: auto;
+  width: 100vw; margin-left: calc(50% - 50vw);
+  padding: 4px max(28px, calc(50vw - 724px)) 18px;
+}
+.cand { flex: none; width: 268px; }
+.cand > p { font-size: 12.5px; color: var(--text-dim); margin: 0 0 10px; min-height: 3.6em; }
+.cand h3 span {
+  display: inline-grid; place-items: center; width: 19px; height: 19px; margin-right: 7px;
+  border-radius: var(--radius-pill); background: var(--accent-soft); color: var(--accent-strong);
+  font-size: 11.5px; vertical-align: 1px;
+}
+
+/* The sidebar itself: vorlaut's --sidebar-w is 268px, and the rail is drawn at
+   exactly that so what crowds here crowds there. */
+.rail { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; }
+
+/* ------------------------------------------------------ the five new names */
+
+/* The mark: one <i> per cell, which is vorlaut's own idiom for this. Its size
+   presets are drawn the same way (`.size__mini`, src/styles/ui.css), and the
+   reasoning written beside them is that "6 × 11" is a pair of numbers while
+   what somebody is choosing is how much fits on a page.
+
+   Two things differ from the preset row, and both are forced by where this
+   sits. It is 17px rather than 62px, because that is what a 268px row can
+   spare beside a name that already ellipses.
+
+   And it carries no opacity at all, which took two tries and a measurement.
+   vorlaut's preset row draws its cells at opacity .3; that is fine there,
+   because the mark is captioned — "3 × 5" is printed under it — so the drawing
+   is a help rather than the carrier. Here it is the only thing carrying the
+   fact, so it has to clear the 3:1 that WCAG 1.4.11 asks of a graphic somebody
+   has to make out. Against the rail and against the open row:
+
+       ruhige Zeile   .55   2.36 hell   2.77 dunkel   fällt durch
+       ruhige Zeile   1.0   6.08 hell   5.99 dunkel   besteht
+       offene Zeile   .55   2.15 hell   2.53 dunkel   fällt durch
+       offene Zeile   1.0   4.52 hell   5.20 dunkel   besteht
+
+   Every number there is computed from tokens/vorlaut.css with this package's
+   own contrast(), not read off a screen. A dimmed mark fails in both schemes
+   and on both kinds of row, so there is no version of this idea that whispers:
+   full currentColor, exactly as dark as the count beside it. */
+.collections__mark {
+  flex: none;
+  display: grid; gap: 1px; width: var(--mark, 17px);
+  grid-template-columns: repeat(var(--c), 1fr);
+  grid-template-rows: repeat(var(--r), 1fr);
+}
+.collections__mark i { background: currentColor; aspect-ratio: 4 / 3; border-radius: .5px; }
+/* The speaker's corner. Empty rather than dimmed: on the device there is no
+   key there, and a fainter square would say "a key that is off". */
+.collections__mark i.off { background: none; }
+
+/* The pair as text, for the candidate that draws the device and names the
+   grid. --text-faint and not --text-dim, so that the name stays the loudest
+   thing on the row and the count stays second. */
+.collections__grid { flex: none; font-size: 11.5px; font-variant-numeric: tabular-nums; color: var(--text-faint); }
+
+/* The noun after the number: "5 Sets", "78 Tasten". Not bold even on the open
+   row — the number is the fact, the noun is what it counts. */
+.collections__unit { font-weight: 400; margin-left: 3px; }
+
+/* The two-line row. `.collections__name` keeps its own ellipsis, so the
+   wrapper only has to stop the flex item growing past the rail. */
+.collections__text { flex: 1; min-width: 0; }
+.collections__text .collections__name { display: block; }
+.collections__sub {
+  display: block; font-size: 11.5px; line-height: 1.35; color: var(--text-faint);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* The open row tints everything inside it; the sub-line would otherwise stay
+   the same grey it is on the rows that are not open.
+
+   This rule used to carry `opacity: .8`, and it went for the same reason the
+   mark's did. At 11.5px these two are text, so the bar is 4.5:1, and
+   --accent-strong over --accent-soft at .8 gives 3.20 hell and 3.83 dunkel —
+   both under it. At full strength: 4.52 and 5.20. The row is already the quiet
+   end of the type scale, and a second dimming puts it through the floor. */
+.collections__item--active .collections__sub,
+.collections__item--active .collections__grid { color: inherit; }
+
+/* ----------------------------------------------------------- the close-ups */
+
+.zoom { display: flex; gap: 26px; flex-wrap: wrap; align-items: flex-end; margin: 18px 0 6px; }
+.zoom figure { margin: 0; text-align: center; }
+.zoom figcaption { font-size: 11.5px; color: var(--text-dim); margin-top: 8px; font-variant-numeric: tabular-nums; }
+.zoom .collections__mark { color: var(--text); margin: 0 auto; }
+.zoom .big { --mark: 62px; }
+
+.strip { display: flex; gap: 18px; flex-wrap: wrap; margin: 16px 0 8px; }
+.strip .rail { width: 268px; }
+.strip h3 { color: var(--text-dim); font-weight: 600; margin-bottom: 6px; }
+
+/* ---------------------------------------------------------------- the table */
+
+table { border-collapse: collapse; width: 100%; margin: 14px 0 8px; font-size: 13.5px; }
+th, td { text-align: left; padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--text-faint); font-weight: 600; }
+td b { font-weight: 600; }
+.yes { color: var(--accent-strong); }
+.no { color: var(--text-faint); }
+
+.note {
+  font-size: 13.5px; color: var(--text-dim); max-width: 68ch;
+  border-left: 2px solid var(--line); padding-left: 14px; margin: 14px 0;
+}
+.note b { color: var(--text); }

@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — was eine Zeile in der Sammlungsliste sagt</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="sammlung-zeile.css">
+</head>
+<body>
+<div class="paper">
+
+  <h1>Was eine Zeile in der Sammlungsliste sagt</h1>
+
+  <p class="lede">
+    Eine Zeile trägt heute einen Namen und eine Zahl. Die Zahl bedeutet auf dem
+    DIY-Talker <em>Sets</em> und in der Android-App <em>Tasten</em> — und auf der
+    Zeile steht nicht, welche von beiden. Zwei Sammlungen für zwei verschiedene
+    Geräte sind auseinanderzuhalten, sobald eine davon offen ist, und vorher nicht.
+  </p>
+  <p class="lede">
+    Sechs Vorschläge über derselben Liste. <b>Keiner nimmt die Zahl weg.</b>
+    <code>conventions.md</code> §1.8 hält fest, dass eine Zeile eine Zahl trägt,
+    und niemand weicht davon ab; §1.7 stellt die Löschfrage mit genau dieser
+    Zahl, und §1.8 begründet sich zur Hälfte damit — die Zahl soll nicht zum
+    ersten Mal in dem Moment auftauchen, in dem etwas verschwindet. vorlaut
+    stand auf dieser Zeile schon einmal für den Namen allein; ein Vorschlag, der
+    die Zahl ersetzt, wäre vorlauts dritte Position zu einer Frage.
+    Die offene Frage ist also nicht <em>statt</em>, sondern: <b>passen Name,
+    Gerät, Raster und Zahl auf eine Zeile, ohne dass sie eine Faktenwand wird —
+    und wenn nicht, was davon verdient den Platz?</b> Die Antwort unten ist ein
+    Nein und dann eine Auswahl.
+  </p>
+  <p class="lede">
+    Nichts hiervon ist gebaut, und <code>collections.js</code> ist unverändert.
+    Die Zeilen unten sind die echte <code>.collections</code> aus
+    <code>components.css</code>; neu sind fünf Klassen, und die sind der
+    Vorschlag.
+  </p>
+
+  <div class="scheme">
+    <div class="segmented" role="group" aria-label="Farbschema">
+      <button type="button" data-set="" aria-pressed="true">System</button>
+      <button type="button" data-set="light" aria-pressed="false">Hell</button>
+      <button type="button" data-set="dark" aria-pressed="false">Dunkel</button>
+    </div>
+    <small>Nicht Teil des Vorschlags. Nebeneinander ginge nur, indem
+      generierte Hexwerte hierher abgeschrieben würden — siehe den Kopf jeder
+      Token-Datei.</small>
+  </div>
+
+
+  <h2>Sechs Zeilen über einer Liste</h2>
+  <p class="lede">
+    Dieselben sechs Sammlungen, sechsmal gezeichnet. Die Leiste ist 268 Pixel
+    breit, weil <code>--sidebar-w</code> das auch ist. Offen ist jeweils
+    „Kindergarten Sommer 2026“ — der längste Name, absichtlich, weil die offene
+    Zeile fett gesetzt ist und damit die ist, der am wenigsten Platz bleibt.
+  </p>
+
+  <div class="band" id="band"></div>
+
+  <p class="note">
+    <b>Wo abgeschnitten wird, ist der Befund und nicht die Schlamperei.</b>
+    „Sammlung vom 25.08.2026“ ist kein ausgedachter Härtefall: §1.5 vergibt
+    diesen Namen bei jedem Anlegen, also ist die längste Zeile der Liste die,
+    die niemand getippt hat. Was rechts danebensteht, nimmt ihr Platz weg —
+    und zwar messbar. In der offenen Zeile bleiben dem Namen:
+  </p>
+  <table>
+    <thead>
+      <tr><th>Kandidat</th><th>Platz für den Namen</th><th>Höhe der Liste</th><th>Was es kostet</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>A</b> Heute</td><td>206 px</td><td>249 px</td><td class="no">—</td></tr>
+      <tr><td><b>B</b> Gerät als Wort</td><td>206 px</td><td><b>342 px</b></td><td>keine Breite, dafür 37 % mehr Höhe</td></tr>
+      <tr><td><b>C</b> Raster gezeichnet</td><td>181 px</td><td>249 px</td><td>25 px Name</td></tr>
+      <tr><td><b>D</b> Gerät + Raster</td><td><b>137 px</b></td><td>249 px</td><td><b>69 px Name — ein Drittel</b></td></tr>
+      <tr><td><b>E</b> Die Zahl nennt es</td><td>166 px</td><td>249 px</td><td>40 px Name</td></tr>
+      <tr><td><b>F</b> Nur das Gerät</td><td>181 px</td><td>249 px</td><td>25 px Name</td></tr>
+    </tbody>
+  </table>
+  <p class="note">
+    Das ist die Antwort auf die Ausgangsfrage, und sie ist ein Nein: <b>Name,
+    Gerät, Raster und Zahl passen nicht alle vier auf eine 268-Pixel-Zeile.</b>
+    D trägt alle vier und bezahlt es mit einem Drittel des Namens — bei genau
+    den Namen, die vorlaut selbst vergibt. Damit steht die zweite Frage an:
+    welche der vier verdient den Platz.
+  </p>
+
+
+  <h2>Was das Zeichen bei 17 Pixeln noch sagt</h2>
+  <p class="lede">
+    Der Kandidat C zeichnet das Raster, statt es zu nennen — vorlaut macht das
+    bei seinen Größenvorgaben schon so, mit einem <code>&lt;i&gt;</code> pro
+    Zelle. Dort ist das Zeichen 62 Pixel breit und trägt „3 × 5“ als Bildtext
+    darunter. In der Zeile ist es 17 Pixel breit und trägt gar nichts darunter.
+    Oben in Zeilengröße, unten so, wie vorlaut es heute zeichnet:
+  </p>
+
+  <div class="zoom" id="zoom-small"></div>
+  <div class="zoom" id="zoom-big"></div>
+
+  <p class="note">
+    <b>Bei 17 Pixeln sind vier Rastergrößen zwei.</b> Gemessen, nicht geschätzt:
+    eine Zelle ist bei 3 × 5 noch 2,6 × 2,0 Pixel groß, bei 4 × 6 genau
+    2,0 × 1,5 — und dann fällt sie unter das Pixel. 5 × 8 sind 1,3 × 0,9,
+    6 × 11 sind 0,6 × 0,5. Die beiden großen Raster sind nicht mehr Raster,
+    sondern Grieß, und voneinander gar nicht zu unterscheiden.
+  </p>
+  <p class="note">
+    <b>Und der Fehler geht in die falsche Richtung.</b> Weil die Lücken zwischen
+    den Zellen ganze Pixel bleiben, während die Zellen schrumpfen, deckt das
+    Zeichen umso weniger Fläche, je feiner das Raster ist: der Talker deckt
+    78 %, 3 × 5 deckt 57 %, 6 × 11 nur noch 15 %. <b>Die Sammlung mit den
+    meisten Tasten bekommt das schwächste Zeichen.</b> Das ist keine Frage der
+    Farbe und in beiden Schemata gleich — ein Zeichen, dessen Gewicht mit dem
+    Inhalt variiert, liest sich als Wichtigkeit und nicht als Dichte.
+  </p>
+  <p class="note">
+    <b>Und eine Sache, die das Zeichen fast gekostet hätte.</b> Der erste
+    Entwurf zeichnete die Zellen wie vorlaut sie zeichnet, gedämpft — dort
+    opacity .3, hier .55. Gegen die Tokens dieses Pakets gerechnet, mit dessen
+    eigener <code>contrast()</code>, ergibt das <b>2,36 : 1</b> im hellen und
+    <b>2,77 : 1</b> im dunklen Schema, und auf der offenen Zeile 2,15 und 2,53.
+    Die Schwelle für eine Grafik, die jemand erkennen muss, ist 3 : 1. Ein
+    gedämpftes Zeichen fällt also in beiden Schemata und auf beiden Zeilenarten
+    durch; bei voller Deckkraft sind es 6,08 / 5,99 und 4,52 / 5,20. <b>Es gibt
+    keine flüsternde Fassung dieser Idee</b> — das Zeichen ist so dunkel wie die
+    Zahl daneben oder es ist nicht da. Dieselbe Rechnung hat die Unterzeile von
+    B und das Zahlenpaar von D eine Stufe heller gemacht, als sie sein durften.
+  </p>
+
+  <p class="note">
+    Der Talker dagegen ist in jeder Größe erkennbar, weil ihn nicht die
+    Zellenzahl kenntlich macht, sondern das Loch. <b>Das Zeichen beantwortet
+    zuverlässig die Gerätefrage und die Rasterfrage gar nicht</b> — was C
+    widerlegt und D und F offen lässt. Beide zeichnen deshalb ein festes
+    Raster, das immer gleich schwer ist; sie unterscheiden sich nur darin, ob
+    die echte Größe als Zahlenpaar danebensteht.
+  </p>
+
+
+  <h2>Offen, nicht offen, und die Zeile ohne Zahl</h2>
+  <p class="lede">
+    Links dreimal dieselbe Zeile in D — geschlossen, offen, und mit einem Namen,
+    der nicht passt. Rechts eine Liste ohne Gerät und ohne Raster: das ist,
+    was mitreden und bildhaft an dieselbe Funktion übergeben würden.
+  </p>
+
+  <div class="strip" id="strip"></div>
+
+  <p class="note">
+    <b>Eine Zeile ohne Zahl gibt es weiterhin und bleibt richtig.</b>
+    <code>count</code> ist in <code>collections.d.ts</code> optional, weil
+    vorlaut die Layouts, die es nicht zeigt, erst lesen muss, um zu zählen —
+    eine Zeile kann also da sein, bevor ihre Zahl da ist. Bei E steht dann auch
+    kein Wort da, denn ein Substantiv ohne Zahl zählt nichts. Bei B, C und D
+    steht das Gerät trotzdem, weil es nicht gezählt werden muss.
+  </p>
+
+
+  <h2>Was die Löschfrage danach noch einführt</h2>
+  <p class="lede">
+    §1.7 zählt in der Frage, was weggeht. Alle sechs Kandidaten behalten die
+    Zahl, also ist die Frage bei allen sechs gedeckt. Interessant ist nur die
+    zweite Spalte: welches Wort die Frage einführt, das die Zeile vorher nicht
+    gesagt hatte. Beispiel „Zum Ausprobieren“, ein Set.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Kandidat</th><th>Was die Zeile sagte</th><th>Was die Frage einführt</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>A</b> Heute</td><td>1</td><td>das Wort <b>Set</b></td></tr>
+      <tr><td><b>B</b> Gerät als Wort</td><td>DIY-Talker · 1</td><td>das Wort <b>Set</b> — „Talker“ ist nicht dasselbe Wort</td></tr>
+      <tr><td><b>C</b> Raster gezeichnet</td><td>▨ 1</td><td>das Wort <b>Set</b></td></tr>
+      <tr><td><b>D</b> Gerät + Raster</td><td>▨ 1</td><td>das Wort <b>Set</b></td></tr>
+      <tr><td><b>E</b> Die Zahl nennt es</td><td>1 Set</td><td class="yes">nichts</td></tr>
+      <tr><td><b>F</b> Nur das Gerät</td><td>▨ 1</td><td>das Wort <b>Set</b></td></tr>
+    </tbody>
+  </table>
+  <p class="note">
+    E ist hier allein, und das ist sein eigentliches Argument: es fügt der Zeile
+    keine Spalte hinzu, sondern lässt die vorhandene Zahl aussprechen, was sie
+    schon zählt. Der Preis steht daneben — es sagt das Raster nicht und kann es
+    auch nicht sagen.
+  </p>
+
+
+  <h2>Was die geteilte API dazu sagen müsste</h2>
+  <p class="lede">
+    Alle drei Produkte zeichnen diese Zeile durch
+    <code>@lautstark/design/collections</code> (§5 5b), und §1.8 hält fest, dass
+    das Absicht ist: eine Zeile statt dreier, die wieder auseinanderlaufen
+    könnten. Ein Feld hinzuzufügen heißt also, es zwei Produkten hinzuzufügen,
+    die es nie haben werden.
+  </p>
+  <p class="lede">
+    <code>CollectionRow</code> bekäme <b>ein</b> weiteres optionales Feld, kein
+    zweites. Es beschreibt, wofür die Sammlung gemacht ist, und trägt die
+    Rastergröße in sich statt daneben — ein <code>grid</code> ohne
+    <code>target</code> wäre ein Zustand, den es nicht gibt, und zwei getrennte
+    Felder wären zwei Gelegenheiten, ihn zu erzeugen. Fehlt das Feld, zeichnet
+    die Zeile genau das, was sie heute zeichnet: Name und Zahl, ohne Lücke, wo
+    ein Zeichen gestanden hätte. Es gibt <b>keinen</b> Vorgabewert und keine
+    Sorte „unbekannt“ — mitreden und bildhaft lassen es weg, so wie vorlaut
+    <code>count</code> weglässt, solange es nicht gezählt hat.
+  </p>
+  <table>
+    <thead>
+      <tr><th>Produkt</th><th>Was es übergibt</th><th>Was es kostet</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>vorlaut</b></td>
+        <td>das Feld, aus <code>Made.target</code> und <code>Made.grid</code>, die es schon hat</td>
+        <td>nichts Neues — die Werte liegen bereits in der Sammlung</td>
+      </tr>
+      <tr>
+        <td><b>mitreden</b></td>
+        <td class="no">nichts</td>
+        <td>eine <code>?</code>-Eigenschaft mehr in einem Typ, den es liest — kein Aufrufer ändert sich</td>
+      </tr>
+      <tr>
+        <td><b>bildhaft</b></td>
+        <td class="no">nichts</td>
+        <td>dasselbe</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">
+    <b>Der ehrliche Preis ist nicht der Typ, sondern das Vokabular.</b>
+    „DIY-Talker“ und „App“ sind vorlauts Wörter, und sie stünden ab dann in
+    einer Datei, die drei Produkte lesen. Dagegen hilft, dass die geteilte
+    Funktion die Wörter nie selbst schreibt: sie zeichnet ein Zeichen und stellt
+    dar, was ihr übergeben wurde. Genau deshalb sind D und F billiger als B und E:
+    diese beiden verlangen von der geteilten Zeile deutsche Substantive, jene
+    beiden verlangen von ihr nur ein Raster und ein Loch.
+  </p>
+
+
+  <h2>Empfehlung</h2>
+  <p class="lede">
+    <b>F — das Gerät gezeichnet, das Raster gar nicht.</b> Zu Beginn dieser
+    Seite stand D vorn, und die Messungen haben es umgedreht; das ist der Grund,
+    warum die Seite existiert.
+  </p>
+  <p class="lede">
+    Die Ausgangsfrage — passen alle vier auf eine Zeile — ist beantwortet, und
+    zwar mit Nein: D trägt alle vier und nimmt dem Namen dafür 69 der 206 Pixel,
+    bei genau den Namen, die vorlaut selbst vergibt. Bleibt die zweite Frage,
+    und die vier Fakten beantworten sie unterschiedlich gut:
+  </p>
+  <ul class="lede">
+    <li><b>Der Name</b> ist die Frage. Er verliert nichts, was zu vermeiden ist.</li>
+    <li><b>Die Zahl</b> bleibt, weil §1.8 sie hält und §1.7 sie später braucht.
+      Das war nie zur Wahl gestellt.</li>
+    <li><b>Das Gerät</b> ist die Frage, die beim Wiederfinden offen ist — und
+      es ist für 25 Pixel und ohne ein einziges Wort zu haben.</li>
+    <li><b>Das Raster</b> ist die Frage, die beim Wiederfinden niemand stellt.
+      Es wird beim Anlegen einmal gewählt und danach über das ⋯ neben dem Namen
+      geändert — beides Orte, an denen es gezeichnet und beschriftet Platz hat.
+      44 Pixel Name dafür auszugeben, dass eine selten gestellte Frage
+      vorbeantwortet wird, ist der schlechteste Tausch auf der Seite.</li>
+  </ul>
+  <p class="lede">
+    <b>Falls das Zeichen zu wenig ist, ist E die Alternative und nicht D.</b>
+    E kostet 40 Pixel statt 25, sagt das Gerät in Worten statt in einem Zeichen,
+    das gelernt werden muss, und nimmt der Löschfrage als einziger Kandidat ihr
+    neues Wort ab. Es hat einen echten Nachteil, den F nicht hat: „Sets“ und
+    „Tasten“ sind deutsche Substantive in einer Datei, die drei Produkte lesen.
+    <b>C ist der Kandidat, der beim Hinsehen verliert</b> — er verspricht zwei
+    Antworten mit einem Zeichen und liefert bei der Hälfte der Rastergrößen
+    keine, mit einem Zeichen, das obendrein umso blasser wird, je mehr darin
+    steckt. Genau das war die Idee, mit der diese Seite angefangen hat.
+  </p>
+
+</div>
+
+<script>
+/* Die Liste, einmal. Jede Zeile ist genau das, was an drawCollections ginge —
+ * `made` ist das vorgeschlagene Feld, und die beiden Talker-Zeilen zeigen, dass
+ * `grid` darin fehlen darf, weil ein Talker kein Raster hat. Die Reihenfolge
+ * ist §1.4: zuletzt bearbeitet zuerst. */
+const ROWS = [
+  { id: "1", name: "Morgens",                  count: 5,  made: { target: "diy" } },
+  { id: "2", name: "Kindergarten Sommer 2026", count: 78, made: { target: "app", grid: { rows: 6, columns: 11 } } },
+  { id: "3", name: "Spielen",                  count: 22, made: { target: "app", grid: { rows: 4, columns: 6 } } },
+  { id: "4", name: "Kernvokabular",            count: 96, made: { target: "app", grid: { rows: 5, columns: 8 } } },
+  { id: "5", name: "Zum Ausprobieren",         count: 1,  made: { target: "diy" } },
+  { id: "6", name: "Sammlung vom 25.08.2026",  count: 0,  made: { target: "app", grid: { rows: 3, columns: 5 } } },
+];
+const OPEN = "2";
+
+const el = (tag, cls, text) => {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+
+/* Das Substantiv, das die Zahl zählt. Der Talker zählt Sets, das Tablet
+   Tasten — dieselbe Spalte, zwei verschiedene Dinge, und das ist der ganze
+   Anlass für diese Seite. */
+const unit = (made, n) => made.target === "diy"
+  ? (n === 1 ? "Set" : "Sets")
+  : (n === 1 ? "Taste" : "Tasten");
+
+const word = (made) => made.target === "diy"
+  ? "DIY-Talker"
+  : "App · " + made.grid.rows + " × " + made.grid.columns;
+
+const pair = (made) => made.grid.rows + " × " + made.grid.columns;
+
+/* Das Zeichen. `true` zeichnet das echte Raster (C), `false` ein allgemeines
+   (D) — beim Talker ist beides dasselbe, weil zwei Reihen zu dritt die echte
+   Form sind und nicht eine Andeutung davon. Die freie Ecke oben links ist der
+   Lautsprecher, so wie das Gerät ihn hat und obf.ts ihn exportiert. */
+function mark(made, exact) {
+  const talker = made.target === "diy";
+  const cols = talker ? 3 : (exact ? made.grid.columns : 5);
+  const rows = talker ? 2 : (exact ? made.grid.rows : 3);
+  const node = el("span", "collections__mark");
+  node.setAttribute("aria-hidden", "true");
+  node.style.setProperty("--c", String(cols));
+  node.style.setProperty("--r", String(rows));
+  for (let n = 0; n < cols * rows; n++) {
+    node.appendChild(el("i", talker && n === 0 ? "off" : null));
+  }
+  return node;
+}
+
+/* Der Vorlesetext. Das Zeichen ist aria-hidden, also muss die Zeile selbst
+   sagen, was es zeigt — sonst hört jemand mit Screenreader genau die Zeile,
+   über die diese Seite sich beschwert. */
+function spoken(row, kind) {
+  if (kind === "A") return null;
+  const made = row.made;
+  if (!made) return null;
+  if (made.target === "diy") return "DIY-Talker";
+  if (kind === "E") return null;
+  if (kind === "F") return "App";
+  return "App, " + made.grid.rows + " mal " + made.grid.columns;
+}
+
+function drawRow(row, kind) {
+  const item = el("button", "collections__item");
+  item.type = "button";
+  if (row.id === OPEN) {
+    item.classList.add("collections__item--active");
+    item.setAttribute("aria-current", "true");
+  }
+  const made = row.made;
+  const has = (n) => n !== undefined && n !== null;
+
+  /* Fehlt das Feld, fehlt das Zeichen — und zwar ersatzlos, ohne Lücke, wo
+     eines gestanden hätte. Genau das ist die Behauptung über die API: mitreden
+     und bildhaft übergeben nichts und bekommen die Zeile von heute. */
+  if (made && (kind === "C" || kind === "D" || kind === "F")) item.appendChild(mark(made, kind === "C"));
+
+  if (kind === "B") {
+    const text = el("span", "collections__text");
+    text.appendChild(el("span", "collections__name", row.name));
+    if (made) text.appendChild(el("span", "collections__sub", word(made)));
+    item.appendChild(text);
+  } else {
+    item.appendChild(el("span", "collections__name", row.name));
+  }
+
+  if (kind === "D" && made && made.grid) item.appendChild(el("span", "collections__grid", pair(made)));
+
+  if (has(row.count)) {
+    const count = el("span", "collections__count", String(row.count));
+    if (kind === "E" && made) count.appendChild(el("span", "collections__unit", unit(made, row.count)));
+    item.appendChild(count);
+  }
+
+  const say = spoken(row, kind);
+  if (say) item.setAttribute("aria-description", say);
+  return item;
+}
+
+function rail(rows, kind) {
+  const list = el("div", "collections");
+  list.setAttribute("role", "group");
+  list.setAttribute("aria-label", "Sammlungen");
+  for (const row of rows) list.appendChild(drawRow(row, kind));
+  const box = el("div", "rail");
+  box.appendChild(list);
+  return box;
+}
+
+const CANDIDATES = [
+  ["A", "Heute", "Name und Zahl. 5 und 78 stehen untereinander in einer Spalte, als wären sie vergleichbar."],
+  ["B", "Das Gerät als Wort", "Eine zweite Zeile sagt es aus. Klar zu lesen, und die Liste wird doppelt so hoch."],
+  ["C", "Das Raster gezeichnet", "Ein Zeichen für beides: das Gerät und, bei der App, wie viel auf eine Seite passt."],
+  ["D", "Gerät gezeichnet, Raster benannt", "Das Zeichen sagt nur, welches Gerät. Das Zahlenpaar sagt die Größe — bei jeder Größe."],
+  ["E", "Die Zahl nennt, was sie zählt", "Keine neue Spalte. Die Zahl, die schon da ist, sagt dazu, was sie gezählt hat."],
+  ["F", "Nur das Gerät, gezeichnet", "Wie D, ohne das Zahlenpaar. Die Zeile beantwortet die Gerätefrage und die Rasterfrage gar nicht."],
+];
+
+const band = document.getElementById("band");
+for (const [letter, title, claim] of CANDIDATES) {
+  const col = el("div", "cand");
+  const head = el("h3");
+  head.appendChild(el("span", null, letter));
+  head.appendChild(document.createTextNode(title));
+  col.appendChild(head);
+  col.appendChild(el("p", null, claim));
+  col.appendChild(rail(ROWS, letter));
+  band.appendChild(col);
+}
+
+/* Die Nahaufnahme: dieselben fünf Zeichen zweimal, in Zeilengröße und in der
+   Größe, in der vorlaut sie heute schon zeichnet. */
+const SHAPES = [
+  [{ target: "diy" }, "Talker"],
+  [{ target: "app", grid: { rows: 3, columns: 5 } }, "3 × 5"],
+  [{ target: "app", grid: { rows: 4, columns: 6 } }, "4 × 6"],
+  [{ target: "app", grid: { rows: 5, columns: 8 } }, "5 × 8"],
+  [{ target: "app", grid: { rows: 6, columns: 11 } }, "6 × 11"],
+];
+for (const [where, big] of [["zoom-small", false], ["zoom-big", true]]) {
+  const box = document.getElementById(where);
+  for (const [made, caption] of SHAPES) {
+    const fig = el("figure", big ? "big" : null);
+    fig.appendChild(mark(made, true));
+    fig.appendChild(el("figcaption", null, big ? caption + " bei 62px" : caption + " bei 17px"));
+    box.appendChild(fig);
+  }
+}
+
+/* Der Streifen: die Zustände, und die Liste, die kein Gerät hat. */
+const STRIP = [
+  ["Geschlossen und offen", ROWS.slice(0, 3), "D"],
+  ["Ohne Gerät — mitreden, bildhaft", [
+    { id: "7", name: "Beim Arzt",              count: 14 },
+    { id: "8", name: "Einkaufen mit Papa",     count: 3 },
+    { id: "9", name: "Sammlung vom 25.08.2026" },
+  ], "D"],
+];
+const strip = document.getElementById("strip");
+for (const [title, rows, kind] of STRIP) {
+  const col = el("div");
+  col.appendChild(el("h3", null, title));
+  col.appendChild(rail(rows, kind));
+  strip.appendChild(col);
+}
+
+/* Das Schema. data-theme auf <html>, weil die Token-Datei ihre dunklen Werte
+   dorthin schreibt; „System“ heißt kein Attribut, also prefers-color-scheme. */
+for (const button of document.querySelectorAll(".segmented button")) {
+  button.onclick = () => {
+    for (const other of document.querySelectorAll(".segmented button")) {
+      other.setAttribute("aria-pressed", String(other === button));
+    }
+    const set = button.dataset.set;
+    if (set) document.documentElement.setAttribute("data-theme", set);
+    else document.documentElement.removeAttribute("data-theme");
+  };
+}
+</script>
+</body>
+</html>
