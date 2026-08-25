@@ -1,0 +1,547 @@
+/* vorlaut's two editors, as one design.
+ *
+ * The builder has two of them — a five-key talker and a tablet — written
+ * months apart, and they had drifted into two products sharing a sidebar. This
+ * file is the proposal that they are one: **the same cell, the same grid, the
+ * same property bar**, with the differences reduced to the ones the targets
+ * actually force.
+ *
+ * Tokens and `components.css` only. The literal colours here are the
+ * Fitzgerald key, which is a meaning rather than a theme (design.md §8.2), and
+ * the white behind a pictogram, which is canvas: AAC symbols are drawn for
+ * white and need it in either scheme.
+ *
+ * ## The three decisions this file is arguing for
+ *
+ * **1. The word is always a field, and the field is in the cell.** At rest it
+ * has no border and no fill and reads as a label; focused it becomes an input
+ * where it already was. That is the one thing worth keeping from the talker's
+ * editor, where every key is live and you type on the thing itself. The
+ * tablet's editor put the words in a panel eleven cells away, which is what
+ * made adding fifteen buttons feel like fifteen trips.
+ *
+ * **2. Everything else waits until asked.** The tablet's empty cell is the
+ * model: a dashed outline and a plus, and nothing else. No bordered frame, no
+ * "kein Symbol" placeholder, no picker button, no colour row — the talker's
+ * board showed all of those around four words before anything had been typed.
+ * The picture and the play button appear on hover or focus; the properties
+ * appear in one bar under the grid when a cell is selected.
+ *
+ * **3. One grid, including the hole.** The talker's board is drawn here the
+ * way the device actually is and the way `obf.ts` already exports it — two
+ * rows of three with the top-left corner empty, because that is where the
+ * speaker sits. So the two editors are literally the same component: one of
+ * them has five cells, a hole, and a set key.
+ */
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg); color: var(--text);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One number governs every gutter, the same promise the viewer's board makes:
+   between the strip and the grid, between two cells, and around the outside. */
+:root { --gap: 10px; }
+
+.editor { display: grid; gap: 18px; padding: 18px; max-width: 1180px; margin: 0 auto; }
+
+/* ------------------------------------------------------------- page strip */
+
+/* Identical in both editors, and it has to be: it is the level above the work,
+   which is the level people lose track of. The rail down the leading edge is
+   the screen's own colour — the one the tablet draws around a page and the one
+   the talker draws around all five displays.
+
+   What differs is invisible here and is the reason the two cannot share an
+   implementation: on the talker this order *is* the navigation, because the
+   firmware advances by walking it. On the tablet it is presentation only. */
+.strip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.tab {
+  font: inherit; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  padding: 9px 14px 9px 11px;
+  border: 1px solid transparent; border-left: 4px solid var(--screen, transparent);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2); color: var(--text-dim);
+}
+.tab:hover { color: var(--text); }
+.tab[aria-current="true"] { background: var(--surface); color: var(--text); border-color: var(--line); border-left-color: var(--screen); }
+.tab .home { font-size: 12px; opacity: .7; }
+
+/* ------------------------------------------------------------------ grid */
+
+/* --rows and --cols come off the element, so a board of any shape is the same
+   component with two numbers changed - no breakpoint of its own, which is the
+   promise the export already keeps. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 5), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 3), minmax(0, 1fr));
+  gap: var(--gap);
+}
+
+/* ------------------------------------------------------------------ cell */
+
+.cell {
+  position: relative;
+  display: grid; grid-template-rows: 1fr auto; justify-items: center; align-items: center;
+  gap: 4px; padding: 7px;
+  aspect-ratio: 4 / 3; min-width: 0;
+  border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--tint, var(--surface));
+}
+
+/* A cell with a tint is carrying a word class, and the Fitzgerald key is a
+   light ramp meant to be read over. So its text is ink rather than the theme's
+   --text, in both schemes: the tint does not change when the page does. */
+.cell[style*="--tint"] .cell__field { color: #1a1a1d; }
+
+/* The empty cell, which is the whole restraint argument in one rule: a dashed
+   outline, a plus, nothing else. It is what the tablet's editor already got
+   right and what this design keeps. */
+.cell--empty {
+  background: transparent; border-style: dashed; border-width: 1.5px;
+}
+.cell--empty .cell__add {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-size: 22px; color: var(--text-faint); pointer-events: none;
+}
+.cell--empty:focus-within .cell__add,
+.cell--empty:has(.is-focus) .cell__add,
+.cell--empty:hover .cell__add { opacity: 0; }
+.cell--empty:hover { border-color: var(--text-faint); }
+
+/* The word. A field at all times and a label at rest - no border, no fill, no
+   affordance - so that typing on the thing itself costs no furniture. */
+.cell__field {
+  font: inherit; font-weight: 600; font-size: 14px; line-height: 1.15;
+  width: 100%; text-align: center; padding: 3px 2px;
+  border: 1px solid transparent; border-radius: var(--radius-sm);
+  background: transparent; color: var(--text);
+  text-overflow: ellipsis;
+}
+.cell__field::placeholder { color: var(--text-faint); font-weight: 400; }
+/* `.is-focus` is the same rule under a class, so a static page can show the
+   focused state without stealing the document's focus. Nothing but this mock
+   needs it. */
+.cell__field:focus, .cell__field.is-focus {
+  outline: none;
+  background: var(--surface); color: var(--text);
+  border-color: var(--accent);
+  /* Focused, the field takes the width it needs rather than the width its
+     column happens to be. At eleven columns a cell is 91px, which is no place
+     to type a sentence into - and the alternative, sending the writer to a
+     panel, is the thing this design is undoing. */
+  position: relative; z-index: 3;
+  min-width: 150px;
+  /* The full shadow rather than the small one: this box is over its
+     neighbours, and at eleven columns the cell it is covering is still drawing
+     its own dashed outline and plus. Depth is what says which is on top. */
+  box-shadow: var(--shadow);
+}
+
+.cell__pic {
+  max-width: 100%; max-height: 100%; min-height: 0;
+  object-fit: contain; border-radius: 4px; background: #fff;
+}
+
+/* The picture's absence. A glyph at the contrast of a hint, not a bordered box
+   with the words "kein Symbol" in it - which is what the talker's editor drew,
+   at the size of the picture it did not have. */
+.cell__pic--none {
+  display: grid; place-items: center; width: 100%; height: 100%;
+  color: var(--text-faint); opacity: .45;
+}
+.cell__pic--none svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+.cell:hover .cell__pic--none, .cell:focus-within .cell__pic--none { opacity: .8; }
+
+/* ------------------------------------------------------- the two tools */
+
+/* Hear it, and give it a picture. Both come from the talker's editor, where
+   the play button was a permanent slot on every key; here they are at rest
+   invisible and appear on hover or focus. A tool nobody is reaching for should
+   not be taking room from the word. */
+.cell__tools {
+  position: absolute; inset: 4px 4px auto auto;
+  display: flex;
+  opacity: 0; transition: opacity .12s ease;
+  pointer-events: none;
+}
+.cell:hover .cell__tools, .cell:focus-within .cell__tools,
+.cell.is-selected .cell__tools,
+.cell.show-tools .cell__tools { opacity: 1; pointer-events: auto; }
+
+/* Positioned by itself rather than through a wrapper: with one tool left there
+   is nothing to wrap, and a wrapper was a third row in the cell's grid that
+   took height from the picture. Hidden until the pointer or the keyboard is on
+   the cell - a control nobody is reaching for should not be spending room. */
+.cell > .tool {
+  position: absolute; top: 4px; right: 4px; z-index: 2;
+  opacity: 0; transition: opacity .12s ease;
+}
+.cell:hover > .tool,
+.cell:focus-within > .tool,
+.cell.show-tools > .tool { opacity: 1; }
+.grid--dense .cell > .tool { top: 3px; right: 3px; }
+
+.tool {
+  font: inherit; cursor: pointer;
+  width: 24px; height: 24px; display: grid; place-items: center;
+  border: 0; border-radius: var(--radius-pill);
+  background: var(--surface); color: var(--text-dim);
+  box-shadow: var(--shadow-sm);
+}
+.tool:hover { color: var(--text); }
+.tool svg { width: 13px; height: 13px; fill: none; stroke: currentColor;
+            stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* The tool stays on a dense board, where the earlier draft hid it.
+ *
+ * That draft had two tools competing with the word for a 91px cell and moved
+ * both to the property row. With the sheet carrying the picture there is one
+ * tool left, it only appears under the pointer, and it is a mouse target in an
+ * editor rather than a key a child presses - so 20px is plenty and the reason
+ * for hiding it is gone. */
+.grid--dense .cell__tools { inset: 3px 3px auto 3px; }
+.grid--dense .tool { width: 20px; height: 20px; }
+.grid--dense .tool svg { width: 11px; height: 11px; }
+.grid--dense .cell { aspect-ratio: 1 / 1; padding: 4px; gap: 2px; }
+.grid--dense .cell__field { font-size: 12px; }
+.grid--dense .cell__pic--none svg { width: 18px; height: 18px; }
+
+/* ----------------------------------------------------------- selection */
+
+.cell.is-selected {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* --------------------------------------------------------- the set key */
+
+/* The talker's set key genuinely carries more than a cell: it is the screen's
+   name, its picture and its colour, and on the device it is a display that
+   says where you are as well as the key that moves on. Forcing it into an
+   ordinary cell would lose that.
+
+   So it stays the same cell with two marks - a rail in the screen's colour and
+   an eyebrow naming what it is - and its extra property, the colour, goes
+   where a tablet button's word class goes. Same slot in the same bar, the
+   product's own answer in it. */
+.cell--setkey {
+  border-left: 5px solid var(--screen, var(--accent));
+  background: var(--surface);
+  /* Room for the eyebrow, rather than letting it sit under the picture. In
+     the light scheme the pictogram's white canvas blends into the surface and
+     the overlap is invisible; in the dark one it is a white box over the word
+     SEITENTASTE. Reserved space is the fix that works in both. */
+  padding-top: 18px;
+}
+.cell__eyebrow {
+  position: absolute; top: 5px; left: 8px;
+  font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-faint);
+}
+.cell--setkey .cell__field { font-weight: 700; }
+/* The eyebrow owns the top of this cell, so its tools go to the foot. The
+   alternative - moving the eyebrow - loses the one thing that says at a glance
+   which of the five keys this is. */
+.cell--setkey .cell__tools { inset: auto 4px 4px 4px; }
+
+/* The speaker's corner. Content rather than an accident - somebody's hand
+   learns that the top left is not a key - so it is drawn as absent rather than
+   left out of the markup. */
+.cell--hole { border: 0; background: transparent; }
+.cell--hole span {
+  position: absolute; inset: 0; display: grid; gap: 8px;
+  /* align-content, not place-items: place-items centres each item inside its
+     own track, and with two tracks splitting the cell's height that pushed the
+     glyph and its caption to opposite ends of a 120px box. */
+  align-content: center; justify-items: center;
+  font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-faint); opacity: .6;
+}
+/* A ring with a dot in it, at hint contrast. The word alone read as a caption
+   for something missing; a speaker grille reads as the thing that is there. */
+.cell--hole svg { width: 46px; height: 46px; fill: none; stroke: currentColor; }
+
+/* --------------------------------------------------- the Sammlung's grid */
+
+/* Size presets, for the dialog that makes a Sammlung and for the card that
+   changes one later. Drawn rather than named, because "4 × 6" is a pair of
+   numbers and what somebody is choosing is how much is on a page. */
+.sizes { display: flex; gap: 10px; flex-wrap: wrap; }
+.size {
+  font: inherit; cursor: pointer; display: grid; gap: 7px; justify-items: center;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text-dim);
+}
+.size:hover { border-color: var(--text-faint); }
+.size[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+.size__mini {
+  display: grid; gap: 2px; width: 62px;
+  grid-template-columns: repeat(var(--c), 1fr);
+  grid-template-rows: repeat(var(--r), 1fr);
+}
+.size__mini i { background: currentColor; opacity: .3; aspect-ratio: 4 / 3; border-radius: 1px; }
+.size b { font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.size small { font-size: 11px; }
+
+/* ------------------------------------------------------- property bar */
+
+/* One row, under the grid, and only when something is selected. It holds what
+   a cell cannot: the things that are set once and then left alone.
+
+   The first slot is "what colours this" in both editors - a word class on a
+   tablet button, the screen's colour on a talker's set key. One position, one
+   question, the product's own answer. conventions.md §4's shape. */
+.props {
+  display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--surface);
+}
+.props__what { display: flex; flex-direction: column; }
+.props .lbl { margin-bottom: 5px; }
+.props__spacer { flex: 1 1 auto; }
+
+/* The colour choices, for the set key. The palette that is already in
+   boot_data.ts, as swatches - the talker's editor spent a colour input and a
+   hex field on this, permanently, on every board. */
+.swatches { display: flex; gap: 6px; }
+.swatch {
+  width: 26px; height: 26px; border-radius: var(--radius-sm); cursor: pointer;
+  border: 2px solid transparent; background: var(--pick);
+}
+.swatch[aria-pressed="true"] { border-color: var(--text); }
+
+/* A quiet line where the bar would be, so the grid does not jump by 60px the
+   moment something is selected. */
+.props--none {
+  color: var(--text-dim); font-size: 14px;
+  background: transparent; border-style: dashed;
+}
+
+/* .field is a full-width form control, which is right in a settings sheet and
+   wrong in a row of three. Here each one takes what its longest option needs,
+   so the row stays one line and the destructive button is not pushed onto its
+   own. */
+.props select.field { width: auto; padding: 9px 11px; }
+
+/* =========================================================== the button sheet
+
+   Everything about one button, in one modal, opened by pressing it.
+
+   This replaces the property row above rather than sitting beside it, and it
+   is the simpler answer: the row could only ever hold what fits on one line,
+   which is why the picture and the sound had to stay in the cell and why a
+   dense board had to give its tools up. A sheet has room for all of it at
+   every board size, so the eleven-column case stops being a degradation and
+   becomes the same interaction as the three-column one.
+
+   What it costs is the fast path: fifteen new buttons is fifteen open-type-
+   close cycles rather than fifteen presses and some typing. The mitigation is
+   in the sheet's foot - see the note there - and it is worth stating plainly
+   rather than hiding, because it is the one thing the property row did better.
+
+   The same skeleton serves all three cases. Left column: the picture, its
+   search and the upload, which is the one part that is identical everywhere.
+   Right column: only what that target actually has. */
+
+/* A width override on the shared component, not a redefinition of it: two
+   columns need more than the 600px a sheet of prose wants. Everything else -
+   the head, body and foot anatomy, the border, the shadow - stays
+   components.css's. */
+.sheet--button { max-width: 720px; width: 100%; }
+
+.sheet--button > .body {
+  display: grid; grid-template-columns: 200px 1fr; gap: 22px;
+  color: var(--text); font-size: inherit;
+  padding-top: 14px;
+}
+@media (max-width: 720px) { .sheet--button > .body { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------ the picture */
+
+.pick { display: grid; gap: 10px; align-content: start; }
+
+.pick__preview {
+  /* Wider than tall. A pictogram is square, but a preview that is also square
+     at column width takes a third of the sheet to show something the cell
+     behind the sheet is already showing. */
+  aspect-ratio: 4 / 3; display: grid; place-items: center; overflow: hidden;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: #fff;
+}
+.pick__preview img { width: 100%; height: 100%; object-fit: contain; }
+/* No picture yet. The same hint-contrast glyph the cell uses, at the size the
+   box happens to be - not a bordered placeholder announcing an absence. */
+.pick__preview--none { background: var(--surface-2); color: var(--text-faint); }
+.pick__preview--none svg { width: 40px; height: 40px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+
+/* minmax(0, 1fr) rather than 1fr: a grid track's automatic minimum is its
+   content's min-content width, and a pictogram's is its intrinsic pixel width
+   - so four of them inflated this grid past the column it was given and the
+   fourth hung under the fields beside it. The same trap .sheet's own comment
+   in components.css describes, one level in. */
+.pick__results {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
+  max-height: 150px; overflow-y: auto;
+}
+.pick__hit {
+  padding: 0; cursor: pointer; aspect-ratio: 1;
+  border: 2px solid transparent; border-radius: var(--radius-sm); background: #fff;
+}
+.pick__hit img { width: 100%; height: 100%; object-fit: contain; }
+.pick__hit[aria-pressed="true"] { border-color: var(--accent); }
+.pick__hit:hover { border-color: var(--line); }
+
+/* ------------------------------------------------------------- the fields */
+
+.form { display: grid; gap: 16px; align-content: start; }
+.form__row { display: grid; gap: 6px; }
+/* The spoken text sits next to the way to hear it, because they are one
+   question: does this say the right thing. */
+.form__withplay { display: flex; gap: 8px; align-items: center; }
+.form__withplay .field { flex: 1 1 auto; }
+.form__hint { font-size: 12.5px; color: var(--text-faint); }
+
+/* ----------------------------------------------------------- what it does */
+
+/* Four kinds rather than a flat list of seven, because the flat list mixed two
+   different questions - what a word does, and what a bar control does - and
+   put them in one dropdown where they read as alternatives to each other.
+
+   The first two are the correction this sheet is really making. Both speak;
+   the difference is only whether the word joins the sentence, which is what
+   the labels now say. "In die Satzleiste" against "Sofort sprechen" described
+   an axis that does not exist: the viewer utters an appending button too. */
+.does { display: grid; gap: 8px; }
+.does__opt {
+  display: grid; grid-template-columns: auto 1fr; gap: 3px 10px;
+  padding: 10px 12px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.does__opt:hover { border-color: var(--text-faint); }
+.does__opt:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.does__opt input { grid-row: span 2; align-self: center; accent-color: var(--accent-strong); }
+.does__opt b { font-size: 14px; font-weight: 600; }
+.does__opt small { font-size: 12.5px; color: var(--text-dim); }
+/* What a choice needs once it is chosen, tucked under it rather than in a
+   fifth control that is dead most of the time. */
+.does__more { grid-column: 2; display: none; gap: 8px; margin-top: 8px; }
+.does__opt:has(input:checked) .does__more { display: grid; }
+.does__more label { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-dim); }
+
+/* The foot carries the destructive act on the left, away from the confirming
+   one - and between them the way to keep going, because a board is built in
+   runs and the sheet should not make you re-open it fourteen more times. */
+.sheet--button > .foot { justify-content: space-between; }
+.foot__right { display: flex; align-items: center; gap: 9px; }
+
+/* ================================================ the board, with the sheet
+
+   What is left on the board once a press opens a sheet: less than either
+   earlier draft had.
+
+   The cell stops being a field. It was an input styled to look like a label so
+   that a word could be typed where it sits; with the sheet carrying the word,
+   an input on the board would be a second way to do one thing, and pressing a
+   cell would have to choose between focusing it and opening the sheet. So the
+   cell goes back to being a button, which is what it looks like anyway.
+
+   The two tools go with it, and so does the property row. Nothing is left on
+   the board that is not the board. */
+
+/* The cell is not itself a button, and that is a correction rather than a
+   style. It held a play control, and a control inside a control is invalid
+   markup and unreachable to a keyboard: nothing can focus the inner one.
+   So the cell is a box holding two real buttons - one filling it, which opens
+   the sheet, and one in the corner, which plays. A press anywhere else on the
+   cell lands on the first. */
+.cell__open {
+  position: absolute; inset: 0; z-index: 1;
+  border: 0; border-radius: inherit; background: transparent;
+  cursor: pointer; font: inherit;
+}
+.cell:has(.cell__open:hover) { border-color: var(--text-faint); }
+.cell__open:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cell__pic, .cell__word { position: relative; pointer-events: none; }
+
+/* The word as text rather than as a value in a box. Same size and weight the
+   field had, so the board does not change shape between the two drafts. */
+/* Two lines, then an ellipsis.
+ *
+ * AsTeRICS Grid's TextConfig offers three answers to a label that does not fit
+ * - shrink to fit, truncate, ellipsis - and defaults to one line and shrink.
+ * Two lines and an ellipsis is the better default here: at eleven columns a
+ * cell is 91px, and shrinking "Ich habe Durst" to fit one line of that makes
+ * type nobody can read, while truncating loses the end of the sentence with no
+ * sign that anything is missing. Which of the three it is could become a
+ * setting later; it should not be one before somebody wants it. */
+.cell__word {
+  font-weight: 600; font-size: 14px; line-height: 1.2;
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis;
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  overflow-wrap: anywhere;
+}
+
+/* A button with a word and no picture is its own thing, not a cell missing
+   something. AsTeRICS Grid sets text-only buttons at 35% of cell height
+   against 15% with a picture - more than twice - and that ratio is what makes
+   them read as deliberate. There is no placeholder glyph here for the same
+   reason: an empty picture slot on a board is furniture announcing an absence,
+   and the way to add one is a press away in the sheet. */
+.cell--words { grid-template-rows: 1fr; }
+.cell--words .cell__word { font-size: 21px; -webkit-line-clamp: 3; }
+.grid--dense .cell--words .cell__word { font-size: 15px; }
+.cell[style*="--tint"] .cell__word { color: #1a1a1d; }
+.grid--dense .cell__word { font-size: 12px; -webkit-line-clamp: 2; }
+
+/* A page has no cell on a tablet - its name and colour belong to nothing on
+   the board - so the current tab carries the way in. The same ⋯ the work head
+   uses for a Sammlung, one level down, on the thing it acts on. */
+.tab__more {
+  border: 0; background: transparent; color: var(--text-faint);
+  cursor: pointer; font: inherit; line-height: 1; padding: 0 2px;
+  border-radius: var(--radius-sm);
+}
+.tab__more:hover { color: var(--text); background: var(--surface-3); }
+
+/* ------------------------------------------------------------- the scrim */
+
+/* components.css settles the sheet and says the backdrop weight is deliberately
+   left to the product - the audit left that fork open. This is vorlaut's
+   answer, and the reason is the board: the thing behind this sheet is a grid of
+   coloured cells, and a light scrim over it leaves the Fitzgerald tints reading
+   as slightly-wrong colours rather than as out of play. */
+.stage { position: relative; border-radius: var(--radius); overflow: hidden; }
+.stage__scrim {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  background: rgba(12, 10, 20, .55);
+  padding: 20px;
+}
+
+
+/* ------------------------------------------------- colour, as a preference
+
+   Word-class colour is switched off in plenty of real boards, and the software
+   families use treats it as a preference rather than a rule: AsTeRICS Grid
+   carries `colorSchemesActivated` beside a `colorMode` of background, border
+   or both. Three states, one per Sammlung, and the same three here.
+
+   Off is not "no colour" - a page still has its own, drawn round the board -
+   it is "no colour that means a word class". Which is the distinction the two
+   schemes have to keep apart anyway. */
+.grid--plain .cell { background: var(--surface); }
+.grid--plain .cell--empty { background: transparent; }
+.grid--plain .cell__word { color: var(--text); }
+
+.grid--edge .cell { background: var(--surface); border-color: var(--tint, var(--line)); border-width: 3px; }
+.grid--edge .cell--empty { background: transparent; border-color: var(--line); border-width: 1.5px; }
+.grid--edge .cell__word { color: var(--text); }

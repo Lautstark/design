@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — die beiden Editoren als ein Entwurf</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="editor.css">
+<style>
+/* The sheet around the mocks. Not part of the design being proposed - it is
+   the paper the panels are pinned to, so it stays out of editor.css. */
+/* Wide, because two editors side by side is the whole point and each of them
+   has to have something like the width it really gets. A real content column
+   is ~1100px; halving 1240 gave each side 560 and made the property row wrap,
+   which is the mock lying about the design rather than the design being
+   wrong. */
+.sheet-wrap { max-width: 1560px; margin: 0 auto; padding: 40px 24px 80px; }
+.sheet-wrap h1 { font-size: 30px; margin: 0 0 10px; font-weight: 600; }
+.sheet-wrap .lede { max-width: 64ch; color: var(--text-dim); margin: 0 0 8px; font-size: 16px; }
+.panel { margin-top: 44px; }
+.panel > h2 {
+  font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-strong); margin: 0 0 4px;
+}
+.panel > p { margin: 0 0 16px; color: var(--text-dim); font-size: 15px; max-width: 68ch; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+@media (max-width: 940px) { .two { grid-template-columns: 1fr; } }
+.side { border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); }
+.side > h3 {
+  margin: 0; padding: 11px 16px; border-bottom: 1px solid var(--line);
+  font-size: 13px; font-weight: 600; color: var(--text-dim);
+  display: flex; align-items: center; gap: 9px;
+}
+.who {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: var(--radius-sm);
+}
+.who--diy { background: var(--surface-3); color: var(--text); }
+.who--app { background: var(--accent-soft); color: var(--accent-strong); }
+.side .editor { padding: 16px; }
+.anatomy { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; max-width: 760px; }
+.anatomy figure { margin: 0; display: grid; gap: 8px; }
+.anatomy figcaption { font-size: 12.5px; color: var(--text-dim); }
+.anatomy figcaption b { display: block; color: var(--text); font-size: 13px; margin-bottom: 2px; }
+.note { font-size: 14px; color: var(--text-dim); margin: 14px 0 0; max-width: 70ch; }
+.note code { font-family: var(--mono); font-size: .92em; }
+</style>
+</head>
+<body>
+<div class="sheet-wrap">
+
+  <h1>Die beiden Editoren als ein Entwurf</h1>
+  <p class="lede">
+    Dieselbe Zelle, dasselbe Raster, dieselbe Eigenschaftszeile. Vom Tablet-Editor
+    bleibt die Ruhe: gestrichelte leere Zelle, ein Pluszeichen, sonst nichts. Vom
+    Talker-Editor bleibt, dass man dort tippt, wo die Sache ist — und die
+    Vorhör-Taste.
+  </p>
+  <p class="lede">
+    Nichts hiervon ist gebaut. <code>editor.css</code> daneben trägt die Begründung
+    zu jeder Regel.
+  </p>
+
+  <!-- ============================================================ anatomy -->
+  <section class="panel">
+    <h2>Die Zelle</h2>
+    <p>
+      Vier Zustände. Alles andere folgt daraus — beide Editoren zeichnen nur noch
+      diese Zelle, in unterschiedlich großen Rastern.
+    </p>
+    <div class="anatomy">
+
+      <figure>
+        <div class="grid" style="--cols:1; --rows:1">
+          <div class="cell cell--empty">
+            <input class="cell__field" aria-label="Taste anlegen">
+            <span class="cell__add" aria-hidden="true">+</span>
+          </div>
+        </div>
+        <figcaption><b>Leer</b>Gestrichelt, ein Plus. Keine Rahmen, keine Platzhalter, keine Knöpfe.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="grid" style="--cols:1; --rows:1">
+          <div class="cell cell--empty">
+            <input class="cell__field is-focus" value="trinken" aria-label="Aufschrift">
+          </div>
+        </div>
+        <figcaption><b>Im Tippen</b>Ein Druck, und die Zelle ist das Feld. Der Text wird dort geschrieben, wo er hingehört.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="grid" style="--cols:1; --rows:1">
+          <div class="cell" style="--tint:#c7f3c7">
+            <img class="cell__pic" src="symbols/6061.png" alt="">
+            <input class="cell__field" value="trinken" aria-label="Aufschrift">
+            <span class="cell__tools">
+              <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+              <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+            </span>
+          </div>
+        </div>
+        <figcaption><b>Gefüllt</b>Bild, Wort, Wortart als Fläche. Die beiden Werkzeuge erscheinen unter dem Zeiger.</figcaption>
+      </figure>
+
+      <figure>
+        <div class="grid" style="--cols:1; --rows:1">
+          <div class="cell is-selected" style="--tint:#c7f3c7">
+            <img class="cell__pic" src="symbols/6061.png" alt="">
+            <input class="cell__field" value="trinken" aria-label="Aufschrift">
+            <span class="cell__tools">
+              <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+              <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+            </span>
+          </div>
+        </div>
+        <figcaption><b>Gewählt</b>Ein Ring, und unter dem Raster erscheint die Eigenschaftszeile.</figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- ============================================================== empty -->
+  <section class="panel">
+    <h2>1 — Leer</h2>
+    <p>Neue Sammlung, nichts getippt. Beide zeigen die Form, die zu füllen ist, und sonst nichts.</p>
+    <div class="two">
+
+      <div class="side">
+        <h3><span class="who who--diy">Talker</span> 2 × 3, wie das Gerät wirklich ist</h3>
+        <div class="editor">
+          <div class="strip">
+            <button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB">Seite 1</button>
+            <button class="btn quiet" type="button">+ Neue Seite</button>
+          </div>
+          <div class="grid" style="--cols:3; --rows:2">
+            <div class="cell cell--hole"><span>Lautsprecher</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--setkey" style="--screen:#3B5BDB">
+              <span class="cell__eyebrow">Seitentaste</span>
+              <span class="cell__pic--none"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></span>
+              <input class="cell__field" placeholder="Name der Seite" aria-label="Name der Seite">
+            </div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          </div>
+          <div class="props props--none">Keine Taste gewählt.</div>
+        </div>
+      </div>
+
+      <div class="side">
+        <h3><span class="who who--app">Tablet</span> 3 × 5</h3>
+        <div class="editor">
+          <div class="strip">
+            <button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Seite 1</button>
+            <button class="btn quiet" type="button">+ Neue Seite</button>
+          </div>
+          <div class="grid" style="--cols:5; --rows:3">
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          </div>
+          <div class="props props--none">Keine Taste gewählt.</div>
+        </div>
+      </div>
+
+    </div>
+    <p class="note">
+      Der Talker zeigt jetzt das Loch, wo der Lautsprecher sitzt — das ist Inhalt,
+      keine Auslassung, und <code>obf.ts</code> exportiert das Raster längst so.
+      Damit sind beide Editoren dieselbe Komponente: einer hat fünf Zellen, ein
+      Loch und eine Seitentaste.
+    </p>
+  </section>
+
+  <!-- ======================================================= mid-authoring -->
+  <section class="panel">
+    <h2>2 — Beim Schreiben</h2>
+    <p>Ein paar Zellen gefüllt, in eine wird gerade getippt. Das Feld nimmt sich die Breite, die es braucht.</p>
+    <div class="two">
+
+      <div class="side">
+        <h3><span class="who who--diy">Talker</span></h3>
+        <div class="editor">
+          <div class="strip">
+            <button class="tab" type="button" aria-current="true" style="--screen:#159947">Morgens</button>
+            <button class="tab" type="button" style="--screen:#9B7BFF">Spielen</button>
+            <button class="btn quiet" type="button">+ Neue Seite</button>
+          </div>
+          <div class="grid" style="--cols:3; --rows:2">
+            <div class="cell cell--hole"><span>Lautsprecher</span></div>
+            <div class="cell">
+              <img class="cell__pic" src="symbols/6632.png" alt="">
+              <input class="cell__field" value="ich" aria-label="Aufschrift">
+              <span class="cell__tools">
+                <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+                <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+              </span>
+            </div>
+            <div class="cell cell--empty">
+              <input class="cell__field is-focus" value="Ich habe Durst" aria-label="Aufschrift">
+            </div>
+            <div class="cell cell--setkey" style="--screen:#159947">
+              <span class="cell__eyebrow">Seitentaste</span>
+              <img class="cell__pic" src="symbols/8195.png" alt="">
+              <input class="cell__field" value="Morgens" aria-label="Name der Seite">
+            </div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          </div>
+          <div class="props props--none">Keine Taste gewählt.</div>
+        </div>
+      </div>
+
+      <div class="side">
+        <h3><span class="who who--app">Tablet</span></h3>
+        <div class="editor">
+          <div class="strip">
+            <button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Morgens</button>
+            <button class="tab" type="button" style="--screen:#159947">Essen</button>
+            <button class="btn quiet" type="button">+ Neue Seite</button>
+          </div>
+          <div class="grid" style="--cols:5; --rows:3">
+            <div class="cell" style="--tint:#fdfd96">
+              <img class="cell__pic" src="symbols/6632.png" alt="">
+              <input class="cell__field" value="ich" aria-label="Aufschrift">
+              <span class="cell__tools">
+                <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+                <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+              </span>
+            </div>
+            <div class="cell" style="--tint:#c7f3c7">
+              <img class="cell__pic" src="symbols/5441.png" alt="">
+              <input class="cell__field" value="will" aria-label="Aufschrift">
+            </div>
+            <div class="cell cell--empty">
+              <input class="cell__field is-focus" value="Ich habe Durst" aria-label="Aufschrift">
+            </div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell" style="--tint:#ffda89">
+              <img class="cell__pic" src="symbols/2462.png" alt="">
+              <input class="cell__field" value="Apfel" aria-label="Aufschrift">
+            </div>
+            <div class="cell" style="--tint:#84b6f4">
+              <span class="cell__pic--none"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></span>
+              <input class="cell__field" value="mehr" aria-label="Aufschrift">
+            </div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          </div>
+          <div class="props props--none">Keine Taste gewählt.</div>
+        </div>
+      </div>
+
+    </div>
+    <p class="note">
+      Fünfzehn Tasten anlegen heißt fünfzehnmal drücken und tippen, ohne dass der
+      Blick das Raster verlässt. Das Bild kommt danach, wenn überhaupt — die Zelle
+      ohne Bild („mehr“) zeigt nur einen Hinweis in Hinweis-Kontrast.
+    </p>
+  </section>
+
+  <!-- =========================================================== selected -->
+  <section class="panel">
+    <h2>3 — Eine Taste gewählt</h2>
+    <p>
+      Die Eigenschaftszeile erscheint unter dem Raster. Der erste Platz ist in beiden
+      Editoren dieselbe Frage — <em>was färbt das hier</em> — mit der Antwort des
+      jeweiligen Geräts darin.
+    </p>
+    <div class="two">
+
+      <div class="side">
+        <h3><span class="who who--diy">Talker</span> Seitentaste gewählt</h3>
+        <div class="editor">
+          <div class="strip">
+            <button class="tab" type="button" aria-current="true" style="--screen:#159947">Morgens</button>
+            <button class="tab" type="button" style="--screen:#9B7BFF">Spielen</button>
+            <button class="btn quiet" type="button">+ Neue Seite</button>
+          </div>
+          <div class="grid" style="--cols:3; --rows:2">
+            <div class="cell cell--hole"><span>Lautsprecher</span></div>
+            <div class="cell">
+              <img class="cell__pic" src="symbols/6632.png" alt="">
+              <input class="cell__field" value="ich" aria-label="Aufschrift">
+            </div>
+            <div class="cell">
+              <img class="cell__pic" src="symbols/6061.png" alt="">
+              <input class="cell__field" value="Ich habe Durst" aria-label="Aufschrift">
+            </div>
+            <div class="cell cell--setkey is-selected" style="--screen:#159947">
+              <span class="cell__eyebrow">Seitentaste</span>
+              <img class="cell__pic" src="symbols/8195.png" alt="">
+              <input class="cell__field" value="Morgens" aria-label="Name der Seite">
+              <span class="cell__tools">
+                <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+                <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+              </span>
+            </div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          </div>
+          <div class="props">
+            <div class="props__what">
+              <span class="lbl">Farbe der Seite</span>
+              <div class="swatches">
+                <button class="swatch" type="button" style="--pick:#3B5BDB" aria-label="Blau"></button>
+                <button class="swatch" type="button" style="--pick:#159947" aria-pressed="true" aria-label="Grün"></button>
+                <button class="swatch" type="button" style="--pick:#9B7BFF" aria-label="Violett"></button>
+                <button class="swatch" type="button" style="--pick:#FF8BC7" aria-label="Rosa"></button>
+                <button class="swatch" type="button" style="--pick:#FF6B35" aria-label="Orange"></button>
+              </div>
+            </div>
+            <div class="props__spacer"></div>
+            <button class="btn destructive" type="button">Seite löschen</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="side">
+        <h3><span class="who who--app">Tablet</span> Navigationstaste gewählt</h3>
+        <div class="editor">
+          <div class="strip">
+            <button class="tab" type="button" aria-current="true" style="--screen:#3B5BDB"><span class="home">⌂</span>Morgens</button>
+            <button class="tab" type="button" style="--screen:#159947">Essen</button>
+            <button class="btn quiet" type="button">+ Neue Seite</button>
+          </div>
+          <div class="grid" style="--cols:5; --rows:3">
+            <div class="cell" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6632.png" alt=""><input class="cell__field" value="ich" aria-label="Aufschrift"></div>
+            <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/5441.png" alt=""><input class="cell__field" value="will" aria-label="Aufschrift"></div>
+            <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2462.png" alt=""><input class="cell__field" value="Apfel" aria-label="Aufschrift"></div>
+            <div class="cell is-selected" style="--tint:#d8af97">
+              <img class="cell__pic" src="symbols/6456.png" alt="">
+              <input class="cell__field" value="Essen" aria-label="Aufschrift">
+              <span class="cell__tools">
+                <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+                <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+              </span>
+            </div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell" style="--tint:#84b6f4"><span class="cell__pic--none"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></span><input class="cell__field" value="mehr" aria-label="Aufschrift"></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell" style="--tint:#bdbfbf"><input class="cell__field" value="Sprich" aria-label="Aufschrift"></div>
+            <div class="cell" style="--tint:#bdbfbf"><input class="cell__field" value="Weg" aria-label="Aufschrift"></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+            <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          </div>
+          <div class="props">
+            <div class="props__what">
+              <span class="lbl">Wortart</span>
+              <select class="field"><option>Kategorie</option><option>Nomen</option><option>Verb</option></select>
+            </div>
+            <div class="props__what">
+              <span class="lbl">Beim Drücken</span>
+              <select class="field"><option>Zu einer Seite</option><option>In die Satzleiste</option><option>Sofort sprechen</option></select>
+            </div>
+            <div class="props__what">
+              <span class="lbl">Zielseite</span>
+              <select class="field"><option>Essen</option><option>Morgens</option><option>Neue Seite …</option></select>
+            </div>
+            <div class="props__spacer"></div>
+            <button class="btn destructive" type="button">Taste löschen</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p class="note">
+      Was die Zeile trägt, ist das, was einmal eingestellt und dann in Ruhe gelassen
+      wird. Aufschrift und Bild stehen nicht darin — die bleiben in der Zelle.
+      Die Seitentaste behält ihre eigene Form (Farbschiene, Augenbraue) und gibt nur
+      die Farbe an die Zeile ab, statt eine Farbzeile und ein Hex-Feld dauerhaft auf
+      dem Brett stehen zu lassen.
+    </p>
+  </section>
+
+  <!-- ============================================================== dense -->
+  <section class="panel">
+    <h2>4 — Dicht</h2>
+    <p>
+      Dasselbe Raster bei 6 und bei 11 Spalten. Ab acht Spalten wandern die beiden
+      Werkzeuge in die Eigenschaftszeile; das Wort bleibt in der Zelle, und beim
+      Tippen nimmt sich das Feld die Breite, die es braucht.
+    </p>
+
+    <div class="side" style="margin-bottom:22px">
+      <h3><span class="who who--app">Tablet</span> 3 × 6 — noch alles in der Zelle</h3>
+      <div class="editor">
+        <div class="grid" style="--cols:6; --rows:3">
+          <div class="cell show-tools" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6632.png" alt=""><input class="cell__field" value="ich" aria-label="Aufschrift">
+            <span class="cell__tools">
+              <button class="tool" type="button" aria-label="Vorhören"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></button>
+              <button class="tool" type="button" aria-label="Bild wählen"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/></svg></button>
+            </span>
+          </div>
+          <div class="cell" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6625.png" alt=""><input class="cell__field" value="du" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/5441.png" alt=""><input class="cell__field" value="will" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6456.png" alt=""><input class="cell__field" value="essen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6061.png" alt=""><input class="cell__field" value="trinken" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#84b6f4"><img class="cell__pic" src="symbols/5508.png" alt=""><input class="cell__field" value="mehr" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2462.png" alt=""><input class="cell__field" value="Apfel" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/32464.png" alt=""><input class="cell__field" value="Wasser" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2458.png" alt=""><input class="cell__field" value="Mama" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#fdcae1"><img class="cell__pic" src="symbols/5526.png" alt=""><input class="cell__field" value="nein" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#fdcae1"><img class="cell__pic" src="symbols/8195.png" alt=""><input class="cell__field" value="bitte" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/23392.png" alt=""><input class="cell__field" value="spielen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/8142.png" alt=""><input class="cell__field" value="gehen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6564.png" alt=""><input class="cell__field" value="sehen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2269.png" alt=""><input class="cell__field" value="Fußball" aria-label="Aufschrift"></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <h3><span class="who who--app">Tablet</span> 6 × 11 — Werkzeuge in der Zeile, Feld wächst beim Tippen</h3>
+      <div class="editor">
+        <div class="grid grid--dense" style="--cols:11; --rows:3">
+          <div class="cell" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6632.png" alt=""><input class="cell__field" value="ich" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#fdfd96"><img class="cell__pic" src="symbols/6625.png" alt=""><input class="cell__field" value="du" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/5441.png" alt=""><input class="cell__field" value="will" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6456.png" alt=""><input class="cell__field" value="essen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6061.png" alt=""><input class="cell__field" value="trinken" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#84b6f4"><img class="cell__pic" src="symbols/5508.png" alt=""><input class="cell__field" value="mehr" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2462.png" alt=""><input class="cell__field" value="Apfel" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/32464.png" alt=""><input class="cell__field" value="Wasser" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2458.png" alt=""><input class="cell__field" value="Mama" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#fdcae1"><img class="cell__pic" src="symbols/5526.png" alt=""><input class="cell__field" value="nein" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#fdcae1"><img class="cell__pic" src="symbols/8195.png" alt=""><input class="cell__field" value="bitte" aria-label="Aufschrift"></div>
+
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/23392.png" alt=""><input class="cell__field" value="spielen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/8142.png" alt=""><input class="cell__field" value="gehen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#c7f3c7"><img class="cell__pic" src="symbols/6564.png" alt=""><input class="cell__field" value="sehen" aria-label="Aufschrift"></div>
+          <div class="cell" style="--tint:#ffda89"><img class="cell__pic" src="symbols/2269.png" alt=""><input class="cell__field" value="Fußball" aria-label="Aufschrift"></div>
+          <div class="cell cell--empty"><input class="cell__field is-focus" value="Ich habe Durst" aria-label="Aufschrift"></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+          <div class="cell cell--empty"><input class="cell__field" aria-label="Aufschrift"><span class="cell__add" aria-hidden="true">+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="note">
+      Nur drei Zeilen gezeigt, damit die Zellbreite zu sehen ist — bei elf Spalten
+      sind es 91 px. Das Wort bleibt lesbar, das Bild wird klein aber erkennbar, und
+      das fokussierte Feld legt sich über seine Nachbarn statt in einer 91-px-Spalte
+      zu ersticken.
+    </p>
+  </section>
+
+</div>
+</body>
+</html>
