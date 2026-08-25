@@ -1,4 +1,4 @@
-# vorlaut — board screen mock
+# vorlaut — mocks
 
 `vorlaut-board.html` is the board screen, drawn with `tokens/vorlaut.css` and
 nothing else. It exists so the screen can be argued about before it is built in
@@ -71,3 +71,36 @@ The wording is German throughout, matching the board. vorlaut is bilingual on
 the web (`TEXTS` in `boot_data.ts` carries `de` and `en` behind a picker) and
 the Android viewer currently is not: its chrome is hardcoded English over
 German package content. Whatever these screens become, they need the pair.
+
+## The two editors
+
+`vorlaut-editor.html` is a different kind of mock from the five above. Those
+draw a screen that exists; this one draws a proposal, and it is here rather
+than in the product because the argument is about pixels and a round trip
+through two TypeScript editors is the expensive way to have it.
+
+The builder has two editors — a five-key talker and a tablet — written months
+apart, and side by side they read as two products sharing a sidebar. The
+proposal is that they are one: **the same cell, the same grid, the same
+property row**, with the differences cut down to the ones the targets force.
+
+Three decisions, each argued at the rule in `editor.css`:
+
+1. **The word is always a field, and the field is in the cell.** A label at
+   rest, an input when focused, in place. Kept from the talker, where every key
+   is live; the tablet had put the words in a panel eleven cells away.
+2. **Everything else waits until asked.** Kept from the tablet: a dashed
+   outline and a plus, and nothing else. The picture and the play button appear
+   under the pointer; the properties appear in one row under the grid.
+3. **One grid, including the hole.** The talker is drawn the way the device is
+   and the way `obf.ts` already exports it — two rows of three with the
+   speaker's corner empty. So both editors are literally the same component.
+
+The talker's set key is the one thing not forced into an ordinary cell. It
+carries a screen's name, picture *and* colour, and on the device it says where
+you are as well as moving on. It keeps a colour rail and an eyebrow, and hands
+its one extra property to the row — the same slot a tablet button gives its
+word class. One position, one question, the product's own answer in it.
+
+Nothing here is built. `--rows` and `--cols` sit on each `.grid`, so any board
+in it can be re-shaped in place.
