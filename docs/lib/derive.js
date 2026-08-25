@@ -72,6 +72,12 @@ const NON_COLOUR = {
   'radius-item': '7px',
   font: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
   mono: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace',
+  /* The other half of the typographic contract, and it is here because --font
+     alone was not enough to keep the three the same size. Two products set
+     1.55 and one 1.45, so a row built from the *same* shared rules came out
+     1.4px shorter in one of them - a difference nothing could be wrong
+     against, because there was no value to disagree with. */
+  leading: '1.55',
 };
 
 const SHADOW = {
