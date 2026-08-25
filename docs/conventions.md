@@ -241,9 +241,7 @@ request — a digest, a fetch, a timer — commits it underneath code that belie
 it is still inside one. `idb` does not remove the rule, but it is one place
 where the rule is understood rather than three.
 
-**Diverging: mitreden** (uses `idb`, but keeps collections and phrases as two
-JSON arrays under keys in a `meta` store, so it has the library it declared and
-none of the indexes).
+**Diverging: nobody**, as of 2026-08-24.
 
 vorlaut moved on 2026-08-24, from hand-rolled request callbacks and a single
 `content` store holding the registry as one record with every layout beside it
@@ -257,6 +255,26 @@ was optional while being an index key, which does not mis-sort a record, it
 leaves it out of the index. Neither is a thing a hand-rolled store could have
 said. There was no migration and no carrying-across: the upgrade drops every
 store it finds, which is the rule about the rules above.
+
+mitreden moved the same day, and was the more interesting half: it had used
+`idb` since the day its storage was written, so nothing about the library was
+missing — the whole library simply sat in a `meta` store as two JSON arrays,
+one under `phrases` and one under `collections`. It had the dependency it
+declared and none of the indexes, which is the case this rule exists to name.
+The membership index is the one that pays here, and it pays because of §4.1:
+mitreden is the product whose arity is *many*, a sentence is in the morning
+Sammlung and the nursery one at once, and that is precisely the shape a
+multiEntry index is for and a filter over everything is worst at. The other
+reader is §1.8's count, which had meant loading every sentence to tally.
+
+Its storage layer also carries the answer to a question the rule does not ask
+and every adopter will meet: an index key has to be *in* the record, and the
+two things mitreden sorts and looks up by — the normalised text, and the order
+the Sammlungen were made in — were not fields the program had. They live in the
+stored record and are stripped on the way out, so the types above the storage
+layer are unchanged and no Sicherung carries them. That last part is worth
+copying rather than the mechanism: a bookkeeping field that leaks is a field
+nobody meant to publish, sitting in a file somebody keeps for years.
 
 ### 2.2 Every write that changes what a Sicherung holds says so, at the write
 
@@ -682,12 +700,15 @@ not more agreement about rows. It is the DOM-ownership question being settled in
 merits; the shell is not the reason to do them.
 
 **Related, and not an extraction.** §2.1 asked two products to move to `idb`
-with real stores; vorlaut did on 2026-08-24 and mitreden has not. Nothing shared
-comes out of it, so it is not on this list. It used to be filed here as
-something the Sammlung shell wanted done first, which no longer means anything
-now that the shell is not being built — but mitreden's storage is still owed on
-§2.1's own argument, and it is one of the two things above that would reopen
-this question.
+with real stores; both did, on 2026-08-24, and that rule now has nobody
+diverging. Nothing shared came out of it, which is why it was never on this
+list. It used to be filed here as something the Sammlung shell wanted done
+first — and now that it is done, it is worth saying plainly that it did not
+change the answer above: all three products keep their libraries in indexed
+stores and the shell is still not extractable, because what stopped it was
+never the storage. It was the three sidebars, the DOM-ownership question and
+the layering disagreement. One of the two things that would reopen this has
+happened; the other has not.
 
 ---
 
