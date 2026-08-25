@@ -557,30 +557,33 @@ panels with. All three carry a test that opens a second panel and asserts the
 first closed, because nothing else in a suite references an attribute like this
 one and a green suite is what let two of them go without it for so long.
 
-### 3.6 The overflow menu is `⋯`, and it holds what acts on the whole Sammlung
+### 3.6 The overflow menu is `⋯`, and it holds what belongs to the whole Sammlung
 
 Anchored to its trigger, `role="menu"`, focus moves into it on open and returns
 to the trigger on Escape or on choosing. Contents, in order: export, then
 whatever this Sammlung is itself set to, then delete, marked destructive.
 
-**Why.** The two acts that apply to a Sammlung as a whole are rare enough that
-neither earns a permanent button and consequential enough that neither should be
-hard to find; a menu beside the name is where a thing's own acts belong.
-design.md §3.6 settles the glyph.
+**Why.** What applies to a Sammlung as a whole — the acts on it, and what it is
+set to — is rare enough that none of it earns a permanent button, and
+consequential enough that none of it should be hard to find. A menu beside the
+name is where both belong, and for one reason rather than two: each is answered
+by *which* Sammlung the menu is beside, which is §3.10's test read off the page
+instead of out of a store. design.md §3.6 settles the glyph.
 
-**And its own settings, not only its acts.** This section said *acts* from the
-day it was written, and a settings surface is not one — read strictly, what is
-true of one particular Sammlung had nowhere on the page to be, which is how it
-ends up in the app's sheet instead (§3.10). vorlaut's tablet editor has been
-stretching the sentence for as long as it has existed and the document never
-noticed: `collectionMenuExtras()` hands the shell a *Raster* card from
-`editor-app/editor.ts` — grid size, the shared first column, the colour of a
-word class — and the card's own note says why it belongs to the Sammlung and
-not to the page, because a key that lies in the same place on every page is a
-fact about the whole layout. That was right, and it is the shape the rest of it
-takes. So the menu holds what a Sammlung *is* as well as what can be done to it,
-and the ordering above is what keeps the two legible: the exports first, the
-settings under them, the delete last wherever it appears.
+**Amended 2026-08-25: settings as well as acts, and the heading with them.**
+This section said *acts* alone from the day it was written, and a settings
+surface is not one — read strictly, what is true of one particular Sammlung had
+nowhere on the page to be, which is how it ends up in the app's sheet instead
+(§3.10). vorlaut's tablet editor has been stretching the sentence for as long
+as it has existed and the document never noticed: `collectionMenuExtras()`
+hands the shell a *Raster* card from `editor-app/editor.ts` — grid size, the
+shared first column, the colour of a word class — and the card's own note says
+why it belongs to the Sammlung and not to the page, because a key that lies in
+the same place on every page is a fact about the whole layout. That was right,
+and it is the shape the rest of it takes. So the menu holds what a Sammlung
+*is* as well as what can be done to it, and the ordering above is what keeps
+the two legible: the exports first, the settings under them, the delete last
+wherever it appears.
 
 **The keyboard contract, which no product implements and all three have.** A
 menu is not a `<div>` of buttons that happens to be visible: `@lautstark/design/menu`
@@ -600,6 +603,19 @@ looking correct. The behaviour is the convention; the package is how it is kept.
 kept its export in a settings panel; both of its exports are in the `⋯` now,
 above the delete, and the settings panel holds only the way *in* — importing is
 not an act on one particular Sammlung.
+
+**And a third one, which is why that line says "both of its exports" and not
+"everything it writes".** The sweep for §3.10 found vorlaut's *Gerät* panel
+writing the open Sammlung's build into a folder — an act on one particular
+Sammlung, in the sheet, which is the arrangement the paragraph above reports as
+finished. It is named here rather than counted as a divergence, because unlike
+the two exports it is not obvious that moving it would improve anything: its own
+note says what it is for — the files the talker reads, in the shape
+`tools/serialcheck.html` can send and `mklittlefs` can turn into an image — and
+it exists for the machine where the cable is not working. An act whose whole
+purpose is that the ordinary route has failed is a poor test of a rule about
+where the ordinary route lives. Left open on the page rather than resolved in
+silence, which is what "the divergence lists go stale in hours" asks for.
 
 ### 3.7 A folder the browser has taken access to is a warning, not a note
 
@@ -879,14 +895,6 @@ hit. mitreden's five panels and bildhaft's five are about the installation
 throughout. bildhaft's print settings are the near miss and they pass rather
 than escape: they live in `AppSettings`, they are the same for every Sammlung,
 and they put nothing on a sentence.
-
-**One thing the same sweep turned up that is not this rule's**, recorded so the
-next reader does not have to find it twice: vorlaut's *Gerät* panel writes the
-open Sammlung's build into a folder, which is an act on one Sammlung rather
-than a setting of one, sitting in the sheet that §3.6 says such acts leave. Its
-own note argues it is the way in that stays open when the cable is wrong, which
-may well be an exception worth keeping. That is §3.6's question and not this
-one's, and it is written down here rather than answered.
 
 ---
 
