@@ -180,13 +180,32 @@ selecting is the half that is easy to leave out and is the whole difference
 between a suggestion and a thing that has to be deleted first: an unselected
 default name is a small chore charged on every creation.
 
-**Diverging: nobody**, as of 2026-08-24. vorlaut was named here for `"Board 1"`,
-focused but not selected; it names for the day and selects, and did so from the
-commit that gave it a list of Sammlungen to name at all — the same one that
-spent §1.4's entry. It uniquifies by minting a fresh id rather than by ` (2)`,
-because two of its Sammlungen may genuinely share a name and the identity is
-never the name (§1.1); what the rule is about is the suggestion, not the
-uniqueness.
+**Diverging: nobody**, as of 2026-08-25. vorlaut was named here for
+`"Board 1"`, focused but not selected; it names for the day and selects, and did
+so from the commit that gave it a list of Sammlungen to name at all — the same
+one that spent §1.4's entry. It uniquifies by minting a fresh id rather than by
+` (2)`, because two of its Sammlungen may genuinely share a name and the
+identity is never the name (§1.1); what the rule is about is the suggestion, not
+the uniqueness.
+
+**bildhaft was doing neither half, and this line said nobody was.** Its
+`handleNewCollection` created the Sammlung, repainted, and stopped — no focus,
+and `select()` appeared nowhere in the product. So the invented name was a chore
+to delete on every single creation, which is the exact cost the paragraph above
+describes. Fixed 2026-08-25.
+
+**And the reason nobody caught it is worth more than the fix.** Both other
+products cover this, and both assert `toBeFocused()` and stop — which is the
+test that passes against precisely this bug, because focus without selection is
+indistinguishable from focus with it until somebody types. A rule with two
+halves needs a test with two halves, and the honest one here is behavioural:
+type a character and assert what the field ends up holding. bildhaft's new
+`e2e/collections.spec.ts` does that; the other two still do not, and would not
+notice if either of them lost `select()` tomorrow.
+
+That is the same shape as §3.4's second call site: a check that stops at the
+first thing it can see. There, one violation was found and the search ended;
+here, one half of a rule is asserted and the other is assumed.
 
 ### 1.6 Renaming is typing in the title, never a dialog
 
