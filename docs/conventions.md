@@ -471,6 +471,56 @@ Both packages carry a test that anything needing attention also offers something
 to press. A panel that says something is wrong and hands nobody a button is the
 failure the pair exists to make impossible.
 
+### 3.8 What the page reports, it reports out loud
+
+One live region per page — `role="status"`, which is `aria-live="polite"` — and
+it is **in the tree from the first paint, never hidden and never removed**. What
+changes is its text. Every act that reports an outcome writes there: what
+succeeded, what failed, how many arrived.
+
+**Why.** A live region announces a *change* in something the reader was already
+watching. It follows that the two natural ways to write one both produce
+silence, and neither of them looks wrong:
+
+- **Setting the text and then inserting the node.** The region arrives already
+  carrying its message, so there is no change to notice.
+- **Toggling it with `[hidden]`, or removing it between messages.** It leaves
+  the accessibility tree and re-enters carrying the next one, which is the first
+  case again, once per message.
+
+The words are on screen and correct the whole time. Nothing goes red, no
+screenshot differs, and no ordinary test touches it — an assertion on the text
+passes identically either way, because the text *is* there. That is why this is
+a written rule rather than a thing careful people get right: all three products
+built the region, and all three built it one of these two ways.
+
+**How it is held.** Each product carries an `e2e/announce.spec.ts` asserting the
+two properties the mechanism actually needs — that the region is present and
+empty *before* any message, and that after one it is still **the same element**
+rather than a fresh node in its place. A test that only asserts the text is the
+test that let this through three times.
+
+**And empty, it has to cost nothing**, or the next person removes it again for
+the reason bildhaft had. mitreden's and vorlaut's are inline elements with no
+content, so they take no room by construction. A styled container does not:
+`components.css` gives `.toast` a fill and a padding, so an empty one is a bare
+pill at the foot of the screen. The answer is to strip the paint from the empty
+state (`.toast:empty`), never to take the node out.
+
+`components.css` also carries `.toast[hidden] { display: none }`, which is the
+second bullet above written into the shared package. It is there for a real
+reason — an author `display` rule beats the browser's own `[hidden]`, so the
+file that takes the attribute's meaning away has to give it back — but the
+attribute must not be used on the region itself.
+
+**Diverging: nobody**, as of 2026-08-25. mitreden and vorlaut each met this and
+each fixed it. bildhaft's toast set its text, appended the node, and removed it
+again 3.2 seconds later, so every acknowledgement the product made — an
+exported Sammlung, a saved picture, a failed import, "Alle Daten gelöscht" —
+was silent until this rule was written. That it survived longest in the product
+whose users are the reason the family exists is the argument for the rule
+living here rather than in three commit messages.
+
 ---
 
 ## 4. Differences that are correct
