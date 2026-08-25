@@ -287,6 +287,14 @@ button, field, chip, menu, sheet and focus policy. The contrasts are kept
 because they are the evidence, not because they are current. Where a bullet has
 since become wrong about what a product *does*, it says so underneath.
 
+**Read end to end against both products on 2026-08-25**, so that the notes below
+are one reading rather than a trail of separate ones. Three entries needed
+nothing: *Status and toast* still describes both products exactly, and the
+*Since* lines under *Confirmations and prompts* and *Footers* are still true —
+mitreden's three destructive questions are three `confirmDialog()` calls, and
+its footer is components.css's `.footer` carrying the Impressum and Datenschutz
+the published site owes.
+
 ### Buttons
 
 - **mitreden.** One `button` base: `font: inherit`, weight 600, radius 10px, padding
@@ -305,6 +313,14 @@ since become wrong about what a product *does*, it says so underneath.
   whether a quiet button is grey text or grey fill. bildhaft additionally has an
   icon-button size that mitreden has no equivalent of (`.gear` and `.dots` are two
   separate hand-rolled near-misses of it).
+- **Since:** neither base exists. Both products spell a button `.btn` from
+  components.css, with `.primary`, `.quiet`, `.sm` and `.icon` beside it —
+  bildhaft's `--modifier` names went, and so did mitreden's bare `button` base.
+  The shape disagreement was settled rather than won: the shared button is a
+  bordered rectangle at `--radius-sm` over a `--surface-2` fill, which is
+  mitreden's border on bildhaft's fill, and the pill is gone from both. The icon
+  button mitreden had no equivalent of is `.btn.quiet.icon`, and the near-misses
+  went with it — `app.css` keeps a comment where its own `.icon` used to be.
 
 ### Text fields and search
 
@@ -324,6 +340,18 @@ since become wrong about what a product *does*, it says so underneath.
   Shift+Enter for a newline; mitreden's textarea is explicitly multi-line — one
   sentence per line is the input format — so Enter must stay a newline there. That
   is a genuine difference in the data, not a style choice.
+- **Since:** both draw components.css's `.field`, and mitreden's recessed hole —
+  `background: var(--ink)`, darker than the panel — is gone; its `app.css` puts
+  the change in four words, "a fill, not a hole".
+
+  **And the last claim is now false, which is the interesting half.** mitreden's
+  composer submits on Enter, with Shift+Enter for a newline, exactly as
+  bildhaft's does (`src/ui/composer.ts`). The difference in the data was real and
+  survives — several lines pasted at once still each become a sentence — but it
+  never needed the key to differ: the format is what a *paste* means, not what
+  Enter has to mean. Read as a lesson about audits, this is one: "a genuine
+  difference in the data, not a style choice" was true of the difference and
+  wrong about what followed from it.
 
 ### Chips and filters
 
@@ -391,7 +419,12 @@ in components.css (conventions.md §5, 5b). What each bullet above has lost:
   hand-roll are why. The head/body/foot split went into `components.css`, and the
   behaviour underneath went into `@lautstark/design/dialog` at v1.12.0 with
   bildhaft's as the base. All three now open the same sheet and ask the same
-  question through it.
+  question through it. mitreden's half of the bullet moved too: "one instance
+  exists — settings" is three or four, depending on how the shared confirm is
+  counted (settings, the setup sheet, the info sheets behind the footer links,
+  and `confirmDialog()`), and the head/body/foot split it "does not need yet" is
+  the one it uses — `.sheet .body` is a shared region rule that reaches into
+  it.
 
 One defect here is worth naming because sighted review cannot see it: bildhaft's
 dialogs carried **two buttons with the same accessible name** — the close ✕ and a
@@ -442,6 +475,18 @@ a submenu, on the reasoning that seventeen voices have no place in a bar but are
 fine in a list you opened on purpose. That is a good rule and belongs in the shared
 set.
 
+**It never got there, and its one implementation is gone (2026-08-25).** No
+product does this today and `@lautstark/design/menu` has no API for it. What
+removed it was not a menu decision: a voice stopped being a property of a
+sentence when it became a property of the Sammlung (§3.1, conventions.md §3.10),
+so there is no voice list to open from a row. mitreden's row menu is now
+downloads, *record again* where a recording is missing, and delete. The rule is
+worth keeping as a rule — a list you opened on purpose is a fine place for
+seventeen of something — but it is a recommendation with nothing behind it
+rather than a pattern one product already proved. The table above is one
+character out of date as well: mitreden's trigger is `⋯`, which is what §3.6
+asked for.
+
 ### List rows
 
 - **mitreden.** `.item`: a flex row, `padding: 15px 2px`, separated by a 1px
@@ -459,6 +504,13 @@ set.
   that are each worked on. Note that bildhaft's hover-reveal is a desktop assumption
   it can afford (README: "Desktop is the primary target") and mitreden cannot —
   mitreden's README actively sells adding sentences from a phone.
+- **Since:** bildhaft's half is unchanged — `.row__actions` is still `opacity: 0`
+  until hover or `:focus-within`, and the distance argument still holds. Three
+  things went from mitreden's row: the checkbox (nothing draws one; two rules in
+  `app.css` still style it), the clickable group tags in `.meta` (a row does not
+  name its Sammlung — the rail says which one you are in), and the `⋮`, which is
+  `⋯`. One thing arrived: the sentence is click-to-edit in place, which is where
+  the `prompt()` under *Confirmations* went.
 
 ### Empty states
 
@@ -472,6 +524,15 @@ set.
 - **Distance: small.** Same instinct — an empty state teaches the one thing the user
   does not yet know — and both distinguish "nothing yet" from "nothing matched".
   Only alignment and colour depth differ.
+- **Since:** `.empty-state` is `.empty`, from components.css, and both products
+  draw that one class. The texts converged further than the audit expected:
+  mitreden's `empty_start` no longer teaches the multi-line format, it teaches
+  the gesture — "Tippe oben einen Satz und drücke `<kbd>Enter</kbd>`", which is
+  bildhaft's sentence, because mitreden's composer now takes Enter the way
+  bildhaft's does. `empty_no_match` still separates the filtered case, and
+  bildhaft gained a bold "Noch keine Sätze" over its line. How many empty states
+  each product has is conventions.md §4.6, and that is the part that did not
+  converge.
 
 ### Status and toast
 
@@ -538,6 +599,18 @@ Four components arrived in bildhaft after §2 was written. None has a mitreden
 counterpart today, so there is nothing to converge yet — they are recorded so the
 audit is not silently out of date, and because two of them encode rules §4.3 now
 states.
+
+**Two of the four have a mitreden side now (read 2026-08-25).** The first has a
+counterpart: below 820px mitreden's rail is a panel that slides over the work
+behind a `.scrim`, opened from a control that is not conditional on the state it
+toggles — the lesson rather than a copy of the markup. The second is the other
+way round. mitreden's document scrolls rather than nesting a full-height
+container, so the failure that bullet describes cannot reach it, but the
+`backdrop-filter: blur(3px)` it names as the second cause of black repaints is
+on `.sheet::backdrop` in `app.css`. And the fourth is worth a look for the
+reason the bullet gives: mitreden versions a client-side database, has just
+carried one across four upgrades, and calls `openDB` with no `blocked` handler —
+which is the "UI hanging with no explanation" this was written down for.
 
 - **A mobile top bar and an off-canvas navigation panel.** Below 820px the sidebar
   is a fixed panel that slides over the content behind a scrim, opened from a
