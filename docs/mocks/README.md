@@ -201,6 +201,18 @@ itself.
 
 With that, the last thing on either board that is not a cell is gone.
 
+**One bug worth keeping the note for.** The tabs wore a colour rail down the
+side, written `border-left-color: var(--screen)`. On a tablet tab, which has no
+page colour any more, `--screen` is unset and the declaration carries no
+fallback — so it goes invalid at computed-value time, which does not mean
+"nothing", it means **inherit**. In the dark scheme that inherited the near-white
+text colour, and every tablet tab grew a white rail nobody drew. Every `var()`
+naming an optional value in this file now carries a fallback.
+
+The rail is gone either way: the tabs wear what the five-key editor has always
+worn, a dot beside the name and the whole border in the screen's colour while
+it is current. It looked like the editor it describes; a rail did not.
+
 
 ## The way out of the board
 

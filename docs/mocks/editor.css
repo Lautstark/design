@@ -52,25 +52,47 @@ html, body {
 /* ------------------------------------------------------------- page strip */
 
 /* Identical in both editors, and it has to be: it is the level above the work,
-   which is the level people lose track of. The rail down the leading edge is
-   the screen's own colour — the one the tablet draws around a page and the one
-   the talker draws around all five displays.
+   which is the level people lose track of.
 
-   What differs is invisible here and is the reason the two cannot share an
-   implementation: on the talker this order *is* the navigation, because the
-   firmware advances by walking it. On the tablet it is presentation only. */
+   The colour treatment is the five-key editor's own, restored: a dot beside
+   the name, and the whole border in the screen's colour while it is current.
+   A left rail was tried instead and was wrong twice - it looked nothing like
+   the editor it was meant to describe, and `border-left-color: var(--screen)`
+   carried no fallback, so on a tab that had no colour the declaration went
+   invalid at computed-value time and *inherited* instead. In the dark scheme
+   that inherited the near-white text colour, and every tablet tab grew a white
+   rail nobody had asked for.
+
+   Which is the whole argument for a fallback on every var() that names an
+   optional value: an unset custom property does not fall back to nothing, it
+   falls back to whatever the parent had.
+
+   What differs between the two is invisible here and is the reason they cannot
+   share an implementation: on the talker this order *is* the navigation,
+   because the firmware advances by walking it. On the tablet it is
+   presentation only. */
 .strip { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
 .tab {
   font: inherit; font-size: 14px; cursor: pointer;
   display: flex; align-items: center; gap: 8px;
-  padding: 9px 14px 9px 11px;
-  border: 1px solid transparent; border-left: 4px solid var(--screen, transparent);
-  border-radius: var(--radius-sm);
+  padding: 9px 14px;
+  border: 2px solid transparent; border-radius: var(--radius-sm);
   background: var(--surface-2); color: var(--text-dim);
 }
 .tab:hover { color: var(--text); }
-.tab[aria-current="true"] { background: var(--surface); color: var(--text); border-color: var(--line); border-left-color: var(--screen); }
+/* The screen's colour where there is one, the neutral line where there is not.
+   The tablet has none any more - a page's own colour has gone from that half
+   while the idea is reconsidered - so its current tab is outlined and no
+   more. */
+.tab[aria-current="true"] {
+  background: var(--surface); color: var(--text);
+  border-color: var(--screen, var(--line));
+}
+.tab .dot {
+  width: 12px; height: 12px; border-radius: 3px; flex: none;
+  background: var(--screen, transparent);
+}
 .tab .home { font-size: 12px; opacity: .7; }
 
 /* ------------------------------------------------------------------ grid */
@@ -233,7 +255,11 @@ html, body {
    where a tablet button's word class goes. Same slot in the same bar, the
    product's own answer in it. */
 .cell--setkey {
-  border-left: 5px solid var(--screen, var(--accent));
+  /* The whole border in the screen's colour, which is what the five-key editor
+     has always drawn round this tile - a rail down one side was the mock's
+     invention and looked like nothing in the product. Every other cell keeps
+     its own border. */
+  border: 3px solid var(--screen, var(--accent));
   background: var(--surface);
   /* Room for the eyebrow, rather than letting it sit under the picture. In
      the light scheme the pictogram's white canvas blends into the surface and
