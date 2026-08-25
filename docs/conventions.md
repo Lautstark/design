@@ -29,6 +29,15 @@ the reason it existed is discovered afterwards.
 design.md settles the vocabulary — the word is **Sammlung**, and §3.6 carries
 the full glossary. Nothing here re-decides it.
 
+**The Android viewer is out of scope, deliberately.** `Lautstark/vorlaut-app`
+renders a package on a tablet and shares nothing here: this document is about
+three browser products, and what they share is CSS and a handful of ES modules.
+It is named rather than left out so that a reader can tell it was excluded and
+not forgotten — and because it is not ungoverned. `exchange/SPEC.md` in vorlaut
+holds its side of the contract, and is the one document in the family with real
+versioning discipline, for the reason the rule about the rules gives: a package
+on somebody's tablet is a file on a device nobody here controls.
+
 ### The divergence lists go stale in hours, not months
 
 Every "Diverging:" line is an audit, and an audit is a photograph. While the
@@ -81,9 +90,16 @@ makes renaming free, which matters when the name is a live input (§1.6): a
 derived key either goes stale on every keystroke or has to be deliberately
 frozen, and both are worse than not deriving it.
 
-**Diverging: mitreden.**
+**Diverging: nobody**, as of 2026-08-25. mitreden's key was `normTag(name)` and
+it is `crypto.randomUUID()` now. The collision this section predicts was not
+hypothetical there: `createCollection`, given a name, looked the derived key up
+and handed back whatever it found, and an import names the Sammlung after the
+file it came from — so two files whose names agreed for 24 characters produced
+one Sammlung, and the second import's sentences went silently into the first
+one's. That is the argument for this rule, and it is a better one than renaming
+being free.
 
-### 1.2 Which Sammlung is open is persisted, in the app's own settings record
+### 1.2 Which Sammlungen are open are persisted, in the app's own settings record
 
 Not in `localStorage`, not in memory: in the same IndexedDB settings record as
 every other preference.
@@ -97,8 +113,14 @@ it is synchronous, it is a different eviction policy, and it survives a database
 being cleared, which means "start again from nothing" leaves a pointer to a
 Sammlung that no longer exists.
 
-**Diverging: mitreden** — its `OPEN` set is module state, so a reload lands on
-whichever Sammlung happens to be first.
+**Diverging: nobody**, as of 2026-08-25. mitreden's `OPEN` was module state, so
+every reload landed on whichever Sammlung happened to be first.
+
+**And it is the set, not one of them.** This section was written in the singular
+against a family where two products can only have one open, and mitreden's arity
+is many (§4.1) — its rail multi-selects for exactly that reason. Restoring one of
+two would be worse than restoring none, because a person would read the second
+as having been closed rather than as not having been restored.
 
 ### 1.3 The sidebar-collapse preference is persisted in the same place
 
@@ -106,7 +128,15 @@ whichever Sammlung happens to be first.
 re-make every visit; and having decided §1.2, a second answer for a second
 preference is how a settings record stops being the settings.
 
-**Diverging: mitreden** (`localStorage`, key `mitreden.rail`).
+**Diverging: nobody**, as of 2026-08-25. mitreden kept it in `localStorage`
+under `mitreden.rail` and it is in the settings record now.
+
+The language and the colour scheme are still in `localStorage` in all three, and
+that is not this rule left half-done. Both have to be readable *before the first
+paint* or the page shows the wrong answer and corrects itself, which rules out
+the database the sentences live in. A sidebar arriving a frame late costs
+nothing. The test is whether the preference is needed before the store can
+answer, not which store is nicer.
 
 vorlaut was named here for having no collapse at all. It has one, in the
 settings record beside every other preference, and it arrived with the sidebar
@@ -121,7 +151,15 @@ getting back to what you were doing, and after a handful of Sammlungen creation
 order reliably puts that at the bottom. It also gives `updatedAt` a reader,
 which is what stops it being a field that is written and never used.
 
-**Diverging: mitreden** (creation order; it keeps no `updatedAt` at all).
+**Diverging: nobody**, as of 2026-08-25. mitreden ordered by creation and now
+keeps an `updatedAt`.
+
+**What moves it is the half worth stating.** A rename is the one edit nobody
+actually does; what "last worked on" means is a sentence added, recorded or
+corrected. So the stamp moves on those too — mitreden's storage bumps every
+Sammlung a written or deleted sentence belongs to, in the same transaction.
+Moving it on renames alone would have satisfied the rule as written and answered
+nothing, while looking right.
 
 vorlaut was named here too, and the entry was true the moment it was written:
 this document audited a vorlaut that had one board, and one board has no order.
@@ -175,7 +213,11 @@ reader to hold what it refers to in their head; a button reading what it will do
 cannot be misread. design.md §3.6 settles the wording; the count and the dialog
 are this document's half.
 
-**Diverging: mitreden** (native `confirm()`; see also §3.1).
+**Diverging: nobody**, as of 2026-08-25 — and it had been true for some time
+before anybody wrote it down here. mitreden moved to `confirmDialog` when it
+took §5's dialog layer, and this line went on naming it for long enough to be
+worth the note: a divergence list is only as good as the last time somebody read
+it against the code.
 
 ### 1.8 A row in the sidebar carries a count
 
@@ -219,7 +261,8 @@ replacing is that merging has to decide what an arriving Sammlung and a stored
 one with the same id *are*; that question is answered by not asking it — the
 arriving one becomes a new Sammlung, and nothing stored is touched.
 
-**Diverging: vorlaut** (its `.obz` import replaces the open Sammlung).
+**Diverging: nobody**, as of 2026-08-25. vorlaut's `.obz` import replaced the
+open Sammlung and now makes a new one, named after the file it came from.
 
 ---
 
@@ -324,7 +367,31 @@ sidebar and it read as a coincidence; three is not a coincidence, and "not
 shared" had come to describe three copies rather than a freedom anybody was
 using.
 
-**Diverging: nobody**, on having one.
+**And the narrow screen is part of the rule, not a footnote to it.** This
+section said "below roughly 820px" from the day it was written, and the
+divergence line under it said *on having one* — a hedge that quietly scoped the
+audit to whether a sidebar existed and left the breakpoint, the layer and the
+scrim unexamined. Two products broke at 820px into a drawer over a scrim; the
+third became a row across the top of the work at 620px, and nothing in this
+document said so, because nothing had asked.
+
+The row was not a lapse. It was argued in the stylesheet, and its argument —
+that hiding the list would strand somebody on whichever Sammlung they opened on
+— is true, and is not an argument for a row: a drawer answers it too. What the
+row cost was measurable, and measuring it is what settled this: 234px of an
+812px phone was furniture before the work began. A layer costs nothing until it
+is asked for.
+
+Three things go with the layer, and the third is the one that is easy to leave
+out. The `‹` that collapses a column is hidden, because down there there is no
+column. The remembered collapse (§1.3) must be *ignored*, not consulted:
+otherwise a sidebar put away on a laptop arrives on the phone as a drawer that
+cannot be opened — `display: none` beats the open state, and the `☰` does
+nothing. And choosing a Sammlung dismisses the layer, because it is in the way
+of the thing that was just asked for.
+
+**Diverging: nobody**, as of 2026-08-25 — on having one, and now on what it does
+when the window is narrow.
 
 ### 3.2 Einstellungen is at the foot of the sidebar
 
@@ -339,7 +406,9 @@ The foot wins because a sidebar that ends in the way out of the page reads the
 same in all three, and because the objection it has to answer is answered by the
 separator and the gap already above it.
 
-**Diverging: mitreden.**
+**Diverging: nobody**, as of 2026-08-25. mitreden's `⚙` is at the foot of its
+rail. Another line that had been spent before it was read — the same lesson as
+§1.7.
 
 ### 3.3 The work head is one row
 
@@ -372,14 +441,27 @@ into the list behind it — and a native prompt is drawn in the browser's own
 chrome, which no token reaches, so it is the one surface in the product that
 cannot follow the scheme. design.md §2 records both.
 
+**What the platform gives, and what a reader would not learn from this page.**
+`showModal()` is doing more than centring a box: it puts the dialog in the top
+layer, makes everything behind it inert, traps Tab inside it, and closes on
+Escape. That is the whole reason the rule is "use the native element" rather
+than "trap focus carefully" — none of it has to be remembered, and a hand-built
+overlay gets none of it. `@lautstark/design/dialog` adds the two the platform
+does not: dismissal by pressing outside, because `::backdrop` is a pseudo-element
+and takes no clicks, and focus landing on **cancel** rather than on whatever
+`showModal()` would have found first, so that the default target of a confirm is
+never the destructive one.
+
 **One rule about the promise, learned the hard way:** a confirm resolves from
 the buttons, with a `settled` guard, and uses the `close` event only for the
 dismissal paths. Resolving from `close` alone is tidier and hangs forever on any
 host that closes the dialog without firing it — the caller waits for the life of
 the page, and what the person sees is a button that did nothing.
 
-**Diverging: mitreden** (native `confirm()` for destructive acts and native
-`prompt()` for editing).
+**Diverging: nobody**, as of 2026-08-25. mitreden had a native `confirm()` for
+destructive acts and a native `prompt()` for editing; it has neither now, and
+there is no `window.confirm`, `window.prompt` or `window.alert` left in any of
+the three.
 
 vorlaut was recorded here as compliant and was not. Its set delete asked
 through `window.confirm` — one call site, in `src/editor-diy/editor.ts`, left
@@ -431,8 +513,24 @@ neither earns a permanent button and consequential enough that neither should be
 hard to find; a menu beside the name is where a thing's own acts belong.
 design.md §3.6 settles the glyph.
 
-**Diverging: nobody** on the glyph. On the contents, **vorlaut** keeps its
-export in a settings panel.
+**The keyboard contract, which no product implements and all three have.** A
+menu is not a `<div>` of buttons that happens to be visible: `@lautstark/design/menu`
+moves focus into the list on open, walks it with the arrows and Home/End,
+returns focus to the trigger on Escape or on choosing, and claims Escape at
+capture — so a menu inside a dialog closes the menu on the first press and the
+dialog on the second, rather than both at once. A disabled item is skipped
+rather than landed on, which is the difference between "the first item" and
+"the first enabled item" in a menu whose export is disabled while the Sammlung
+is empty.
+
+It is written here rather than left to the package because the package is what
+makes it true today, and a fourth product hand-rolling a menu would pass review
+looking correct. The behaviour is the convention; the package is how it is kept.
+
+**Diverging: nobody**, as of 2026-08-25, on the glyph or the contents. vorlaut
+kept its export in a settings panel; both of its exports are in the `⋯` now,
+above the delete, and the settings panel holds only the way *in* — importing is
+not an act on one particular Sammlung.
 
 ### 3.7 A folder the browser has taken access to is a warning, not a note
 
@@ -652,6 +750,32 @@ storage layer and never derived from a name or a position, so that nothing here
 The accent hue, the ground (light or dark), density, and what fills the third
 slot of the work head — see design.md §4.4. Nothing here overrides that list.
 
+### 4.6 The empty state is three answers, and all three are right
+
+**Settled 2026-08-25**, after a sweep for the drift this document had not looked
+for. What a product shows when there is nothing yet follows from what "nothing"
+means there, and the three do not mean the same thing:
+
+- **mitreden** distinguishes two empties. A Sammlung with no sentences says how
+  to add one; a *search* with no matches says so instead. They look alike and
+  are not: one is a place waiting to be filled, the other is a question that
+  came back empty, and telling somebody how to type a sentence is the wrong
+  answer to the second.
+- **bildhaft** swaps the row list for a panel that names the act — a sentence
+  goes in and symbols come out, and the empty state is where that is said.
+- **vorlaut** has none, and cannot. A Sammlung there *is* a layout, and a
+  layout is a fixed set of slots: an empty one is a board of empty keys, which
+  is already the thing you edit. There is no state in which there is nothing to
+  show.
+
+The shape of the argument is §4.1's. vorlaut's absence is not a gap to fill, and
+mitreden's second empty is not a flourish the others owe — the number of empty
+states a product has is a fact about its model.
+
+**What is shared** is the class: `components.css` owns `.empty`, so the two that
+have one draw it the same. That is the line this section is drawing — the *look*
+converges, the *count* does not.
+
 ---
 
 ## 5. Extractions, in the order to do them
@@ -787,9 +911,17 @@ not what a product has to supply, so it is not an answer.
 **Three things do not fit in an adapter at all.**
 
 *The sidebars are not the same object.* bildhaft's holds a search over every
-sentence whose results replace the list; mitreden's is a drawer with a scrim
-below 820px; vorlaut's is neither. "The sidebar list" is a shared thing living
-inside three sidebars that are not.
+sentence whose results replace the list; the other two do not. This used to be a
+three-way split — vorlaut's was neither a drawer nor a searchable rail — and
+half of it closed on 2026-08-25 when §3.1's narrow-screen behaviour was settled
+and all three became drawers below 820px. What is left is bildhaft's search,
+which is a real difference and enough on its own: "the sidebar list" is still a
+shared thing living inside sidebars that are not the same.
+
+That this argument got *smaller* without changing the answer is worth noticing.
+Converging the drawer was worth doing on its own merits, and it moved the shell
+question by nothing at all, because what stops the shell was never the part that
+was easy to agree on.
 
 *The three disagree about who owns the DOM.* bildhaft's sidebar is already
 `sidebar(handlers) → {node, render(state)}` — props in, node out, which is the
