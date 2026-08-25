@@ -59,8 +59,8 @@ html, body {
   background: var(--surface-2); color: var(--text-dim);
   display: grid; place-items: center;
 }
-.page svg { width: 30px; height: 30px; fill: none; stroke: currentColor;
-            stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.page svg { width: 38px; height: 38px; fill: none; stroke: currentColor;
+            stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
 .page:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
 .page:disabled { opacity: .32; cursor: default; }
 
@@ -116,20 +116,20 @@ html, body {
 .ctl {
   border: 0; cursor: pointer; font: inherit;
   border-radius: var(--radius);
-  display: grid; place-items: center; gap: 4px;
-  padding: 0 22px; min-width: 96px;
+  display: grid; place-items: center; gap: 2px;
+  padding: 0 20px; min-width: 112px;
   background: var(--surface-2); color: var(--text-dim);
 }
-.ctl svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 2.2;
+.ctl svg { width: 66px; height: 66px; fill: none; stroke: currentColor; stroke-width: 2;
            stroke-linecap: round; stroke-linejoin: round; }
-.ctl span { font-size: 12px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
+.ctl span { font-size: 12.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
 .ctl:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
 .ctl:disabled { opacity: .32; cursor: default; }
 
 /* One primary per view (design.md 4.3). On this screen it is Speak. */
 .ctl.speak {
   background: var(--accent); color: var(--accent-ink);
-  min-width: 148px;
+  min-width: 168px;
 }
 .ctl.speak:hover:not(:disabled) { background: var(--accent-hover); }
 .ctl.speak:disabled { background: var(--surface-2); color: var(--text-dim); }
