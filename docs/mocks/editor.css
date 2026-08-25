@@ -167,8 +167,8 @@ html, body {
    invisible and appear on hover or focus. A tool nobody is reaching for should
    not be taking room from the word. */
 .cell__tools {
-  position: absolute; inset: 4px 4px auto 4px;
-  display: flex; justify-content: space-between;
+  position: absolute; inset: 4px 4px auto auto;
+  display: flex;
   opacity: 0; transition: opacity .12s ease;
   pointer-events: none;
 }
@@ -187,11 +187,16 @@ html, body {
 .tool svg { width: 13px; height: 13px; fill: none; stroke: currentColor;
             stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
-/* Past seven columns a 24px control inside a 110px cell is a target nobody can
-   hit and a picture nobody can read. The tools move to the property bar, which
-   is where they were always going to end up on a dense board - and the cell
-   keeps the one thing that has to stay legible at any size, which is the word. */
-.grid--dense .cell__tools { display: none; }
+/* The tool stays on a dense board, where the earlier draft hid it.
+ *
+ * That draft had two tools competing with the word for a 91px cell and moved
+ * both to the property row. With the sheet carrying the picture there is one
+ * tool left, it only appears under the pointer, and it is a mouse target in an
+ * editor rather than a key a child presses - so 20px is plenty and the reason
+ * for hiding it is gone. */
+.grid--dense .cell__tools { inset: 3px 3px auto 3px; }
+.grid--dense .tool { width: 20px; height: 20px; }
+.grid--dense .tool svg { width: 11px; height: 11px; }
 .grid--dense .cell { aspect-ratio: 1 / 1; padding: 4px; gap: 2px; }
 .grid--dense .cell__field { font-size: 12px; }
 .grid--dense .cell__pic--none svg { width: 18px; height: 18px; }
@@ -239,10 +244,39 @@ html, body {
    left out of the markup. */
 .cell--hole { border: 0; background: transparent; }
 .cell--hole span {
-  position: absolute; inset: 0; display: grid; place-items: center;
-  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
-  color: var(--text-faint); opacity: .5;
+  position: absolute; inset: 0; display: grid; gap: 8px;
+  /* align-content, not place-items: place-items centres each item inside its
+     own track, and with two tracks splitting the cell's height that pushed the
+     glyph and its caption to opposite ends of a 120px box. */
+  align-content: center; justify-items: center;
+  font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--text-faint); opacity: .6;
 }
+/* A ring with a dot in it, at hint contrast. The word alone read as a caption
+   for something missing; a speaker grille reads as the thing that is there. */
+.cell--hole svg { width: 46px; height: 46px; fill: none; stroke: currentColor; }
+
+/* --------------------------------------------------- the Sammlung's grid */
+
+/* Size presets, for the dialog that makes a Sammlung and for the card that
+   changes one later. Drawn rather than named, because "4 × 6" is a pair of
+   numbers and what somebody is choosing is how much is on a page. */
+.sizes { display: flex; gap: 10px; flex-wrap: wrap; }
+.size {
+  font: inherit; cursor: pointer; display: grid; gap: 7px; justify-items: center;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text-dim);
+}
+.size:hover { border-color: var(--text-faint); }
+.size[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--text); }
+.size__mini {
+  display: grid; gap: 2px; width: 62px;
+  grid-template-columns: repeat(var(--c), 1fr);
+  grid-template-rows: repeat(var(--r), 1fr);
+}
+.size__mini i { background: currentColor; opacity: .3; aspect-ratio: 4 / 3; border-radius: 1px; }
+.size b { font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.size small { font-size: 11px; }
 
 /* ------------------------------------------------------- property bar */
 

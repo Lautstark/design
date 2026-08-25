@@ -143,3 +143,17 @@ it. Nothing is left on the board that is not the board.
 A page has no cell on a tablet, so the current tab carries a `⋯` that opens the
 page's own card. The talker needs none: there the set key *is* a cell.
 
+Two things the sheet nearly took away and gets back. **Hearing a button**
+without opening anything: one play tool, under the pointer, on every board size
+— the earlier draft hid it past seven columns because two tools were competing
+with the word, and with the picture in the sheet there is only one left. And
+**the speaker's corner** is drawn as a speaker rather than captioned as one.
+
+**The grid size is not a page setting and has left the editing bar.** It sat
+next to the page tabs, where everything else belongs to the page; it belongs to
+the Sammlung, and sharing it across pages is exactly what makes a button sit
+under the same thumb wherever you are. It is asked when a Sammlung is made — as
+pictures rather than a pair of numbers, since what is being chosen is how much
+fits on a page — and changed afterwards from the ⋯ beside the name. Growing
+stays free, shrinking still asks.
+
