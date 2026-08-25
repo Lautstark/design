@@ -30,14 +30,17 @@ export interface CollectionRow {
 
 export interface CollectionRowsOpts {
   rows: CollectionRow[];
-  /** Which ids are open. A set rather than one id because arity is per product
-   *  (conventions.md §4.1): one in vorlaut and bildhaft, several in mitreden. */
+  /** Which ids are open, and what is counted here is *open Sammlungen* — not
+   *  how many a sentence may be in, which is a different question (§4.1) and no
+   *  longer answered differently by the three. A set rather than one id because
+   *  several can be open at once in mitreden (conventions.md §4.2); vorlaut and
+   *  bildhaft open one at a time. */
   open: Iterable<string>;
   /**
    * A row was pressed. `additive` is true when the press carried Cmd or Ctrl —
    * the "and also this one" chord §4.2 settles, decided here so that it cannot
-   * drift to a different key in one product. A product whose arity is one
-   * ignores it.
+   * drift to a different key in one product. A product that opens one Sammlung
+   * at a time ignores it — vorlaut and bildhaft, for the reason §4.2 gives.
    */
   onPick(id: string, additive: boolean): void;
 }

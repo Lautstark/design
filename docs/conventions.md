@@ -117,8 +117,9 @@ Sammlung that no longer exists.
 every reload landed on whichever Sammlung happened to be first.
 
 **And it is the set, not one of them.** This section was written in the singular
-against a family where two products can only have one open, and mitreden's arity
-is many (§4.1) — its rail multi-selects for exactly that reason. Restoring one of
+against a family where two products can only have one open, and mitreden can
+have several — its rail multi-selects (§4.2, which is about the open set and not
+about arity; corrected here 2026-08-25). Restoring one of
 two would be worse than restoring none, because a person would read the second
 as having been closed rather than as not having been restored.
 
@@ -323,10 +324,14 @@ mitreden moved the same day, and was the more interesting half: it had used
 missing — the whole library simply sat in a `meta` store as two JSON arrays,
 one under `phrases` and one under `collections`. It had the dependency it
 declared and none of the indexes, which is the case this rule exists to name.
-The membership index is the one that pays here, and it pays because of §4.1:
-mitreden is the product whose arity is *many*, a sentence is in the morning
-Sammlung and the nursery one at once, and that is precisely the shape a
-multiEntry index is for and a filter over everything is worst at. The other
+The membership index is the one that pays here, and it paid twice over at the
+time: mitreden's arity was *many*, a sentence was in the morning Sammlung and
+the nursery one at once, and that is precisely the shape a multiEntry index is
+for and a filter over everything is worst at. **As of 2026-08-25 it is an
+ordinary index on one field** — arity went to one (§4.1), and the version 4
+upgrade replaced the multiEntry index with a plain one. What this rule is about
+survives the change unaltered: the lookup is an index, not a scan of the whole
+library. The other
 reader is §1.8's count, which had meant loading every sentence to tally.
 
 Its storage layer also carries the answer to a question the rule does not ask
@@ -904,12 +909,34 @@ Do not converge these. Each follows from what the product holds.
 
 ### 4.1 Arity — how many Sammlungen a thing can be in
 
-**Settled: many-to-many where the model allows it. Per product, not a house
-style.**
+**Settled: per product, not a house style. All three currently answer one.**
 
-- **mitreden: many.** A sentence belongs in the morning Sammlung and in the
-  nursery one, with one recording behind both. Its sidebar multi-selects for
-  exactly this reason (§4.2).
+That the three answers agree is not the rule and does not become one. The rule
+is that the question was put to three models and answered three times
+separately, which is why mitreden could change its answer on 2026-08-25 without
+bildhaft or vorlaut being consulted or moved. A fourth product holding something
+a sentence could be in two of would say *many* here and be right.
+
+- **mitreden: one. Amended 2026-08-25** (mitreden `e5a6449`, read against
+  `src/core/types.ts` and `src/db/repo.ts` the same day). This said *many* — a
+  sentence in the morning Sammlung and in the nursery one, with one recording
+  behind both — and the recording is what overturned it. The voice moved from
+  the sentence to the Sammlung: a Sammlung records in one voice, so a sentence
+  in two of them has two answers to which voice records it and no way to choose
+  between them. `Phrase.collection` is one id, or none. The morning sentence and
+  the nursery one are two sentences now, each with its own recording, which is
+  right rather than wasteful — they are two different sounds, and a Sammlung is
+  handed to a device as a set of files. The sidebar's multi-select did *not*
+  follow the arity down; §4.2 says why it never depended on it.
+
+  What used to be a merge is a second row. Adding a sentence whose text is
+  already in another Sammlung mints a row with its own id: a *move* would
+  silently empty the Sammlung it came from, and a *refusal* would leave a
+  Sammlung unable to hold a sentence that belongs in it. Where the twin was
+  recorded in the very voice the new Sammlung records in, the clip is copied
+  rather than made again; where the voices differ it is a genuine second
+  recording, which is the point rather than the cost. A twin in the *same*
+  Sammlung is still a merge, and now a no-op.
 - **bildhaft: one.** Asked on its merits and answered no: a Sammlung there is a
   book or a topic, and a line translated for one book is not thereby part of
   another. The unit-of-reuse principle its README states argues for reusing the
@@ -918,15 +945,55 @@ style.**
 - **vorlaut: one, necessarily.** A Sammlung there is a whole layout. It cannot
   be in two, because it *is* the contents of one.
 
+Existing mitreden libraries were carried across rather than dropped
+(`f75949c`): a sentence in several Sammlungen kept its id and stayed in the
+first — the one it was originally added to — while each further Sammlung got a
+row of its own with a copy of the clip, so nothing was re-recorded and nothing
+was deleted. A sentence in none stayed in none. That is a deliberate exception
+to "One rule about the rules" above, and argued on merits rather than on cost:
+the Sicherung carries no audio because audio is reproducible, and reproducing a
+whole library is exactly the bill somebody would want to see the new arrangement
+before agreeing to. Anything older than the shape it carried across is still
+dropped outright.
+
 design.md §3.1 previously made many-to-many a family rule with bildhaft owing
 the change; it was amended on 2026-08-24. Arity is a fact about what a product
 holds, and a rule that overrides it makes one product's model into the others'
 decoration.
 
-### 4.2 Multi-select in the sidebar follows from arity
+**That argument is untouched by 2026-08-25, and this change was made under it
+rather than against it.** The two cases look alike from a distance — a section
+that used to name three different answers now names one, three times — and a
+reader has to be able to tell them apart. What moved here is what mitreden
+*holds*: a sentence stopped carrying its own voice, so it stopped being the kind
+of thing that can sit in two Sammlungen, and the arity followed the model. It
+was not imposed. No section of this document or of design.md asked for it, the
+other two products were neither told nor changed, and this section's own closing
+argument was read before the decision rather than discovered after it. A family
+rule overriding a product's model is the failure named above; three products
+agreeing, each for a reason of its own, is not.
+
+### 4.2 Multi-select in the sidebar
 
 mitreden only, where Cmd- or Ctrl-click adds a second Sammlung to the open set.
-Elsewhere a rail that toggles would have one reachable state.
+Elsewhere a rail that toggles would have one reachable state, which is why the
+other two pass one id and ignore the additive flag. mitreden's reason for having
+it is its own: sentences are worked on across several Sammlungen at a sitting,
+and the union of the open set is the view that supports that.
+
+**Amended 2026-08-25.** This was headed "follows from arity", and the derivation
+was wrong. Multi-select is about how many Sammlungen may be *open at once*;
+arity is about how many one sentence may be *in*. They are independent, and
+mitreden's arity change is the proof: arity went to one and the multi-select
+stayed exactly as it was. `src/ui/rail.ts` is still the one caller passing more
+than one id in `open`, still acts on `additive`, and the list still shows the
+union of whatever is open — read 2026-08-25 at mitreden `e5a6449`, which says
+the same thing in its own words. It was useful when a sentence could be in the
+morning Sammlung and the nursery one, and it is useful now that it cannot.
+
+The wrong derivation was not free. It made §4.2 read as a consequence of §4.1,
+so anybody amending §4.1 would have taken the behaviour down with it as
+housekeeping.
 
 ### 4.3 What deleting takes with it
 
@@ -937,6 +1004,25 @@ leave rows nothing can reach.
 
 Both are right for their model. What must stay the same is §1.7 — the question
 says which of the two is about to happen.
+
+**Re-read 2026-08-25 against mitreden's arity going to one (§4.1), because "a
+grouping over it" was written when there could be another one. It holds.**
+`dropCollection` deletes the Sammlung and strips the `collection` field from
+each of its sentences in a single transaction; the rows stay, and so do their
+clips. Whether membership is one field or an entry in a list is not something
+this section ever rested on, and the argument for keeping the sentences is
+stronger now, not weaker: each row is one recording of its own, so a deletion
+that took the sentences would take audio that only exists there.
+
+What is new is that deleting a Sammlung is now the ordinary way a sentence
+becomes uncollected, where before it could land in the other one it was in.
+Uncollected is a real state and stays one: a sentence with no Sammlung records
+in the settings voice, which is the same answer a Sammlung without a voice gets.
+One consequence to know before somebody reports it as a bug — an orphaned
+sentence keeps its clip but is compared against the settings voice from then on,
+so it can read *stale* where it read *ok*. Nothing is deleted and nothing is
+re-recorded unasked. The sentence outlives the grouping; the mark over it need
+not.
 
 ### 4.4 Nothing duplicates a Sammlung
 
@@ -1086,8 +1172,9 @@ the accent behind the open one — were the part of the three sidebars that
 genuinely matched. Done 2026-08-24. It carries `aria-current`, which two of the
 three were missing, so the one fact the list exists to convey was not there for
 anyone not looking at the accent; and it owns the Cmd-or-Ctrl chord §4.2
-settles, which only mitreden's arity uses but which all three would otherwise
-have had a chance to get differently.
+settles, which only mitreden uses — it is the one product that opens more than
+one Sammlung at a time (§4.2) — but which all three would otherwise have had a
+chance to get differently.
 
 The class names became `.collections__*` rather than the `.list__item` two of
 the three already shared. Standardising on the majority name would have moved
