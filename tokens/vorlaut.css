@@ -13,27 +13,27 @@
   color-scheme: light dark;
 
   /* Ground and surfaces */
-  --bg: #f9f9fb;
+  --bg: #ebebed;
   --surface: #ffffff;
-  --surface-2: #f0f0f4;
-  --surface-3: #e6e5ec;
-  --line: #dadae0;
+  --surface-2: #e9e9ed;
+  --surface-3: #dcdbe2;
+  --line: #929197;
 
   /* Text */
   --text: #1a1a1d;
-  --text-dim: #63616b;
-  --text-faint: #6c6b74;
+  --text-dim: #5e5d66;
+  --text-faint: #696871;
 
   /* Accent */
   --accent: #9B7BFF;
   --accent-ink: #130b2a;
-  --accent-strong: #7a57d7;
+  --accent-strong: #7652d3;
   --accent-hover: #8e6def;
   --accent-soft: #f3f1ff;
 
   /* Danger */
-  --danger: #ad332c;
-  --danger-ink: #fff6f4;
+  --danger: #a42a25;
+  --danger-ink: #fae8e5;
   --danger-soft: #ffebe8;
 
   /* Shape and type */
@@ -54,15 +54,15 @@
   :root {
     /* Ground and surfaces */
     --bg: #161618;
-    --surface: #1f1f22;
-    --surface-2: #28282b;
-    --surface-3: #323236;
-    --line: #3a3a3e;
+    --surface: #303033;
+    --surface-2: #3d3d40;
+    --surface-3: #49484d;
+    --line: #7a797f;
 
     /* Text */
     --text: #ebebf0;
-    --text-dim: #9c9ba5;
-    --text-faint: #8f8e98;
+    --text-dim: #b6b5bf;
+    --text-faint: #a8a6b0;
 
     /* Accent */
     --accent-strong: #9b7bff;
@@ -102,25 +102,25 @@
   color-scheme: light;
 
   /* Ground and surfaces */
-  --bg: #f9f9fb;
+  --bg: #ebebed;
   --surface: #ffffff;
-  --surface-2: #f0f0f4;
-  --surface-3: #e6e5ec;
-  --line: #dadae0;
+  --surface-2: #e9e9ed;
+  --surface-3: #dcdbe2;
+  --line: #929197;
 
   /* Text */
   --text: #1a1a1d;
-  --text-dim: #63616b;
-  --text-faint: #6c6b74;
+  --text-dim: #5e5d66;
+  --text-faint: #696871;
 
   /* Accent */
-  --accent-strong: #7a57d7;
+  --accent-strong: #7652d3;
   --accent-hover: #8e6def;
   --accent-soft: #f3f1ff;
 
   /* Danger */
-  --danger: #ad332c;
-  --danger-ink: #fff6f4;
+  --danger: #a42a25;
+  --danger-ink: #fae8e5;
   --danger-soft: #ffebe8;
 
   /* Shadow */
@@ -133,15 +133,15 @@
 
   /* Ground and surfaces */
   --bg: #161618;
-  --surface: #1f1f22;
-  --surface-2: #28282b;
-  --surface-3: #323236;
-  --line: #3a3a3e;
+  --surface: #303033;
+  --surface-2: #3d3d40;
+  --surface-3: #49484d;
+  --line: #7a797f;
 
   /* Text */
   --text: #ebebf0;
-  --text-dim: #9c9ba5;
-  --text-faint: #8f8e98;
+  --text-dim: #b6b5bf;
+  --text-faint: #a8a6b0;
 
   /* Accent */
   --accent-strong: #9b7bff;
