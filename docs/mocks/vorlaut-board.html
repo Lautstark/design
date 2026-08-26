@@ -17,13 +17,13 @@
       <button class="page" id="prev" aria-label="Zurückblättern" disabled><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
       <div class="said" id="said"></div>
       <button class="page" id="next" aria-label="Weiterblättern" disabled><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
-      <button class="ctl speak" id="speak" disabled><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg><span>Sprechen</span></button>
-      <button class="ctl" id="back" disabled><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2.5"/></svg><span>Rückgängig</span></button>
-      <button class="ctl" id="clear" disabled><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 12h10l1-12"/></svg><span>Leeren</span></button>
+      <button class="ctl speak" id="speak" aria-label="Sprechen" disabled><svg viewBox="0 0 24 24"><path class="fill" d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+      <button class="ctl" id="back" aria-label="Zurück" disabled><svg viewBox="0 0 24 24"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-2.5"/></svg></button>
+      <button class="ctl" id="clear" aria-label="Leeren" disabled><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M9 7V5h6v2"/><path d="M6 7l1 12h10l1-12"/></svg></button>
     </div>
 
     <!-- 3x5, the size boot_data.ts starts a tablet Sammlung at. -->
-    <div class="grid" id="grid">
+    <div class="grid board fill" id="grid">
       <button class="cell" style="--tint:#fdfd96"
               data-word="ich" data-id="6632" data-tint="#fdfd96">
         <img src="symbols/6632.png" alt="">
@@ -75,7 +75,7 @@
         <b>sehen</b>
       </button>
       <button class="cell" style="--tint:#ffda89"
-              data-word="Apfel" data-id="2462" data-tint="#ffda89">
+              data-word="Apfel" data-say="einen Apfel" data-id="2462" data-tint="#ffda89">
         <img src="symbols/2462.png" alt="">
         <b>Apfel</b>
       </button>
@@ -94,9 +94,13 @@
         <img src="symbols/2458.png" alt="">
         <b>Mama</b>
       </button>
+      <!-- No picture at all. Not every button has one, and the first Sammlung
+           this viewer was ever handed had none: the bar needs something to put
+           in the card when the symbol is missing by design rather than by
+           fault. -->
       <button class="cell" style="--tint:#fdcae1"
-              data-word="bitte" data-id="8195" data-tint="#fdcae1">
-        <img src="symbols/8195.png" alt="">
+              data-word="bitte" data-tint="#fdcae1">
+        <span></span>
         <b>bitte</b>
       </button>
     </div>
@@ -131,7 +135,15 @@ document.getElementById('grid').addEventListener('click', e => {
   const el = document.createElement('span');
   el.className = 'entry';
   el.style.setProperty('--tint', cell.dataset.tint);
-  el.innerHTML = '<img src="symbols/' + cell.dataset.id + '.png" alt=""><b>' + cell.dataset.word + '</b>';
+  // SPEC.md 7.3: the entry shows its vocalization, and only when there is no
+  // picture to show instead. data-say is the vocalization, data-word the label.
+  const say = cell.dataset.say || cell.dataset.word;
+  if (cell.dataset.id) {
+    el.innerHTML = '<img src="symbols/' + cell.dataset.id + '.png" alt="' + say + '">';
+  } else {
+    el.className = 'entry wordonly';
+    el.innerHTML = '<b>' + say + '</b>';
+  }
   said.appendChild(el);
   // Always follow the newest entry. A press has to show its own result, or the
   // bar has stopped being the confirmation the child pressed the button for.
@@ -154,6 +166,18 @@ if (q) {
     : q.split(',');
   for (const w of words) document.querySelector('.cell[data-word="' + w + '"]')?.click();
 }
+
+/* The three word-class settings, so all three can be shot from one file:
+   ?c=fill (default), ?c=border, ?c=off. The viewer has no such setting — this
+   switches what the *package* carries, which is what the editor exports. */
+const mode = new URLSearchParams(location.search).get('c');
+if (mode) document.getElementById('grid').className = 'grid board ' + mode;
+
+/* ?state=speaking|degraded, for the two states that are neither. */
+const state = new URLSearchParams(location.search).get('state');
+if (state === 'speaking') document.querySelector('.cell[data-word="will"]')?.classList.add('speaking');
+if (state === 'degraded') document.querySelector('.cell[data-word="Wasser"]')?.classList.add('degraded');
+
 refresh();
 </script>
 </body>

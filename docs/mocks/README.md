@@ -14,16 +14,32 @@ Change `--rows` / `--cols` on `<body>` to see another board shape. The layout
 takes them from there and has no breakpoint of its own, which is the same
 promise the Compose grid makes.
 
+Query parameters, so every state can be shot from one file:
+
+| | |
+|---|---|
+| `?s=ich,will,Apfel` | start with a sentence in the bar; `?s=long` overflows it |
+| `?c=fill` (default), `?c=border`, `?c=off` | the three word-class settings the editor exports |
+| `?state=speaking`, `?state=degraded` | the two states that are neither |
+
 ## What it is showing
 
-A 3×5 board — the size `boot_data.ts` starts a tablet Sammlung at — with a
-sentence of three entries already in the bar, and one degraded button
-(`Wasser`) whose picture the package promised and did not contain.
+A 3×5 board — the size `boot_data.ts` starts a tablet Sammlung at. Two of the
+fifteen buttons are not ordinary: `Wasser` is degraded, its picture promised by
+the package and not contained in it, and `bitte` has no picture at all, which
+is not a fault but a button somebody wrote as a word.
 
-Colour on this screen comes from the Fitzgerald key and from nowhere else.
-Every surface around it is a neutral token, so that a tint always means a word
-class rather than decoration. The key's ten hexes live in vorlaut's
-`boot_data.ts` (`WORD_CLASSES`).
+**The board does not follow the theme.** It has a dark case and light contents
+in either scheme, and `board.css` carries the only two literal surfaces in this
+repository outside `tokens/`. The reason is in that file's header and is
+measurable: white tiles on the light theme's `--bg` sat at 1.05:1, which is a
+rounding error rather than a contrast, and the whole screen swam.
+
+Colour inside the case comes from the Fitzgerald key and from nowhere else, so
+a tint always means a word class rather than decoration. The key's ten hexes
+live in vorlaut's `boot_data.ts` (`WORD_CLASSES`). How much of it a button
+shows is not the viewer's choice — the editor writes `background_color`,
+`border_color` or neither, and `?c=` switches between the three.
 
 ## The symbols
 

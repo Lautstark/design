@@ -1,10 +1,18 @@
 /* The vorlaut board screen.
  *
- * Drawn with tokens/vorlaut.css and nothing else — there is no literal colour
- * in this file except the Fitzgerald key, which is not a theme colour but a
- * meaning, and the white behind a pictogram, which is canvas rather than a
- * plane (design.md §8.2: AAC symbols are drawn for white and need it in either
- * scheme).
+ * This is the one screen in the family that does not follow the theme. It has
+ * a dark case and light contents in either scheme, and the two greys below are
+ * the only literal surfaces in the repository outside tokens/.
+ *
+ * The reason is measurable rather than a taste. A board is a field of white
+ * and pale-tinted tiles, and on the light theme's `--bg` those tiles sat at a
+ * contrast ratio of 1.05:1 — a rounding error, not a difference, so the whole
+ * screen swam. Darkening the ground to #3C3C44 puts them at 10.9:1. Doing that
+ * only in the light theme would mean the board looked like two different
+ * products, so it does it always. Every other surface here is still a token,
+ * and the Fitzgerald key and the white behind a pictogram are unchanged: the
+ * first is a meaning rather than a theme colour, the second is canvas
+ * (design.md §8.2 — AAC symbols are drawn for white and need it either way).
  */
 
 * { box-sizing: border-box; }
@@ -23,16 +31,29 @@ html, body {
 .screen {
   height: 100vh;
   display: grid;
-  grid-template-rows: auto 1fr;
-  gap: var(--gap);
-  padding: var(--gap);
+  grid-template-rows: var(--bar-h) 1fr;
+  gap: var(--bar-gap);
+  padding: var(--edge);
+  background: var(--ground);
 }
 
-/* One number governs every gutter on the screen: between the bar and the grid,
-   between any two cells, and between the grid and every edge. The old build
-   set a padding on the grid AND a padding inside each cell, so the outer
-   columns carried both and sat further in than the inner ones. */
-:root { --gap: 10px; }
+:root {
+  /* The case. See the header for why these two are literals. */
+  --ground: #3C3C44;
+  --bar-plate: #24242A;
+
+  /* One number governs every gutter inside the grid: between any two cells and
+     nowhere else. The old build set a padding on the grid AND a padding inside
+     each cell, so the outer columns carried both and sat further in than the
+     inner ones. The screen's edge and the seam between two different surfaces
+     are allowed their own values — that is not the same mistake. */
+  --gap: 10px;
+  --edge: 20px;
+  --bar-gap: 14px;
+
+  /* 13% of the screen. It was 19%, which is half a row of board. */
+  --bar-h: 13vh;
+}
 
 /* ------------------------------------------------------------ sentence bar */
 
@@ -41,13 +62,14 @@ html, body {
    button they have to find again mid-thought. */
 .bar {
   display: grid;
-  grid-template-columns: var(--exitcol, 0px) auto 1fr auto auto auto auto;
-  gap: var(--gap);
+  /* Six columns for six children. This said `var(--exitcol, 0px) auto 1fr ...`
+     for seven, and nothing ever set --exitcol — so the back arrow lived in a
+     0px column and had never once been visible. */
+  grid-template-columns: auto 1fr auto auto auto auto;
+  gap: 7px;
   align-items: stretch;
-  height: var(--bar-h);
+  min-height: 0;
 }
-
-:root { --bar-h: 132px; }
 
 /* The arrows are always here and never move. Reserving their space costs a
    little width that is usually idle, and buys that the entries never jump
@@ -55,27 +77,23 @@ html, body {
    the resting state on a short sentence, which is most sentences. */
 .page {
   border: 0; cursor: pointer; font: inherit;
-  width: 62px; border-radius: var(--radius);
-  background: var(--surface-2); color: var(--text-dim);
+  width: 54px; border-radius: var(--radius-sm);
+  background: var(--bar-plate); color: #EBEBF0;
   display: grid; place-items: center;
 }
-.page svg { width: 38px; height: 38px; fill: none; stroke: currentColor;
+.page svg { width: 26px; height: 26px; fill: none; stroke: currentColor;
             stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-.page:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
-.page:disabled { opacity: .32; cursor: default; }
+.page:disabled { color: #5B5A64; cursor: default; }
 
 /* What has been said so far, as symbols. The entries are the grid's tiles at a
    smaller size — that is the whole point: a person who cannot read the sentence
    back can still recognise the pictures they pressed, in the order they pressed
-   them.
-
-   scroll-behavior is smooth so that a jump is followed by the eye rather than
-   teleporting; scroll-snap keeps a whole symbol at the left edge after one. */
+   them. */
 .said {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: var(--gap);
-  display: flex; align-items: center; gap: var(--gap);
+  background: var(--bar-plate);
+  border-radius: var(--radius-sm);
+  padding: 6px;
+  display: flex; align-items: center; gap: 7px;
   overflow-x: auto; overflow-y: hidden;
   scroll-behavior: smooth;
   /* No scroll-snap. Snapping gives a clean left edge, and a clean edge is
@@ -87,52 +105,67 @@ html, body {
 }
 .said::-webkit-scrollbar { display: none; }
 
-.said:empty::after {
-  content: "";
-  display: block; width: 100%; height: 100%;
-  border-radius: var(--radius-sm);
-  /* An empty bar is a shape, not a word. "…" is text, and text is the thing
-     this screen is for people who cannot use. */
-  background: repeating-linear-gradient(
-    -45deg, var(--surface-2) 0 10px, transparent 10px 20px);
-  opacity: .5;
-}
+/* An empty bar is the plate and nothing else. There is no placeholder, because
+   a placeholder is either text — the thing this screen exists for people who
+   cannot use — or a shape that has to be learnt as meaning nothing. */
 
+/* An entry is a white card on the dark plate: the same relation the tiles have
+   to the ground, so the bar and the grid read as one idea rather than two.
+
+   No word under the symbol. SPEC.md §7.3 lets an entry carry text, and it does
+   — but showing it costs a third of the card's height, and the person reading
+   the sentence back is often the person who cannot read it. The pictures they
+   touched are the form they can check. */
 .entry {
   flex: 0 0 auto;
-  width: 96px;
-  border-radius: var(--radius-sm);
-  background: var(--tint, var(--surface-2));
-  padding: 6px 6px 4px;
-  display: grid; gap: 2px; justify-items: center;
-  border: 1px solid rgba(0,0,0,.06);
+  width: 8.5%; min-width: 62px; aspect-ratio: 1;
+  border-radius: 7px;
+  background: #fff;
+  padding: 4px;
+  display: grid; place-items: center;
 }
-.entry img { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border-radius: 5px; }
-.entry b { font-size: 13px; font-weight: 600; color: #1a1a1d; letter-spacing: -.01em; }
+.entry img { width: 100%; height: 100%; object-fit: contain; }
+
+/* Unless the button had no picture at all, in which case the word is the only
+   thing there is and the card grows to hold it rather than clipping it. The
+   word is the *vocalization* and not the label (SPEC.md §7.3): a button
+   labelled "Apfel" that says "einen Apfel" puts the phrase in the bar, so the
+   bar reads as the sentence it is about to speak. */
+.entry.wordonly {
+  width: auto; aspect-ratio: auto; max-width: 26%;
+  padding: 4px 14px;
+}
+.entry.wordonly b {
+  font-size: 14px; font-weight: 600; color: #1a1a1d; letter-spacing: -.01em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
 /* The bar's own controls. They belong to the bar because they act on the bar,
    and putting them in the grid would spend three of a 3x5 board's fifteen
-   cells on punctuation. */
+   cells on punctuation.
+
+   No labels. Three symbols on a dark plate are quiet enough to ignore and
+   large enough to hit, and the words were spending bar height that the sentence
+   wanted. What the words were carrying has to move into aria-label — without
+   it these are three unnamed buttons to a screen reader. */
 .ctl {
   border: 0; cursor: pointer; font: inherit;
-  border-radius: var(--radius);
-  display: grid; place-items: center; gap: 2px;
-  padding: 0 20px; min-width: 112px;
-  background: var(--surface-2); color: var(--text-dim);
+  border-radius: var(--radius-sm);
+  display: grid; place-items: center;
+  width: 8%; min-width: 58px;
+  background: var(--bar-plate); color: #EBEBF0;
 }
-.ctl svg { width: 66px; height: 66px; fill: none; stroke: currentColor; stroke-width: 2;
+.ctl svg { width: 26px; height: 26px; fill: none; stroke: currentColor; stroke-width: 2;
            stroke-linecap: round; stroke-linejoin: round; }
-.ctl span { font-size: 12.5px; font-weight: 600; letter-spacing: .03em; text-transform: uppercase; }
-.ctl:hover:not(:disabled) { background: var(--surface-3); color: var(--text); }
-.ctl:disabled { opacity: .32; cursor: default; }
+.ctl:disabled { color: #5B5A64; cursor: default; }
 
-/* One primary per view (design.md 4.3). On this screen it is Speak. */
-.ctl.speak {
-  background: var(--accent); color: var(--accent-ink);
-  min-width: 168px;
-}
-.ctl.speak:hover:not(:disabled) { background: var(--accent-hover); }
-.ctl.speak:disabled { background: var(--surface-2); color: var(--text-dim); }
+/* One primary per view (design.md §4.3). On this screen it is Speak — and it
+   is primary by being wider and by having a filled symbol, not by being
+   coloured. An accent fill here was the loudest thing on a screen whose only
+   colour is supposed to mean word class. */
+.ctl.speak { width: 11%; min-width: 84px; }
+.ctl.speak svg { width: 32px; height: 32px; }
+.ctl.speak svg .fill { fill: currentColor; stroke: none; }
 
 /* --------------------------------------------------------------- the grid */
 
@@ -147,36 +180,62 @@ html, body {
 
 /* A cell is the symbol, with its word small underneath. The symbol takes all
    the room that is left after the word, which is what "symbol dominant" means
-   in a layout that has to survive 6x11 as well as 3x5. */
+   in a layout that has to survive 6x11 as well as 3x5.
+
+   The cell is one container. The build this replaces put a white card inside a
+   grey tile — two shapes, two radii and two colours per button, and the white
+   read as the button while the grey read as chrome. */
 .cell {
   border: 0; cursor: pointer; font: inherit;
   border-radius: var(--radius);
-  background: var(--tint, var(--surface-2));
-  padding: 8px 8px 6px;
-  display: grid; grid-template-rows: 1fr auto; gap: 4px;
+  background: #fff;
+  padding: 5% 5% 0;
+  display: grid; grid-template-rows: 1fr auto; gap: 2px;
   min-height: 0; min-width: 0;
-  /* The tint is the Fitzgerald class and carries meaning, so the resting cell
-     has no other colour on it — no border, no shadow, no gradient. */
+  overflow: hidden;
 }
-.cell img {
-  width: 100%; height: 100%; min-height: 0;
-  object-fit: contain;
-  background: #fff; border-radius: var(--radius-sm);
-}
+.cell img { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
+
+/* A button with no picture at all — not a fault, just a word. The label takes
+   the whole cell rather than sitting at the foot of an empty one. */
+.cell:not(:has(img)) { grid-template-rows: 1fr; place-items: center; padding: 6%; }
+.cell:not(:has(img)) > span { display: none; }
+.cell:not(:has(img)) b { font-size: clamp(13px, 1.9vw, 26px); padding-bottom: 0; white-space: normal; }
 .cell b {
   font-size: clamp(11px, 1.35vw, 19px);
   font-weight: 600; letter-spacing: -.01em;
+  /* Always the dark ink. The cell is white or a pale Fitzgerald tint and never
+     anything else, so the label does not follow a scheme. */
   color: #1a1a1d;
+  padding-bottom: 5%;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .cell:hover { filter: brightness(.97); }
 .cell:active { filter: brightness(.94); }
 
-/* An empty cell keeps its place and is not pressable. */
-.cell.empty { background: var(--surface-2); opacity: .35; cursor: default; pointer-events: none; }
+/* The three word-class settings the editor exports, and the three ways a cell
+   can arrive. "Fläche" is a background_color on the button, "Rahmen" a
+   border_color, "Aus" neither — the viewer has no setting of its own, it draws
+   what the package carries. */
+.board.fill   .cell { background: var(--tint, #fff); }
+.board.border .cell { box-shadow: inset 0 0 0 4px var(--tint, transparent); }
+
+/* An empty cell keeps its place and is not pressable. It is a hole in the
+   ground rather than a pale tile, so that nothing looks like a button. */
+.cell.empty {
+  background: rgba(0,0,0,.14); box-shadow: none;
+  cursor: default; pointer-events: none;
+}
+
+/* Speaking. The only accent left on this screen, and it is feedback rather
+   than decoration: it answers "did it hear me", which is the question a user
+   asks first and cannot ask out loud. Clip and device voice are told apart by
+   hue. */
+.cell.speaking { outline: 4px solid var(--accent); outline-offset: -4px; }
+.cell.synth    { outline: 4px solid var(--accent-strong); outline-offset: -4px; }
 
 /* Degraded: the picture was promised and is missing. The mark is a corner
-   wedge rather than a stand-in symbol — drawing a placeholder pictogram would
+   badge rather than a stand-in symbol — drawing a placeholder pictogram would
    tell a child who cannot read that the button has a picture, which is the one
    thing that has gone wrong with it. */
 .cell.degraded { position: relative; }
@@ -187,6 +246,6 @@ html, body {
   background: var(--danger); color: var(--danger-ink);
   font-size: 14px; font-weight: 700; line-height: 22px; text-align: center;
 }
-.cell.degraded img { opacity: 0; }
+.cell.degraded img { opacity: .32; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
