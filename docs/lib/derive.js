@@ -29,12 +29,19 @@ import { hexToOklch, oklchToHex, contrast, solveContrast } from './oklch.js';
    and as it lightens in dark mode: a neutral that holds its tint at every step
    reads as one material rather than as grey with a colour cast on top. */
 const PLANES = {
-  light: { bg: [0.9823, 0.0029], surface: [1.0000, 0.0000], 'surface-2': [0.9556, 0.0057], 'surface-3': [0.9256, 0.0087] },
-  dark:  { bg: [0.2005, 0.0042], surface: [0.2393, 0.0058], 'surface-2': [0.2779, 0.0062], 'surface-3': [0.3178, 0.0075] },
+  light: { bg: [0.9400, 0.0029], surface: [1.0000, 0.0000], 'surface-2': [0.9350, 0.0057], 'surface-3': [0.8950, 0.0087] },
+  dark:  { bg: [0.2005, 0.0042], surface: [0.3100, 0.0058], 'surface-2': [0.3600, 0.0062], 'surface-3': [0.4050, 0.0075] },
 };
 
 /* The hairline. One step off --surface-2, away from the text. */
-const LINE = { light: [0.8900, 0.0090], dark: [0.3500, 0.0080] };
+/* The hairline, and the only thing on the ladder that carries a boundary on
+ * its own. It used to sit one step off --surface-2, which made it a shade
+ * rather than an edge: 1.45:1 against --surface in dark, 1.39:1 in light, so a
+ * card outlined with it was a card with no outline. WCAG 1.4.11 asks 3:1 of
+ * anything that says where a component is, and unlike the planes — three steps
+ * of 3:1 need 27:1 of range and black to white gives 21:1 — a single hairline
+ * can reach it. */
+const LINE = { light: [0.6600, 0.0090], dark: [0.5800, 0.0080] };
 
 /*
  * --text is a fixed point on the ladder, not a solved value. It is the colour
@@ -195,6 +202,22 @@ export function auditScheme(t, opts = {}) {
     ['--danger', '--bg', t.danger, t.bg, 4.5],
     ['--danger-ink', '--danger', t['danger-ink'], t.danger, 4.5],
     ['--text', '--surface-3', t.text, t['surface-3'], 7.0],
+
+    /* Surfaces against each other, which nothing here used to check — every
+     * pair above is text on a plane, and for text the table was always right.
+     * What went unmeasured was whether the planes can be told apart at all: a
+     * card sat on the page at 1.10:1 in dark and 1.05:1 in light, which is a
+     * rounding error rather than an edge, and the hairline meant to rescue it
+     * was 1.45:1 and 1.39:1.
+     *
+     * --line carries the 3:1 that WCAG 1.4.11 asks of anything saying where a
+     * component is, because it is the one value on the ladder that can. Three
+     * plane steps at 3:1 need 27:1 of range and black to white gives 21:1, so
+     * the planes are held to being *visible* rather than compliant — 1.15:1 is
+     * the floor that stops the ladder collapsing back into one shade. */
+    ['--line', '--surface', t.line, t.surface, 3.0],
+    ['--surface', '--bg', t.surface, t.bg, 1.15],
+    ['--surface-2', '--surface', t['surface-2'], t.surface, 1.15],
   ];
   if (opts.ok) pairs.push(['--ok', '--bg', t.ok, t.bg, 4.5], ['--warn', '--bg', t.warn, t.bg, 4.5]);
 
