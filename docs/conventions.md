@@ -65,10 +65,33 @@ argued from what it would cost to adopt is not a convention, it is an excuse
 with a table around it.
 
 That condition will not hold forever, and this paragraph is what to re-read when
-it stops. What is already outside it is the **`.obz` exchange format** — once a
-package reaches somebody's tablet it is a file on a device nobody here controls,
-so `exchange/SPEC.md` keeps its versioning discipline and its compatibility
-rules. Everything internal is fair game.
+it stops. Two things are already outside it, and they are outside it for the
+same reason.
+
+The **`.obz` exchange format** — once a package reaches somebody's tablet it is
+a file on a device nobody here controls, so `exchange/SPEC.md` keeps its
+versioning discipline and its compatibility rules.
+
+**A person's IndexedDB**, from the day a product is advertised. The sentence
+above transfers to it without a word changed: a database in a carer's browser is
+on a device nobody here controls, and nobody here can put back what an upgrade
+drops from it. The disposable data this rule is written around is the author's
+own; a child's communication board is not it, and *"you should have configured a
+backup"* is not a sentence that can be said to the person who lost one. So a
+schema change carries the data across or refuses to touch it — it does not clear
+the stores and start again. vorlaut settled this on 2026-08-27 (ADR 0015: one
+step per version, inside the `versionchange` transaction, or abort and leave the
+database exactly as it was found), and bildhaft settled it identically the same
+day (ADR 0001, with `docs/schema-upgrades.md` weighing the ways out). mitreden
+keeps its Sammlungen the same way and has the same premise expiring.
+
+Both are entries on a short list of exceptions, not arguments against the rule,
+and the list is short on purpose: the reason either one is on it is a device
+nobody here controls, so nothing gets on it by being merely inconvenient to
+change. The rest of the paragraph stands. There are still no deprecation paths
+and no tolerating an old shape "during a transition", the migration an upgrade
+runs is a step that finishes rather than a compatibility mode that lingers, and
+everything else internal is fair game.
 
 ---
 
