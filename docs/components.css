@@ -288,6 +288,72 @@
 }
 .notice.bad { background: var(--danger-soft); color: var(--danger); }
 
+/*
+ * The way out.
+ *
+ * "Stays until something replaces it" was written about a line that reports a
+ * refusal, and it is right about that one. Applied to „Alltag zu Hause
+ * hinzugefügt." it left a sentence about last Tuesday sitting at the top of the
+ * list, because nothing ever came to replace it. A ✕ is not auto-dismissal —
+ * §4.3's bar is still that the product may not clear the line on a timer — it
+ * is the reader deciding they have read it.
+ *
+ * It is a `.btn.quiet.icon`, not a control this component owns. The sheet
+ * already puts a corner ✕ on one and there is no reason for the notice to have
+ * a second kind; what the notice overrides is one declaration, below.
+ *
+ *   <p class="notice">
+ *     „Alltag zu Hause" hinzugefügt.
+ *     <button class="btn quiet icon" aria-label="Meldung ausblenden">✕</button>
+ *   </p>
+ *
+ * The ✕ needs an accessible name that says what it dismisses. Two cautions,
+ * both learned next door: the sheet's rule about not giving a corner ✕ and a
+ * footer dismiss the same name applies here whenever both are on screen; and a
+ * notice is usually inside a live region, whose announcement is its whole text
+ * content — so the button's name is read out again every time the line
+ * changes, which is an argument for „Meldung ausblenden" over anything longer.
+ */
+
+/* Keyed off :has() rather than a modifier class, the way .collections__item
+   reads its own second line: the row layout and the thing that needs it stay
+   one fact instead of two that have to agree. That is not only tidiness here.
+   Both siblings compose this class with others — bildhaft writes
+   `standing notice bad` onto its backup line, mitreden toggles `notice` onto
+   the same line — and mitreden's settings notice is a `<p>` holding a <b> and a
+   <span> in inline flow, which display:flex on the base rule would break into
+   two columns. Hung off :has(), the plate they use cannot change, rather than
+   being promised not to. Where :has() is missing the ✕ falls back into flow:
+   below the sentence, still a button, still named.
+
+   flex-start, not the centre .sheet > .head uses for its corner ✕. A sheet head
+   holds a title; this holds the sentence that says what happened *including
+   what partly failed*, which is the message kind most likely to run to two
+   lines — and a ✕ centred against a paragraph sits level with nothing. Against
+   the first line it sits level with the text it dismisses. Same reasoning as
+   .collections__item:has(.collections__sub), and the same trigger. */
+.notice:has(> .btn) { display: flex; gap: 12px; align-items: flex-start; }
+
+/* margin-left rather than a grow on the text: the sentence is usually a bare
+   text node, and an anonymous flex item cannot be given flex-grow. */
+.notice > .btn { flex: none; margin-left: auto; }
+
+/* The one declaration the notice overrides, and the reason is measured. The
+   quiet tier hovers to --surface-2 because it assumes it is sitting on the
+   page's ground; on this plate that fill is 1.08:1 in the light scheme — under
+   the 1.15 floor the audit uses for "these two planes can be told apart", so
+   the hover is invisible in exactly the scheme most people run. --surface-3 is
+   1.20:1 light and 1.75:1 dark over both plates, and §4.2 already reserves it
+   for "under the pointer, never at rest", which is where the pointer is.
+
+   Only the fill. The tier keeps --text-dim at rest (5.60:1 over the plates at
+   worst, all three products, both schemes) and --text under the pointer (7.57:1
+   over --surface-3 at worst). Taking the plate's own ink instead, which the
+   Compose port does, is right on a touch screen that has no hover and not
+   available here: --accent-strong over --surface-3 measures 2.88:1 in vorlaut's
+   dark scheme, so an ink ✕ would have nowhere legible to go. */
+.notice > .btn.quiet:hover:not(:disabled) { background: var(--surface-3); }
+
 .toast {
   display: inline-block;
   background: var(--text); color: var(--bg);
