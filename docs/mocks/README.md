@@ -61,20 +61,85 @@ keywords by hand. The first search hit was wrong for several of them —
 map of a disability workshop. A board of placeholder squares would have hidden
 that, and would also have made any spacing look fine.
 
-## The other three screens
+## The adult's screens
 
 `vorlaut-sammlungen.html`, `vorlaut-sammlungen-leer.html`,
-`vorlaut-warnungen.html`, `vorlaut-pin-waehlen.html`, `vorlaut-pin-eingeben.html`.
+`vorlaut-warnungen.html`, `vorlaut-pin-waehlen.html`,
+`vorlaut-pin-eingeben.html`, `vorlaut-pin-falsch.html`.
 
-These are the adult's screens. The board gives up everything it can to the
-grid; these give up nothing, because reading is the whole task.
+Six files and fewer screens than that: the first two are one screen full and
+empty, the last three are one sheet in three states, and `vorlaut-warnungen.html`
+is a sheet over the first. This heading used to say three and the list under it
+had five, which was about the state the app was in. Everything outside the
+Tafel is there to do three things — add a file, look at what is on the device,
+remove one — and it had grown four surfaces, three doors to two places, and a
+primary action that scrolled away as soon as a fourth Sammlung arrived.
+vorlaut-app `45ca73e` (`v0.6.0`) cut that down, and these files follow it.
+
+The board gives up everything it can to the grid; these give up nothing,
+because reading is the whole task.
+
+### What the app settled, and these files now show
+
+**The foot does not scroll.** Sammlung hinzufügen was a list item under the
+last row, so with four Sammlungen you scrolled to find the thing the screen
+exists for. It is the right half of a fixed foot now — and Einstellungen is the
+left half, which is the easier part of the change to miss because it barely
+shows in a diff. It stays at the foot, where design.md §3.6 keeps it, but as a
+Quiet-tier button rather than 13.5sp of dim text with 6dp under it: measured on
+a tablet, 30dp of touch target becoming the 48dp both controls have now. The
+rule is `.fussleiste` in `screens.css`, and not `.footer` — `components.css`
+owns that name for the centred plate of fine print at the bottom of a web page,
+which is the same word for a different object.
+
+**A Sammlung row has no picture.** It led with a 56dp pictogram, decoded off
+the archive per row on a worker. What that picture could show is whichever
+button happens to sit first in the root board rather than a cover anybody
+chose, and four AAC line drawings on white tell four rows apart far less well
+than four names do. So the row leads with the name, `.sammlung .face` is gone
+from `screens.css`, and `rememberFace` went with it in the app. Nothing left
+`symbols/`: all three pictograms this mock used are still drawn by
+`vorlaut-board.html`, both editors and `vorlaut-exit.html`.
+
+**The `⋯` carries one item, Entfernen.** It held three, and two of them said
+what the row and the chip already said — the row opens by being tapped, and the
+warnings open by their count. What is left is the one act with nowhere else to
+be. It keeps the `⋯` rather than promoting Entfernen to a visible control,
+because §4.3 is about where the *next* action goes.
+
+**Warnungen is a sheet, not a route.** It had its own app bar, its own intro
+and its own way back, for an aside nobody answers on the spot. SPEC.md 9.3 asks
+that the warnings stay reachable after the import — the person importing is
+usually not the person who later notices a button has gone quiet — and a sheet
+is reachable. `vorlaut-warnungen.html` therefore draws the Sammlungen list with
+the sheet over it rather than a screen of its own; it keeps its name because it
+is still the warnings, and it keeps the `.warn` rows, which survived the route
+unchanged. The silhouette is ConfirmDestructive's, value for value, which is
+`components.css`'s `.sheet`.
+
+**There is a third row flag, `öffnet sich`.** Which Sammlung opens on the next
+start decides what the child is handed, and it was written down nowhere — which
+left the one question an adult has before passing the tablet over unanswerable
+from the screen that exists to answer it. `Flag()` gained `accent` beside
+`quiet` for it: not quiet, because it is the fact somebody is looking for; not
+the danger fill, because nothing is wrong. Accent, then quiet, then the warning
+count — the order the app adds them in, so the fact you are looking for sits
+nearest the name.
+
+One thing in these files runs ahead of the released app, and only one. The
+empty state's wording in `vorlaut-sammlungen-leer.html` is vorlaut-app's `main`
+rather than `v0.6.0`: the sentence named `.obz`, which is the extension of the
+two exports that are *not* for this app, and the fix landed after the tag. The
+file says so in a comment, so a later reader does not mistake a lead for a
+regression.
 
 They import `components.css` and use it. The first pass at `screens.css`
 redefined `.notice`, `.empty`, `.sheet` and the footer before noticing all four
 were already in that file — which is the drift `components.css` was written to
 stop, arriving from a fourth product. What is left in `screens.css` is
-vorlaut's own layout: a Sammlung row carrying a picture and a warning count,
-and the warning rows. Product layout is identity, not vocabulary.
+vorlaut's own layout: a Sammlung row and what is wrong with it, the foot the
+list stands on, and the warning rows. Product layout is identity, not
+vocabulary.
 
 Two names are deliberate. The page header is `.appbar` and not `.head`, because
 `components.css` owns `.sheet > .head` and says its vocabulary is small,
@@ -83,14 +148,19 @@ reused, and has to be scoped. And a Sammlung row is `.sammlung` and not
 count down the side — where this is the main surface of a viewer whose whole
 job is choosing between Sammlungen.
 
-The wording is German throughout, matching the board. vorlaut is bilingual on
-the web (`TEXTS` in `boot_data.ts` carries `de` and `en` behind a picker) and
-the Android viewer currently is not: its chrome is hardcoded English over
-German package content. Whatever these screens become, they need the pair.
+The wording is German throughout, matching the board, and so is the app's.
+`app/src/main/res/values/strings.xml` is the German base and `values-en/`
+carries the English; the header comment on the base file says why, and it is
+not a shrug — these are German boards, built by German-speaking families, on a
+device handed to a German-speaking child, and bildhaft made the same call for
+the same kind of reason. What the viewer does not have is the *picker*: on the
+web `TEXTS` in `boot_data.ts` carries `de` and `en` behind one, while the
+Android viewer follows the device locale. The header says it should end up
+there too.
 
 ## The two editors
 
-`vorlaut-editor.html` is a different kind of mock from the five above. Those
+`vorlaut-editor.html` is a different kind of mock from the screens above. Those
 draw a screen that exists; this one draws a proposal, and it is here rather
 than in the product because the argument is about pixels and a round trip
 through two TypeScript editors is the expensive way to have it.
