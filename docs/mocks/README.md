@@ -314,3 +314,66 @@ here derives a display name"). So vorlaut's German stays in vorlaut's `TEXTS`,
 the shared row never learns a vocabulary, and mitreden and bildhaft pass nothing
 and render precisely what they render today. Described in words only; nothing is
 implemented.
+
+## Ein Paket auf das Tablet
+
+`vorlaut-senden.html` and `vorlaut-empfangen.html` are the two halves of one
+proposal, and like the two editors above they draw something that does not
+exist. Today a tablet Sammlung reaches a tablet as a file somebody carries:
+the editor downloads `<name>-app.zip`, and the rest is a cable, a stick, or a
+share sheet. The proposal is that the editor can hand it straight over on the
+home network, and that the viewer can be told to listen.
+
+The exchange rule this has to respect is directional, and it is easy to read
+backwards. `exchange/SPEC.md` §5.2 permits a METACOM licensee to bake their own
+symbols into a package **for the person they support** and put it on that
+person's device — that is the sanctioned case, not the forbidden one. What §5.2
+forbids is the package's bytes leaving the *viewer* afterwards: no export, no
+sharing, no backup upload. A viewer that only ever receives gives none of that
+up, which is the shape drawn here.
+
+**The address is the whole design problem.** It is four numbers, and the two
+halves of the proposal show the same four numbers in the same grouping: read
+large on the tablet, typed into four boxes in the editor, dimmed in the same
+two places on both. What has to be copied is picked out on the screen it is
+copied from.
+
+Four boxes rather than one field is `pin.css`'s argument, reused: one field
+with four numbers in it asks somebody to count what they typed. The differences
+are what the content forces — three digits to a box, nothing masked, and the
+two boxes that rarely change stepped back to an outline once an address has
+been sent. They stay editable, because `192.168` is a habit and not a rule: a
+Fritzbox hands out `192.168.178.x`, most other routers `192.168.0.x`, and a
+network on `10.x` is ordinary. Hard-coding the first half would work in most
+German homes and strand the rest.
+
+`vorlaut-empfangen.html` takes `?state=`: `liste` (default), `wege` — the two
+ways a Sammlung can arrive, asked before the file picker rather than instead of
+it — `warten`, `laeuft`, `fertig`.
+
+Two things it deliberately does not draw. There is **no progress bar**:
+`Notice()` in vorlaut-app gained `busy` and `onDismiss` at 4acc32e, so the line
+that says how it ended is the line that says it is arriving. `components.css`
+has not caught up — its `.notice` is still the plain plate — and a product
+stylesheet growing its own busy notice is the drift that file exists to stop,
+so the mock uses the plain one and the layout argument survives without the
+ticker. And there is **no confirmation before sending**: the package is already
+built at that point, and sending it to the wrong tablet in your own house costs
+one wrong Sammlung in a list that has a Entfernen.
+
+**The scaffolding is not the proposal.** `vorlaut-empfangen.html` carries a
+fixed foot in a local `<style>` because that is how vorlaut-app has drawn the
+Sammlungen screen since 4acc32e — Einstellungen quiet at the left, Sammlung
+hinzufügen primary at the right, neither scrolling — while
+`vorlaut-sammlungen.html` still shows the older layout, where the button was
+the last item in the list and every row carried a 56dp picture. That mock is
+stale against the shipped app and is not this branch's to fix.
+
+**What is unresolved, and it is not a detail.** The editor is served over
+`https` and a tablet on the LAN answers over `http`, which browsers block as
+mixed content. Private Network Access exists for exactly this shape — the
+device on the network consents with
+`Access-Control-Allow-Private-Network` — and both ends are ours, but whether it
+carries on a real tablet is a question for a real tablet. Until that is
+answered these two pages are a drawing. Speichern stays either way: the path
+that always works does not leave.
