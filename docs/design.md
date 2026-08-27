@@ -1136,7 +1136,14 @@ the chrome is not.
   line anchored under the input. Disappears when the work does.
 - *Outcome* — the sentence that says what happened, including what partly failed.
   Stays until something replaces it. Never auto-dismissed if it names a failure or
-  reports a number the user might need.
+  reports a number the user might need. It **may carry a dismiss**, and the two are
+  not the same thing: the bar is that the *product* may not clear the line on a
+  timer, not that the *reader* may not close it once they have read it. "Stays
+  until something replaces it" was written about a line reporting a refusal and is
+  right about that one; applied to „Alltag zu Hause hinzugefügt." it left a
+  sentence about last Tuesday at the top of the list, because nothing ever came to
+  replace it. The ✕ is a quiet icon button inside the notice, not a control the
+  notice owns — `components.css` has the one declaration it overrides, and why.
 - *Aside* — a fire-and-forget acknowledgement of something that is already visible
   on screen ("Sicherung exportiert."). May be a toast that clears itself.
 
@@ -1144,6 +1151,25 @@ Both products may implement these differently — mitreden's persistent inline l
 correct for outcome, bildhaft's toast is correct for aside — but neither may use one
 treatment for a kind it does not suit. bildhaft's 3.2 s toast currently carries
 outcome messages that report counts; that is the mismatch on its side.
+
+**Progress assumes a control that started it, and one screen has none.** The rule
+above sends progress to "the button, or the input" because in all three products
+something was pressed. vorlaut's Android viewer receiving a package over the LAN
+has neither: the tablet is waiting on a network, and there is no originating
+control to hang a spinner on. Its `Notice()` therefore carries a `busy` state —
+an indeterminate ticker on the outcome plate, so one line says „wird empfangen …"
+and then „empfangen", rather than a progress bar that exists for four seconds and
+is never seen again.
+
+That state is **deliberately vorlaut's and not the family's**, and this paragraph
+is here so the next reader does not take the gap for an oversight. Two reasons.
+It is a second *kind* of message on the outcome plate, which is a change to the
+taxonomy above rather than a missing rule below it. And it would be the first
+animation in `components.css`: §4.2 closes the motion budget at 130ms for colour
+and 220ms for size or position, "nothing else", and an indeterminate loop is
+neither — so it costs an amendment there too. Neither bildhaft nor mitreden has a
+long operation that would spend it. If a second product grows one, that is the
+evidence to reopen this with; one product is not.
 
 **Empty states teach.** An empty list says the one thing the user does not yet know:
 what to type, or how the input is read. A *filtered*-empty is a different, shorter
@@ -1725,7 +1751,8 @@ plain modifier words, the way vorlaut and mitreden already speak: `.btn`,
 `aria-pressed="true"` rather than a class, because a filter a screen reader
 cannot hear toggling is not a filter; `.menu` inside a `.menu-anchor`;
 `.sheet` with `.head`, `.body` and `.foot`; `.empty`; `.notice` and
-`.notice.bad`; `.toast`. Everything is opt-in by class — importing the file
+`.notice.bad`, taking an optional trailing `.btn.quiet.icon` as its dismiss;
+`.toast`. Everything is opt-in by class — importing the file
 restyles nothing by itself except `:focus-visible`, which is the one rule that
 was already true everywhere and should not be optional.
 
