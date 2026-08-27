@@ -604,23 +604,34 @@ It is written here rather than left to the package because the package is what
 makes it true today, and a fourth product hand-rolling a menu would pass review
 looking correct. The behaviour is the convention; the package is how it is kept.
 
-**Diverging: nobody**, as of 2026-08-25, on the glyph or the contents. vorlaut
-kept its export in a settings panel; both of its exports are in the `⋯` now,
-above the delete, and the settings panel holds only the way *in* — importing is
-not an act on one particular Sammlung.
+**Diverging: nobody**, as of 2026-08-27, on the glyph or the contents. vorlaut
+kept its export in a settings panel; everything it writes is in the `⋯` now,
+above the delete. A talker Sammlung has four entries there — the document, the
+app package, the device's own `.obz`, and the build written into a folder — and
+a tablet Sammlung has the one act that is its own, the app package. The settings
+panel holds only the way *in*: importing is not an act on one particular
+Sammlung.
 
-**And a third one, which is why that line says "both of its exports" and not
-"everything it writes".** The sweep for §3.10 found vorlaut's *Gerät* panel
-writing the open Sammlung's build into a folder — an act on one particular
-Sammlung, in the sheet, which is the arrangement the paragraph above reports as
-finished. It is named here rather than counted as a divergence, because unlike
-the two exports it is not obvious that moving it would improve anything: its own
-note says what it is for — the files the talker reads, in the shape
-`tools/serialcheck.html` can send and `mklittlefs` can turn into an image — and
-it exists for the machine where the cable is not working. An act whose whole
-purpose is that the ordinary route has failed is a poor test of a rule about
-where the ordinary route lives. Left open on the page rather than resolved in
-silence, which is what "the divergence lists go stale in hours" asks for.
+**The third one is closed, and not by anyone arguing it.** This section carried
+an open question from 2026-08-25. The sweep for §3.10 had found vorlaut's
+*Gerät* panel writing the open Sammlung's build into a folder — an act on one
+particular Sammlung, sitting in a sheet — and it was named here rather than
+counted as a divergence, because its own note says it exists for the machine
+where the cable is not working, and an act whose whole purpose is that the
+ordinary route has failed is a poor test of a rule about where the ordinary
+route lives.
+
+The panel is gone. `editor-diy/folder_build.ts` registers the folder write
+through `collectionMenuExtras()`, so it is an entry in the `⋯` like the three
+beside it, and what is still called *Gerät* in vorlaut is a row in the transfer
+sheet naming which talker is about to be written to — a summary of what the
+press will do, not a thing to press. Nothing that acts on one particular
+Sammlung is left in a sheet of the app's own.
+
+The exception was never argued to a conclusion; it stopped existing when the
+screen around it was rebuilt for other reasons. That is the ordinary fate of
+one, and the reason to write it down rather than resolve it in silence: it had
+somewhere to be found when the ground moved under it.
 
 ### 3.7 A folder the browser has taken access to is a warning, not a note
 
@@ -904,14 +915,24 @@ forced:
   on the `⋯` beside the name (§3.6) and not in the settings sheet, where a
   control answering differently per Sammlung is exactly the divergence below.
 
-**Diverging: vorlaut**, as of 2026-08-25, on two panels of one sheet. The voice
-(`state.layout.voice`) and the language the built device shows its own menu in
-(`state.layout.language`) are both written from the settings sheet and both land
-in the open Sammlung's layout — the second under a comment that already says it
-"is different from one Sammlung to the next", which is this section's test
-written out in the template that fails it. Both belong in the `⋯` beside the
-name, and the shape of the move is in the product already: that is where
-`collectionMenuExtras()` puts the tablet editor's *Raster* card (§3.6).
+**Diverging: nobody**, as of 2026-08-27. vorlaut was the one, on 2026-08-25, on
+two panels of one sheet: the voice (`state.layout.voice`) and the language the
+built device shows its own menu in (`state.layout.language`) were both written
+from the settings sheet at the foot of the sidebar and both landed in the open
+Sammlung's layout — the second under a comment that already said it "is
+different from one Sammlung to the next", which is this section's test written
+out in the template that failed it.
+
+It is fixed, and not by the move this paragraph prescribed. Both are still
+panels rather than menu entries. What changed is the door: they are in a
+Sammlung sheet now, opened from the `⋯` beside the name (§3.6), with the tablet
+editor's *Raster* card and the per-Sammlung symbol source that has since joined
+them. Reading that back as a correction to the rule rather than to the product:
+this section's test is about what a control answers to, not about what shape it
+takes. A panel whose answer changes when a different row in the sidebar is
+selected is not a setting of the app — and it stops being one the moment it is
+reached from the row rather than from the app, without having to stop being a
+panel.
 
 **Diverging: nobody else**, read against the code the same day rather than
 inferred from vorlaut — §3.4's lesson about an audit that stops at its first
