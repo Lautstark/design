@@ -351,13 +351,16 @@ German homes and strand the rest.
 ways a Sammlung can arrive, asked before the file picker rather than instead of
 it — `warten`, `laeuft`, `fertig`.
 
-Two things it deliberately does not draw. There is **no progress bar**:
-`Notice()` in vorlaut-app gained `busy` and `onDismiss` at 4acc32e, so the line
-that says how it ended is the line that says it is arriving. `components.css`
-has not caught up — its `.notice` is still the plain plate — and a product
-stylesheet growing its own busy notice is the drift that file exists to stop,
-so the mock uses the plain one and the layout argument survives without the
-ticker. And there is **no confirmation before sending**: the package is already
+Two things it deliberately does not draw. There is **no progress bar**, and
+that is now the family's answer rather than a gap. `Notice()` in vorlaut-app
+grew `busy` and `onDismiss` at 4acc32e; of the two, only the ✕ came up to
+`components.css`, at 13c429d. `busy` was refused, and design.md §4.3 records
+why: §4.3 sends progress to "the control that started it", so a busy outcome
+line is a second *kind* of message rather than a missing rule under the
+existing one, and §4.2 closes the motion budget at 130ms for colour and 220ms
+for size or position — an indeterminate loop is neither. So this screen says
+"wird empfangen" on the same plain plate it later says "ersetzt" on, and the
+plate carries the ✕. And there is **no confirmation before sending**: the package is already
 built at that point, and sending it to the wrong tablet in your own house costs
 one wrong Sammlung in a list that has a Entfernen.
 
