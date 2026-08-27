@@ -434,13 +434,12 @@ plate carries the ✕. And there is **no confirmation before sending**: the pack
 built at that point, and sending it to the wrong tablet in your own house costs
 one wrong Sammlung in a list that has a Entfernen.
 
-**The scaffolding is not the proposal.** `vorlaut-empfangen.html` carries a
-fixed foot in a local `<style>` because that is how vorlaut-app has drawn the
-Sammlungen screen since 4acc32e — Einstellungen quiet at the left, Sammlung
-hinzufügen primary at the right, neither scrolling — while
-`vorlaut-sammlungen.html` still shows the older layout, where the button was
-the last item in the list and every row carried a 56dp picture. That mock is
-stale against the shipped app and is not this branch's to fix.
+**The scaffolding is not the proposal.** `vorlaut-empfangen.html` needs the
+Sammlungen screen's fixed foot to draw the door in its frame, and carried it in
+a local `<style>` while `vorlaut-sammlungen.html` still showed the older layout,
+where the button was the last item in the list and every row had a 56dp
+picture. That mock has caught up, so the rule moved to `screens.css` as
+`.fussleiste` and there is one copy of it.
 
 **It was measured, and it works — behind a permission the browser has only
 just begun to ask for.** The blocker named here was the wrong one, twice over,

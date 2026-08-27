@@ -8,20 +8,6 @@
 <link rel="stylesheet" href="../components.css">
 <link rel="stylesheet" href="screens.css">
 <link rel="stylesheet" href="senden.css">
-<style>
-/* The fixed foot of the Sammlungen screen, as vorlaut-app draws it since
-   4acc32e: Einstellungen quiet at the left, Sammlung hinzufügen primary at the
-   right, neither scrolling. It is scaffolding here — this mock is not a
-   proposal about the foot, it just cannot draw the door without the doorframe.
-   screens.css does not carry it yet because vorlaut-sammlungen.html still shows
-   the pre-4acc32e layout, where the button was the last item in the list. */
-.fussleiste {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  border-top: 1px solid var(--line);
-  padding: 14px 28px;
-  background: var(--bg);
-}
-</style>
 </head>
 <body>
 
@@ -45,20 +31,21 @@
       </p>
 
       <button class="sammlung">
-        <span><span class="name">Morgens</span><br><span class="sub">2 Tafeln · 5 Tasten · geändert 24.08.2026</span></span>
-        <span><span class="flag accent">öffnet sich</span> <span class="flag quiet">nicht weitergeben</span></span>
+        <span class="text"><span class="name">Morgens</span><span class="sub">2 Tafeln · 5 Tasten</span></span>
+        <span class="flag accent">öffnet sich</span>
+        <span class="flag quiet">nicht weitergeben</span>
         <span class="dots" role="button" aria-label="Mehr">⋯</span>
       </button>
 
       <button class="sammlung">
-        <span><span class="name">Kernvokabular</span><br><span class="sub">1 Tafel · 15 Tasten · geändert 24.08.2026</span></span>
-        <span><span class="flag quiet">nicht weitergeben</span> <span class="flag">2 Warnungen</span></span>
+        <span class="text"><span class="name">Kernvokabular</span><span class="sub">1 Tafel · 15 Tasten</span></span>
+        <span class="flag quiet">nicht weitergeben</span>
+        <span class="flag">2 Warnungen</span>
         <span class="dots" role="button" aria-label="Mehr">⋯</span>
       </button>
 
       <button class="sammlung">
-        <span><span class="name">Spielen</span><br><span class="sub">1 Tafel · 6 Tasten · geändert 22.08.2026</span></span>
-        <span></span>
+        <span class="text"><span class="name">Spielen</span><span class="sub">1 Tafel · 6 Tasten</span></span>
         <span class="dots" role="button" aria-label="Mehr">⋯</span>
       </button>
     </div>
