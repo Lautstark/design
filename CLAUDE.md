@@ -115,3 +115,34 @@ git -C ~/Code/design push origin main
 `--no-ff` always. If the main checkout is on somebody else's branch or is dirty,
 wait. Then remove the worktree and delete the branch, so rule 1's dashboard
 stays true.
+
+## 8. Cut a release with `npm version`, not by hand
+
+A release here is a version and a tag. The version lives in two files — npm
+writes it into `package-lock.json` as well, as a mirror of `package.json` — and
+editing one by hand is how they came to say 1.17.0 and 1.15.0 at the same time.
+
+```bash
+npm version minor --no-git-tag-version   # or patch, or major
+git commit -am "Say 1.18.0, which <the change> should have said"
+git tag -a v1.18.0                       # the notes go here
+```
+
+`--no-git-tag-version` is the part to keep. Plain `npm version` also commits and
+tags, and gives the tag the same message as the commit — which would flatten
+what the tags here actually carry. `v1.17.0`'s annotation is a paragraph about a
+card sitting at 1.10:1 with an outline meant to rescue it; `v1.15.0`, left to a
+default, says `Merge branch 'claude/converge-shared-sizes'` and nothing else.
+
+The bump is its own commit. It has been, twice in thirty: `25e4947` says "1.5.0"
+and nothing else, and `0f17c86` says which change should have said 1.17.0. The
+other twenty-eight arrived inside a commit about something else — a line in
+`package.json` riding along with the work that earned it, which is what a
+hand-edit to a file nobody diffs looks like a month later when you are trying to
+find out when a version shipped.
+
+`tests/version.test.js` fails when the two files disagree, so a lapse costs a red
+suite rather than a fortnight. It is the net, not the method: run the command.
+
+After the tag, the three products need `npm install` to see it. Their own
+preflights say so, and there is nothing to do here.

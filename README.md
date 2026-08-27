@@ -137,10 +137,20 @@ pin is a real pin.
 Nothing runs on a consumer's machine at install time. There is deliberately no
 `prepare` script: this family allowlists install scripts, and a token set that is
 static CSS has no business asking for an exemption. What ships is what was
-committed, and CI checks the committed files are current instead — which is why
-the header in every token file names a version. (This paragraph used to claim the
-opposite, that `prepare` regenerated `tokens/` on install. It never has; `build.js`
-has said so in its header the whole time.)
+committed, and CI checks the committed files are current instead, by regenerating
+them and diffing.
+
+That check is why the header in every token file names its inputs — the
+repository, the product, the accent — and names no version, sha or date. A stamp
+would make the regenerated copy differ from the committed one for a reason that
+has nothing to do with the content, so the check would fail forever, and a check
+that always fails is one people learn to scroll past. `tests/generated.test.js`
+holds the header to it, and the head of `build.js` has the account.
+
+(Two corrections have lived in this paragraph. It used to say `prepare`
+regenerated `tokens/` on install; it never has, and `build.js` has said so in its
+header the whole time. It then said the header names a version, which is the
+opposite of what makes the check work — read against the emitter 2026-08-27.)
 
 ### Keeping the pin current
 
