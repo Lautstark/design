@@ -61,7 +61,8 @@
     "check": "node build.js --check",
     "pins": "node pins.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "preversion": "npm run check && npm test"
   },
   "devDependencies": {
     "happy-dom": "^20.11.6",
