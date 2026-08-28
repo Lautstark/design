@@ -67,5 +67,8 @@
   "devDependencies": {
     "happy-dom": "^20.11.6",
     "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
