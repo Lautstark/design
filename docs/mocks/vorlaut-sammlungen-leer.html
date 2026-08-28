@@ -14,16 +14,28 @@
   </div>
 
   <div class="wrap">
+    <!-- R.string.empty_body as it stands on vorlaut-app's main, which is AHEAD
+         of v0.6.0 — the fix landed after the tag, so every tablet in the world
+         still shows the .obz-only sentence this replaces. It names both
+         extensions because there are two: the editor's app output is a .zip
+         (Chrome on Android goes by the media type for an unregistered
+         extension, so a .obz declared application/zip never downloads), while
+         .obz is what other AAC software and the talker export emit, and this
+         app takes those too. The rest of this mock is 4acc32e exactly. -->
     <div class="empty">
       <b>Noch keine Sammlung auf diesem Gerät.</b>
-      Eine Sammlung kommt als <code>.obz</code>-Datei aus dem Editor. Öffne sie aus
-      den Dateien, teile sie mit dieser App, oder hol sie unten herein.<br>
+      Eine Sammlung kommt als Datei aus dem Editor — <code>.zip</code> aus dessen
+      App-Ausgabe, <code>.obz</code> aus anderen Programmen. Öffne sie aus den
+      Dateien, teile sie mit dieser App, oder hol sie unten herein.<br>
       <small>Ohne Sammlung hat dieses Gerät nichts zu sagen.</small>
     </div>
-
-    <div class="actions"><button class="btn primary">Sammlung hinzufügen</button></div>
   </div>
 
-  <div class="footer"><button class="linklike">Einstellungen</button></div>
+  <!-- The foot is outside the list, so an empty screen has it too — and „unten
+       herein“ above is pointing straight at it. -->
+  <div class="fussleiste">
+    <button class="btn quiet">Einstellungen</button>
+    <button class="btn primary">Sammlung hinzufügen</button>
+  </div>
 </body>
 </html>

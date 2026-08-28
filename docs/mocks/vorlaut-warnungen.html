@@ -9,22 +9,77 @@
 <link rel="stylesheet" href="screens.css">
 </head>
 <body>
+  <!--
+    Warnungen is not a screen. It was one — its own app bar, its own intro, its
+    own way back — and became a sheet over the list it describes (vorlaut-app
+    45ca73e). SPEC.md 9.3 asks that the warnings stay reachable after the
+    import, because the person importing is usually not the person who later
+    notices a button has gone quiet; a sheet is reachable, and a whole route
+    was more than an aside nobody answers on the spot needed.
+
+    So this page draws vorlaut-sammlungen.html with the sheet over it, and the
+    Sammlung underneath is the one whose count was pressed.
+  -->
   <div class="appbar">
-    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"> <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="#9B7BFF" /> <circle cx="200" cy="174" r="22" fill="white" /> <path d="M 290 174 A 22 22 0 0 1 334 174" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" /> <ellipse cx="256" cy="256" rx="46" ry="38" fill="white" /> </svg> <b>vorlaut</b><span class="where">Kernvokabular</span>
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"> <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="#9B7BFF" /> <circle cx="200" cy="174" r="22" fill="white" /> <path d="M 290 174 A 22 22 0 0 1 334 174" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" /> <ellipse cx="256" cy="256" rx="46" ry="38" fill="white" /> </svg> <b>vorlaut</b>
   </div>
 
   <div class="wrap">
-    <p class="notice">Zwei Tasten sind unvollständig. Die Tafel funktioniert.
-       Ändern kann das nur, wer die Sammlung gebaut hat — die Reihenfolge unten ist
-       die, in der es auf der Tafel steht.</p>
+    <button class="sammlung">
+      <span class="text">
+        <span class="name">Morgens</span>
+        <span class="sub">2 Tafeln · 5 Tasten</span>
+      </span>
+      <span class="flag quiet">nicht weitergeben</span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
 
-    <div class="warn marks"><i></i><div><div>Ein Bild fehlt. Die Taste zeigt nur ihr Wort.</div><div class="at">Tafel kern · Taste Wasser · image_missing</div></div></div>
+    <button class="sammlung">
+      <span class="text">
+        <span class="name">Kernvokabular</span>
+        <span class="sub">1 Tafel · 15 Tasten</span>
+      </span>
+      <span class="flag accent">öffnet sich</span>
+      <span class="flag">3 Warnungen</span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
 
-    <div class="warn marks"><i></i><div><div>Eine Aufnahme fehlt. Die Taste spricht mit der Gerätestimme.</div><div class="at">Tafel kern · Taste Apfel · sound_missing</div></div></div>
-
-    <div class="warn"><i></i><div><div>Eine Datei in der Sammlung heißt ungewöhnlich. Sie wurde trotzdem gefunden.</div><div class="at">ganze Sammlung · path_normalization</div></div></div>
+    <button class="sammlung">
+      <span class="text">
+        <span class="name">Spielen</span>
+        <span class="sub">1 Tafel · 6 Tasten</span>
+      </span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
   </div>
 
-  <div class="footer"><button class="linklike">Einstellungen</button></div>
+  <div class="fussleiste">
+    <button class="btn quiet">Einstellungen</button>
+    <button class="btn primary">Sammlung hinzufügen</button>
+  </div>
+
+  <!-- The silhouette is ConfirmDestructive's, value for value, which is
+       components.css's .sheet — same plane, same radius, same 22px. -->
+  <div class="scrim"><div class="sheet" style="width:560px">
+    <div class="head"><h2>Warnungen · Kernvokabular</h2></div>
+    <div class="body">
+      <p class="notice">Diese Sammlung funktioniert. Ändern kann das nur, wer sie
+         gebaut hat — die Reihenfolge unten ist die, in der es auf der Tafel steht.</p>
+
+      <!-- Bounded rather than free: a Sammlung with forty warnings would grow a
+           sheet taller than the tablet, and a Dialog does not scroll on the
+           window's behalf. The order is the importer's and is not re-sorted —
+           SPEC.md 9.5 makes the sequence part of the format precisely so a
+           caregiver can compare this list against what they saw last week. -->
+      <div style="max-height:320px; overflow-y:auto; margin-top:12px">
+        <div class="warn marks"><i></i><div><div>Ein Bild fehlt. Die Taste zeigt nur ihre Beschriftung.</div><div class="at">Tafel kern · Taste Wasser · image_missing</div></div></div>
+
+        <div class="warn marks"><i></i><div><div>Eine Aufnahme fehlt. Die Taste bleibt stumm und ist markiert.</div><div class="at">Tafel kern · Taste Apfel · sound_missing</div></div></div>
+
+        <div class="warn"><i></i><div><div>Eine Datei in der Sammlung heißt ungewöhnlich. Sie wurde trotzdem gefunden.</div><div class="at">ganze Sammlung · path_normalization</div></div></div>
+      </div>
+    </div>
+    <div class="foot"><button class="btn">Fertig</button></div>
+  </div></div>
 </body>
 </html>

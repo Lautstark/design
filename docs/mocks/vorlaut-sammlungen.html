@@ -14,33 +14,50 @@
   </div>
 
   <div class="wrap">
-    <p class="notice">„Kernvokabular" hinzugefügt: 15 Tasten auf einer Tafel.
-       Zwei Tasten fehlt ein Bild — siehe Warnungen.</p>
+    <!-- The outcome line is R.string.added and nothing more. It used to end
+         „siehe Warnungen“, which pointed at a screen that no longer exists;
+         the count on the row is the door now. -->
+    <p class="notice">„Kernvokabular“ hinzugefügt.</p>
 
+    <!-- No picture, and the name starts at the row's edge. The counts are two
+         plurals joined by „ · “, because "1 Tafeln" is wrong and one format
+         string cannot carry two quantities. No date: the app never drew one. -->
     <button class="sammlung">
-      <span class="face"><img src="symbols/6456.png" alt=""></span>
-      <span><span class="name">Morgens</span><br><span class="sub">2 Tafeln · 5 Tasten · geändert 24.08.2026</span></span>
-      <span><span class="flag quiet">nicht weitergeben</span></span>
+      <span class="text">
+        <span class="name">Morgens</span>
+        <span class="sub">2 Tafeln · 5 Tasten</span>
+      </span>
+      <span class="flag quiet">nicht weitergeben</span>
+      <span class="dots" role="button" aria-label="Mehr">⋯</span>
+    </button>
+
+    <!-- The Sammlung the child is handed, and the one with something wrong.
+         Accent first, then quiet, then the count — the order SammlungenScreen
+         adds them in, so the fact you are looking for is nearest the name. -->
+    <button class="sammlung">
+      <span class="text">
+        <span class="name">Kernvokabular</span>
+        <span class="sub">1 Tafel · 15 Tasten</span>
+      </span>
+      <span class="flag accent">öffnet sich</span>
+      <span class="flag">3 Warnungen</span>
       <span class="dots" role="button" aria-label="Mehr">⋯</span>
     </button>
 
     <button class="sammlung">
-      <span class="face"><img src="symbols/2462.png" alt=""></span>
-      <span><span class="name">Kernvokabular</span><br><span class="sub">1 Tafel · 15 Tasten · geändert 24.08.2026</span></span>
-      <span><span class="flag">2 Warnungen</span></span>
+      <span class="text">
+        <span class="name">Spielen</span>
+        <span class="sub">1 Tafel · 6 Tasten</span>
+      </span>
       <span class="dots" role="button" aria-label="Mehr">⋯</span>
     </button>
-
-    <button class="sammlung">
-      <span class="face"><img src="symbols/23392.png" alt=""></span>
-      <span><span class="name">Spielen</span><br><span class="sub">1 Tafel · 6 Tasten · geändert 22.08.2026</span></span>
-      <span></span>
-      <span class="dots" role="button" aria-label="Mehr">⋯</span>
-    </button>
-
-    <div class="actions"><button class="btn primary">Sammlung hinzufügen</button></div>
   </div>
 
-  <div class="footer"><button class="linklike">Einstellungen</button></div>
+  <!-- Neither of these is in the list, and that is the change: the primary
+       action used to be the item under the last row. -->
+  <div class="fussleiste">
+    <button class="btn quiet">Einstellungen</button>
+    <button class="btn primary">Sammlung hinzufügen</button>
+  </div>
 </body>
 </html>

@@ -1,5 +1,10 @@
-/* The three screens that are not the board: Sammlungen, Warnungen, and the
- * handover sheet.
+/* The screens that are not the board: Sammlungen with its fixed foot, the
+ * warnings over it, and the PIN.
+ *
+ * There used to be four of them and there are two. Warnungen was a route with
+ * its own app bar, its own intro and its own way back, and became a sheet over
+ * the list it describes (vorlaut-app 45ca73e) — SPEC.md 9.3 asks for reachable,
+ * and a sheet is reachable.
  *
  * What is NOT in here matters more than what is. The button, the field, the
  * empty state, the outcome notice, the dialog sheet and the footer all come
@@ -8,9 +13,9 @@
  * is the drift it was written to stop. A first pass at this file redefined
  * .notice, .empty, .sheet and the footer before noticing they already existed.
  *
- * What is left here is vorlaut's own layout: a Sammlung row carrying a picture
- * and a warning count, and the warning rows themselves. Product layout is
- * identity, not vocabulary, and stays home.
+ * What is left here is vorlaut's own layout: a Sammlung row and what is wrong
+ * with it, the foot the list stands on, and the warning rows themselves.
+ * Product layout is identity, not vocabulary, and stays home.
  *
  * These screens are for the adult. The board gives up everything it can to the
  * grid; these give up nothing, because reading is the whole task.
@@ -18,8 +23,13 @@
 
 * { box-sizing: border-box; }
 
+/* Height rather than min-height, and the middle row is the only thing that
+   scrolls. The foot below it is the whole point of the layout — with
+   min-height the page scrolled as one and the primary action left the screen
+   as soon as a fourth Sammlung arrived, which is the fault 45ca73e fixed. A
+   mock that scrolls its own foot away cannot show that it does not. */
 body {
-  margin: 0; min-height: 100vh;
+  margin: 0; height: 100dvh;
   background: var(--bg); color: var(--text);
   font: 15px/1.55 var(--font);
   -webkit-font-smoothing: antialiased;
@@ -44,9 +54,38 @@ body {
   color: var(--text-dim);
 }
 
-.wrap { width: 100%; max-width: 860px; margin: 0 auto; padding: 0 28px 32px; }
+/* min-width/min-height:0 because a grid item's automatic minimum size is its
+   content, so without them the list pushes the row taller than its track and
+   overflow-y never gets anything to do. */
+.wrap {
+  width: 100%; max-width: 860px; margin: 0 auto; padding: 0 28px 32px;
+  min-width: 0; min-height: 0; overflow-y: auto;
+}
 .wrap > .notice { margin-bottom: 16px; }
-.actions { display: flex; justify-content: flex-end; margin-top: 20px; }
+
+/* ------------------------------------------------------------- the foot */
+
+/* Quiet at the left, the one primary action at the right, and neither of them
+   scrolls — the shape ConfirmDestructive's own footer already has.
+   Sammlung hinzufügen was the last item in the list, so the thing the screen
+   exists for was behind a scroll by the fourth Sammlung; Einstellungen was
+   13.5sp of dim text with 6dp under it, which on a tablet is 30dp of target
+   against the 48dp both controls have now. It stays at the foot, where
+   design.md §3.6 keeps it, as a button rather than a word.
+
+   Not `.footer`: components.css owns that name and it is the centred plate of
+   fine print at the bottom of a web page — same word, different object. This
+   is the last row of the body grid, which is what makes it stay put.
+
+   Written for vorlaut-empfangen.html, which needed the doorframe to draw the
+   door and carried it in a local <style> while vorlaut-sammlungen.html was
+   still pre-4acc32e. That mock now draws it too, so it lives here once. */
+.fussleiste {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border-top: 1px solid var(--line);
+  padding: 14px 28px;
+  background: var(--bg);
+}
 
 /* ------------------------------------------------------- a Sammlung row */
 
@@ -57,29 +96,37 @@ body {
 
    Not .collections__item: that is the family's *sidebar* row, a name and a
    count down the side. This is the main surface of a viewer whose whole job is
-   choosing between Sammlungen, so it carries a picture and what is wrong. */
+   choosing between Sammlungen, so it carries what is wrong with each.
+
+   The row leads with its name and has no picture. It had one — 56dp, decoded
+   off the archive per row on a worker — and what it could offer was whichever
+   button happens to sit first in the root board rather than a cover anybody
+   chose. Four AAC line drawings on white tell four rows apart far less well
+   than four names do, so the 56px column and everything that filled it went
+   (vorlaut-app 45ca73e). Flex rather than a track list now: the flags are one,
+   two or three per row and a fixed grid had to guess. */
 .sammlung {
-  display: grid; grid-template-columns: 56px 1fr auto auto; gap: 14px;
-  align-items: center;
+  display: flex; align-items: center; gap: 14px;
   width: 100%; text-align: left;
   background: var(--surface); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 14px 14px 14px 16px;
+  border-radius: var(--radius); padding: 13px 14px 13px 18px;
   margin-bottom: 10px;
   font: inherit; color: inherit; cursor: pointer;
 }
 .sammlung:hover { background: var(--surface-2); }
 
-/* A Sammlung is a set of pictures, so a picture introduces it. White ground:
-   a pictogram is a canvas, not a plane (design.md §8.2). */
-.sammlung .face {
-  width: 56px; height: 56px; border-radius: var(--radius-sm);
-  background: #fff; border: 1px solid var(--line); overflow: hidden;
-}
-.sammlung .face img { width: 100%; height: 100%; object-fit: contain; display: block; }
-
+/* The two lines take whatever the flags leave, and both clamp rather than
+   wrap — the app draws each at maxLines = 1, so a long name must not push the
+   ⋯ off the row. Scoped under .sammlung on purpose: `.text` alone is exactly
+   the kind of name components.css warns will collide with something that
+   happens also to be text. */
+.sammlung .text { flex: 1; min-width: 0; }
 .sammlung .name { font-size: 17px; font-weight: 600; letter-spacing: -.01em; }
-/* Counts are everywhere, in tabular numerals, beside the name. */
+/* Counts are everywhere, in tabular numerals, under the name. */
 .sammlung .sub { font-size: 13.5px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.sammlung .name, .sammlung .sub {
+  display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
 
 /* A fact about the row, not a filter and not an action — so it is not a .chip,
    which design.md reserves for things that change what is shown. */
@@ -105,6 +152,9 @@ body {
 
 /* ------------------------------------------------------------- warnings */
 
+/* The rows inside the warnings sheet. They were a screen of their own until
+   45ca73e; the rows survived the route unchanged, because what a caregiver
+   reads was never the part that was too much. */
 .warn {
   display: grid; grid-template-columns: 10px 1fr; gap: 14px;
   background: var(--surface); border: 1px solid var(--line);
