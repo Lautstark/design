@@ -123,7 +123,12 @@ function zeige(s) {
   /* Während etwas ankommt, sagt es die Zeile, die auch das Ergebnis sagt —
      nicht ein Balken, den es vier Sekunden lang gibt. */
   if (s === 'laeuft') {
-    warten.querySelector('.sagt').textContent = '„Kernvokabular“ wird empfangen …';
+    /* Namenlos, und das ist keine Auslassung. Während die Bytes ankommen, ist
+       der Name der Sammlung noch in ihnen drin — lesbar erst, wenn der Importer
+       das ganze Archiv durch hat. Das Gerät weiß hier nur, wie viel kommt. Die
+       Ergebniszeile eine Sekunde später nennt den Namen, und der ist dann
+       gelesen statt behauptet. */
+    warten.querySelector('.sagt').textContent = 'Ein Paket wird empfangen …';
     warten.querySelector('.dazu').textContent = '38 MB. Das Tablet kann liegen bleiben.';
   }
   if (s === 'fertig') {
