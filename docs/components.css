@@ -467,9 +467,24 @@
 .standing[data-state="idle"] .dot,
 .standing[data-state="saving"] .dot { background: var(--accent-strong); }
 
+/* `held` joins these two rather than getting a colour of its own, and the rule
+   at the top of this block is what decides it: the dot answers one question,
+   is it writing, and held is not writing. It arrived with
+   @lautstark/sicherung v1.3.0 — an export came back empty over a folder that
+   is not, so the write was refused and somebody has to say which is right.
+   Nothing is broken, but nothing is being saved either, and this file has
+   already argued that those two want the same colour: "es funktioniert nicht"
+   is a sentence somebody can put off and so is "nichts wird gesichert".
+
+   Left out, it would have fallen through to --text-faint and read as calm.
+   The products take data-state from the status kind verbatim, so a new kind
+   is silently grey here until someone adds it — which is the one failure this
+   whole feature exists to stop, arriving in the stylesheet instead. */
 .standing[data-state="needs-permission"],
+.standing[data-state="held"],
 .standing[data-state="failed"] { color: var(--danger); }
 .standing[data-state="needs-permission"] .dot,
+.standing[data-state="held"] .dot,
 .standing[data-state="failed"] .dot { background: var(--danger); }
 
 /* The age of the last good copy, which is the one number that tells somebody
