@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — an ein Tablet senden</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="senden.css">
+<style>
+/* The paper the sheets are pinned to. Not part of the proposal. */
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 15px/1.55 var(--font); -webkit-font-smoothing: antialiased;
+}
+.blatt { max-width: 1180px; margin: 0 auto; padding: 40px 24px 80px; }
+.blatt h1 { font-size: 30px; margin: 0 0 10px; font-weight: 600; letter-spacing: -.02em; }
+.blatt .lede { max-width: 66ch; color: var(--text-dim); margin: 0 0 8px; font-size: 16px; }
+.gruppe { margin-top: 44px; }
+.gruppe > h2 {
+  font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-strong); margin: 0 0 4px;
+}
+.gruppe > p { margin: 0 0 18px; color: var(--text-dim); font-size: 15px; max-width: 70ch; }
+.nebeneinander { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 24px; align-items: start; }
+.fall { display: grid; gap: 10px; }
+.fall > h3 { margin: 0; font-size: 13px; font-weight: 600; color: var(--text-dim); }
+.fall .sheet { position: static; }
+</style>
+</head>
+<body>
+<div class="blatt">
+
+  <h1>An ein Tablet senden</h1>
+  <p class="lede">
+    Ein Vorschlag, kein Bildschirm: Was der Editor zeigt, wenn ein App-Paket
+    fertig ist und nicht in den Download-Ordner soll, sondern auf das Tablet
+    daneben. Die Gegenseite ist <code>vorlaut-empfangen.html</code>.
+  </p>
+  <p class="lede">
+    Alles hier ist <code>components.css</code> — die Sheets, die Knöpfe, das
+    Label. Neu ist nur die Adresszeile in <code>senden.css</code>.
+  </p>
+
+  <div class="gruppe">
+    <h2>Wenn das Paket fertig ist</h2>
+    <p>
+      Heute lädt der Editor die Datei an dieser Stelle von selbst herunter und
+      schließt das Blatt: es gab nur eine Sache, die passieren konnte. Mit einem
+      zweiten Ziel ist das eine Frage geworden. Der Preis steht dabei — wer nur
+      speichern will, drückt jetzt einmal mehr als vorher.
+    </p>
+    <div class="nebeneinander">
+
+      <div class="fall">
+        <h3>Zwei Türen</h3>
+        <div class="sheet">
+          <div class="head"><h2>Paket für die App</h2></div>
+          <div class="body">
+            <p>„Kernvokabular“ ist fertig: 1 Tafel, 15 Tasten, 38 MB.</p>
+          </div>
+          <div class="foot">
+            <button class="btn quiet">Schließen</button>
+            <button class="btn">Speichern</button>
+            <button class="btn primary">An ein Tablet senden</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fall">
+        <h3>Zwei Tasten fehlt ein Bild</h3>
+        <div class="sheet">
+          <div class="head"><h2>Paket für die App</h2></div>
+          <div class="body">
+            <p>„Kernvokabular“ ist fertig: 1 Tafel, 15 Tasten, 38 MB.</p>
+            <p class="notice" style="margin-top:12px">Zwei Tasten haben kein Bild bekommen. Die App zeigt dort das Wort.</p>
+          </div>
+          <div class="foot">
+            <button class="btn quiet">Schließen</button>
+            <button class="btn">Speichern</button>
+            <button class="btn primary">An ein Tablet senden</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="gruppe">
+    <h2>Die Adresse</h2>
+    <p>
+      Vier Felder statt eines Textfelds, aus demselben Grund, aus dem die PIN
+      vier hat: eine Zahl mit Punkten darin lässt sich nicht überfliegen, vier
+      Kästchen schon. Getippt wird nur die Zahl — der Sprung ins nächste Feld
+      passiert nach der dritten Ziffer oder beim Punkt, und Rücktaste am Anfang
+      eines leeren Feldes geht zurück ins vorige.
+    </p>
+    <div class="nebeneinander">
+
+      <div class="fall">
+        <h3>Beim ersten Mal — alle vier offen</h3>
+        <div class="sheet">
+          <div class="head"><h2>An ein Tablet senden</h2></div>
+          <div class="body">
+            <p style="margin-bottom:14px">Die Adresse steht auf dem Tablet, sobald dort „Vom Rechner empfangen“ offen ist.</p>
+            <span class="lbl">Adresse des Tablets</span>
+            <div class="adresse" id="neu">
+              <!-- Kein autofocus: im Produkt gehört er hierher, auf einer
+                   Mockseite scrollt er den Leser an der ersten Gruppe vorbei. -->
+              <input class="oktett" inputmode="numeric" maxlength="3" aria-label="Erste Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" aria-label="Zweite Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" aria-label="Dritte Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" aria-label="Vierte Zahl">
+            </div>
+          </div>
+          <div class="foot">
+            <button class="btn quiet">Abbrechen</button>
+            <button class="btn primary">Senden</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="fall">
+        <h3>Danach — gemerkt, Cursor im letzten Feld</h3>
+        <div class="sheet">
+          <div class="head"><h2>An ein Tablet senden</h2></div>
+          <div class="body">
+            <span class="lbl">Adresse des Tablets</span>
+            <div class="adresse" id="alt">
+              <input class="oktett" data-known="1" inputmode="numeric" maxlength="3" value="192" aria-label="Erste Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" data-known="1" inputmode="numeric" maxlength="3" value="168" aria-label="Zweite Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" value="178" aria-label="Dritte Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" value="42" aria-label="Vierte Zahl">
+            </div>
+            <p class="gemerkt">Zuletzt an diese Adresse gesendet.</p>
+          </div>
+          <div class="foot">
+            <button class="btn quiet">Abbrechen</button>
+            <button class="btn primary">Senden</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="gruppe">
+    <h2>Wenn es nicht ankommt</h2>
+    <p>
+      Zwei Gründe, die auf dem Bildschirm gleich aussehen und entgegengesetzte
+      Handgriffe verlangen — deshalb dürfen sie nie denselben Satz bekommen.
+      Beim einen stimmt die Zahl nicht: der Router hat neu vergeben, und die
+      gemerkte Adresse zeigt ins Leere. Beim anderen stimmt die Zahl, und der
+      Browser hat den Weg ins lokale Netz gar nicht erst freigegeben — das
+      Tablet wurde nicht gefragt und hat nichts falsch gemacht. Wer bei diesem
+      zweiten Fall „steht auf dem Tablet eine andere?“ liest, prüft eine
+      richtige Zahl so lange nach, bis er aufgibt.
+    </p>
+    <p>
+      Kein Rad, das sich weiterdreht: beide Antworten kommen sofort.
+    </p>
+    <div class="nebeneinander">
+      <div class="fall">
+        <h3>Keine Antwort an dieser Adresse</h3>
+        <div class="sheet">
+          <div class="head"><h2>An ein Tablet senden</h2></div>
+          <div class="body">
+            <span class="lbl">Adresse des Tablets</span>
+            <div class="adresse">
+              <input class="oktett" data-known="1" inputmode="numeric" maxlength="3" value="192" aria-label="Erste Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" data-known="1" inputmode="numeric" maxlength="3" value="168" aria-label="Zweite Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" value="178" aria-label="Dritte Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" value="51" aria-label="Vierte Zahl">
+            </div>
+            <p class="notice bad" style="margin-top:14px">
+              Kein Tablet an dieser Adresse. Steht auf dem Tablet eine andere?
+            </p>
+          </div>
+          <div class="foot">
+            <button class="btn quiet">Abbrechen</button>
+            <button class="btn primary">Noch einmal senden</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Der Fall, den es vor der Messung noch nicht gab. Chrome fragt seit
+           kurzem nach Erlaubnis für das lokale Netz; wird sie abgelehnt, geht
+           die Anfrage gar nicht erst hinaus. Die Adresse bleibt stehen, weil
+           sie richtig ist, und der Knopf heißt nicht „noch einmal senden“:
+           ein zweiter Versuch trifft dieselbe abgelehnte Erlaubnis, solange
+           sie nicht im Browser zurückgenommen wird. -->
+      <div class="fall">
+        <h3>Der Browser hat den Weg nicht freigegeben</h3>
+        <div class="sheet">
+          <div class="head"><h2>An ein Tablet senden</h2></div>
+          <div class="body">
+            <span class="lbl">Adresse des Tablets</span>
+            <div class="adresse">
+              <input class="oktett" data-known="1" inputmode="numeric" maxlength="3" value="192" aria-label="Erste Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" data-known="1" inputmode="numeric" maxlength="3" value="168" aria-label="Zweite Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" value="178" aria-label="Dritte Zahl">
+              <span class="punkt">.</span>
+              <input class="oktett" inputmode="numeric" maxlength="3" value="42" aria-label="Vierte Zahl">
+            </div>
+            <p class="notice bad" style="margin-top:14px">
+              Der Browser hat den Zugriff auf das lokale Netzwerk abgelehnt. An
+              der Adresse liegt es nicht — das Tablet wurde nicht gefragt. Die
+              Erlaubnis steht im Schloss links in der Adressleiste.
+            </p>
+          </div>
+          <div class="foot">
+            <button class="btn quiet">Abbrechen</button>
+            <button class="btn">Speichern statt senden</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* Auto-advance, wie pin.css es für die PIN schon beschreibt — hier mit drei
+   Ziffern statt einer, und mit dem Punkt als zweitem Weg ins nächste Feld,
+   weil eine Adresse so abgeschrieben wird, wie sie dasteht. */
+for (const zeile of document.querySelectorAll('.adresse')) {
+  const felder = [...zeile.querySelectorAll('.oktett')];
+
+  felder.forEach((feld, i) => {
+    feld.addEventListener('input', () => {
+      feld.value = feld.value.replace(/\D/g, '');
+      if (feld.value.length === 3 && i < felder.length - 1) felder[i + 1].select();
+    });
+
+    feld.addEventListener('keydown', (e) => {
+      if (e.key === '.' && i < felder.length - 1) { e.preventDefault(); felder[i + 1].select(); }
+      if (e.key === 'Backspace' && !feld.value && i > 0) { e.preventDefault(); felder[i - 1].select(); }
+    });
+
+    /* Eine angefasste Zahl ist keine gemerkte mehr: sobald jemand in eines der
+       ruhigen Felder geht, hört es auf, ruhig zu sein. */
+    feld.addEventListener('focus', () => { delete feld.dataset.known; feld.select(); });
+  });
+
+  /* Eingefügt wird meistens die ganze Adresse auf einmal. */
+  zeile.addEventListener('paste', (e) => {
+    const teile = (e.clipboardData || window.clipboardData).getData('text').trim().split('.');
+    if (teile.length !== 4 || teile.some(t => !/^\d{1,3}$/.test(t))) return;
+    e.preventDefault();
+    felder.forEach((f, i) => { f.value = teile[i]; delete f.dataset.known; });
+    felder[3].select();
+  });
+}
+</script>
+</body>
+</html>

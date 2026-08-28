@@ -314,3 +314,134 @@ here derives a display name"). So vorlaut's German stays in vorlaut's `TEXTS`,
 the shared row never learns a vocabulary, and mitreden and bildhaft pass nothing
 and render precisely what they render today. Described in words only; nothing is
 implemented.
+
+## Ein Paket auf das Tablet
+
+`vorlaut-senden.html` and `vorlaut-empfangen.html` are the two halves of one
+proposal, and like the two editors above they draw something that does not
+exist. Today a tablet Sammlung reaches a tablet as a file somebody carries:
+the editor downloads `<name>-app.zip`, and the rest is a cable, a stick, or a
+share sheet. The proposal is that the editor can hand it straight over on the
+home network, and that the viewer can be told to listen.
+
+The exchange rule this has to respect is directional, and it is easy to read
+backwards. `exchange/SPEC.md` §5.2 permits a METACOM licensee to bake their own
+symbols into a package **for the person they support** and put it on that
+person's device — that is the sanctioned case, not the forbidden one. What §5.2
+forbids is the package's bytes leaving the *viewer* afterwards: no export, no
+sharing, no backup upload. A viewer that only ever receives gives none of that
+up, which is the shape drawn here.
+
+**The address is the whole design problem.** It is four numbers, and the two
+halves of the proposal show the same four numbers in the same grouping: read
+large on the tablet, typed into four boxes in the editor, dimmed in the same
+two places on both. What has to be copied is picked out on the screen it is
+copied from.
+
+Four boxes rather than one field is `pin.css`'s argument, reused: one field
+with four numbers in it asks somebody to count what they typed. The differences
+are what the content forces — three digits to a box, nothing masked, and the
+two boxes that rarely change stepped back to an outline once an address has
+been sent. They stay editable, because `192.168` is a habit and not a rule: a
+Fritzbox hands out `192.168.178.x`, most other routers `192.168.0.x`, and a
+network on `10.x` is ordinary. Hard-coding the first half would work in most
+German homes and strand the rest.
+
+`vorlaut-empfangen.html` takes `?state=`: `liste` (default), `wege` — the two
+ways a Sammlung can arrive, asked before the file picker rather than instead of
+it — `warten`, `laeuft`, `fertig`.
+
+Two things it deliberately does not draw. There is **no progress bar**, and
+that is now the family's answer rather than a gap. `Notice()` in vorlaut-app
+grew `busy` and `onDismiss` at 4acc32e; of the two, only the ✕ came up to
+`components.css`, at 13c429d. `busy` was refused, and design.md §4.3 records
+why: §4.3 sends progress to "the control that started it", so a busy outcome
+line is a second *kind* of message rather than a missing rule under the
+existing one, and §4.2 closes the motion budget at 130ms for colour and 220ms
+for size or position — an indeterminate loop is neither. So this screen says
+"wird empfangen" on the same plain plate it later says "ersetzt" on, and the
+plate carries the ✕. And there is **no confirmation before sending**: the package is already
+built at that point, and sending it to the wrong tablet in your own house costs
+one wrong Sammlung in a list that has a Entfernen.
+
+**The scaffolding is not the proposal.** `vorlaut-empfangen.html` carries a
+fixed foot in a local `<style>` because that is how vorlaut-app has drawn the
+Sammlungen screen since 4acc32e — Einstellungen quiet at the left, Sammlung
+hinzufügen primary at the right, neither scrolling — while
+`vorlaut-sammlungen.html` still shows the older layout, where the button was
+the last item in the list and every row carried a 56dp picture. That mock is
+stale against the shipped app and is not this branch's to fix.
+
+**It was measured, and it works — behind a permission the browser has only
+just begun to ask for.** The blocker named here was the wrong one, twice over,
+and being wrong about it changes what these two pages owe.
+
+*Mixed content is not what stops this.* Chrome does not apply mixed-content
+blocking to a private address. From `https://lautstark.github.io/vorlaut-editor/`
+a `fetch()` POST to `http://192.168.0.176:8765/` went through and answered 200,
+with only a warning in the console — 3 MB confirmed end to end in the page, and
+a 48 MB body arriving complete at the receiver. The control says the carve-out
+is real and specific rather than an accident of the profile: the same POST to
+`http://example.com/` is refused outright, `blocked=mixed-content`, *This
+request has been blocked; the content must be served over HTTPS*. Chrome
+151.0.7922.174 on macOS, fresh profile, no flags.
+
+*Private Network Access is not the mechanism either*, and the header this
+section was written around is dead. Chrome 151 never sends
+`Access-Control-Request-Private-Network` — its preflight carries
+`Access-Control-Request-Method` and `-Headers` and nothing more — and a
+receiver that deliberately omits `Access-Control-Allow-Private-Network` is
+accepted exactly the same. Nothing on the tablet needs to know the words
+*private network*.
+
+*What decides it is a permission.* `navigator.permissions.query({name:
+'local-network-access'})` answers `granted` in Chrome 151 as it ships, which is
+why the transfer passes unremarked. Local Network Access is PNA's successor and
+it is a user permission, not a header handshake. Run the same Chrome with
+`--enable-features=LocalNetworkAccessChecks` and the query answers `prompt`,
+the request stalls, and the receiver sees no byte — until somebody clicks
+**Allow**, after which the same 3 MB lands, 200, in about two seconds. A
+permission granted through DevTools instead of the prompt does *not* satisfy
+it: the request still dies with `net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS`
+and *Permission was denied for this request to access the `local` address
+space*. The click is the thing.
+
+*And past the click the receiver's side is plain CORS.* With the checks on and
+the permission granted, three receivers were tried — one answering
+`Access-Control-Allow-Private-Network`, one `Access-Control-Allow-Local-Network-Access`,
+one neither — and all three took the POST and answered 200. vorlaut-app needs
+`Access-Control-Allow-Origin`, `-Methods` and `-Headers`, and nothing else.
+
+**The case that fails is a browser that enforces the checks without asking.**
+Samsung Internet 30 (Chromium 143.0.7499.194), on the tablet this is for — an
+SM-X130 on Android 16, same wifi — refused in 450 ms with no prompt at all:
+`net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS`, *Permission was denied for
+this request to access the `unknown` address space*. That is not a tablet
+problem; the tablet is the receiver and never runs the editor. It is a warning
+about the **sender**: a Chromium with the checks on and no permission UI is a
+dead end, and neither end can do anything about it.
+
+So — **works on Chrome: today silently, tomorrow behind one Allow.** What that
+cost these pages is one state, and `vorlaut-senden.html` now draws it: „Der
+Browser hat den Weg nicht freigegeben", beside the older „keine Antwort an
+dieser Adresse". They are deliberately two cases and not one message. On screen
+the two failures look the same and their fixes are opposite — one is a number
+to re-read, the other is a permission in the address bar — so somebody who
+dismissed the prompt and was told „steht auf dem Tablet eine andere?" would
+check a correct number until they gave up. The refusal keeps the address
+standing, because it is right, and its foot offers Speichern rather than
+„noch einmal senden": a second attempt meets the same refused permission until
+it is taken back in the browser.
+
+Two things stay untested and are worth settling before this is built.
+**Safari and Firefox were not tried** — neither implements LNA, and whether
+either exempts a private address from mixed-content blocking at all is
+unknown, while the editor runs on whatever browser the adult has. Chrome on
+Android was not tried either, for want of a tablet whose Chrome had ever been
+opened; it matters only if somebody edits on one tablet and sends to another.
+And the fallback, if a sender turns out to be a refusing kind, is not another
+transport: nothing a page can do rescues it, so the sending half would have to
+stop being a page. Serving the editor over plain `http` would put both ends in
+one address space and ought to sidestep the checks entirely — untested, and
+academic while GitHub Pages will not serve it that way. Speichern stays either
+way: the path that always works does not leave.

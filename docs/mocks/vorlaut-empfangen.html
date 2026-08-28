@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="de" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>vorlaut — vom Rechner empfangen</title>
+<link rel="stylesheet" href="../../tokens/vorlaut.css">
+<link rel="stylesheet" href="../components.css">
+<link rel="stylesheet" href="screens.css">
+<link rel="stylesheet" href="senden.css">
+<style>
+/* The fixed foot of the Sammlungen screen, as vorlaut-app draws it since
+   4acc32e: Einstellungen quiet at the left, Sammlung hinzufügen primary at the
+   right, neither scrolling. It is scaffolding here — this mock is not a
+   proposal about the foot, it just cannot draw the door without the doorframe.
+   screens.css does not carry it yet because vorlaut-sammlungen.html still shows
+   the pre-4acc32e layout, where the button was the last item in the list. */
+.fussleiste {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  border-top: 1px solid var(--line);
+  padding: 14px 28px;
+  background: var(--bg);
+}
+</style>
+</head>
+<body>
+
+  <div class="appbar">
+    <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"> <path d="M 128 76 H 384 Q 436 76 436 128 V 272 Q 436 324 384 324 H 314 L 256 408 L 198 324 H 128 Q 76 324 76 272 V 128 Q 76 76 128 76 Z" fill="#9B7BFF" /> <circle cx="200" cy="174" r="22" fill="white" /> <path d="M 290 174 A 22 22 0 0 1 334 174" fill="none" stroke="white" stroke-width="26" stroke-linecap="round" /> <ellipse cx="256" cy="256" rx="46" ry="38" fill="white" /> </svg> <b>vorlaut</b>
+    <span class="where" id="wo">Sammlungen</span>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Die Liste, wie sie steht. Kein Vorschlag, nur der Grund, warum
+         jemand auf „Sammlung hinzufügen“ drückt. -->
+    <div id="liste">
+      <!-- Die Ergebniszeile, mit dem Weg hinaus, den components.css seit
+           13c429d trägt: ein .btn.quiet.icon, an dem die Zeile ihr Layout über
+           :has(> .btn) aufhängt. Der Satz steht in einem <span>, weil das
+           Skript ihn setzt und textContent auf dem <p> den Knopf mitnähme. -->
+      <p class="notice" id="meldung" hidden>
+        <span id="meldungtext"></span>
+        <button class="btn quiet icon" id="meldungzu" aria-label="Meldung ausblenden">✕</button>
+      </p>
+
+      <button class="sammlung">
+        <span><span class="name">Morgens</span><br><span class="sub">2 Tafeln · 5 Tasten · geändert 24.08.2026</span></span>
+        <span><span class="flag accent">öffnet sich</span> <span class="flag quiet">nicht weitergeben</span></span>
+        <span class="dots" role="button" aria-label="Mehr">⋯</span>
+      </button>
+
+      <button class="sammlung">
+        <span><span class="name">Kernvokabular</span><br><span class="sub">1 Tafel · 15 Tasten · geändert 24.08.2026</span></span>
+        <span><span class="flag quiet">nicht weitergeben</span> <span class="flag">2 Warnungen</span></span>
+        <span class="dots" role="button" aria-label="Mehr">⋯</span>
+      </button>
+
+      <button class="sammlung">
+        <span><span class="name">Spielen</span><br><span class="sub">1 Tafel · 6 Tasten · geändert 22.08.2026</span></span>
+        <span></span>
+        <span class="dots" role="button" aria-label="Mehr">⋯</span>
+      </button>
+    </div>
+
+    <!-- Der Wartebildschirm. Eine Sache steht darauf. -->
+    <div class="warten" id="warten" hidden>
+      <div style="display:flex;align-items:center;gap:11px">
+        <span class="puls" aria-hidden="true"></span>
+        <span class="sagt">Wartet auf ein Paket.</span>
+      </div>
+
+      <div class="anzeige" aria-label="192 Punkt 168 Punkt 178 Punkt 42">
+        <span class="fest">192</span><span class="punkt">.</span><span class="fest">168</span><span class="punkt">.</span><span>178</span><span class="punkt">.</span><span>42</span>
+      </div>
+
+      <p class="dazu">Diese Adresse im Editor eintragen. Solange dieser Bildschirm offen ist, nimmt das Tablet Pakete an.</p>
+    </div>
+
+  </div>
+
+  <div class="fussleiste">
+    <button class="btn quiet">Einstellungen</button>
+    <button class="btn primary" id="hinzu">Sammlung hinzufügen</button>
+  </div>
+
+  <!-- Die zwei Wege. Vor der Dateiauswahl, nicht statt ihr. -->
+  <div class="scrim" id="scrim" hidden><div class="sheet" style="width:460px">
+    <div class="head"><h2>Sammlung hinzufügen</h2></div>
+    <div class="body">
+      <p>Woher kommt sie?</p>
+      <div class="wege">
+        <button class="weg" type="button">
+          <span class="zeichen" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a2 2 0 0 1 2-2h3.5l2 2.5H18a2 2 0 0 1 2 2V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
+          </span>
+          <span class="worte">
+            <span class="was">Vom Tablet holen</span>
+            <span class="wo">Eine Datei, die schon hier liegt</span>
+          </span>
+        </button>
+        <button class="weg" type="button" id="wegfunk">
+          <span class="zeichen" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5a9.5 9.5 0 0 1 14 0"/><path d="M8.5 16a5 5 0 0 1 7 0"/><circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/></svg>
+          </span>
+          <span class="worte">
+            <span class="was">Vom Rechner empfangen</span>
+            <span class="wo">Über das WLAN, direkt aus dem Editor</span>
+          </span>
+        </button>
+      </div>
+    </div>
+    <div class="foot">
+      <button class="btn quiet" id="weg-ab">Abbrechen</button>
+    </div>
+  </div></div>
+
+<script>
+/* Vier Zustände aus einer Datei, wie vorlaut-board.html es hält:
+   ?state=liste (Vorgabe) · wege · warten · laeuft · fertig */
+const state = new URLSearchParams(location.search).get('state') || 'liste';
+
+const liste  = document.getElementById('liste');
+const warten = document.getElementById('warten');
+const scrim  = document.getElementById('scrim');
+const meldung = document.getElementById('meldung');
+const wo     = document.getElementById('wo');
+
+function zeige(s) {
+  const amWarten = s === 'warten' || s === 'laeuft';
+  liste.hidden = amWarten;
+  warten.hidden = !amWarten;
+  scrim.hidden = s !== 'wege';
+  wo.textContent = amWarten ? 'Vom Rechner empfangen' : 'Sammlungen';
+
+  /* Während etwas ankommt, sagt es die Zeile, die auch das Ergebnis sagt —
+     nicht ein Balken, den es vier Sekunden lang gibt. */
+  if (s === 'laeuft') {
+    warten.querySelector('.sagt').textContent = '„Kernvokabular“ wird empfangen …';
+    warten.querySelector('.dazu').textContent = '38 MB. Das Tablet kann liegen bleiben.';
+  }
+  if (s === 'fertig') {
+    meldung.hidden = false;
+    document.getElementById('meldungtext').textContent =
+      '„Kernvokabular“ ersetzt: 15 Tasten auf einer Tafel.';
+  }
+}
+zeige(state);
+
+/* Die Ergebniszeile geht weg, weil jemand sie gelesen hat — nicht auf einem
+   Timer. design.md §4.3 lässt das ✕ zu und die Uhr weiterhin nicht. */
+document.getElementById('meldungzu').onclick = () => { meldung.hidden = true; };
+
+document.getElementById('hinzu').onclick = () => { scrim.hidden = false; };
+document.getElementById('weg-ab').onclick = () => { scrim.hidden = true; };
+document.getElementById('wegfunk').onclick = () => { scrim.hidden = true; zeige('warten'); };
+</script>
+</body>
+</html>

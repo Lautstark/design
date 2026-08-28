@@ -90,6 +90,12 @@ body {
 }
 .flag.quiet { background: var(--surface-2); color: var(--text-dim); }
 
+/* The third weight, added when vorlaut-app's Flag() gained `accent` at 4acc32e
+   (v0.6.0): the Sammlung that opens on the next launch. Not quiet, because it
+   is the one fact on the row somebody is looking for; not the danger fill,
+   because nothing is wrong. */
+.flag.accent { background: var(--accent-soft); color: var(--accent-strong); }
+
 .dots {
   border: 0; background: transparent; color: var(--text-dim);
   font-size: 19px; line-height: 1; cursor: pointer;

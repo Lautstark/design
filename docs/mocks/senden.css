@@ -1,0 +1,195 @@
+/* Ein Paket aus dem Editor an ein Tablet schicken.
+ *
+ * Two halves of one hand-off, and the layout each needs. The viewer's waiting
+ * screen is here; the editor's two sheets are here; everything they are built
+ * out of — the button, the field, the sheet, the outcome notice, the footer —
+ * is components.css's and is not restated. screens.css's .appbar, .wrap and
+ * .scrim carry the app screen, because this is one of the adult's screens and
+ * has no reason to be a different page from the ones beside it.
+ *
+ * What is genuinely new is one idea used twice: **an address split into its
+ * four numbers**, shown that way on the tablet and typed that way in the
+ * editor. Everything below serves that.
+ */
+
+/* ------------------------------------------------------- die vier Kästchen */
+
+/* The PIN row's sibling, and deliberately so — pin.css already argued this
+ * shape for this product and this person: one field with four numbers in it
+ * asks somebody to count what they typed, four boxes do not. The differences
+ * are what the content forces. A box holds up to three digits rather than one,
+ * so it is wider and its type is smaller; nothing is masked, because an address
+ * on a local network is not a secret and the person is copying it off a screen
+ * two feet away; and the boxes do not all carry the same weight, which is the
+ * whole point of the next rule.
+ *
+ * Mono, and tabular. Four numbers that change one at a time must not shift the
+ * boxes beside them, and 1 is the digit that would.
+ */
+.adresse { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+
+.oktett {
+  width: 72px;
+  font: inherit;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 19px;
+  font-weight: 500;
+  text-align: center;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 10px 4px;
+  caret-color: var(--accent);
+}
+.oktett:focus {
+  background: var(--surface);
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The two numbers that rarely change, on a visit where they are already known.
+ *
+ * They step back to an outline so the eye lands on the two that do change —
+ * but they stay fields, focusable and editable, because "192.168" is a habit
+ * rather than a rule. A Fritzbox hands out 192.168.178.x, most other routers
+ * 192.168.0.x or 192.168.1.x, and a network that runs 10.x is not unusual. A
+ * design that hard-coded the first half would work in most German homes and
+ * strand the rest with no way back — so all four are typed the first time, and
+ * only the ones worth doubting are quiet the next.
+ */
+.oktett[data-known="1"] {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--text-dim);
+}
+
+.punkt {
+  font-family: var(--mono);
+  font-size: 19px;
+  color: var(--text-faint);
+  padding-bottom: 3px;
+  user-select: none;
+}
+
+/* Said once under the row, and only when there is something to say. */
+.gemerkt { margin-top: 10px; font-size: 12.5px; color: var(--text-faint); }
+.gemerkt[hidden] { display: none; }
+
+/* ------------------------------------------------ die Adresse auf dem Gerät */
+
+/* The same four numbers, read rather than typed.
+ *
+ * Grouped exactly as the boxes are grouped and dimmed in exactly the same
+ * places, so that what the person has to copy is already picked out on the
+ * screen they are copying from. That correspondence is the only reason this is
+ * not simply a line of text.
+ *
+ * Big because of where it is read from: a tablet on a table and a keyboard an
+ * arm's length away. clamp() rather than a breakpoint — the screen this sits on
+ * is a tablet in either orientation and there is nothing to break at.
+ */
+.anzeige {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(34px, 7vw, 54px);
+  font-weight: 500;
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+.anzeige .fest { color: var(--text-faint); }
+.anzeige .punkt { font-size: inherit; padding: 0; }
+
+/* ------------------------------------------------------ der Wartebildschirm */
+
+/* One sentence, one address, one line saying what to do with it. Nothing else
+ * is on this screen, because anybody looking at it is looking for the number.
+ */
+.warten {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+  text-align: center;
+  padding: 44px 0 12px;
+}
+.warten .sagt { font-size: 21px; font-weight: 650; letter-spacing: -.015em; }
+.warten .dazu { max-width: 44ch; color: var(--text-dim); margin: 0; }
+
+/* Alive without being busy: the tablet is doing nothing until something
+ * arrives, and a spinner would claim otherwise. */
+.puls {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent);
+  animation: puls 1.9s ease-in-out infinite;
+}
+@keyframes puls { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .puls { animation: none; opacity: 1; }
+}
+
+/* There is deliberately no progress bar here.
+ *
+ * The first draft drew one. It should not: Compose's Notice() gained `busy`
+ * and `onDismiss` in vorlaut-app at 4acc32e (v0.6.0), so the outcome line this
+ * screen already ends on is also the line it can run on — one component saying
+ * "arriving", then "arrived", instead of a bar that exists for four seconds
+ * and is never seen again.
+ *
+ * Of the two states Compose grew, exactly one came up to the family. The ✕
+ * landed at 13c429d: it is a `.btn.quiet.icon` the notice hangs its row layout
+ * off with `:has(> .btn)`, so the plain plate is untouched by construction and
+ * the outcome line below carries one.
+ *
+ * `busy` deliberately did not, and the refusal is now written down in
+ * design.md §4.3 rather than being this file's opinion. Two reasons: §4.3
+ * sends progress to "the control that started it", so a busy outcome line is a
+ * second *kind* of message rather than a missing rule under the existing one;
+ * and §4.2 closes the motion budget at 130ms for colour and 220ms for size or
+ * position, "nothing else", which an indeterminate loop is neither. Neither
+ * sibling has a long operation that would spend either, and one product is not
+ * evidence. §4.3 records what would reopen it — a second product growing one.
+ *
+ * So the mock draws the plain plate while bytes arrive, and that is now the
+ * family's answer rather than a gap it is working around.
+ */
+
+/* --------------------------------------------------------- die zwei Wege */
+
+/* Which way a Sammlung comes in, asked before the file picker rather than
+ * instead of it. Rows and not two buttons in a foot: each way needs a second
+ * line to be choosable at all, and the difference between them is where the
+ * file is rather than what will happen to it.
+ */
+.wege { display: grid; gap: 10px; margin-top: 16px; }
+
+.weg {
+  display: flex; align-items: center; gap: 14px; width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  cursor: pointer;
+}
+.weg:hover { background: var(--surface-3); }
+.weg:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.weg .zeichen {
+  width: 38px; height: 38px; flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-dim);
+}
+.weg .zeichen svg { width: 19px; height: 19px; display: block; }
+.weg .worte { display: grid; gap: 2px; min-width: 0; }
+.weg .was { font-size: 15.5px; font-weight: 600; }
+.weg .wo { font-size: 13px; color: var(--text-dim); }
