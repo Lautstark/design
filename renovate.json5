@@ -1,0 +1,21 @@
+// Renovate, for this repository.
+//
+// One line, and that is the whole of it. Everything general - when updates
+// arrive, what groups with what, what may merge itself - lives in
+// Lautstark/.github and names no package.
+//
+// This package has no dependencies at all, which is the property the three
+// products are protecting when they pin it: build.js runs on a bare node, and
+// the audit job in check.yml installs nothing to prove it still does. So the
+// only thing Renovate has to look at here is the two devDependencies the test
+// runner needs, and the shared preset already says those group together and
+// may merge themselves after three days.
+//
+// The .json5 is spelled out on purpose: the //path/to/file syntax implies a
+// .json extension, so omitting it looks for a file that is not there and
+// Renovate stops before it does anything. The shorter "owner/repo:name" form
+// implies it too.
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: ["github>Lautstark/.github//renovate-shared.json5"],
+}
