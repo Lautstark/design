@@ -421,6 +421,19 @@ German homes and strand the rest.
 ways a Sammlung can arrive, asked before the file picker rather than instead of
 it — `warten`, `laeuft`, `fertig`.
 
+**`laeuft` does not name the Sammlung, and the first draft of this page did.**
+It said „Kernvokabular" wird empfangen … , which the receiver cannot say: the
+body is raw bytes, so the name is *inside* them and unreadable until the
+importer has been through the whole archive. All the device has while bytes are
+arriving is a Content-Length. The fix could have gone either way — one agreed
+request header carrying the name would have bought the sentence back — and it
+went this way deliberately. A name in a header is a *claim* by the sender; the
+name in the package is the *fact*. Showing the claim during the transfer and
+the fact a second later is a way to put a sentence on screen that the next
+sentence contradicts, and it would give one fact two sources that can disagree.
+So the screen says „Ein Paket wird empfangen …" with the size, and the outcome
+line names the Sammlung once it has been read. The wire carries no name.
+
 Two things it deliberately does not draw. There is **no progress bar**, and
 that is now the family's answer rather than a gap. `Notice()` in vorlaut-app
 grew `busy` and `onDismiss` at 4acc32e; of the two, only the ✕ came up to
