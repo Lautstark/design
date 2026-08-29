@@ -1162,6 +1162,7 @@ left to extract, and what the real risk turned out to be instead.
 | ~~4~~ | ~~backupFolder panel~~ | — | — | **not doing** |
 | 5a | the name field | `@lautstark/design/rename` | **S** | done |
 | 5b | the Sammlung rows | `@lautstark/design/collections` | **S** | done |
+| 6 | the status line | `@lautstark/design/toast` | **S** | done |
 | ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are

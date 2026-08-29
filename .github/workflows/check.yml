@@ -63,8 +63,8 @@ jobs:
             exit 1
           }
 
-  # docs/lib/'s four behaviour modules: ./menu, ./dialog, ./rename and
-  # ./collections. Each exists because three products got the same thing subtly
+  # docs/lib/'s five behaviour modules: ./menu, ./dialog, ./rename, ./toast
+  # and ./collections. Each exists because three products got the same thing subtly
   # wrong, and a change to one of them lands in all three at once behind a tag —
   # which is the whole reason they are worth a runner and the colour maths is
   # not the only thing checked here any more.

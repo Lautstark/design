@@ -41,6 +41,13 @@ decided.
   value has not moved. Its `refresh` is the only way to assign the field, which
   is the point — all three products had a repaint that assigned it directly and
   so could put the stored name back over what somebody was typing.
+- **`@lautstark/design/toast`** — the line that says what just happened:
+  `announcer(node, {rest, onRest, busyClass})`. It wraps a live region the
+  product has already mounted and never adds or removes it, which is the whole
+  of it — all three products announced their acknowledgements to nobody,
+  because a region that arrives carrying its message is a region no reader was
+  watching. What happens *after* a message stays the product's: bildhaft
+  empties the line, vorlaut dims it, mitreden leaves it and has a busy state.
 - **`@lautstark/design/collections`** — the sidebar's Sammlung rows:
   `drawCollections(container, {rows, open, onPick})`, with `.collections` in
   components.css beside it. Carries the two things a row was getting wrong
@@ -52,7 +59,7 @@ decided.
   skeleton, the Sammlung rows and the message furniture, written once against
   the token names. The
   gallery imports it, and a product imports it beside its token file.
-- **[tests/](tests/)** — the four behaviour modules above, under vitest with
+- **[tests/](tests/)** — the five behaviour modules above, under vitest with
   happy-dom. `npm test`. happy-dom rather than jsdom because jsdom has no
   `HTMLDialogElement.showModal`, which would have left the one module whose
   subject is the native `<dialog>` unrunnable. The generator's own CI job still

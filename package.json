@@ -51,6 +51,10 @@
       "types": "./docs/lib/rename.d.ts",
       "default": "./docs/lib/rename.js"
     },
+    "./toast": {
+      "types": "./docs/lib/toast.d.ts",
+      "default": "./docs/lib/toast.js"
+    },
     "./collections": {
       "types": "./docs/lib/collections.d.ts",
       "default": "./docs/lib/collections.js"
