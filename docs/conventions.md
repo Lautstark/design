@@ -1276,6 +1276,7 @@ left to extract, and what the real risk turned out to be instead.
 | 5a | the name field | `@lautstark/design/rename` | **S** | done |
 | 5b | the Sammlung rows | `@lautstark/design/collections` | **S** | done |
 | 6 | the status line | `@lautstark/design/toast` | **S** | done |
+| 7 | the crop geometry | `@lautstark/design/crop` | **S–M** | **proposed** |
 | ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
 | 7 | the download trigger, `touched()`, `downloadSlug`, `weighs` | `@lautstark/werkzeuge` | **S** — half a day | done |
 | ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | — | — | **not doing** |
@@ -1446,6 +1447,85 @@ an await — and a helper general enough for all four would be longer than the
 four. The one case that genuinely was shared is the rename field's timing, and
 it went to `@lautstark/design/rename` as 5a, where it could take the three
 failures those three copies were hiding with it.
+
+**7. The crop geometry.** `@lautstark/design/crop`. **Proposed 2026-08-29, and
+not started: it wants the owner's agreement first.** `bildhaft/src/ui/crop.ts`
+and `vorlaut-editor/src/shell/crop.ts` are 551 lines between them and were read
+against each other rather than counted from a distance, because #4 is what
+happens when a pair of lookalikes is only counted.
+
+**They are not #4.** Comments stripped, the two files are 138 and 137 lines of
+code. **73 lines are identical, and only nine of those are bare closers** —
+sixty-four substantive lines, just under half of either file. #4's three files
+shared twelve, half of them closing braces. The measurement is the same
+measurement and it comes out the other way.
+
+**And the identical half is the subject, not the scaffolding.** `FRAME = 0.84`,
+`MARGIN`, `CLOSEST = 4`, the two-per-cent tolerance that decides a picture is
+already square, `clamp()`, `place()`'s percentage layout, the zoom that works
+about the square's own centre rather than its corner, the pointer-capture drag
+with the backwards sign, and the arrow-key nudge at four per cent of the square.
+Byte-identical, constants included. The class names agree too — `.crop`,
+`.crop__frame`, `.crop__zoom` — which is what a copy looks like from the outside.
+
+**The stylesheets are the second copy, and they carry a number that cannot be
+checked.** Both products write `.crop__frame { inset: 8% }`, and 8 is `MARGIN`:
+`(1 - FRAME) / 2 * 100`, computed by hand from a constant in the TypeScript and
+written as a literal in the CSS, twice, with nothing connecting the four. Change
+`FRAME` in either product and the frame that shows what is being cut off stops
+agreeing with the square that is being kept — silently, in the one place where
+being off by a little is invisible and being wrong is the whole failure.
+
+**What genuinely differs is `cut()`, and it must.** vorlaut always writes PNG
+with its alpha kept and caps the square at `IMAGE_SIZE` — 512, out of
+`exchange/SPEC.md` §5.3 — because those bytes go into a package on somebody's
+tablet. bildhaft follows the source format, keeps a JPEG a JPEG at quality 0.92,
+and caps at nothing at all: `print.css` forbids downscaling before printing, and
+a twelve-megapixel photograph re-encoded as PNG would land in IndexedDB and then
+in every exported backup as a `data:` URL. Opposite answers, each argued from
+its own product's downstream. That is §4-shaped and belongs on §4's side of the
+line. The naming helper follows from it — `cropName(name, type)` against
+`pngName(name)` — and is not part of this proposal in any case: a filename
+helper is `@lautstark/werkzeuge`'s subject.
+
+Two more differences, both real and neither an obstacle. The crop **mounts**
+differently, because vorlaut's picker refuses a modal over a modal and replaces
+`.pick__preview` in place while bildhaft opens a box inside its picker; that is
+the field named `surface` in one and `box` in the other, and the outer `.crop`
+rule that sizes it. And the DOM is **built** differently — bildhaft's `el()`
+against `document.createElement` — which §5's declined shell entry treats as a
+real obstacle and which is not one here, for the reason below.
+
+**The argument for doing it is a divergence that reading found and neither file
+knows about.** bildhaft's keydown handler calls `event.stopPropagation()`, with
+a comment: *"or the picker's own Enter/key handling sees a keystroke that was
+meant for the picture"*. vorlaut's handler is otherwise line-for-line the same
+and does not. One of the two is wrong, or their hosts differ in a way nothing
+written down says. That is #4's finding in a different form — one contract
+written twice with nothing checking the two agree — and there the answer was a
+test, because there was nothing left to extract. Here it is one function.
+
+**So: extract the model, not the component.** The shareable piece owns no DOM
+and has no opinion about one: given a picture's dimensions it holds `x`, `y` and
+`side`, and answers clamp, place-as-three-percentages, zoom-to-factor,
+drag-by-pixels and nudge. That is roughly forty-five lines, all of them currently
+identical in both products. What stays with each product is the elements, the two
+accessible labels, and `cut()`.
+
+**That is what makes this S–M rather than the L the shell was.** The
+DOM-ownership question §5 declines the shell over does not have to be answered,
+because the extracted piece does not touch the DOM — it is the one shape that
+takes the question off the table rather than picking a winner. There is no
+adapter, no arity, and no layering disagreement. `.crop__frame`, `.crop__zoom`
+and `.crop:focus-visible` go to `components.css` with it, and `MARGIN` reaches
+the frame as a custom property so that `inset: 8%` stops being a number written
+out twice.
+
+**The honest weakness: this is two products, not three.** mitreden has no
+pictures to cut, so unlike 5a and 5b there is no third copy to delete and no
+third opinion to reconcile. Two copies of a geometry model with a divergence
+already in them is still worth one, but it is a weaker case than the rows were,
+and somebody declining it on that ground would not be wrong.
 
 ### ~~5. The Sammlung shell~~ — and why it is not being extracted
 
