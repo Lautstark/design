@@ -42,7 +42,7 @@ decided.
   is the point — all three products had a repaint that assigned it directly and
   so could put the stored name back over what somebody was typing.
 - **`@lautstark/design/toast`** — the line that says what just happened:
-  `announcer(node, {rest, onRest, busyClass})` → `say` / `rests` / `busy` /
+  `announcer(node, {rest, onRest, onWake, busyClass})` → `say` / `rests` / `busy` /
   `clear`. It wraps a live region the
   product has already mounted and never adds or removes it, which is the whole
   of it — all three products announced their acknowledgements to nobody,

@@ -99,6 +99,7 @@ describe('what happens after a message', () => {
     const line = announcer(node, {
       rest: 4000,
       onRest: (n) => n.classList.add('status--rested'),
+      onWake: (n) => n.classList.remove('status--rested'),
     });
     line.rests('Gesichert');
     vi.advanceTimersByTime(3900);
@@ -106,6 +107,27 @@ describe('what happens after a message', () => {
     vi.advanceTimersByTime(60_000);
     expect(node.classList.contains('status--rested')).toBe(false);
     expect(node.textContent).toBe('Speichern fehlgeschlagen');
+  });
+
+  /* The failure vorlaut's own suite caught, in the module that should have
+     stopped it: a rest that has already fired leaves its mark behind, and the
+     next message arrives wearing it. "not saved yet" came back dimmed,
+     carrying the fade that belonged to "saved". */
+  it('undoes a rest that already fired, so the next message is not dimmed', () => {
+    const line = announcer(node, {
+      rest: 4000,
+      onRest: (n) => n.classList.add('status--rested'),
+      onWake: (n) => n.classList.remove('status--rested'),
+    });
+
+    line.rests('Gesichert');
+    vi.advanceTimersByTime(4000);
+    expect(node.classList.contains('status--rested'), 'faded, as asked').toBe(true);
+
+    line.say('Noch nicht gesichert');
+    expect(node.classList.contains('status--rested'), 'and lit again for the next thing')
+      .toBe(false);
+    expect(node.textContent).toBe('Noch nicht gesichert');
   });
 });
 

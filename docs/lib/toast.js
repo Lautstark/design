@@ -64,7 +64,7 @@
  */
 export function announcer(node, options = {}) {
   if (!node) throw new Error("announcer needs the element that is already in the page");
-  const { rest = 0, onRest = null, busyClass = null } = options;
+  const { rest = 0, onRest = null, onWake = null, busyClass = null } = options;
 
   let timer;
 
@@ -81,6 +81,20 @@ export function announcer(node, options = {}) {
     timer = setTimeout(() => onRest(node), rest);
   };
 
+  /* The inverse of onRest, and it needs saying why it is not optional in
+     spirit even though it is in the signature.
+
+     Whatever onRest did is still done when the next message arrives. bildhaft
+     gets away without this because its onRest empties the text and the next
+     message writes over it - the effect undoes itself. vorlaut's adds a class,
+     which does not, so its line came back with "not saved yet" still wearing
+     the fade that belonged to "saved". Its own suite caught that; the point of
+     putting the pair here is that no call site has to remember the second
+     half. */
+  const wake = () => {
+    if (onWake) onWake(node);
+  };
+
   return {
     /** The region itself, for a product that has to mount or measure it. */
     node,
@@ -88,6 +102,7 @@ export function announcer(node, options = {}) {
     /** Something finished, and the line stays lit until the next thing. */
     say(text) {
       stop();
+      wake();
       node.textContent = text;
       if (busyClass) node.classList.remove(busyClass);
       return node;
@@ -109,6 +124,7 @@ export function announcer(node, options = {}) {
      *  a line that dimmed or emptied under it would say it had. */
     busy(text) {
       stop();
+      wake();
       node.textContent = text;
       if (busyClass) node.classList.add(busyClass);
       return node;
@@ -117,6 +133,7 @@ export function announcer(node, options = {}) {
     /** Quiet, now, without waiting for the timer. The node stays where it is. */
     clear() {
       stop();
+      wake();
       node.textContent = "";
       if (busyClass) node.classList.remove(busyClass);
       return node;

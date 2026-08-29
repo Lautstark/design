@@ -18,6 +18,13 @@ export interface AnnouncerOpts {
   onRest?: (node: HTMLElement) => void;
   /** A class `busy()` adds and every `say()` removes. Omit it in a product
    *  with no busy state. */
+  /** The inverse of `onRest`, run whenever the line becomes current again.
+   *
+   *  Needed exactly when `onRest` does not undo itself. bildhaft's empties the
+   *  text and the next message overwrites it, so it has none; vorlaut's adds a
+   *  class, and without this its line came back carrying the fade that
+   *  belonged to the message before. */
+  onWake?: (node: HTMLElement) => void;
   busyClass?: string;
 }
 
