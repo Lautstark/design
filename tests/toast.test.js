@@ -32,7 +32,7 @@ describe('the region itself', () => {
   it('never leaves the page, whatever is said to it', () => {
     const line = announcer(node, { rest: 3200, onRest: (n) => { n.textContent = ''; } });
 
-    line.say('Alles gelöscht.');
+    line.rests('Alles gelöscht.');
     expect(node.isConnected, 'still mounted while it carries a message').toBe(true);
 
     vi.advanceTimersByTime(3200);
@@ -50,7 +50,7 @@ describe('the region itself', () => {
 describe('what happens after a message', () => {
   it('empties the line, for a product that goes quiet', () => {
     const line = announcer(node, { rest: 3200, onRest: (n) => { n.textContent = ''; } });
-    line.say('42 Sätze hinzugefügt');
+    line.rests('42 Sätze hinzugefügt');
     expect(node.textContent).toBe('42 Sätze hinzugefügt');
     vi.advanceTimersByTime(3199);
     expect(node.textContent, 'not a moment early').toBe('42 Sätze hinzugefügt');
@@ -63,7 +63,7 @@ describe('what happens after a message', () => {
       rest: 4000,
       onRest: (n) => n.classList.add('status--rested'),
     });
-    line.say('Gesichert');
+    line.rests('Gesichert');
     vi.advanceTimersByTime(4000);
     expect(node.textContent, 'still says what is true').toBe('Gesichert');
     expect(node.classList.contains('status--rested')).toBe(true);
@@ -71,9 +71,41 @@ describe('what happens after a message', () => {
 
   it('leaves it alone when nobody asked for a rest', () => {
     const line = announcer(node);
-    line.say('Gespeichert');
+    line.rests('Gespeichert');
     vi.advanceTimersByTime(60_000);
     expect(node.textContent).toBe('Gespeichert');
+  });
+
+  /* The distinction vorlaut needs, on one element: a failed write stays lit
+     while "saved" is allowed to fade, and the same line carries each in turn. */
+  it('stays lit for say(), and fades only for rests()', () => {
+    const line = announcer(node, {
+      rest: 4000,
+      onRest: (n) => n.classList.add('status--rested'),
+    });
+
+    line.say('Speichern fehlgeschlagen');
+    vi.advanceTimersByTime(60_000);
+    expect(node.classList.contains('status--rested'), 'a failure keeps asking').toBe(false);
+
+    line.rests('Gesichert');
+    vi.advanceTimersByTime(4000);
+    expect(node.classList.contains('status--rested')).toBe(true);
+  });
+
+  /* And the wake-up half: anything said cancels a pending rest, so a failure
+     arriving while "saved" was fading does not inherit its fade. */
+  it('wakes the line when something new arrives mid-fade', () => {
+    const line = announcer(node, {
+      rest: 4000,
+      onRest: (n) => n.classList.add('status--rested'),
+    });
+    line.rests('Gesichert');
+    vi.advanceTimersByTime(3900);
+    line.say('Speichern fehlgeschlagen');
+    vi.advanceTimersByTime(60_000);
+    expect(node.classList.contains('status--rested')).toBe(false);
+    expect(node.textContent).toBe('Speichern fehlgeschlagen');
   });
 });
 
@@ -83,9 +115,9 @@ describe('two messages in quick succession', () => {
   it('does not let the first one\'s timer clear the second one', () => {
     const line = announcer(node, { rest: 3200, onRest: (n) => { n.textContent = ''; } });
 
-    line.say('Erste');
+    line.rests('Erste');
     vi.advanceTimersByTime(3000);
-    line.say('Zweite');
+    line.rests('Zweite');
 
     vi.advanceTimersByTime(400);
     expect(node.textContent, 'the first timer would have fired at 3200').toBe('Zweite');

@@ -40,11 +40,20 @@
  * - mitreden leaves it entirely, and has a second state — a turning ring for
  *   something that has *started* rather than finished.
  *
- * So `rest` and `onRest` are the caller's, and so is the busy class. What is
- * shared is the invariant above, the timer being cancelled on every new
- * message, and `say()` always clearing the busy marker — which is mitreden's
- * rule and worth keeping: the end of a job is always reported, and forgetting
- * to stop the spinner leaves the page claiming to be busy for the session.
+ * So `rest` and `onRest` are the caller's, and so is the busy class.
+ *
+ * `say()` and `rests()` are two verbs rather than one with an option, because
+ * which of them a message wants is a property of the message and not of the
+ * region. vorlaut has both on one line and named them first: a failed write
+ * stays lit, "saved" fades, and the same element carries each in turn. A
+ * product where every message fades calls `rests()` every time, which is
+ * bildhaft; one where none does never calls it, which is mitreden.
+ *
+ * What is shared is the invariant above, the timer being cancelled on every
+ * new message, and `say()` always clearing the busy marker — which is
+ * mitreden's rule and worth keeping: the end of a job is always reported, and
+ * forgetting to stop the spinner leaves the page claiming to be busy for the
+ * rest of the session.
  */
 
 /**
@@ -76,11 +85,22 @@ export function announcer(node, options = {}) {
     /** The region itself, for a product that has to mount or measure it. */
     node,
 
-    /** Something finished. */
+    /** Something finished, and the line stays lit until the next thing. */
     say(text) {
       stop();
       node.textContent = text;
       if (busyClass) node.classList.remove(busyClass);
+      return node;
+    },
+
+    /** Said, and then allowed to go quiet - `onRest` after `rest` ms.
+     *
+     * A second verb rather than an option on say(), because which of the two a
+     * message wants is a property of the message and not of the region.
+     * vorlaut has both on one line and named them first: a failed write stays
+     * lit, "saved" fades, and the same element carries each in turn. */
+    rests(text) {
+      this.say(text);
       start();
       return node;
     },

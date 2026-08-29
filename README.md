@@ -42,12 +42,16 @@ decided.
   is the point — all three products had a repaint that assigned it directly and
   so could put the stored name back over what somebody was typing.
 - **`@lautstark/design/toast`** — the line that says what just happened:
-  `announcer(node, {rest, onRest, busyClass})`. It wraps a live region the
+  `announcer(node, {rest, onRest, busyClass})` → `say` / `rests` / `busy` /
+  `clear`. It wraps a live region the
   product has already mounted and never adds or removes it, which is the whole
   of it — all three products announced their acknowledgements to nobody,
   because a region that arrives carrying its message is a region no reader was
   watching. What happens *after* a message stays the product's: bildhaft
   empties the line, vorlaut dims it, mitreden leaves it and has a busy state.
+  `say` and `rests` are two verbs rather than one with a flag, because vorlaut
+  needs both on the same element - a failed write stays lit while "saved" is
+  allowed to fade.
 - **`@lautstark/design/collections`** — the sidebar's Sammlung rows:
   `drawCollections(container, {rows, open, onPick})`, with `.collections` in
   components.css beside it. Carries the two things a row was getting wrong

@@ -25,8 +25,13 @@ export interface AnnouncerOpts {
 export interface Announcer {
   /** The region itself, for a product that has to mount or measure it. */
   node: HTMLElement;
-  /** Something finished. Cancels any pending rest, then starts a new one. */
+  /** Something finished. Cancels any pending rest; the line stays lit. */
   say(text: string): HTMLElement;
+  /** Said, and then allowed to go quiet - `onRest` after `rest` ms. A second
+   *  verb rather than an option, because which one a message wants is a
+   *  property of the message rather than of the region: vorlaut's failed write
+   *  stays lit and its "saved" fades, on the same element. */
+  rests(text: string): HTMLElement;
   /** Something started. Rests nothing, and marks the line busy if this
    *  announcer was given a class for it. */
   busy(text: string): HTMLElement;
