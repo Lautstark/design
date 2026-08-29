@@ -656,6 +656,41 @@ screen around it was rebuilt for other reasons. That is the ordinary fate of
 one, and the reason to write it down rather than resolve it in silence: it had
 somewhere to be found when the ground moved under it.
 
+**Amendment, 2026-08-29: the act a setting implies belongs beside the setting,
+not in the menu above it.** mitreden's `⋯` carried a fourth item, *Sammlung neu
+aufnehmen*, above the export. It was there because a Sammlung's voice can be
+changed and its recordings then no longer match it — and the settings sheet
+where that change is made ended its own cost line by naming this menu item and
+asking you to go and press it. A setting that cannot finish its own job is the
+symptom; two trips through the same menu is the cost.
+
+The act moved into the sheet, as a button under the voice list carrying the
+count of what it would speak. vorlaut is the precedent and had already argued
+it: its Sammlung sheet holds a ▶ that speaks one line, a re-grant for a sleeping
+METACOM folder, and the tablet grid's *Verkleinern* — each a button **inside the
+panel whose value it acts on**, each **named for what the press does** rather
+than saying *Speichern*, and the last two **drawn from state**, present or live
+only when the press would do something. A Save on the dialog is what that shape
+exists to avoid, because it would make the panels that apply live lie about when
+they take effect.
+
+**So the menu is three items in both products**: export, what this Sammlung is
+set to, delete. That is the order above, unchanged — what the amendment removes
+is the idea that an act *implied by a setting* is a fourth kind of thing
+belonging beside them. It belongs where the setting is.
+
+**The test.** If the item's label would have to name a state to be honest —
+mitreden's item was permanently present and most often answered *„Alles hier
+ist schon in der Stimme der Sammlung aufgenommen"* — it is not a menu item. A
+menu is a list of things you can do; an entry whose common outcome is a
+sentence explaining that it did nothing is a heading pretending to be a verb.
+Whether anything is outstanding is a matter for the place that shows the state,
+which in mitreden is the work head: *„3 Sätze, 2 offen"*.
+
+**Diverging: nobody**, as of 2026-08-29. vorlaut has no re-record at all — it
+stores no clips and re-speaks everything on export — so the rule reaches it only
+through the shape it already had. bildhaft has no recorded audio either.
+
 ### 3.7 A folder the browser has taken access to is a warning, not a note
 
 Two different things in this family hand a product a folder: `@lautstark/sicherung`
