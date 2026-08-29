@@ -964,6 +964,42 @@ throughout. bildhaft's print settings are the near miss and they pass rather
 than escape: they live in `AppSettings`, they are the same for every Sammlung,
 and they put nothing on a sentence.
 
+### 3.11 Sprache is the first panel, and the only one open on arrival
+
+Every settings sheet in the family is a column of folded panels (§3.5). One of
+them opens with the sheet, and it is always the language.
+
+**Why.** Somebody who cannot read the page is exactly who reaches for this
+panel, and every other heading in the sheet is written in the language they
+have just told us they cannot read. Its own options are the exception: all
+three products name them `Deutsch` and `English` rather than translating them,
+so they say the same thing whichever language the rest of the sheet is in. A
+folded column with the language third or fifth asks that reader to find the way
+out by guessing at headings.
+
+That also settles which panel opens, which the three had answered three ways.
+It is a choice about what somebody most needs on arrival, and *the setting you
+need in order to use anything at all* beats *the setting you use most often* —
+which is what mitreden's open voice panel was, and bildhaft's nothing-open was
+the same question left unanswered.
+
+**Only one.** §3.5's whole argument is that the folded headings carry their
+state and are read at a glance; a second panel open spends that for a second
+time and the column stops being scannable.
+
+**The rest of the order** is what two of the three already had and the third now
+does: the panels about this product's own subject, then Erscheinungsbild, then
+Daten last. Nothing turns on it beyond the sheet reading the same way in all
+three.
+
+**Diverging: nobody**, as of 2026-08-29. vorlaut had it and said why in its
+markup; mitreden had written half the argument — its language control carries a
+deliberately bilingual accessible name "because somebody who cannot read the
+page is exactly who reaches for this" — and then placed the panel third behind
+two headings that reader cannot read either. bildhaft was fifth of seven with
+nothing open. Both moved the same day. Another line that had been spent before
+it was read, which is §1.7 and §3.2's lesson for the third time.
+
 ---
 
 ## 4. Differences that are correct
