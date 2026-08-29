@@ -1254,6 +1254,12 @@ Everything in 1, 2, 5a and 5b belongs in **`@lautstark/design`**, beside
 `.collections`. Putting the JS next to the CSS that draws it is the smallest
 true home.
 
+#7 is the exception and got its own package, **`@lautstark/werkzeuge`**, because
+none of it draws anything: a blob handed to the browser, a `Set` of listeners, a
+transliteration, and `Math.round`. `@lautstark/design` is the look, and a package
+whose README opens by saying so is the wrong place to keep a notifier that a
+storage layer imports.
+
 The numbering is not tidy on purpose: 5a and 5b are what came out of #5 once it
 was designed on paper, and #5 itself is struck through below with the reasoning
 that killed it. Renumbering them 6 and 7 would leave nothing pointing at the
@@ -1271,6 +1277,8 @@ left to extract, and what the real risk turned out to be instead.
 | 5b | the Sammlung rows | `@lautstark/design/collections` | **S** | done |
 | 6 | the status line | `@lautstark/design/toast` | **S** | done |
 | ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
+| 7 | the download trigger, `touched()`, `downloadSlug`, `weighs` | `@lautstark/werkzeuge` | **S** — half a day | done |
+| ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | — | — | **not doing** |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are
 already near-identical files in mitreden and vorlaut; bildhaft's `actionMenu` is
@@ -1291,6 +1299,14 @@ exactly the hang that guard prevents. It carries mitreden's move off native
 **3. `touched()` and `slug`/`safeName`.** Ten lines and forty lines. Neither
 earns a package; they ride along with the storage work §2.1 implies and should
 not be a task of their own.
+
+*Amended 2026-08-29.* Half right. The storage work landed and neither of these
+came out of it — what each product did instead was put its copy in a file of
+its own and write down that the day it earned a package should be a move rather
+than an excavation. vorlaut's `data/changed.ts` and `shell/filename.ts` say so
+in their headers. #7 is that day, and the files were right: adopting the package
+was one line in each. What the entry above got wrong is not the size — they are
+still ten lines and forty — it is that size was the wrong question. See #7.
 
 **~~4. The backupFolder panel.~~ Not doing, 2026-08-24.** The entry above was
 right that it is less duplicated than three ~150-line files suggest, and
@@ -1355,6 +1371,81 @@ components.css reached straight into a different component that happened also to
 be a list. bildhaft's sidebar makes the same point at run time — its search
 results are a `.list` too. A name generic enough to collide once will do it
 again.
+
+**7. The download trigger, and three things beside it.**
+`@lautstark/werkzeuge`, 2026-08-29. Four modules, no dependencies, and nothing
+in it is more than fifteen lines — which is the entry #3 above said was a reason
+not to. It is #2-shaped rather than #1-shaped: it removes a bug class, and the
+duplication is the second reason rather than the first.
+
+**Six copies of the download trigger, and two of them were wrong.** bildhaft
+revoked its blob URL on the line after `click()`, which is a download that
+silently never begins — the click returns before the browser has opened the URL.
+Both other products carried a comment saying exactly that, in mitreden's case
+two lines away from a copy that got it right. vorlaut's `offer()` never appended
+its anchor to the document, so it never removed one either, and a session that
+exported ten packages left ten detached nodes holding ten blob URLs. Neither
+failure is visible from inside a product: one reports itself as the browser
+being odd, and the other reports itself as nothing at all.
+
+The delay is 60 seconds, vorlaut's, and the reasoning is in the module. The
+costs are not symmetric — too early is an export that has to be done again with
+no error to go on, too late is one blob held for a minute on a page that just
+built it — so the long side wins. mitreden's 2 seconds was a guess about how
+fast a machine is; a minute is a guess about nothing.
+
+**The signatures genuinely differ and were not forced together.**
+`download(blob, filename)` is the primitive with a thin `downloadJson` over it,
+because mitreden and bildhaft both have a JSON door and mitreden also has a raw
+one. The filename is taken **whole**: vorlaut composes `<name>-app.zip` and
+stamps nothing, deliberately, while the other two date everything, so the prefix
+and the stamp stayed in the products.
+
+**`downloadSlug` converges three rules into one, and it is user-visible.**
+`Häufige Wörter!` was `häufige-wörter` in mitreden, `Häufige Wörter` in bildhaft
+and `Haeufige_Woerter_` in vorlaut; it is vorlaut's everywhere now. Nothing
+reads a download's name back and a person reads it, so spelling the umlaut out
+beats both mapping it and stripping it — `Woerter` is a word somebody
+recognises and `Worter` is not one. vorlaut's `shell/filename.ts` had already
+argued this and copied mitreden's table character for character so that the
+shared one would have a transliteration to inherit rather than three to choose
+between; the package inherited exactly that, and the file it came from is gone.
+
+**Two tables that look like it and must not become it.** mitreden's
+`core/ids.ts` `slug()` makes sentence ids and vorlaut's `data/store.ts`
+`safeName()` makes IndexedDB keys. Both have frozen output — an id is a file
+name on a talker, a key round-trips through `.obz` and Sicherung files — so
+adding one letter to the shared table would rename files on somebody's device
+or lose a picture. They keep their own copies and say so, and `werkzeuge`'s
+RELEASING.md makes a change to `downloadSlug` a major for the same reason.
+
+**What was declined, and why it is worth naming.** mitreden's `ui/state.ts` is
+the family's fifth `subscribe`/`notify` pair and it did not convert. It is
+array-backed, its `subscribe` returns nothing so nothing can unsubscribe, and
+its `notify()` writes the open-Sammlungen record before it walks its listeners.
+That last one is the whole answer: §2.2's notifier announces that a *Sicherung's
+contents* changed, and this one persists a preference and repaints. Same shape,
+different job — §4 is the list of exactly those, and converting it would have
+been an unforced behaviour change with no caller asking for one.
+
+**~~8. `el()` and `debounce`/`throttle`.~~ Not doing, 2026-08-29.** Both came
+out of the same audit as #7 and both dissolved on being measured, which is worth
+recording because the audit will suggest them again.
+
+`el()` reads as a three-way duplication and is not one. Only bildhaft has an
+element builder; mitreden's `el(id)` and vorlaut's `$(id)` are `getElementById`
+wrappers that happen to share a name with it. A shared builder would collide
+with roughly ninety `el(id)` call sites in mitreden — so the cost is a rename
+across one product, and the benefit is deduplicating one function that exists
+once.
+
+`debounce`/`throttle` is the opposite mistake: no product defines one. There are
+four inline `setTimeout`/`clearTimeout` sites, with different delays and
+different needs — two want a way to flush early, one re-checks staleness after
+an await — and a helper general enough for all four would be longer than the
+four. The one case that genuinely was shared is the rename field's timing, and
+it went to `@lautstark/design/rename` as 5a, where it could take the three
+failures those three copies were hiding with it.
 
 ### ~~5. The Sammlung shell~~ — and why it is not being extracted
 
