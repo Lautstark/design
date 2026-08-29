@@ -1002,6 +1002,42 @@ it was read, which is §1.7 and §3.2's lesson for the third time.
 
 ---
 
+### 3.12 Erasing everything is a panel, not a heading inside another one
+
+**The rule.** The control that destroys all of a product's data is a settings
+panel of its own, last in the column. It is never a subheading inside the panel
+about backups, and the panel about backups is called Sicherung rather than
+Daten.
+
+**Why.** „Daten" is a category, not a subject, and a category will take
+anything filed under it. Both mitreden and bildhaft ended up with a section
+that held two acts with nothing in common but the noun: making a copy of your
+work, and destroying it. The reset sat at the bottom of that section under an
+`<h3>` — a second heading level doing the job §3.5 gives to a panel, and the
+one irreversible control in the sheet reachable only by opening the section
+somebody came to for a backup.
+
+The scannability argument in §3.5 settles it. If the folded headings are the
+list of what this product can be told to do, then *Alles löschen* belongs in
+that list. A person who wants it should not have to guess which other section
+it is nested under, and a person who does not want it should not meet it by
+opening a section about something else.
+
+**Why last.** For the same reason §3.6 puts a Sammlung's delete at the foot of
+its menu: an irreversible act is not reached on the way to anything else.
+
+**What „Sicherung" fixes on the way.** With one subject left in it, the panel
+can be named for that subject. Both products opened it with a bold
+„Sicherung." in front of the first sentence — a lead that made sense under a
+category heading and reads as the same word twice under this one. Both leads
+went with the split.
+
+**Diverging: nobody**, as of 2026-08-29. vorlaut never had a reset in its Daten
+panel, so this is the other two arriving where it already was — the third time
+in this document that vorlaut turns out to have been the model (§3.10, §3.11).
+
+---
+
 ## 4. Differences that are correct
 
 Do not converge these. Each follows from what the product holds.
