@@ -1,0 +1,159 @@
+/*
+ * Generated from Lautstark/design — do not edit.
+ *
+ * Every value below follows from one input, druckwerk's accent #00A88E, and is
+ * regenerated whenever the design repository moves. Editing this file by hand
+ * survives exactly until the next sync and silently drops the contrast
+ * guarantees, which are checked at generation time and not at runtime.
+ *
+ * To change a value here, change the rule that produces it.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  /* Ground and surfaces */
+  --bg: #e9eceb;
+  --surface: #ffffff;
+  --surface-2: #e6ebe9;
+  --surface-3: #d7dedc;
+  --line: #8d9492;
+
+  /* Text */
+  --text: #171b1a;
+  --text-dim: #56615e;
+  --text-faint: #616c69;
+
+  /* Accent */
+  --accent: #00A88E;
+  --accent-ink: #001a14;
+  --accent-strong: #007764;
+  --accent-hover: #009881;
+  --accent-soft: #dffaf2;
+
+  /* Danger */
+  --danger: #a42a25;
+  --danger-ink: #fae8e5;
+  --danger-soft: #ffebe8;
+
+  /* Shape and type */
+  --radius: 14px;
+  --radius-sm: 9px;
+  --radius-pill: 999px;
+  --radius-item: 7px;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --leading: 1.55;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(28, 26, 23, .05);
+  --shadow: 0 2px 6px rgba(28, 26, 23, .06), 0 12px 32px rgba(28, 26, 23, .08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Ground and surfaces */
+    --bg: #141716;
+    --surface: #2d3130;
+    --surface-2: #3a3e3d;
+    --surface-3: #454a49;
+    --line: #767c7a;
+
+    /* Text */
+    --text: #e7edeb;
+    --text-dim: #acb8b4;
+    --text-faint: #9eaaa6;
+
+    /* Accent */
+    --accent-strong: #00a88e;
+    --accent-hover: #30bba0;
+    --accent-soft: #0b2620;
+
+    /* Danger */
+    --danger: #f17265;
+    --danger-ink: #330f0c;
+    --danger-soft: #341b18;
+
+    /* Shadow */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+    --shadow: 0 2px 6px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .4);
+  }
+}
+
+/* A choice, where the two rules above are the absence of one. Nothing sets this
+   attribute unless somebody picked a scheme in that product's settings; with it
+   unset the media query is still the whole story, which is what "follows the
+   OS" has always meant here and stays the default.
+
+   An attribute selector rather than light-dark(). Both express one rule instead
+   of two, and light-dark() would express it without repeating a single value —
+   but it fails as one piece: a browser that cannot parse it drops every
+   declaration holding it, and the page comes up with no tokens at all rather
+   than with the wrong scheme. These products run on donated and hand-me-down
+   tablets that cannot take a current OS, and a scheme toggle is not worth
+   trading a blank page for. The repetition below is in generated output, where
+   it costs nothing and nobody maintains it.
+
+   color-scheme is re-declared in each, and it is the half that is easy to drop:
+   without it the browser keeps drawing its own furniture — scrollbars, the open
+   list of a select, a date picker — in the scheme the OS asked for, and a page
+   set to light grows a black scrollbar down the side of it. */
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  /* Ground and surfaces */
+  --bg: #e9eceb;
+  --surface: #ffffff;
+  --surface-2: #e6ebe9;
+  --surface-3: #d7dedc;
+  --line: #8d9492;
+
+  /* Text */
+  --text: #171b1a;
+  --text-dim: #56615e;
+  --text-faint: #616c69;
+
+  /* Accent */
+  --accent-strong: #007764;
+  --accent-hover: #009881;
+  --accent-soft: #dffaf2;
+
+  /* Danger */
+  --danger: #a42a25;
+  --danger-ink: #fae8e5;
+  --danger-soft: #ffebe8;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(28, 26, 23, .05);
+  --shadow: 0 2px 6px rgba(28, 26, 23, .06), 0 12px 32px rgba(28, 26, 23, .08);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Ground and surfaces */
+  --bg: #141716;
+  --surface: #2d3130;
+  --surface-2: #3a3e3d;
+  --surface-3: #454a49;
+  --line: #767c7a;
+
+  /* Text */
+  --text: #e7edeb;
+  --text-dim: #acb8b4;
+  --text-faint: #9eaaa6;
+
+  /* Accent */
+  --accent-strong: #00a88e;
+  --accent-hover: #30bba0;
+  --accent-soft: #0b2620;
+
+  /* Danger */
+  --danger: #f17265;
+  --danger-ink: #330f0c;
+  --danger-soft: #341b18;
+
+  /* Shadow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .3);
+  --shadow: 0 2px 6px rgba(0, 0, 0, .3), 0 12px 32px rgba(0, 0, 0, .4);
+}
