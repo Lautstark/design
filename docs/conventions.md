@@ -1239,6 +1239,57 @@ states a product has is a fact about its model.
 have one draw it the same. That is the line this section is drawing — the *look*
 converges, the *count* does not.
 
+### 4.7 Wochenwerk's appointment sheet has a Sichern, and design.md §3.5 is right anyway
+
+**Settled 2026-09-01**, and written down because the rule it breaks is a good
+one. design.md §3.5 says everything is saved as it is done, and allows a save
+button in exactly one place: a settings field whose half-typed value would do
+something wrong — "its scope is one field, never a screen". Wochenwerk's
+appointment sheet is a whole screen with a draft behind it and an Abbrechen
+beside a Sichern. Nothing is written until the button.
+
+**Why it is not the drift it looks like.** §3.5 is a rule about *editing a thing
+that exists*. A Sammlung is already there when you rename it, so the write has
+somewhere to land on every keystroke and a save button would only be a second
+way to say what the field already said. Two facts about this sheet break that
+assumption, and neither is a taste:
+
+- **A new appointment does not exist yet.** The sheet is how it comes into
+  being, so there is no record to debounce a write into. Saving as you go would
+  mean minting a row the moment somebody clicks an empty column — and then
+  Abbrechen would have to *delete* rather than discard, which is a worse
+  question than the one the button asks.
+- **A change to a recurring appointment has to ask which days it reaches** —
+  this one, this and all following, or all of them — and that question is asked
+  at the moment of consequence rather than chosen in advance, so that an
+  appointment with no series carries none of it. It needs an edge to be asked
+  at. Written continuously there is no such moment: either the question comes on
+  every keystroke, or something answers it silently, and answering it silently
+  is how one afternoon's edit quietly rewrites a year of Tuesdays.
+
+So the shape is the same as §4.1's. What the product *holds* is different — a
+record that may not exist yet, and one that may stand for a rule covering
+hundreds of days — and the save boundary follows from that rather than being
+imposed on it.
+
+**What is not exempted.** Everything else in Wochenwerk's calendar saves as it is
+done, and the exception is this one sheet rather than the product. The board
+writes what a child picked immediately; the settings panels write as they are
+touched. A second screen growing a Sichern is drift, and this line is not cover
+for it.
+
+**A note on scope, because this is the first time Wochenwerk appears here.**
+Neither this document nor design.md governs it: both were written for mitreden,
+bildhaft and vorlaut, and say so in their opening lines. Wochenwerk is a fourth
+product consuming the package — `tokens/wochenwerk.css`, `components.css`, and
+the dialog, menu and toast modules — and druckwerk is a fifth. Whether the prose
+should widen to four or five is a bigger question than this entry, and it is not
+being answered here. What this entry is for is narrower and immediate: a reader
+who finds a whole-screen save button in a product that imports `components.css`
+would be right to reach for §3.5, and would be removing something load-bearing.
+A difference nobody wrote down gets "fixed" once, by somebody being helpful —
+which is the sentence at the top of this document, and this is that case.
+
 ---
 
 ## 5. Extractions, in the order to do them

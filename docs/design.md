@@ -890,6 +890,11 @@ oversight. So the rule to write down is not "never a save button" but:
 > settings field where a partial value would do something wrong — half an API key,
 > half a word list. Wherever one exists, its scope is one field, never a screen.
 
+One screen in the family does have one, and it is not an oversight:
+conventions.md §4.7 records why Wochenwerk's appointment sheet holds its writes
+until a button, and what would have to be true of a screen before that argument
+reached it.
+
 ### 3.6 Summary table
 
 Three rows were amended on 2026-08-24, when vorlaut joined the concept and the
