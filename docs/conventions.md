@@ -1343,6 +1343,39 @@ touched. A second screen growing a Sichern is drift, and this line is not cover
 for it — the test it has to pass is the one above: is there a second surface, and
 is somebody being told something by it?
 
+### 4.8 A new appointment is not named for the day
+
+**Settled 2026-09-01.** §1.5 gives a new Sammlung a name — `"Sammlung vom
+24.08.2026"` — and selects it, so the first keystroke replaces it. Wochenwerk
+gives a new appointment nothing, and focuses an empty field. Half of §1.5 is
+taken and half is not, deliberately.
+
+**Why.** §1.5's reason is that a Sammlung with no name is *nameless*: nothing
+else about it answers "what is this called", so an invented date is a true
+answer for the many nobody will name. An appointment is not in that position. It
+is named by what it holds — `derivedName` in `src/model.ts` reads the birthday
+on it, or the cards it offers, or its symbol's label — and `titleOf` is
+`title?.trim() || derivedName(…)`. The title is an *override*, not the name.
+
+So a suggestion would not fill a hole; it would cover one that is not there, and
+it would keep covering it. A stored `"Termin vom 02.09.2026"` shadows
+`derivedName` permanently, which means an appointment named for the day it was
+created goes on being called that after a Spielplatz symbol arrives — while the
+name that follows the symbol sits underneath it, unused. §1.5's own argument
+against an unselected default is that it is "a small chore charged on every
+creation"; here the chore is charged whether or not it is selected, because the
+cost is not the deleting, it is what the record is called afterwards.
+
+**What is taken from §1.5 is the focus.** The caret lands in the name field on a
+new appointment, for the reason `.title-input` needs one at all — it is a field
+that does not look like one until it is asked to, and on a new sheet nothing had
+asked it, so it read as the sheet's heading. The field shows `derivedName` as
+its placeholder, so what stands there is what the appointment will be called if
+nothing is typed. Nothing to select, because there is nothing to replace.
+
+**This is §4.1's shape again.** What the product holds is different: a Sammlung
+holds things that do not name it, and an appointment holds the thing that does.
+
 ---
 
 ## 5. Extractions, in the order to do them
