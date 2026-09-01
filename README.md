@@ -9,6 +9,12 @@ You type a sentence; one gives it a voice, one gives it symbols, one puts it on 
 key you can press. They should look like siblings, and this is where that is
 decided.
 
+One more takes the same look without being that tool:
+[wochenwerk](https://github.com/Lautstark/Wochenwerk), a family calendar and a
+child's symbol board. Which of the conventions reach it and which do not is
+settled in
+[the conventions](docs/conventions.md#there-are-four-products-and-this-was-written-for-three).
+
 **[The gallery →](https://lautstark.github.io/design/)**
 · **[The rule set →](docs/design.md)**
 · **[The conventions →](docs/conventions.md)**
