@@ -8,6 +8,8 @@ means working out how it is done here.
 
 Three products, one tool with three outputs: [mitreden] gives a sentence a
 voice, [bildhaft] gives it symbols, [vorlaut] puts it on a key you can press.
+One more consumes the package without being that tool; "There are four products"
+below says which rules reach it.
 
 [mitreden]: https://github.com/Lautstark/mitreden
 [bildhaft]: https://github.com/Lautstark/bildhaft
@@ -37,6 +39,57 @@ not forgotten — and because it is not ungoverned. `exchange/SPEC.md` in vorlau
 holds its side of the contract, and is the one document in the family with real
 versioning discipline, for the reason the rule about the rules gives: a package
 on somebody's tablet is a file on a device nobody here controls.
+
+### There are four products, and this was written for three
+
+The three above are one tool with three outputs, and most of what follows is
+about the thing those three share: a **Sammlung**, and the sidebar shell around
+it. One more product consumes the package without being that tool:
+**wochenwerk**, a family calendar and a child's symbol board. It has an accent
+and generated tokens in `products/` like the rest.
+
+(`products/` also still holds **druckwerk**, which is archived and on its way
+out. It is not documented here and no rule below is written against it.)
+
+**Where a rule below says "all three", it stays three.** Those lines are audits
+of the three products named at the top, most of them dated, several of them
+about what somebody did on an afternoon in August. Rewriting them to five would
+turn an audit into a claim about products that were not read — which is the
+failure §3.4 already paid for once, and the more expensive kind: a line that was
+never true reads as settled and is the last place anybody looks.
+
+**Wochenwerk, read against its source on 2026-09-01.** It takes
+`tokens/wochenwerk.css`, `components.css`, and the `dialog`, `menu` and `toast`
+modules, keeps its records through `idb`, and holds its folder through
+`@lautstark/sicherung/ablage` and `ablage-ui`. So §2.1, §3.4, §3.5, §3.7 and
+§3.8 reach it, and it follows them: its settings sheet is a column of
+`<details class="panel" name="settings">` with a `.section` and a `.state` in
+each heading, which is §3.5 down to the mechanism it names.
+
+§3.6 is the one to read carefully, because half of it reaches and half does not.
+Wochenwerk uses the `menu` module — two `⋯` triggers in its settings sheet, on
+the rows for a card and for a person — but §3.6 is about what the `⋯` *holds*,
+and what it holds there is "everything belonging to the whole Sammlung". Those
+are row menus. The machinery is shared; the section's subject is not.
+
+It has **no Sammlung and no sidebar**. Section 1 is about the identity,
+ordering, renaming, counting and arity of Sammlungen and §3.1 is about the shell
+around them, so neither reaches it — and §4.1 through §4.4 are that same
+question asked four ways. That is not a divergence anybody owes. There is
+nothing there to diverge from.
+
+The reference already runs one way, which is the reason this section is worth
+its space: `src/model.ts` in wochenwerk cites **§1.2 and §1.3 by name** for
+where a preference lives. It goes further than they do — one settings record in
+IndexedDB and never `localStorage` for anything — and it can, because it has
+neither of the two preferences §1.3 exempts. It is German by policy and follows
+the operating system's scheme, so there is nothing that has to be readable
+before the first paint. Read that as agreement with §1.3's test rather than as a
+stricter rule: the test is whether the preference is needed before the store can
+answer, and wochenwerk has no such preference.
+
+Its one recorded difference is §4.7.
+
 
 ### The divergence lists go stale in hours, not months
 
@@ -1241,54 +1294,54 @@ converges, the *count* does not.
 
 ### 4.7 Wochenwerk's appointment sheet has a Sichern, and design.md §3.5 is right anyway
 
-**Settled 2026-09-01**, and written down because the rule it breaks is a good
-one. design.md §3.5 says everything is saved as it is done, and allows a save
-button in exactly one place: a settings field whose half-typed value would do
-something wrong — "its scope is one field, never a screen". Wochenwerk's
-appointment sheet is a whole screen with a draft behind it and an Abbrechen
-beside a Sichern. Nothing is written until the button.
+**Settled 2026-09-01, and re-argued on the same day** — the first version of this
+entry gave three reasons and two of them do not survive being read against §1.5.
+What is left is one reason, and it is enough because it is about something no
+other product in this family has.
 
-**Why it is not the drift it looks like.** §3.5 is a rule about *editing a thing
-that exists*. A Sammlung is already there when you rename it, so the write has
-somewhere to land on every keystroke and a save button would only be a second
-way to say what the field already said. Two facts about this sheet break that
-assumption, and neither is a taste:
+design.md §3.5 says everything is saved as it is done, and allows a save button
+in exactly one place: a settings field whose half-typed value would do something
+wrong — "its scope is one field, never a screen". Wochenwerk's appointment sheet
+is a whole screen with a draft behind it and an Abbrechen beside a Sichern.
+Nothing is written until the button.
 
-- **A new appointment does not exist yet.** The sheet is how it comes into
-  being, so there is no record to debounce a write into. Saving as you go would
-  mean minting a row the moment somebody clicks an empty column — and then
-  Abbrechen would have to *delete* rather than discard, which is a worse
-  question than the one the button asks.
-- **A change to a recurring appointment has to ask which days it reaches** —
-  this one, this and all following, or all of them — and that question is asked
-  at the moment of consequence rather than chosen in advance, so that an
-  appointment with no series carries none of it. It needs an edge to be asked
-  at. Written continuously there is no such moment: either the question comes on
-  every keystroke, or something answers it silently, and answering it silently
-  is how one afternoon's edit quietly rewrites a year of Tuesdays.
+**The reason: what is being edited and what is being shown are not the same
+screen, and the other one is on a wall.** In the three, the surface you edit is
+the surface you look at — a live write shows the author their own half-finished
+state, which is exactly what they were doing anyway. Wochenwerk has two
+surfaces. The calendar is the editor; the board is a separate page in the
+hallway, and `src/main.ts` re-reads the database on every minute boundary
+(`setTimeout(tick, 60_000 - …)`). So a write as you type puts a half-planned
+appointment — no symbol yet, or still on yesterday — in front of a two-year-old
+who cannot read, within sixty seconds, where it is not a draft but a statement
+about what happens next. The save button is the line between planning something
+and telling a child it is happening.
 
-So the shape is the same as §4.1's. What the product *holds* is different — a
-record that may not exist yet, and one that may stand for a rule covering
-hundreds of days — and the save boundary follows from that rather than being
-imposed on it.
+**Two reasons that were here and are not good enough**, kept because a reader
+will think of both:
+
+- *"A new appointment does not exist until the button, so there is nowhere to
+  write."* §1.5 answers this: the family's response to a new thing is to create
+  it immediately with a default and select the name. Wochenwerk could do the
+  same. The reason it does not is the one above, not this one.
+- *"A change to a recurring appointment has to ask which days it reaches, and
+  that needs an edge."* It needs *an* edge, not this one. A live-writing version
+  could write the single occurrence and offer "apply to the series" as its own
+  act, which is what several calendars do. This is a good design, not a forced
+  one, and it should not be filed as a constraint.
+
+**The alternative that was considered and rejected**: keep the live write and
+give every record a "not ready yet" flag the board skips. That does not remove
+the boundary, it moves it out of the sheet and into the data model, where every
+reader of the database has to know about it — and one that forgets draws the
+draft. A boundary in one dialog is cheaper than a third state on every record.
 
 **What is not exempted.** Everything else in Wochenwerk's calendar saves as it is
 done, and the exception is this one sheet rather than the product. The board
 writes what a child picked immediately; the settings panels write as they are
 touched. A second screen growing a Sichern is drift, and this line is not cover
-for it.
-
-**A note on scope, because this is the first time Wochenwerk appears here.**
-Neither this document nor design.md governs it: both were written for mitreden,
-bildhaft and vorlaut, and say so in their opening lines. Wochenwerk is a fourth
-product consuming the package — `tokens/wochenwerk.css`, `components.css`, and
-the dialog, menu and toast modules — and druckwerk is a fifth. Whether the prose
-should widen to four or five is a bigger question than this entry, and it is not
-being answered here. What this entry is for is narrower and immediate: a reader
-who finds a whole-screen save button in a product that imports `components.css`
-would be right to reach for §3.5, and would be removing something load-bearing.
-A difference nobody wrote down gets "fixed" once, by somebody being helpful —
-which is the sentence at the top of this document, and this is that case.
+for it — the test it has to pass is the one above: is there a second surface, and
+is somebody being told something by it?
 
 ---
 
