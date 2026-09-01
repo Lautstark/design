@@ -9,6 +9,13 @@ You type a sentence; one gives it a voice, one gives it symbols, one puts it on 
 key you can press. They should look like siblings, and this is where that is
 decided.
 
+Two more take the same look without being that tool:
+[wochenwerk](https://github.com/Lautstark/Wochenwerk), a family calendar and a
+child's symbol board, and **druckwerk**, which makes printable material from
+symbols. `npm run check` solves the pairings for all five. What the conventions
+reach and what they do not is settled in
+[the conventions](docs/conventions.md#there-are-five-products-and-this-was-written-for-three).
+
 **[The gallery →](https://lautstark.github.io/design/)**
 · **[The rule set →](docs/design.md)**
 · **[The conventions →](docs/conventions.md)**

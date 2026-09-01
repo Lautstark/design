@@ -8,6 +8,8 @@ means working out how it is done here.
 
 Three products, one tool with three outputs: [mitreden] gives a sentence a
 voice, [bildhaft] gives it symbols, [vorlaut] puts it on a key you can press.
+Two more consume the package without being that tool; "There are five products"
+below says which rules reach them.
 
 [mitreden]: https://github.com/Lautstark/mitreden
 [bildhaft]: https://github.com/Lautstark/bildhaft
@@ -37,6 +39,60 @@ not forgotten — and because it is not ungoverned. `exchange/SPEC.md` in vorlau
 holds its side of the contract, and is the one document in the family with real
 versioning discipline, for the reason the rule about the rules gives: a package
 on somebody's tablet is a file on a device nobody here controls.
+
+### There are five products, and this was written for three
+
+The three above are one tool with three outputs, and most of what follows is
+about the thing those three share: a **Sammlung**, and the sidebar shell around
+it. Two more products consume the package without being that tool —
+**wochenwerk**, a family calendar and a child's symbol board, and
+**druckwerk**, which makes printable material from symbols. Both have an accent
+and generated tokens in `products/`, and `npm run check` solves and verifies the
+pairings for all five.
+
+**Where a rule below says "all three", it stays three.** Those lines are audits
+of the three products named at the top, most of them dated, several of them
+about what somebody did on an afternoon in August. Rewriting them to five would
+turn an audit into a claim about products that were not read — which is the
+failure §3.4 already paid for once, and the more expensive kind: a line that was
+never true reads as settled and is the last place anybody looks.
+
+**Wochenwerk, read against its source on 2026-09-01.** It takes
+`tokens/wochenwerk.css`, `components.css`, and the `dialog`, `menu` and `toast`
+modules, keeps its records through `idb`, and holds its folder through
+`@lautstark/sicherung/ablage` and `ablage-ui`. So §2.1, §3.4, §3.5, §3.7 and
+§3.8 reach it, and it follows them: its settings sheet is a column of
+`<details class="panel" name="settings">` with a `.section` and a `.state` in
+each heading, which is §3.5 down to the mechanism it names.
+
+§3.6 is the one to read carefully, because half of it reaches and half does not.
+Wochenwerk uses the `menu` module — two `⋯` triggers in its settings sheet, on
+the rows for a card and for a person — but §3.6 is about what the `⋯` *holds*,
+and what it holds there is "everything belonging to the whole Sammlung". Those
+are row menus. The machinery is shared; the section's subject is not.
+
+It has **no Sammlung and no sidebar**. Section 1 is about the identity,
+ordering, renaming, counting and arity of Sammlungen and §3.1 is about the shell
+around them, so neither reaches it — and §4.1 through §4.4 are that same
+question asked four ways. That is not a divergence anybody owes. There is
+nothing there to diverge from.
+
+The reference already runs one way, which is the reason this section is worth
+its space: `src/model.ts` in wochenwerk cites **§1.2 and §1.3 by name** for
+where a preference lives. It goes further than they do — one settings record in
+IndexedDB and never `localStorage` for anything — and it can, because it has
+neither of the two preferences §1.3 exempts. It is German by policy and follows
+the operating system's scheme, so there is nothing that has to be readable
+before the first paint. Read that as agreement with §1.3's test rather than as a
+stricter rule: the test is whether the preference is needed before the store can
+answer, and wochenwerk has no such preference.
+
+Its one recorded difference is §4.7.
+
+**Druckwerk is named and not mapped.** Its accent, its tokens and its
+`products/druckwerk.json` note are here; nobody has read it against these rules.
+A line saying it complies would be exactly the kind §3.4 warns about, so there
+is no such line — only this one, so that a reader can tell it was not forgotten.
 
 ### The divergence lists go stale in hours, not months
 
