@@ -165,25 +165,67 @@ export function confirmDialog(options) {
       on: { click: () => finish(false) },
     });
 
+    const confirm = make('button', {
+      className: options.danger ? 'btn destructive filled' : 'btn primary',
+      text: options.confirmLabel,
+      attrs: { type: 'button' },
+      on: { click: () => finish(true) },
+    });
+
+    /* The word, where one is asked for.
+     *
+     * Reserved for the acts that reach past this browser and cannot be undone —
+     * emptying a household's whole library, which with a folder as the store
+     * empties it on every device somebody owns. Everywhere else a click is the
+     * right amount of friction, and spending this on deleting one row would
+     * make it a habit, and a habit is not a check.
+     *
+     * The word comes from the caller, like every other word here: two of the
+     * consumers are bilingual and a string in this file would be wrong in one of
+     * them. Compared after trimming and case-folded, because somebody typing the
+     * word they were shown is the evidence being asked for — a capital letter is
+     * not a second question.
+     */
+    const wanted = options.requireTyping;
+    const field = wanted
+      ? make('input', {
+          className: 'field',
+          attrs: { type: 'text', autocomplete: 'off', autocapitalize: 'off',
+                   spellcheck: 'false', 'aria-label': options.typingLabel ?? wanted },
+        })
+      : null;
+    if (field) {
+      confirm.disabled = true;
+      const check = () => {
+        confirm.disabled = field.value.trim().toLowerCase() !== wanted.trim().toLowerCase();
+      };
+      field.addEventListener('input', check);
+      /* Enter in a text field inside a <form>-less dialog does nothing by
+         default, and a person who has just typed the word expects it to. Only
+         once the word is right, so it can never be the thing that confirms by
+         accident. */
+      field.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !confirm.disabled) { event.preventDefault(); finish(true); }
+      });
+    }
+
     const handle = openDialog({
       title: options.title,
       closeLabel: options.closeLabel,
       // A plain paragraph: `.sheet > .body > p` is already margin-free in
       // components.css, so an inline style here would be the shared layer
       // being second-guessed by the module that depends on it.
-      body: [make('p', { text: options.body })],
+      body: [
+        make('p', { text: options.body }),
+        ...(field ? [make('p', { text: options.typingLabel ?? '' }), field] : []),
+      ],
       footer: [
         // No spacer: components.css puts `justify-content: flex-end` on the
         // foot already, and bildhaft's `.spacer` was a leftover from before it
         // did. A shared module must not emit a class the shared layer does not
         // define - it would draw right in one product and left in two.
         cancel,
-        make('button', {
-          className: options.danger ? 'btn destructive filled' : 'btn primary',
-          text: options.confirmLabel,
-          attrs: { type: 'button' },
-          on: { click: () => finish(true) },
-        }),
+        confirm,
       ],
       // Escape, the ✕ and a press outside all land here. None of them is a yes.
       onClose: () => finish(false),
@@ -197,6 +239,10 @@ export function confirmDialog(options) {
      * button is a Tab away and should be reached deliberately. vorlaut's copy
      * did this and bildhaft's did not; it is the one thing the base was missing.
      */
-    cancel.focus();
+    /* With a word to type, the caret goes in the field instead: the person has
+       already decided, and the next thing they have to do is the typing. The
+       safe button is still what Escape and the ✕ do, and the destructive one is
+       still disabled until the word is right. */
+    if (field) field.focus(); else cancel.focus();
   });
 }

@@ -1135,6 +1135,27 @@ not come back. Where the product cannot style a dialog cheaply, a native
 `confirm()` carrying the same *sentence* is acceptable — the wording is the rule,
 the chrome is not.
 
+**And it says how far it reaches, when that is further than here.** Added
+2026-09-02. Every editor can keep its work in a folder, and where one does, a
+deletion removes the files — so it removes them on every device the household
+has. „Das lässt sich nicht rückgängig machen" is true of this browser and says
+nothing about the tablet in the hallway. The three products that have the act now
+answer `wipeReaches()`: *browser*, *folder*, or *unreachable*. The last is not a
+warning but a refusal — with the folder out of reach a wipe empties this browser,
+leaves the folder whole, and hands everything back on the next start, which is a
+delete that reports success and undoes itself.
+
+**One act per product may ask for a word to be typed, and no more.**
+`confirmDialog`'s `requireTyping` disables the confirming button until the reader
+types the word already printed on it — trimmed and case-folded, because somebody
+typing what they were shown is the evidence being asked for and a capital letter
+is not a second question. It is for the acts that reach past this browser and
+cannot be undone: emptying a household's whole library, on every device they own.
+**Spending it anywhere else is what breaks it.** Friction asked for on deleting
+one row becomes a habit within a week, and a habit is not a check — the reader
+types the word without reading the sentence, which is worse than the plain
+confirmation it replaced.
+
 **Messages.** Three kinds, three treatments:
 
 - *Progress* — belongs to the control that started it: a spinner in the button, or a

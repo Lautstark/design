@@ -319,3 +319,81 @@ describe('confirmDialog', () => {
     expect(document.querySelector('dialog')).toBeNull();
   });
 });
+
+/* The word somebody has to type before the thing goes.
+ *
+ * Reserved for acts that reach past this browser: with a folder as the store,
+ * „Alles löschen" empties the library on every device the household owns. The
+ * friction is the point, and so is its scarcity — spent on deleting one row it
+ * would become a habit, and a habit is not a check.
+ */
+describe('confirmDialog with a word to type', () => {
+  const ASKED = { ...WORDS, requireTyping: 'löschen', typingLabel: 'Tipp „löschen“' };
+  const field = () => sheet().querySelector('.body input');
+  const confirm = () => footButtons()[1];
+
+  const type = (text) => {
+    field().value = text;
+    field().dispatchEvent(new Event('input'));
+  };
+
+  it('starts with the destructive button refusing to work', () => {
+    void confirmDialog({ ...ASKED });
+    expect(field()).not.toBeNull();
+    expect(confirm().disabled).toBe(true);
+  });
+
+  it('lets it through once the word is there', () => {
+    void confirmDialog({ ...ASKED });
+    type('löschen');
+    expect(confirm().disabled).toBe(false);
+  });
+
+  it('is not fooled by a near miss', () => {
+    void confirmDialog({ ...ASKED });
+    for (const near of ['lösche', 'löschen!', 'delete', '']) {
+      type(near);
+      expect(confirm().disabled).toBe(true);
+    }
+  });
+
+  /* Somebody typing the word they were shown is the evidence being asked for.
+     A capital letter is not a second question, and neither is a stray space. */
+  it('accepts the word however it was capitalised or padded', () => {
+    void confirmDialog({ ...ASKED });
+    type('  LÖSCHEN ');
+    expect(confirm().disabled).toBe(false);
+  });
+
+  it('resolves true when the word is right and the button is pressed', async () => {
+    const answer = confirmDialog({ ...ASKED });
+    type('löschen');
+    confirm().click();
+    await expect(answer).resolves.toBe(true);
+  });
+
+  /* Enter is what a person expects after typing a word into a field, and this
+     dialog has no <form> to give it to them. Only once the word is right, so it
+     can never be what confirms by accident. */
+  it('takes Enter in the field, but only once the word is right', async () => {
+    const answer = confirmDialog({ ...ASKED });
+    field().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    expect(sheet()).not.toBeNull();
+    type('löschen');
+    field().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+    await expect(answer).resolves.toBe(true);
+  });
+
+  /* The caret goes where the next thing to do is. Without a word to type the
+     safe button keeps the focus, which is the rule this file already holds. */
+  it('puts the caret in the field, not on the safe button', () => {
+    void confirmDialog({ ...ASKED });
+    expect(document.activeElement).toBe(field());
+  });
+
+  it('draws no field at all when no word is asked for', () => {
+    void confirmDialog({ ...WORDS });
+    expect(field()).toBeNull();
+    expect(confirm().disabled).toBe(false);
+  });
+});

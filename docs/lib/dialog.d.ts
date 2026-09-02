@@ -41,6 +41,20 @@ export interface ConfirmOptions {
   closeLabel: string;
   /** Draws the confirming button as destructive. */
   danger?: boolean;
+  /**
+   * A word the reader has to type before the confirming button works.
+   *
+   * For the acts that reach past this browser and cannot be undone — emptying a
+   * household's whole library, which with a folder as the store empties it on
+   * every device they own. Not for deleting one row: friction spent everywhere
+   * becomes a habit, and a habit is not a check.
+   *
+   * Compared trimmed and case-folded. The word is the caller's, like every other
+   * word here, and should be the one already printed on the button.
+   */
+  requireTyping?: string;
+  /** The line above that field, and its accessible name. */
+  typingLabel?: string;
 }
 
 /**
