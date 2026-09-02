@@ -1292,7 +1292,7 @@ states a product has is a fact about its model.
 have one draw it the same. That is the line this section is drawing — the *look*
 converges, the *count* does not.
 
-### 4.7 Wochenwerk's appointment sheet has a Sichern, and design.md §3.5 is right anyway
+### 4.7 Wochenwerk's appointment sheet commits, and design.md §3.5 is right anyway
 
 **Settled 2026-09-01, and re-argued on the same day** — the first version of this
 entry gave three reasons and two of them do not survive being read against §1.5.
@@ -1302,8 +1302,17 @@ other product in this family has.
 design.md §3.5 says everything is saved as it is done, and allows a save button
 in exactly one place: a settings field whose half-typed value would do something
 wrong — "its scope is one field, never a screen". Wochenwerk's appointment sheet
-is a whole screen with a draft behind it and an Abbrechen beside a Sichern.
+is a whole screen with a draft behind it and an Abbrechen beside a Fertig.
 Nothing is written until the button.
+
+**The button said „Sichern" until 2026-09-02 and says „Fertig" now**, which is a
+change to the word and not to anything above. The reason is one this section
+never had to consider: the same product says „Sicherung als Datei" and
+„Sicherung einlesen" for the backup, so one stem was doing two unrelated jobs in
+one settings sheet. „Fertig" is what the settings dialog's own footer already
+said. A reader coming here from that rename should find the argument unmoved —
+§3.5's exception is about a screen having a boundary, not about what is printed
+on it.
 
 **The reason: what is being edited and what is being shown are not the same
 screen, and the other one is on a wall.** In the three, the surface you edit is
@@ -1377,6 +1386,66 @@ nothing is typed. Nothing to select, because there is nothing to replace.
 holds things that do not name it, and an appointment holds the thing that does.
 
 ---
+
+### 4.9 The two folder questions, and what each product answers
+
+**Written 2026-09-02.** §4.7's neighbour in subject: there are two questions a
+product can put to a folder, and they are not two answers to one question.
+
+- **Ablage** — the folder *is* the store. Several writers, sync between
+  machines, conflicts as the central problem. `@lautstark/sicherung/ablage`,
+  drawn by the shared `wherePanel`.
+- **Sicherung** — the folder receives an *aging copy*. One writer, dated files
+  pruned to `keep`, no conflicts possible. `@lautstark/sicherung`.
+
+They are complementary, and the distinction is not academic. An Ablage answers
+"the laptop died". Only a dated copy answers "we did that on purpose and were
+wrong", because a synced store carries a mistake to every machine within seconds
+and has no history behind it.
+
+All four editors answer both, as of 2026-09-02. Until that day wochenwerk
+answered only the first — the one combination nobody intended, a store in a
+folder with nothing behind it, in the product whose own settings panel argued for
+the second in as many words while offering a download somebody had to remember.
+It now carries both, in two panels rather than one: „Ablage" says where the
+calendar *is*, „Sicherung" where the copy goes, because one heading cannot carry
+both answers.
+
+**How that gap went unseen is worth more than the gap.** It was looked for by
+grepping `vorlaut` for the import, finding nothing, and concluding that three
+products diverged four ways. `vorlaut` is the talker and the site; the editor is
+`vorlaut-editor`, a separate repository since it split. One repository looked at,
+four conclusions drawn, and every one of them wrong. Whatever else these
+documents are for, an audit of "who does what" is worth nothing unless the list
+of repositories was checked first.
+
+### 4.10 The backup panel is shared, and was the last thing four products drew alone
+
+**Done 2026-09-02, `@lautstark/sicherung/backup-panel`.** The Ablage half had
+been extracted as `wherePanel` and was identical everywhere. The Sicherung half
+was written out four times over the same `actionsFor` and `lineFor` — bildhaft
+211 lines, vorlaut-editor 170, mitreden 161, druckwerk 112 — and had drifted in
+ways no test could see, because each copy was internally consistent:
+
+- **only bildhaft carried a headline**, the line a panel's summary shows so the
+  „Daten" section stops being the one whose state you unfold it to learn, and the
+  only thing keeping *being written* apart from *looks like it is*;
+- **only bildhaft handed back a `dispose`**, so the other three leaked a listener
+  per reopen of a settings dialog;
+- **mitreden's English carried German quotation marks**, in two arms, for as long
+  as they existed.
+
+Two rules survived the move by becoming the module's rather than a product's. The
+headline is bildhaft's. **`lang` read on every paint rather than captured** is
+mitreden's: that page changes language without reloading, and a locale taken once
+answers in the language the reader has just left while staying perfectly
+well-formed. mitreden's own `backup-language.test.ts` is what caught the shared
+module's first draft taking it once — which is the argument for extracting *into*
+tests rather than deleting them, and every assertion in the package's
+`backup-panel.test.ts` was watched to fail before it was allowed to count.
+
+What stays with the product: which `Sicherung` it is, where a spoken sentence
+goes, and which heading the state line belongs in.
 
 ## 5. Extractions, in the order to do them
 
