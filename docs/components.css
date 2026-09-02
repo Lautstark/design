@@ -219,10 +219,20 @@
    scrolling) stays per product, and the backdrop weight is deliberately not
    settled here — the audit left that fork open. A sheet with both a corner ✕
    and a footer dismiss must not give them the same accessible name. */
+/* Two widths, as tokens, because `wide` was a class this file *named* and did
+   not draw — dialog.d.ts offers it, `openDialog` marks it, and nothing here
+   gave it a meaning. So three products invented one: bildhaft
+   `max-width: min(100% - 48px, 1060px)`, wochenwerk `min(900px, 94vw)`,
+   mitreden a plain `calc(100% - 40px)` on the ordinary sheet. That is not four
+   products disagreeing about design; it is one hole in this file, filled four
+   ways. A product that wants a different figure sets the token and says why,
+   which is a decision somebody can find. */
+:where(.sheet) { --sheet-w: min(600px, calc(100% - 40px)); --sheet-w-wide: min(1060px, calc(100% - 48px)); }
+
 .sheet {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); box-shadow: var(--shadow);
-  padding: 22px; max-width: 600px;
+  padding: 22px; width: var(--sheet-w); max-width: 100%;
   /* A sheet is usually a grid or flex item, and such an item's automatic
      minimum size is its content's min-content width — so one long unbroken
      line inside inflates the whole dialog past the space it was given, and it
@@ -230,6 +240,7 @@
      content deal with the width it gets. */
   min-width: 0;
 }
+.sheet.wide { width: var(--sheet-w-wide); }
 /*
  * The three regions are the sheet's OWN children, and the selectors have to
  * say so. As descendants they reached anything nested that happened to share

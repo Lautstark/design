@@ -1447,6 +1447,35 @@ tests rather than deleting them, and every assertion in the package's
 What stays with the product: which `Sicherung` it is, where a spoken sentence
 goes, and which heading the state line belongs in.
 
+### 4.11 The sheet's backdrop is still an open fork, and here is the evidence
+
+**Read 2026-09-02, not settled.** components.css says the backdrop weight is
+"deliberately not settled here — the audit left that fork open". It is worth
+recording what the four products have since done with that freedom, because a
+reader will otherwise rediscover it:
+
+| | `dialog.sheet::backdrop` |
+| --- | --- |
+| bildhaft | `rgba(22, 20, 17, .38)` + `blur(3px)` |
+| mitreden | `rgba(22, 20, 17, .38)` + `blur(3px)` — byte-identical |
+| vorlaut-editor | `rgba(0, 0, 0, .6)`, no blur |
+| wochenwerk | none at all; the browser's own |
+
+Two agree exactly, one differs, one abstains. **That is not enough to close the
+fork**, and the temptation is to close it anyway on a 2:1 count — which would
+change two products' appearance on a vote rather than an argument. The test this
+file states is "only what the products demonstrably duplicated", and a duplicate
+that two of four share while a third contradicts it is not that.
+
+What it *is* enough for is to stop calling it a freedom anybody is using. Nobody
+chose black-60 over warm-38; vorlaut's is the oldest of the four and predates the
+other two. When somebody has an argument, this table is the starting point.
+
+**The sheet's width was the other half of this and has been closed** — see
+`--sheet-w` in components.css. That one was not a fork: `wide` was a class the
+file named and never drew, so three products filled the hole three ways. A hole
+and a fork look identical from a distance and are not the same thing.
+
 ## 5. Extractions, in the order to do them
 
 Sizes assume the release-and-pin loop the family already has: a tag, a bump in
