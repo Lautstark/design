@@ -651,6 +651,61 @@
   .panel > summary::after { transition: none; }
 }
 
+/* ------------------------------------------------- the shared panels' own look
+ *
+ * `@lautstark/sicherung/ablage-panel` and `/backup-panel` hand a product a
+ * finished block of markup — and every product then drew it itself. The rules
+ * below were byte-alike in bildhaft, mitreden, vorlaut-editor and wochenwerk:
+ * identical values, identical properties, four files.
+ *
+ * That is the failure this file exists to end, one level up from where it was
+ * caught the first time. A module that emits class names into products where
+ * nothing draws them has not shared a component; it has shared the *markup* and
+ * distributed the *work*, and the four results then look different — which is
+ * exactly what a shared panel was supposed to prevent.
+ *
+ * The test is `.collections` further down: module and rules in the same package.
+ * That was the only surface in the family that had both, and it was the only one
+ * that looked the same everywhere.
+ */
+
+/* The block a folder panel is: a column of short rows. */
+.where-panel { display: grid; gap: 11px; }
+.where-panel p { margin: 0; }
+
+/* One statement about where things are, boxed so it reads as a state and not as
+   another sentence. `.bad` is the folder that cannot be reached. */
+.where {
+  display: grid; gap: 2px; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.where b { font-size: 13px; font-weight: 600; }
+.where.bad { border-color: var(--danger); }
+
+/* Consent, under the folder it is about. */
+.where-share { display: grid; gap: 6px; }
+.where-panel .check { display: flex; align-items: center; gap: 9px; font-size: 13px; cursor: pointer; }
+.where-panel .check input { flex: 0 0 auto; margin: 0; }
+
+/* A picture of the folder, the way a file manager draws it: somebody who cannot
+   follow a sentence about nesting recognises a shape they have seen a thousand
+   times. Monospace because the indentation is the information. */
+.tree {
+  margin: 0; padding: 10px 12px; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); background: var(--surface); color: var(--text);
+  font-family: var(--mono); font-size: 12px; line-height: 1.8; overflow-x: auto;
+}
+
+/* A row of things you can do. Wraps, because a panel narrows before its buttons
+   do, and three of the four products had written exactly this. */
+.acts { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* The standing backup's block. Its status line is `.standing` above; this is
+   only the column it sits in. */
+.backup-panel { display: grid; gap: 10px; }
+.backup-panel > p { margin: 0; }
+
 /* ------------------------------------------------------------------ footer */
 
 /* The footer joined this file late, and on evidence: design.md's audit called

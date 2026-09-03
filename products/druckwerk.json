@@ -1,8 +1,0 @@
-{
-  "product": "druckwerk",
-  "accent": "#00A88E",
-  "schemes": "both",
-  "state": false,
-  "transport": "npm",
-  "note": "Follows the OS and consumes the package like its siblings. Druckwerk makes printable UK material from symbols; the teal keeps it apart from bildhaft's orange, mitreden's pink and vorlaut's violet. `state` stays off until the app tracks anything per item worth a colour."
-}

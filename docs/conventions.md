@@ -48,8 +48,10 @@ it. One more product consumes the package without being that tool:
 **wochenwerk**, a family calendar and a child's symbol board. It has an accent
 and generated tokens in `products/` like the rest.
 
-(`products/` also still holds **druckwerk**, which is archived and on its way
-out. It is not documented here and no rule below is written against it.)
+(**druckwerk** was a fifth product and is gone — the repository was deleted on
+2026-09-03 and `products/druckwerk.json` with it. Its name survives in §4.10 as
+evidence in an argument about duplication, which is a fair use of a dead product
+and not a claim that it still exists.)
 
 **Where a rule below says "all three", it stays three.** Those lines are audits
 of the three products named at the top, most of them dated, several of them
@@ -1475,6 +1477,38 @@ other two. When somebody has an argument, this table is the starting point.
 `--sheet-w` in components.css. That one was not a fork: `wide` was a class the
 file named and never drew, so three products filled the hole three ways. A hole
 and a fork look identical from a distance and are not the same thing.
+
+### 4.12 A shared module that emits markup brings its CSS
+
+**Rule, written 2026-09-03 after a review found four copies of one panel's
+appearance.**
+
+`@lautstark/sicherung/ablage-panel` hands a product a finished block of markup
+carrying `.where`, `.where-panel`, `.where-share`, `.tree` and `.acts`.
+`components.css` drew none of them. So every product wrote the rules itself —
+bildhaft 7, mitreden 10, vorlaut-editor 10, wochenwerk 7 — with identical values,
+arrived at four times.
+
+That is not sharing. It is sharing the *markup* and distributing the *work*, and
+the four results then look different, which is the one thing a shared panel
+exists to prevent. The user who reported it had four screenshots of the same
+settings surface and asked why none of them matched.
+
+So: **a module that emits class names ships the rules that draw them.** If the
+rules cannot go in `components.css` — because they are product layout rather than
+vocabulary — then the module should not be emitting those classes either; it
+should hand back a node the product styles, and say so.
+
+`.collections` is the test, and it is the older evidence: `drawCollections` and
+`.collections` are in the same package, and it is the only composed surface in
+the family that looked the same in all three products that had it. It was not
+luck.
+
+**What this cost, and where it was nearly repeated.** The `backup-panel`
+extracted on 2026-09-02 shipped `.backup-panel` and `.acts` into four products
+that drew neither — the same mistake, made the same day the older one was found
+and by the same reader. Both are fixed here. A rule that is easy to break twice
+in a day is a rule worth writing down.
 
 ## 5. Extractions, in the order to do them
 
