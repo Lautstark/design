@@ -88,8 +88,13 @@ export function openDialog(options) {
 
   // No role and no aria-modal: a <dialog> shown with showModal() already has
   // both, and writing them again is how an element ends up announced twice.
+  /* Three widths, named for what is in them rather than for how big they are:
+     a sheet asking one question, a column of panels, a grid of cards. The
+     settings dialog is the second in all four products, and until 2026-09-03
+     three of them asked for the first and one for the third - the same dialog
+     at 600px, 600px, 600px and 900px. `panels` is that shape having a name. */
   const dialog = make('dialog', {
-    className: `sheet${options.wide ? ' wide' : ''}`,
+    className: `sheet${options.panels ? ' panels' : ''}${options.wide ? ' wide' : ''}`,
     attrs: { 'aria-label': options.title },
   });
   dialog.append(

@@ -227,7 +227,15 @@
    products disagreeing about design; it is one hole in this file, filled four
    ways. A product that wants a different figure sets the token and says why,
    which is a decision somebody can find. */
-:where(.sheet) { --sheet-w: min(600px, calc(100% - 40px)); --sheet-w-wide: min(1060px, calc(100% - 48px)); }
+:where(.sheet) { --sheet-w: min(600px, calc(100% - 40px));
+  --sheet-w-panels: min(900px, calc(100% - 40px));
+  /* The air above and below a sheet, and the only place it is written.
+     The anchoring rule and the height limit are both derived from it, so
+     they cannot disagree: a sheet at its tallest reaches exactly the gap
+     it starts at. Left to the browser these were two figures from the UA
+     stylesheet that happened to match. */
+  --sheet-gap: 19px;
+  --sheet-w-wide: min(1060px, calc(100% - 48px)); }
 
 .sheet {
   background: var(--surface); border: 1px solid var(--line);
@@ -240,7 +248,22 @@
      content deal with the width it gets. */
   min-width: 0;
 }
+.sheet.panels { width: var(--sheet-w-panels); }
 .sheet.wide { width: var(--sheet-w-wide); }
+/* Anchored rather than centred. Both figures are derived from `--sheet-gap`
+   rather than chosen separately, so a sheet at its tallest reaches exactly the
+   gap it starts at and the heading is in the same place in either state.
+
+   A dialog's `margin: auto` centres it vertically, so a sheet that grows spends
+   half the growth upwards. These sheets are columns of <details>, and opening
+   one is the commonest thing anybody does in them: measured in wochenwerk at
+   1280x900, the heading travelled 149px upward while the reader was looking at
+   something near the bottom. Reported as "it jumps whenever you pick
+   something", which is exactly what it is. */
+.sheet {
+  margin-block: var(--sheet-gap) auto;
+  max-height: calc(100% - var(--sheet-gap) * 2);
+}
 /*
  * The three regions are the sheet's OWN children, and the selectors have to
  * say so. As descendants they reached anything nested that happened to share

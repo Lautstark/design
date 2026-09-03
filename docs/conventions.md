@@ -1541,6 +1541,33 @@ This is written down because the two rules met in one review and the older one
 was read as forbidding the newer. Left unwritten it is a contradiction the next
 extraction has to rediscover.
 
+### 4.14 Three sheet widths, named for what is in them
+
+`--sheet-w` (600px) is a sheet asking one question. `--sheet-w-panels` (900px)
+is a column of `<details>`. `--sheet-w-wide` (1060px) is a grid of cards.
+
+Before 2026-09-03 there were two, and the settings dialog — the same column of
+panels in all four products — was 600px in bildhaft, mitreden and
+vorlaut-editor and 900px in wochenwerk, which had set the wide token locally
+and said why: its wide sheet is the settings dialog, a column of panels rather
+than a grid of cards, and 900px is where a line of German stops being
+comfortable to read.
+
+That reason was the only one written down anywhere, and it was right. It just
+applied to three products that were not following it. So it became the
+family’s figure and got a name of its own.
+
+The 1060px stayed, because exactly one surface wants it and it is the one that
+reason excludes: bildhaft’s print dialog, a grid of cards. Shrinking the
+shared wide token to 900 would have taken the card grid with it — which is how
+a fix for a complaint about consistency turns into a regression somewhere
+nobody was looking.
+
+The corollary is the part worth keeping. A divergence that is written down can
+turn out to be the correct behaviour the others are missing. wochenwerk’s
+comment was not an exception to be tidied away; it was the decision, sitting in
+the wrong repository.
+
 ### 4.13 vorlaut-editor has no ZIP door and no „Neu einlesen", and neither is a decision
 
 **Read 2026-09-03, while extracting the METACOM panel. Both are holes.**
