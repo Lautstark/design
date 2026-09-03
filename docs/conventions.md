@@ -1510,6 +1510,75 @@ that drew neither — the same mistake, made the same day the older one was foun
 and by the same reader. Both are fixed here. A rule that is easy to break twice
 in a day is a rule worth writing down.
 
+**And a shared module may decide the words on its own surface.** Written
+2026-09-03, because the rule above has a twin that reads as its opposite and is
+not.
+
+`@lautstark/bildquelle`'s README says the package "returns ids and shapes, never
+words", and `@lautstark/sicherung/ui` says the same about `actionsFor` and
+`lineFor`. That rule is about **a provider's status codes**: `permission-needed`
+is a fact a host has to phrase in its own voice, at whichever of its three
+sites it turns up, in whichever of its languages — and a German default shipped
+in a package is a trap a host cannot fix from outside, which is exactly what
+`ProviderStatus.message` was until bildquelle 2.0.0.
+
+**The fixed furniture of one panel is the other kind of thing.** „Ordner
+wählen" on a button in a block the package itself builds is not a fact being
+phrased; it *is* the panel. A product that phrases it differently has not
+localised anything — it has produced a fourth panel that looks like the other
+three and reads differently, which is the failure this whole section is about.
+So a module that emits a surface carries that surface's words in every language
+the family reads, the way `@lautstark/sicherung/backup-panel` and
+`@lautstark/bildquelle/metacom-panel` both do.
+
+The line between them is **who asks the question**. A status code is asked
+about from anywhere; a button label is only ever asked about by the module that
+draws the button. Where a product must still differ, it differs by being handed
+the module's sentence and adding to it — `say(line, action)` — rather than by
+replacing it.
+
+This is written down because the two rules met in one review and the older one
+was read as forbidding the newer. Left unwritten it is a contradiction the next
+extraction has to rediscover.
+
+### 4.13 vorlaut-editor has no ZIP door and no „Neu einlesen", and neither is a decision
+
+**Read 2026-09-03, while extracting the METACOM panel. Both are holes.**
+
+This section is where a difference goes to be justified, and these two came here
+to be justified and failed. They are recorded under §4 anyway, the way §4.4 is,
+because the next reader will ask the same question and deserves the answer
+rather than the search.
+
+- **The ZIP door is built and nothing opens it.**
+  `vorlaut-editor/src/data/symbols.ts:72` exports
+  `readMetacomZip = (file) => metacom.useZip(file)`. It has **no callers** —
+  not in `src/`, not in `tools/`, not in the tests. The settings sheet's
+  template (`src/shell/templates/settings_sheet.ts`) has `metacomChoose`,
+  `metacomFiles` and `metacomForget` and nothing for a ZIP. That is a wrapper
+  written for a button somebody meant to add, which is the clearest evidence a
+  gap can leave behind: a deliberate absence does not build the plumbing first.
+- **„Neu einlesen" is not even plumbed.** No `rebuildIndex` wrapper exists over
+  there. The workaround is re-picking the folder in the operating system's own
+  dialog, which is the step §4.9 already records people giving up at — and it is
+  strictly worse than the other two products' one press.
+
+**The shape of the argument that would have made these correct, and why it does
+not apply.** §4.6's absences are absences of a *state that cannot occur*:
+vorlaut has no empty state because a layout is always a set of slots. Nothing
+like that holds here. A vorlaut-editor user has the same folder, the same
+licensed ZIP off the same shop page, and the same reason to re-read it after
+adding files to it. What varies is which product somebody happened to write the
+button in.
+
+**What the shared module does about it, and what it deliberately does not.**
+`metacomPanel` takes an `actions` list and will draw three of the four. That is
+not this section being overruled — it is the migration being allowed to land the
+panel without also deciding vorlaut-editor's two gaps in the same change, and it
+is where a *justified* absence would be recorded if one ever turned up. Today
+none is. The default is all four, and a product passing `actions` owes this
+section an entry saying why.
+
 ## 5. Extractions, in the order to do them
 
 Sizes assume the release-and-pin loop the family already has: a tag, a bump in
@@ -1523,8 +1592,10 @@ Everything in 1, 2, 5a and 5b belongs in **`@lautstark/design`**, beside
 `.collections`. Putting the JS next to the CSS that draws it is the smallest
 true home.
 
-#7 is the exception and got its own package, **`@lautstark/werkzeuge`**, because
-none of it draws anything: a blob handed to the browser, a `Set` of listeners, a
+Two are exceptions, and each says so where it is described. #9 stayed in
+**`@lautstark/bildquelle`** because every line of it is a call on a provider
+that package owns; only its CSS came here. #7 got its own package,
+**`@lautstark/werkzeuge`**, because none of it draws anything: a blob handed to the browser, a `Set` of listeners, a
 transliteration, and `Math.round`. `@lautstark/design` is the look, and a package
 whose README opens by saying so is the wrong place to keep a notifier that a
 storage layer imports.
@@ -1549,6 +1620,7 @@ left to extract, and what the real risk turned out to be instead.
 | ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
 | 7 | the download trigger, `touched()`, `downloadSlug`, `weighs` | `@lautstark/werkzeuge` | **S** — half a day | done |
 | ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | — | — | **not doing** |
+| 9 | the METACOM folder panel | `@lautstark/bildquelle/metacom-panel` | **M** | published; products not migrated |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are
 already near-identical files in mitreden and vorlaut; bildhaft's `actionMenu` is
@@ -1795,6 +1867,57 @@ pictures to cut, so unlike 5a and 5b there is no third copy to delete and no
 third opinion to reconcile. Two copies of a geometry model with a divergence
 already in them is still worth one, but it is a weaker case than the rows were,
 and somebody declining it on that ground would not be wrong.
+
+**9. The METACOM folder panel.** `@lautstark/bildquelle/metacom-panel`,
+published 2026-09-03. Three products drew the same surface — the licence
+notice, the state line, and four buttons — in three vocabularies, and the words
+were the smallest part of what had drifted.
+
+**It went to `@lautstark/bildquelle` and not here, which is the exception the
+preamble above allows for and should say out loud.** The rule is that the JS
+lives beside the CSS that draws it. This panel cannot: every one of its four
+acts is a method on `MetacomProvider`, its state line is that provider's
+`status()`, and which states are somebody's to act on is `needsAttention()` —
+all of it in bildquelle already. A copy in `@lautstark/design` would be a module
+whose every line reaches into another package, and the family would gain a
+second place to look for the same thing. What comes here instead is the half
+that belongs here: `.metacom-panel`, `.metacom-panel__note`, and the two
+`.standing` arms for bildquelle's status kinds. §4.12 is satisfied because the
+rules are in `components.css`, not because the module is.
+`@lautstark/sicherung/backup-panel` sits the same way for the same reason.
+
+**What the three copies disagreed about, beyond the words.** Only bildhaft put
+the state in the panel's own summary, so the other two made a reader unfold a
+panel to learn whether the folder still worked. Only vorlaut-editor tried
+`requestPermission()` on the stored handle before opening a picker, so §3.7's
+"what one press does" was false in bildhaft — every Chromium visit cost
+re-picking the folder — and wochenwerk grew a second button rather than fixing
+the first. Only bildhaft had a `busy` flag, so the other two can be pressed
+twice into two walks over the same ten thousand files. And bildhaft's folder
+button is a `<label class="btn">` wrapping a file input, which has no tab stop
+and no Enter: unreachable from the keyboard, in the product whose whole subject
+is somebody who cannot use a mouse well. Each copy was internally consistent,
+which is why none of it was visible from inside a product.
+
+**One rule survived the move by becoming the module's, and it came from a file
+that was not one of the three copies.** `symbolSources.ts` shows a source that
+cannot draw as *visible and disabled* rather than removing it, and argues the
+case: a row that is not there says nothing, and a group the keyboard cannot
+enter is worse than one whose entry point is not the answer. All three panels
+did the opposite with their buttons — they rebuild the row without the acts that
+cannot run, so its width and order change under the pointer as a folder arrives,
+and a keyboard on „Neu einlesen" when a folder is forgotten lands back on the
+document. The shared panel disables; it does not delete. bildhaft had written
+the argument down and then not applied it eight lines away, which is the ordinary
+way a good rule stays local.
+
+**What was left out, and it is the finding rather than the omission.** The index
+kind — „mit Schlagwörtern" / „nur Dateinamen" — exists in vorlaut-editor alone
+and is dead text: `src/backend/local.ts`'s `readSettings()` rebuilds
+`settings.metacom` from the browser provider and writes `keywords: false` as a
+literal, so the first arm has been unreachable since the search moved into the
+browser. A folder read in a browser has no keywords to have. Two answers where
+only one can ever print is not a line worth sharing.
 
 ### ~~5. The Sammlung shell~~ — and why it is not being extracted
 

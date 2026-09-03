@@ -77,8 +77,12 @@ settled in
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against
-  the token names. The
-  gallery imports it, and a product imports it beside its token file.
+  the token names. It also draws what the shared panels in the *other* packages
+  emit — `.where-panel` and `.backup-panel` out of `@lautstark/sicherung`,
+  `.metacom-panel` out of `@lautstark/bildquelle` — because conventions.md §4.12
+  says a module that emits class names ships the rules for them, and those two
+  modules could not move here: each is built out of calls on its own package.
+  The gallery imports it, and a product imports it beside its token file.
 - **[tests/](tests/)** — the five behaviour modules above, under vitest with
   happy-dom. `npm test`. happy-dom rather than jsdom because jsdom has no
   `HTMLDialogElement.showModal`, which would have left the one module whose

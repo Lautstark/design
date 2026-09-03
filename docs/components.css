@@ -421,8 +421,13 @@
 
 /*
  * The state of a standing arrangement — something set up once that then runs
- * unattended, and can therefore stop without anybody being told. Today that is
- * the backup folder in all three products; @lautstark/sicherung drives it.
+ * unattended, and can therefore stop without anybody being told. Two of them
+ * now: the backup folder, which @lautstark/sicherung drives, and the licensed
+ * symbol folder, which @lautstark/bildquelle does. Both are a folder somebody
+ * connected once and will not be told about again, which is the whole of what
+ * this line is for, and the two panels sit in the same settings column — so
+ * they read the same by using the same class rather than by two modules
+ * agreeing to.
  *
  * A fourth kind of message, and it earns the place §4.3 does not yet give it.
  * A .notice is the outcome of an action just taken and a .toast is an aside
@@ -455,13 +460,21 @@
  *
  * ## data-state takes the Status kind verbatim
  *
- * The attribute values ARE @lautstark/sicherung's `Status['kind']`, passed
- * through with no translation table in between. A mapping in each product is
- * three chances to disagree about what "failed" looks like, and the drift
- * would be invisible until the day it mattered. The cost is that a new kind in
- * the package is a breaking change for the CSS too — which RELEASING.md says
- * out loud, because an unstyled state falls back to the grey "off" dot and
- * would read as *deliberately not set up*.
+ * The attribute values ARE the emitting package's own `kind`, passed through
+ * with no translation table in between. A mapping in each product is three
+ * chances to disagree about what "failed" looks like, and the drift would be
+ * invisible until the day it mattered. The cost is that a new kind in either
+ * package is a breaking change for the CSS too — which RELEASING.md says out
+ * loud, because an unstyled state falls back to the grey "off" dot and would
+ * read as *deliberately not set up*.
+ *
+ * **Two packages write into one attribute, and their vocabularies are
+ * disjoint.** @lautstark/sicherung says `off`, `idle`, `saving`,
+ * `needs-permission`, `held`, `failed`, `unsupported`; @lautstark/bildquelle
+ * says `ready`, `needs-setup`, `loading`, `error`. Checked on 2026-09-03,
+ * because a shared attribute whose two writers collided on one word would draw
+ * a symbol folder in the colours of a backup and nothing would say so. Either
+ * package minting a kind the other already uses is the thing to refuse.
  */
 .standing {
   display: flex; align-items: baseline; gap: 8px;
@@ -477,6 +490,31 @@
 
 .standing[data-state="idle"] .dot,
 .standing[data-state="saving"] .dot { background: var(--accent-strong); }
+
+/* @lautstark/bildquelle's two working states, by the same question the block
+   above answers: is the thing doing its job? A folder that is indexed answers
+   every search, and one that is being read will. `needs-setup` and `error` are
+   left to fall through — `no-folder` is "off, and you knew that", which is the
+   grey the base rule already gives, and the two that are not are coloured by
+   `.bad` below rather than by a state name, because whether a state is somebody
+   to act on is the package's answer and not this file's. */
+.standing[data-state="ready"] .dot,
+.standing[data-state="loading"] .dot { background: var(--accent-strong); }
+
+/* The dot follows the plate. Both panel modules put `notice bad` on this line
+   in exactly the states their package's `needsAttention()` returns true for, so
+   this rule says "coloured as a warning" once instead of listing state names
+   twice over — and a state added to either package is drawn correctly without
+   this file being touched.
+
+   It changes nothing that was already drawn, and the argument is what shows it
+   rather than a screenshot: `backup-panel` reaches `notice bad` only where
+   @lautstark/sicherung's `needsAttention()` is true, which is `needs-permission`
+   and `failed`, and the rule below already paints both dots danger. So the set
+   this adds to is empty for every product on 2026-09-03. No visual baseline was
+   re-recorded, because no product emits `.metacom-panel` yet — the migration is
+   where that has to be checked, and it is a separate change. */
+.standing.bad .dot { background: var(--danger); }
 
 /* `held` joins these two rather than getting a colour of its own, and the rule
    at the top of this block is what decides it: the dot answers one question,
@@ -715,6 +753,35 @@
    kind. Visual baselines in all four products recorded the change. */
 .backup-panel { display: grid; gap: 10px; }
 .backup-panel > p { margin: 0; }
+
+/* The licensed symbol folder's block, from `@lautstark/bildquelle/metacom-panel`.
+   Same shape as the backup's and deliberately the same gap: the two are the two
+   folder questions conventions.md §4.9 names, they sit in the same settings
+   column, and a reader moving between them should be reading two answers rather
+   than two designs. Everything else on it is vocabulary this file already owns —
+   `.notice` for the licence, `.notice.bad` for the state that has to be acted
+   on, `.standing` for the state line, `.acts` for the buttons.
+
+   §4.12 is why the two rules below are here at all rather than in three
+   products: the module emits these names, so this file draws them. */
+.metacom-panel { display: grid; gap: 10px; }
+.metacom-panel > p { margin: 0; }
+
+/* The small print under a folder panel: where a licence comes from, why this
+   browser will forget the folder, and — on an English page — that METACOM is
+   named in German.
+
+   A class of its own rather than the `.small muted` pair three of the four
+   products happen to declare. Those two names are not in this file, so a module
+   emitting them would be handing vorlaut-editor markup nothing there draws,
+   which is exactly the failure §4.12 was written after. Scoped under the block
+   for `.collections__*`'s reason: a name general enough to collide once will do
+   it again, and `.note` is already vorlaut-editor's own.
+
+   No `display`, deliberately. The module hides two of these three with the
+   `hidden` property, and an author rule setting `display` here would beat the
+   UA's `[hidden] { display: none }` and paint them anyway. */
+.metacom-panel__note { margin: 0; font-size: 13px; line-height: 1.5; color: var(--text-dim); }
 
 /* ------------------------------------------------------------------ footer */
 
