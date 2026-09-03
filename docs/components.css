@@ -702,7 +702,17 @@
 .acts { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* The standing backup's block. Its status line is `.standing` above; this is
-   only the column it sits in. */
+   only the column it sits in.
+   
+   **This one is a decision, not an extraction**, and the distinction matters
+   because the rule at the head of this file is "only what the products
+   demonstrably duplicated". Nobody drew `.backup-panel` — the class was emitted
+   into four products and none of them styled it, so the block fell back to
+   paragraph margins and each product's happened to differ. A class this file's
+   own modules emit has to be drawn here (conventions.md §4.12), and drawing it
+   means choosing a value. 10px is the gap `.where-panel` already uses at 11px,
+   pulled in one step because this block is shorter and its rows are closer in
+   kind. Visual baselines in all four products recorded the change. */
 .backup-panel { display: grid; gap: 10px; }
 .backup-panel > p { margin: 0; }
 
