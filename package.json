@@ -58,6 +58,10 @@
     "./collections": {
       "types": "./docs/lib/collections.d.ts",
       "default": "./docs/lib/collections.js"
+    },
+    "./language": {
+      "types": "./docs/lib/language.d.ts",
+      "default": "./docs/lib/language.js"
     }
   },
   "scripts": {

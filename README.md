@@ -58,6 +58,16 @@ settled in
   `say` and `rests` are two verbs rather than one with a flag, because vorlaut
   needs both on the same element - a failed write stays lit while "saved" is
   allowed to fade.
+- **`@lautstark/design/language`** — the control that changes which language the
+  page is in: `languagePicker({ languages, current, choose, label })` → the
+  `.segmented` row, with `aria-pressed` where it belongs and a `refresh` for the
+  two products that switch without reloading. It is the one shared module here
+  that ships **words**, and the exception is argued rather than convenient: a
+  language's name is not a translation. „Deutsch" is Deutsch on an English page,
+  because this is the control somebody reaches for when they cannot read the
+  interface around it. It returns the row and nothing around it — `.opt`,
+  `.small` and `.faint` are bildhaft's vocabulary, not this package's, and
+  conventions.md §4.12 says a module ships the rules for what it emits.
 - **`@lautstark/design/collections`** — the sidebar's Sammlung rows:
   `drawCollections(container, {rows, open, onPick})`, with `.collections` in
   components.css beside it. Carries the two things a row was getting wrong
