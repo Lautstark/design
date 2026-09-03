@@ -3,11 +3,18 @@
  *
  * Three products drew it and drew it the same: a `.segmented` with one button
  * per language, `aria-pressed` on the one in force, and the language's own name
- * as the label. What differed was only what each had remembered to add —
- * bildhaft has `role="group"` and an `aria-label`, mitreden and vorlaut-editor
- * have neither, and only bildhaft carries a note under the row. Three copies of
- * one control, and the most complete of them was complete by accident rather
- * than by agreement.
+ * as the label. All three had `role="group"` and an `aria-label` too; what
+ * differed was only where — bildhaft set them in the function that builds the
+ * row, mitreden and vorlaut-editor in the template the row is mounted into, and
+ * vorlaut-editor has a test naming that decision.
+ *
+ * That is worth stating, because this comment said the opposite first and was
+ * wrong. It was written from the three build functions without opening the two
+ * templates, and it concluded that two products were missing an accessible name
+ * — an accusation of a real defect, in a shared package, on the strength of
+ * half the evidence. Both migrations found it independently. This module is a
+ * de-duplication, not an accessibility fix: three copies of one control that
+ * agreed on what it should be, and could have stopped agreeing at any time.
  *
  * ## Why this module may carry words, when the others may not
  *
