@@ -27,7 +27,8 @@
     "docs/conventions.md",
     "build.js",
     "products",
-    "pins.js"
+    "pins.js",
+    "installcheck.mjs"
   ],
   "exports": {
     ".": "./docs/lib/derive.js",
