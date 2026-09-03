@@ -28,7 +28,8 @@
     "build.js",
     "products",
     "pins.js",
-    "installcheck.mjs"
+    "installcheck.mjs",
+    "shadows.js"
   ],
   "exports": {
     ".": "./docs/lib/derive.js",
