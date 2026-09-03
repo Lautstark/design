@@ -1621,6 +1621,7 @@ left to extract, and what the real risk turned out to be instead.
 | 7 | the download trigger, `touched()`, `downloadSlug`, `weighs` | `@lautstark/werkzeuge` | **S** — half a day | done |
 | ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | — | — | **not doing** |
 | 9 | the METACOM folder panel | `@lautstark/bildquelle/metacom-panel` | **M** | published; products not migrated |
+| 10 | the voice picker | `@lautstark/stimmquelle/voice-picker` | **M** | published; products not migrated |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are
 already near-identical files in mitreden and vorlaut; bildhaft's `actionMenu` is
@@ -1918,6 +1919,65 @@ and is dead text: `src/backend/local.ts`'s `readSettings()` rebuilds
 literal, so the first arm has been unreachable since the search moved into the
 browser. A folder read in a browser has no keywords to have. Two answers where
 only one can ever print is not a line worth sharing.
+
+**10. The voice picker.** `@lautstark/stimmquelle/voice-picker`, published
+2026-09-03. Three products drew the same list — a field to narrow it with, the
+language pills, and rows carrying a name, four facts and a note — in three
+stylesheets.
+
+**It is the sharpest case §4.12 has produced so far, because the markup had
+already converged and the drawing had not.** mitreden, vorlaut-editor and
+wochenwerk all emit `.voices`, `.voice`, `.voice__name`, `.voice__facts` and
+`.voice__hint`, with `role="radiogroup"`, `role="radio"`, `aria-checked` and a
+roving `tabindex`. Nobody coordinated that; they arrived at one vocabulary and
+then drew it three times. **Not one of those five names was in
+`components.css`**, and they had drifted: `.voice` is `display:block;width:100%`
+in one and `flex:1 1 auto;min-width:0` in the other two; `.voice__facts` is 12px
+in `--text-faint` twice and has *no rule at all* in the third, which writes
+`class="voice__facts small muted"` instead and lands on 13.5px in `--text-dim`.
+Neither `.small` nor `.muted` is drawn in this file. So the third product's
+picker differs from its two siblings by a size and a token step, through two
+utility classes nothing in the shared stylesheet owns, and no screenshot of any
+one product could show it.
+
+The direction §4.12 already settles: the properties go on the component class
+and the module emits no utility class. What comes here is `.voice-picker`,
+`.voice-picker__search`, `.voice-picker__filters`, `.voices`, `.voices__row`,
+`.voices__play`, `.voices__none`, and the four `.voice*` names — all of them
+additive, because this file drew none of them before.
+
+**Where the majority lost, and it is the entry worth reading.** Two of the three
+put `max-height: min(46vh, 340px); overflow: auto` on `.voices`, on the sound
+argument that a personal key turns three voices into three hundred. vorlaut-
+editor had that too, measured what it did and took it out: a wheel gesture
+latches to the element under the pointer for its whole run, so a 340px list
+inside a 460px sheet body meant the sheet did not scroll and the panel below
+could not be reached. This file's own sheet section had already said that two
+nested scrolling areas is how a Save button goes missing. The shared `.voices`
+has no box of its own, so the other two lose theirs when they migrate.
+
+**What reading the three against each other found, in the order of how much it
+costs somebody.** vorlaut-editor's list has no roving `tabindex`, no arrow keys
+and no accessible name — with an Azure key that is several hundred plain buttons
+between the search field and the settings under it, in a family whose subject is
+people who cannot use a mouse well. Only vorlaut-editor draws a chosen voice
+that is no longer in the catalogue, so in the other two a withdrawn key makes a
+deliberate choice show as nothing chosen and the next save drops it silently.
+And the two products that *do* have arrow keys have them working exactly once:
+the repaint belongs to the product, so the row holding focus is replaced by a
+detached node and the second press does nothing. That last one is neither
+product's fault and is the clearest argument for the extraction — nobody owned
+both the key handler and the paint until this module did.
+
+**What deliberately stays with the product**, beyond `voices()`, `current()` and
+`pick()`: what a preview is spoken with, the second language control beside the
+list, and `notes()`. That last one is §4-shaped rather than a gap. `offline:
+false` is a slow start in a browser tab at a desk and total silence on a
+wall-mounted board; `makesFile: false` means "will not be levelled to match the
+others" on that board and "cannot be saved at all" in the product whose entire
+output is a recording. Same catalogue fact, opposite weights, so the module says
+neither and says the one sentence all three had already agreed on — the note
+about a voice that crams single words — in its own two languages.
 
 ### ~~5. The Sammlung shell~~ — and why it is not being extracted
 

@@ -783,6 +783,99 @@
    UA's `[hidden] { display: none }` and paint them anyway. */
 .metacom-panel__note { margin: 0; font-size: 13px; line-height: 1.5; color: var(--text-dim); }
 
+/* ------------------------------------------------------------ voice picker */
+
+/* The list a voice is chosen from, from `@lautstark/stimmquelle/voice-picker`.
+   The block: a field to narrow it with, the language pills, and the list.
+
+   **This one is the opposite case to `.backup-panel` above, and it is worth
+   saying which.** Nobody drew that class; three products drew every one of
+   these. `.voices`, `.voice`, `.voice__name`, `.voice__facts` and
+   `.voice__hint` were already the same five names in mitreden, vorlaut-editor
+   and wochenwerk — the vocabulary had converged on its own and the *drawing*
+   had not, which is §4.12's failure in its purest form. So most of what is
+   below is an extraction and reads like one: where the three agreed, their
+   agreed value stands here unchanged.
+
+   Where they did not, the module's header carries the argument. Two are worth
+   repeating here because they are decisions about appearance rather than about
+   markup, and this is the file that owns those:
+
+   - **No scroll box.** Two of the three put `max-height: min(46vh, 340px);
+     overflow: auto` on `.voices`, on the sound argument that a personal key
+     turns three voices into three hundred and pushes the panel holding that key
+     off the sheet. vorlaut-editor had that too, measured what it did and took
+     it out: a wheel gesture latches to the element under the pointer for its
+     whole run, so a 340px list inside a 460px body meant the sheet did not
+     scroll and the button below could not be reached. The sheet rule one
+     screen up already says two nested scrolling areas is how a Save button is
+     lost. One scroll, with the filters directly above it.
+   - **Selection is `aria-checked`, never a class.** All three had already
+     landed here, and it is the same rule `.menu button[aria-checked="true"]`
+     keeps: what a screen reader is told and what an eye is shown cannot come
+     apart if there is only one thing carrying both.
+
+   The accent tint and no ring, for design.md §4.3's reason and wochenwerk's
+   wording of it: a row that is the answer to a question is not a row that is
+   being pointed at, and 2px of accent around it reads as a focus marker parked
+   on the wrong row. */
+.voice-picker { display: grid; gap: 10px; }
+/* A wrapping <label>, so the caption above the field cannot come apart from it.
+   Block, because a bare label is inline and its two children would not stack. */
+.voice-picker__search { display: block; }
+/* 4px rather than `.acts`' 8px: these are pills that narrow a list, sitting
+   directly above it, not a row of actions. The module empties this rather than
+   hiding it — a catalogue of one language has nothing to narrow by — and
+   `:empty` is what keeps the grid gap from being spent on nothing. `[hidden]`
+   would have needed a second rule here to beat this file's own `display`, which
+   is the trap `.metacom-panel__note` records one block up. */
+.voice-picker__filters { display: flex; flex-wrap: wrap; gap: 4px; }
+.voice-picker__filters:empty { display: none; }
+
+.voices { display: flex; flex-direction: column; gap: 2px; padding: 2px; }
+/* Two buttons to a row: one to hear the voice, one to choose it. A button
+   inside a button does not render, so the row is a wrapper — and it is drawn
+   even where a product offers no preview, so that adding one later moves
+   nothing. */
+.voices__row { display: flex; align-items: center; gap: 8px; }
+.voices__play {
+  width: 40px; flex: none; justify-content: center; padding: 8px 0;
+  font-variant-numeric: tabular-nums;
+}
+/* The filtered-empty line, and deliberately not `.empty`: that is the taught
+   empty state above, a dashed box with 34px of padding, and its own comment
+   says the two must never be confused. This is the shorter sentence, on the
+   list's own left edge. */
+.voices__none { margin: 0; padding: 6px 11px; font-size: 13px; color: var(--text-dim); }
+
+.voice {
+  flex: 1 1 auto; min-width: 0; display: block; text-align: left;
+  font: inherit; cursor: pointer; padding: 8px 11px;
+  border: 1px solid transparent; border-radius: var(--radius-item);
+  background: none; color: var(--text);
+}
+.voice:hover { background: var(--surface-2); }
+.voice[aria-checked="true"] { background: var(--accent-soft); }
+.voice[aria-checked="true"] .voice__name { color: var(--accent-strong); font-weight: 650; }
+.voice__name { font-size: 14.5px; }
+/* Where it comes from, what it speaks, whose voice it is, and what it costs —
+   the four facts a bare list of names withheld, on the line under the name.
+
+   The size and the colour are on this class rather than on a `.small muted`
+   pair in the markup, which is how one of the three reached the same effect and
+   missed it by 1.5px and one token step. Neither of those two names is drawn in
+   this file, so a module emitting them would be handing two products markup
+   nothing there draws — §4.12's failure exactly. */
+.voice__facts { display: block; font-size: 12px; color: var(--text-faint); }
+/* A note the catalogue attaches to one voice, under the facts and deliberately
+   in the same size and the same faint colour. It is a sentence rather than a
+   fact, so it wraps — no accent, no border, no icon, because every one of those
+   would say "this voice is broken" about a voice that is not. */
+.voice__hint {
+  display: block; margin-top: 3px; font-size: 12px; color: var(--text-faint);
+  white-space: normal; text-wrap: pretty;
+}
+
 /* ------------------------------------------------------------------ footer */
 
 /* The footer joined this file late, and on evidence: design.md's audit called
