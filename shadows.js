@@ -67,7 +67,17 @@ function drawn(css) {
     if (chunk.indexOf('{') === -1 || block.includes('@')) continue;
     for (const selector of block.split(',')) {
       const parts = selector.trim().split(/\s+|(?=>)/).filter(Boolean);
-      const last = parts.at(-1) ?? '';
+      /* An ancestor means the rule was aimed, and an aimed rule is a decision
+         somebody made on purpose: `.speech-row .btn` says "the button in this
+         row", not "every button". The header has said so since this file was
+         written; the code did not, because it read only the last part and so
+         counted `.composer .btn` as a bare `.btn`. mitreden found it while
+         doing what this tool told it to do - three of its nine entries were
+         rules scoped to `.item` against shared rules scoped to `.standing`,
+         where no element can ever match both, and it had to write reasons for
+         shadows that did not exist. */
+      if (parts.length > 1) continue;
+      const last = parts[0] ?? '';
       const match = /^\.([A-Za-z][\w-]*)((?::[\w-]+(?:\([^)]*\))?)*)$/.exec(last);
       if (match) found.set(match[1], (found.get(match[1]) ?? 0) + 1);
     }
