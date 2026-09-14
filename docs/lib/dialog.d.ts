@@ -13,6 +13,9 @@ export interface DialogOptions {
   closeLabel: string;
   body: (Node | string)[];
   footer?: (Node | string)[];
+  /** A column of <details>, 900px. The settings dialog in all four products. */
+  panels?: boolean;
+  /** A grid of cards, 1060px. */
   wide?: boolean;
   /** Called once, however the dialog closed. */
   onClose?: () => void;
