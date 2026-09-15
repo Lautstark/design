@@ -22,9 +22,9 @@
  *
  * ## What counts as shadowing, and what does not
  *
- * Only a selector whose LAST part is the bare class, optionally with pseudo
- * classes: `.btn`, `.btn:hover`, `.sheet`. Those replace the shared rule for
- * every element that has the class.
+ * Only a selector that is the bare class and nothing else, optionally with
+ * pseudo classes: `.btn`, `.btn:hover`, `.sheet`. Those replace the shared rule
+ * for every element that has the class.
  *
  * Not `dialog.sheet`, not `a.btn`, not `.speech-row .btn` - a product narrowing
  * a shared name to one place is adding to the drawing rather than replacing it,
