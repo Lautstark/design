@@ -116,33 +116,53 @@ git -C ~/Code/design push origin main
 wait. Then remove the worktree and delete the branch, so rule 1's dashboard
 stays true.
 
-## 8. Cut a release with `npm version`, not by hand
+## 8. A release is a commit subject, not a command
 
-A release here is a version and a tag. The version lives in two files — npm
-writes it into `package-lock.json` as well, as a mirror of `package.json` — and
-editing one by hand is how they came to say 1.17.0 and 1.15.0 at the same time.
+**Since 2026-09-16 nobody cuts a release here.** Every push to `main` runs
+`.github/workflows/release.yml`, which calls the family's reusable workflow in
+`Lautstark/.github`: `npm run check && npm test`, a check that the tarball is
+complete, then semantic-release, which reads the commit subjects since the last
+`v*` tag and decides —
 
-```bash
-npm version minor --no-git-tag-version   # or patch, or major
-git commit -am "Say 1.18.0, which <the change> should have said"
-git tag -a v1.18.0                       # the notes go here
-```
+| subjects since the last tag contain | bump |
+|---|---|
+| `feat!:`, or a `BREAKING CHANGE:` trailer | major |
+| `feat:` | minor |
+| `fix:`, `perf:` | patch |
+| only `docs:`, `test:`, `ci:`, `build:`, `chore:`, `refactor:` | none |
 
-`--no-git-tag-version` is the part to keep. Plain `npm version` also commits and
-tags, and gives the tag the same message as the commit — which would flatten
-what the tags here actually carry. `v1.17.0`'s annotation is a paragraph about a
-card sitting at 1.10:1 with an outline meant to rescue it; `v1.15.0`, left to a
-default, says `Merge branch 'claude/converge-shared-sizes'` and nothing else.
+On a bump it writes the version into `package.json` **and** `package-lock.json`
+(the two that came to say 1.17.0 and 1.15.0 at the same time when a person did
+this by hand — `tests/version.test.js` still holds them together), prepends the
+notes to `CHANGELOG.md`, commits the three as `chore(release): x.y.z`, tags that
+commit, publishes `@lautstark/design` to npmjs.org with provenance and writes a
+GitHub release with the same notes. `release.config.mjs` is the whole
+configuration.
 
-The bump is its own commit. It has been, twice in thirty: `25e4947` says "1.5.0"
-and nothing else, and `0f17c86` says which change should have said 1.17.0. The
-other twenty-eight arrived inside a commit about something else — a line in
-`package.json` riding along with the work that earned it, which is what a
-hand-edit to a file nobody diffs looks like a month later when you are trying to
-find out when a version shipped.
+What that changes for anybody working here:
 
-`tests/version.test.js` fails when the two files disagree, so a lapse costs a red
-suite rather than a fortnight. It is the net, not the method: run the command.
+- **The prefix is the version.** A `fix:` that widens a token pairing ships as
+  a patch to every product on its next Renovate run; a `feat:` that adds a
+  class to `components.css` ships as a minor. A change a product must react to
+  — a removed class, a renamed token — is `feat!:` with a `BREAKING CHANGE:`
+  trailer saying what to do, and that is the only thing that stops it landing
+  in the products unread.
+- **The notes go in the commit body**, where the tag annotation used to carry
+  them. `v1.17.0`'s paragraph about a card at 1.10:1 belongs in the `fix:`
+  commit that solved it; semantic-release copies the body into the changelog
+  and the release.
+- **Do not run `npm version`**, and do not edit the version in `package.json`.
+  A hand bump either collides with the next release commit or, worse, lands a
+  number the changelog cannot account for.
+- **`--check` stays where it is.** The audit and the committed-tokens diff in
+  `check.yml` did not move and were not weakened; the release workflow runs
+  `npm run check` again as its gate before it will tag anything.
 
-After the tag, the three products need `npm install` to see it. Their own
-preflights say so, and there is nothing to do here.
+The `github:Lautstark/design#vX.Y.Z` pins resolve for every tag before
+2026-09-16 and keep working. Anything newer comes from npm as a caret range,
+and the products no longer need `npm install` by hand to see it — Renovate
+brings a minor or a patch to them on its own once their tests pass.
+
+Until the `@lautstark` scope exists on npmjs.org the workflow stops before
+semantic-release, green, with a notice; `@lautstark/sicherung`'s RELEASING.md
+has the one-time account setup, which is the same for every package.
