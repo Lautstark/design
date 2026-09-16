@@ -150,12 +150,18 @@ will do; the page is three files and imports nothing from the network.
 
 ## How a change reaches the products
 
-By npm, for anything with a build step — as a `github:` dependency, which is how
-this family already shares code (`@lautstark/bildquelle`, `@lautstark/stimmquelle`):
+By npm — since 2026-09-16 from npmjs.org, as `@lautstark/design`, the same way
+the family's other shared packages ship:
 
 ```json
-"@lautstark/design": "github:Lautstark/design#v1.0.0"
+"@lautstark/design": "^1.31.3"
 ```
+
+(Before that date it was a `github:Lautstark/design#v1.31.3` pin, and every tag
+up to that one still resolves that way. Nothing newer will: the packages are
+published from `main` by CI now, and the pin moved to a range so that Renovate
+can bring a minor or a patch to the products on its own. `CLAUDE.md` §8 has
+the release side.)
 
 ```css
 @import '@lautstark/design/tokens/bildhaft.css';
@@ -185,23 +191,19 @@ opposite of what makes the check work — read against the emitter 2026-08-27.)
 
 ### Keeping the pin current
 
-An exact tag means an install can never move the build on its own. It also means
-nothing notices when a pin stops being current — which is how vorlaut came to sit
-on 1.5.0 while its two siblings were still on 1.4.3.
+**Renovate does, since 2026-09-16.** A product declares a caret range, Renovate
+opens a branch for each minor or patch the registry publishes, and merges it to
+`main` itself once the product's tests are green. A major waits for a person,
+with the changelog in front of them. The family's shared preset in
+`Lautstark/.github` is where that rule is written.
 
-```
-node node_modules/@lautstark/design/pins.js
-```
-
-Reads the calling repository's own `package.json`, resolves the latest release of
-every `github:Lautstark/*` package it pins, and says which are behind. It also
-flags a pin that is a range or a branch rather than a tag, since that is the rule
-it is checking.
-
-It warns and does not fail. Being a patch behind is not a reason to block a deploy
-that fixes something else, and a check that can stop an urgent release for a
-cosmetic reason is a check people learn to route around. `--strict` exits non-zero
-for anybody who wants the opposite.
+`pins.js` is what did this while the products pinned exact `github:` tags: it
+reads the calling repository's `package.json`, resolves the latest release of
+every `github:Lautstark/*` package it pins, and warns which are behind —
+which is how vorlaut was found on 1.5.0 while its two siblings sat on 1.4.3.
+It only understands `github:` pins, so it has nothing to say about a caret
+range, and a product's deploy workflow drops the step the day its last
+`github:` pin is gone. It stays in the package until every product has.
 
 Not by a CDN. All three products run offline, and a stylesheet fetched from a
 remote host at page load would cost them that. npm is a build-time fetch that

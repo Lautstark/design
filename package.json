@@ -29,7 +29,8 @@
     "products",
     "pins.js",
     "installcheck.mjs",
-    "shadows.js"
+    "shadows.js",
+    "CHANGELOG.md"
   ],
   "exports": {
     ".": "./docs/lib/derive.js",
@@ -71,14 +72,21 @@
     "check": "node build.js --check",
     "pins": "node pins.js",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "preversion": "npm run check && npm test"
+    "test:watch": "vitest"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/git": "^11.0.1",
+    "conventional-changelog-conventionalcommits": "^10.4.0",
     "happy-dom": "^20.11.6",
+    "semantic-release": "^25.0.9",
     "vitest": "^4.1.11"
   },
   "engines": {
     "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
   }
 }
