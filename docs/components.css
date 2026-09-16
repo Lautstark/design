@@ -535,8 +535,10 @@
    @lautstark/sicherung's `needsAttention()` is true, which is `needs-permission`
    and `failed`, and the rule below already paints both dots danger. So the set
    this adds to is empty for every product on 2026-09-03. No visual baseline was
-   re-recorded, because no product emits `.metacom-panel` yet — the migration is
-   where that has to be checked, and it is a separate change. */
+   re-recorded then, because no product emitted `.metacom-panel` yet. Three do
+   now — bildhaft, vorlaut-editor and wochenwerk import
+   `@lautstark/bildquelle/metacom-panel` — and their own visual suites are
+   where that surface is checked. */
 .standing.bad .dot { background: var(--danger); }
 
 /* `held` joins these two rather than getting a colour of its own, and the rule
