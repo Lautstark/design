@@ -1647,8 +1647,8 @@ left to extract, and what the real risk turned out to be instead.
 | ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
 | 7 | the download trigger, `touched()`, `downloadSlug`, `weighs` | `@lautstark/werkzeuge` | **S** — half a day | done |
 | ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | — | — | **not doing** |
-| 9 | the METACOM folder panel | `@lautstark/bildquelle/metacom-panel` | **M** | published; products not migrated |
-| 10 | the voice picker | `@lautstark/stimmquelle/voice-picker` | **M** | published; products not migrated |
+| 9 | the METACOM folder panel | `@lautstark/bildquelle/metacom-panel` | **M** | migrated — bildhaft, vorlaut-editor, wochenwerk import it (2026-09-16) |
+| 10 | the voice picker | `@lautstark/stimmquelle/voice-picker` | **M** | migrated — mitreden, vorlaut-editor, wochenwerk import it (2026-09-16) |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are
 already near-identical files in mitreden and vorlaut; bildhaft's `actionMenu` is
