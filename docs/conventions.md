@@ -1611,9 +1611,9 @@ section an entry saying why.
 Sizes assumed the release-and-pin loop the family had when this was written: a
 tag, a bump in three `package.json`s, and `pins.js` noticing when one is
 behind. **Since 2026-09-16 the loop is shorter.** A `feat:` commit on a
-package's `main` is published to npmjs.org by CI under the version the prefix
-implies, and Renovate merges that minor into each product once its tests pass;
-the bump in three `package.json`s is nobody's job. What stays true is the
+package's `main` is tagged by CI with the version the prefix implies, and
+Renovate merges that minor into each product once its tests pass; the bump in
+three `package.json`s is nobody's job. What stays true is the
 second sentence: an extraction is the work itself, not a migration, and it
 replaces the copies in the same change that publishes the shared one — now
 with the change in the product waiting on the release rather than on a hand.

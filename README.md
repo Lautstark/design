@@ -150,18 +150,12 @@ will do; the page is three files and imports nothing from the network.
 
 ## How a change reaches the products
 
-By npm — since 2026-09-16 from npmjs.org, as `@lautstark/design`, the same way
-the family's other shared packages ship:
+By npm, for anything with a build step — as a `github:` dependency, which is how
+this family shares code (`@lautstark/bildquelle`, `@lautstark/stimmquelle`):
 
 ```json
-"@lautstark/design": "^1.31.3"
+"@lautstark/design": "github:Lautstark/design#v1.31.3"
 ```
-
-(Before that date it was a `github:Lautstark/design#v1.31.3` pin, and every tag
-up to that one still resolves that way. Nothing newer will: the packages are
-published from `main` by CI now, and the pin moved to a range so that Renovate
-can bring a minor or a patch to the products on its own. `CLAUDE.md` §8 has
-the release side.)
 
 ```css
 @import '@lautstark/design/tokens/bildhaft.css';
@@ -191,19 +185,20 @@ opposite of what makes the check work — read against the emitter 2026-08-27.)
 
 ### Keeping the pin current
 
-**Renovate does, since 2026-09-16.** A product declares a caret range, Renovate
-opens a branch for each minor or patch the registry publishes, and merges it to
-`main` itself once the product's tests are green. A major waits for a person,
-with the changelog in front of them. The family's shared preset in
-`Lautstark/.github` is where that rule is written.
+**Renovate does, since 2026-09-16.** Every tag is cut by CI from the commit
+subjects (`CLAUDE.md` §8); Renovate follows the `github:` tags, opens a branch
+per product for each minor or patch, and merges it to `main` itself once the
+product's tests are green. A major waits for a person, with the changelog in
+front of them. The family's shared preset in `Lautstark/.github` is where that
+rule is written.
 
-`pins.js` is what did this while the products pinned exact `github:` tags: it
-reads the calling repository's `package.json`, resolves the latest release of
-every `github:Lautstark/*` package it pins, and warns which are behind —
-which is how vorlaut was found on 1.5.0 while its two siblings sat on 1.4.3.
-It only understands `github:` pins, so it has nothing to say about a caret
-range, and a product's deploy workflow drops the step the day its last
-`github:` pin is gone. It stays in the package until every product has.
+`pins.js` is what did this while a person moved the pins: it reads the calling
+repository's `package.json`, resolves the latest release of every
+`github:Lautstark/*` package it pins, and warns which are behind — which is how
+vorlaut was found on 1.5.0 while its two siblings sat on 1.4.3. It still runs
+in the products' workflows and still warns; between two Renovate runs it is
+the only thing that says a pin is behind. `--strict` exits non-zero for
+anybody who wants the opposite.
 
 Not by a CDN. All three products run offline, and a stylesheet fetched from a
 remote host at page load would cost them that. npm is a build-time fetch that

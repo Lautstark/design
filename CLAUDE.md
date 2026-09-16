@@ -120,9 +120,8 @@ stays true.
 
 **Since 2026-09-16 nobody cuts a release here.** Every push to `main` runs
 `.github/workflows/release.yml`, which calls the family's reusable workflow in
-`Lautstark/.github`: `npm run check && npm test`, a check that the tarball is
-complete, then semantic-release, which reads the commit subjects since the last
-`v*` tag and decides —
+`Lautstark/.github`: `npm run check && npm test`, then semantic-release, which
+reads the commit subjects since the last `v*` tag and decides —
 
 | subjects since the last tag contain | bump |
 |---|---|
@@ -135,18 +134,19 @@ On a bump it writes the version into `package.json` **and** `package-lock.json`
 (the two that came to say 1.17.0 and 1.15.0 at the same time when a person did
 this by hand — `tests/version.test.js` still holds them together), prepends the
 notes to `CHANGELOG.md`, commits the three as `chore(release): x.y.z`, tags that
-commit, publishes `@lautstark/design` to npmjs.org with provenance and writes a
-GitHub release with the same notes. `release.config.mjs` is the whole
+commit and writes a GitHub release with the same notes. There is no registry:
+the tag is the release, exactly as before, and the products go on pinning
+`github:Lautstark/design#vX.Y.Z`. `release.config.mjs` is the whole
 configuration.
 
 What that changes for anybody working here:
 
-- **The prefix is the version.** A `fix:` that widens a token pairing ships as
-  a patch to every product on its next Renovate run; a `feat:` that adds a
-  class to `components.css` ships as a minor. A change a product must react to
-  — a removed class, a renamed token — is `feat!:` with a `BREAKING CHANGE:`
-  trailer saying what to do, and that is the only thing that stops it landing
-  in the products unread.
+- **The prefix is the version.** A `fix:` that widens a token pairing reaches
+  every product as a patch on its next Renovate run; a `feat:` that adds a
+  class to `components.css` reaches them as a minor. A change a product must
+  react to — a removed class, a renamed token — is `feat!:` with a
+  `BREAKING CHANGE:` trailer saying what to do, and that is the only thing
+  that stops it landing in the products unread.
 - **The notes go in the commit body**, where the tag annotation used to carry
   them. `v1.17.0`'s paragraph about a card at 1.10:1 belongs in the `fix:`
   commit that solved it; semantic-release copies the body into the changelog
@@ -158,11 +158,6 @@ What that changes for anybody working here:
   `check.yml` did not move and were not weakened; the release workflow runs
   `npm run check` again as its gate before it will tag anything.
 
-The `github:Lautstark/design#vX.Y.Z` pins resolve for every tag before
-2026-09-16 and keep working. Anything newer comes from npm as a caret range,
-and the products no longer need `npm install` by hand to see it — Renovate
-brings a minor or a patch to them on its own once their tests pass.
-
-Until the `@lautstark` scope exists on npmjs.org the workflow stops before
-semantic-release, green, with a notice; `@lautstark/sicherung`'s RELEASING.md
-has the one-time account setup, which is the same for every package.
+After the tag, the products no longer need `npm install` by hand to see it:
+Renovate opens a branch per product, and a minor or a patch merges once that
+product's tests pass. A major waits for a person.
