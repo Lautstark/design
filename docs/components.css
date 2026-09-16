@@ -297,6 +297,22 @@
   border-top: 1px solid var(--line); margin-top: 18px; padding-top: 14px;
 }
 
+/* ------------------------------------------------------------------ text */
+
+/* Three words for text that is not the main text: smaller, dimmer, dimmest.
+   Found on 2026-09-16 by the first CSS contract test (sicherung's, written for
+   conventions.md §4.12): both of sicherung's panels put `small`, `muted` and
+   `faint` on the hint under the folder, and nothing here drew them. bildhaft
+   and wochenwerk had each written the three for themselves with the same
+   values; mitreden and vorlaut-editor had not, so there the hint stood at body
+   size in body colour. That is the §4.12 drift one level down from the panel.
+   The values are the ones the two products agreed on, and 13.5px is what
+   `.btn.sm` already uses for the same job. A product that still carries its
+   own copy is shadowing these and shadows.js says so. */
+.small { font-size: 13.5px; }
+.muted { color: var(--text-dim); }
+.faint { color: var(--text-faint); }
+
 /* ------------------------------------------------------------ empty states */
 
 /* An empty state teaches the one thing the user does not yet know; a
