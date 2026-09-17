@@ -1,3 +1,9 @@
+## [1.38.0](https://github.com/Lautstark/design/compare/v1.37.1...v1.38.0) (2026-09-17)
+
+### Features
+
+* **sidebar:** Escape, and the focus round trip §6.3 promised ([1d7931c](https://github.com/Lautstark/design/commit/1d7931ce81bbbf0033415f63618dde9d3bb00112))
+
 ## [1.37.1](https://github.com/Lautstark/design/compare/v1.37.0...v1.37.1) (2026-09-17)
 
 ### Bug Fixes
