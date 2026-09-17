@@ -228,6 +228,30 @@
 }
 .dropdown[aria-expanded="true"] { background: var(--surface-2); color: var(--text); }
 
+/* The `.field` variant, which §6.10 argues for in a form row and which did not
+   draw until 2026-09-17.
+   
+   `.dropdown::after` is `flex: none` and presumes a flex container. `.btn`
+   supplies `display: inline-flex`, so `.btn.dropdown` has always worked;
+   `.field` supplies no display at all, which suits the `<input>` it was written
+   for and not a `<button>` with a mark at its far end. Measured on a live
+   `<button class="field dropdown">`: the trigger computes `display: block` and
+   takes the user agent's `text-align: center`, and the chevron computes
+   `display: inline`, where its 10x7 does not apply — so no mark is drawn and
+   the answer centres itself.
+
+   Two products wrote this rule before it came here, which is this file's own
+   admission bar met twice: vorlaut has carried it in `ui.css` with a comment
+   saying `.field` leaves display alone, and wochenwerk met the same wall and
+   declined to write it a second time, using `.btn.dropdown` instead and saying
+   a display on `.field` is design's to add. It was right. Layout only —
+   everything the trigger is drawn with, the fill, the border, the radius, the
+   padding and the focus, is still `.field`'s. */
+.field.dropdown {
+  display: flex; align-items: center; justify-content: space-between; gap: 7px;
+  text-align: left; cursor: pointer;
+}
+
 /* ------------------------------------------------------------------- sheet */
 
 /* The dialog silhouette both products drew, with bildhaft's head/body/foot
