@@ -1,3 +1,9 @@
+## [1.36.0](https://github.com/Lautstark/design/compare/v1.35.0...v1.36.0) (2026-09-17)
+
+### Features
+
+* **panel:** an id for the heading span and one for the body ([e97c2b6](https://github.com/Lautstark/design/commit/e97c2b6e9ed82debfc9d9e4dc360818f41677a67))
+
 ## [1.35.0](https://github.com/Lautstark/design/compare/v1.34.0...v1.35.0) (2026-09-17)
 
 ### Features
