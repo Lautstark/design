@@ -1,3 +1,9 @@
+## [1.37.1](https://github.com/Lautstark/design/compare/v1.37.0...v1.37.1) (2026-09-17)
+
+### Bug Fixes
+
+* **legal:** send both the body and the dialog back to the top ([bf51a65](https://github.com/Lautstark/design/commit/bf51a65f34be6f2c75c024b7902b39e00bb9c97a))
+
 ## [1.37.0](https://github.com/Lautstark/design/compare/v1.36.0...v1.37.0) (2026-09-17)
 
 ### Features
