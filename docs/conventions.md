@@ -2613,6 +2613,21 @@ licence condition rather than a courtesy. `TileGrid` and `Tile` go to design,
 because a grid of labelled picture buttons is furniture and two products drew
 it independently under the same two class names.
 
+**And the search does not import the grid.** Those two homes look like a
+dependency and must not become one: §6.0 says a provider package does not gain
+design as a runtime dependency, and this is the entry where somebody would add
+it without noticing. The search emits `.picker__grid` and `.picker__item`, and
+design draws them — which is the bargain the vanilla panels have always had,
+and it works now because those rules moved into `components.css` with the
+components (design v1.33.0). `TileGrid` and `Tile` are for a *product* that
+wants the component form; bildquelle speaks the vocabulary.
+
+That is also why the BEM spelling survives in a file whose vocabulary is
+otherwise a base class and modifier words. The names are the ones both products
+already emit, and wochenwerk carries five more `.picker__item` rules that stay
+home — the drag affordance, the carried tile, the thumbnail size, the tight
+variant and the dashed empty slot. Renaming would orphan all five for nothing.
+
 **The seam is a parameterised snippet over the answer, not two blocks around
 it.** The first draft gave `before` and `extra`, and both are the wrong shape.
 vorlaut's home tile and its `act` button are not caller content: they come out
