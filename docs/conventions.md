@@ -2082,9 +2082,690 @@ never the storage. It was the three sidebars, the DOM-ownership question and
 the layering disagreement. One of the two things that would reopen this has
 happened; the other has not.
 
+**Reopened 2026-09-17, and it comes out half true.** The entry above named two
+things that would change the answer: the DOM-ownership question being settled
+in §3, and mitreden's storage moving to §2.1. The storage moved on 2026-08-24
+and changed nothing, which is recorded above. **The DOM-ownership question is
+now settled, and by something none of this anticipated** — all four products
+are Svelte, so props in and markup out is not bildhaft's answer winning over
+two imperative repainters, it is the only shape any of them has left. Nobody
+restructured a page wiring to get there; the framework decision did it on the
+way past.
+
+So the sidebar *is* being extracted, as §6.3, and the paragraph above that said
+it could not be is spent. Three corrections to what it claimed, each worth more
+than the conclusion it is amending:
+
+- **bildhaft's search is not what stopped it.** The entry called it "a real
+  difference and enough on its own". It is a real difference and it is a
+  *snippet*: bildhaft replaces the primary list while a search is running, and
+  a seam that can be replaced rather than only decorated says that in one prop.
+  What made it look load-bearing was that the only shape on offer was an
+  adapter with a fixed list in the middle of it.
+- **There are three sidebars, not three of four.** wochenwerk has none, and
+  never did — the audit that suggested the shell the first time was written
+  when there were three products. A fourth arriving without the thing is not
+  evidence against sharing it.
+- **The adapter is still not worth writing, and that half of the entry
+  stands.** What §6.3 takes is the furniture — the column, the drawer, the
+  scrim, the reveal, the topbar, the host the rows are drawn into, the settings
+  door. What it does not take is the eight methods: create, rename, the delete
+  confirm, "there is always one", collapse-and-remember. Those are still four
+  call sites per product and still mostly wording and storage, and the layering
+  disagreement the entry names — create-with-a-date-name living in the repo in
+  two products and in the shell in the third, for a reason that product wrote
+  down — has not moved at all. An adapter over it would still freeze one
+  product's answer into the other two.
+
+The lesson the entry was written to carry survives intact, and is now better
+evidenced: **what stopped the shell was never the rows.** It was the three
+sidebars, the DOM-ownership question and the layering disagreement. Two of
+those are gone; the third is the one that was actually load-bearing, and it is
+why what comes out is a shell and not a Sammlung.
+
 ---
 
-## 6. What this changed in design.md
+## 6. The shared components, and what each of them is
+
+Written 2026-09-17, after all four products moved to Svelte 5 and the
+two-consumer bar was met several times over. §5 is about *what* to extract and
+in which order; this section is the extraction itself — one entry per
+component, saying what it takes, what it draws, and which of the four answers
+it settles on when the four disagreed.
+
+**Why it is a section rather than four ADRs.** The components are being written
+once and adopted four times, and the thing that goes wrong in that shape is not
+the writing. It is that the fourth adopter finds a prop that was shaped for the
+first, and either bends its markup to fit or quietly keeps its copy. So the
+reconciliation is written down before the code, against all four
+implementations at once, and an adopter that cannot use a component as
+specified has found a defect in the spec rather than a reason for an island.
+
+### 6.0 The rules that hold for every entry
+
+**A component lives in the package that owns its subject, not in the package
+that owns its look.** `@lautstark/design` gets the furniture — the sheet, the
+panel, the sidebar, the small pieces. A panel *about* backups goes to
+sicherung, one about a licensed symbol folder to bildquelle, one about voices
+or a speech key to stimmquelle. The test is which package would have to change
+when the thing itself changes.
+
+**A provider package does not gain design as a runtime dependency.** Today the
+coupling between the two is nominal: a panel emits a class vocabulary and
+design draws it. That direction is what makes §4.12 affordable, and reversing
+it would make every provider release wait on a design release. The Svelte
+panels keep the same bargain — they emit the vocabulary and import nothing from
+design. Where a provider panel needs the sheet or the panel frame, the *host*
+supplies it and passes the provider's panel in as content.
+
+**Raw `.svelte` sources, compiled by the consumer.** design keeps no build step
+(§7 of design.md and the whole argument for a dependency-free generator), and
+none of the packages grows one for this. Measured on 2026-09-17 against the
+versions the family actually has: a dependency's `.svelte` compiles in the
+consumer, its scoped `<style>` is emitted into the consumer's CSS bundle, and
+its `.svelte.ts` rune modules compile too. What makes that work is the
+**`svelte` export condition**:
+
+```json
+"./svelte/Sheet": { "svelte": "./svelte/Sheet.svelte", "default": "./svelte/Sheet.svelte" }
+```
+
+`@sveltejs/vite-plugin-svelte` looks for a key named `svelte` anywhere in the
+`exports` map, and a package that has one is excluded from dependency
+pre-bundling and compiled in the consumer's own pass. Without it the build
+still succeeds and **dev mode silently pre-bundles a second compiled copy** of
+the component and of any `.svelte.ts` state it imports. Declare
+`"peerDependencies": { "svelte": "^5" }` beside it, and add the directory to
+`files`.
+
+**Scoped styles are the §4.12 mechanism, and the class vocabulary is still the
+contract.** A shared component's own layout goes in its `<style>` block, which
+travels with it by construction. What must *not* go there is a name the
+products already speak: `.btn`, `.field`, `.panel`, `.sheet`, `.collections__*`
+and the rest stay in `components.css`, because they are the agreement rather
+than one component's private arrangement. The CSS-contract tests in sicherung,
+bildquelle and stimmquelle are what hold that line, and they extend to the
+Svelte versions unchanged — `emittedClasses()` walks a DOM subtree and does not
+care how it was built.
+
+**`drawnClasses()` comes home in the same pass.** All three packages carry a
+character-identical copy and all three say in their header that it belongs in
+design. A design release can carry it now, so it does: `@lautstark/design/css`
+exports `drawnClasses()` and `emittedClasses(root)`, and the three tests import
+them instead of redeclaring them. The `KNOWN_MISSING` maps stay per package —
+they are dated local exceptions, not shared knowledge.
+
+**`aria-pressed` takes a boolean expression.** `components.css` selects
+`[aria-pressed="true"]`, and Svelte serialises a boolean to exactly that
+string. Both the boolean form and vorlaut's `? "true" : "false"` are correct at
+runtime; the ternary exists as a guard against a vanilla helper writing a bare
+attribute, which Svelte markup cannot do. One form, and it is the boolean.
+**`aria-current` is not the same question** — it is a token attribute, so
+`"true"` or absent is right, and `drawCollections` is already correct.
+
+**A shared component carries no German.** Words arrive as props. The two
+exceptions are the ones §4.12 already records: a module that draws its own
+fixed furniture carries that furniture's words in every language the family
+reads (which is why the provider panels have their own `WORDS` tables), and
+language names are named rather than translated.
+
+---
+
+### 6.1 `@lautstark/design/svelte/Sheet`
+
+**The one dialog idiom.** Both openings, one component, one markup.
+
+```svelte
+<Sheet bind:open title={…} {panels} {wide} class={…} onclose={…}>
+  {#snippet head()}…{/snippet}     <!-- optional; replaces the <h2> -->
+  …body…
+  {#snippet foot()}…{/snippet}     <!-- optional; the .foot is drawn only with it -->
+</Sheet>
+```
+
+and, for the on-demand half, `openSheet()` in `./svelte/sheet` — the same
+component mounted into `document.body`:
+
+```ts
+interface Handle { close(): void; dialog: HTMLDialogElement; body: HTMLElement }
+function openSheet<S>(options: {
+  title: string; panels?: boolean; wide?: boolean; class?: string; state: S;
+  body: Component<{ s: S; handle: Handle }>;
+  foot?: Component<{ s: S; handle: Handle }>;
+  head?: Component<{ s: S; handle: Handle }>;
+  onClose?: () => void;
+}): Handle;
+```
+
+`Handle` is vorlaut's superset — `body` is on it because a caller sometimes has
+to reach the region, and three of the four already wanted it. **`openSheet`
+returns a handle and never a promise.** A caller that wants an answer settles
+its own promise from the foot's presses with a `settled` guard and uses
+`onClose` only for the dismissal paths, which is §3.4's rule and what
+`confirmDialog` has always done.
+
+**Emitted markup**, identical for both openings:
+
+```html
+<dialog class="sheet[ panels][ wide][ …class]" aria-label="{title}">
+  <div class="head">…head snippet… | <h2>{title}</h2>
+    <button class="btn icon" type="button" aria-label="{closeLabel}">✕</button></div>
+  <div class="body">…</div>
+  <div class="foot">…</div>
+</dialog>
+```
+
+Six decisions, each settling a four-way or seven-way split:
+
+- **The ✕ is `.btn.icon`**, which is what `@lautstark/design/dialog` has always
+  emitted. The six hand-written sheets use `.btn.quiet.icon` and three of them
+  name that as the reason they could not adopt the frame. The frame wins, not
+  because it is better but because it is what every sheet in the family that
+  already goes through it draws today — converging the other way would move
+  every one of those instead, and they are not the copies being replaced.
+- **The heading is `<h2>`.** vorlaut's three sheets use `<strong>` with only
+  `flex` and `font-weight: 600` restored, so their headings are a genuinely
+  different size. They move to the shared one.
+- **The accessible name is `aria-label`, from `title`, always** — including
+  when a `head` snippet replaces the heading. Five of the seven hand-written
+  dialogs have no accessible name at all today and one uses `aria-labelledby`;
+  one mechanism, and the unnamed five gain a name.
+- **`head` replaces the `<h2>`; it does not sit beside a hidden one.**
+  wochenwerk's appointment sheet mounts its title field before the heading and
+  then hides the heading with an attribute. The snippet form makes that a
+  composition rather than a repair. The `title` prop is still required and
+  still names the dialog, and it stays writable after open — wochenwerk rewrites
+  it on every keystroke, and that is the only live-updating dialog name in the
+  family.
+- **`class` lands on the `<dialog>` itself**, appended after
+  `sheet`/`panels`/`wide`, and it is set at construction rather than added a
+  tick later. vorlaut's four modifiers (`.sheet--button`, `--page`, `--target`,
+  `--choices`) are written `dialog.sheet--x` precisely to out-specify sibling
+  rules, so an inner wrapper will not do.
+- **`.body` is always present and always carries the class.** mitreden's
+  `#info` has an unclassed body and its `#setup` has no body region at all, so
+  neither gets `.sheet > .body`'s 14px and `--text-dim`. Both converge.
+
+**Widths** stay the three tokens selected by `panels` and `wide` (§4.14).
+vorlaut's 720px and 520px modifiers and `#legal`'s 520px come through `class`
+and stay product decisions — a measure for running text is exactly the kind of
+reason §4.14's corollary blesses.
+
+**What this costs, and it is the one place in this pass where it is owed.**
+Replacing six hand-written dialogs with the shared frame changes their pixels:
+the ✕ tier in all six, the heading size in vorlaut's three, the body class and
+padding in mitreden's two. Those baselines are re-recorded, with the before,
+the after and this paragraph named in the commit. **Nothing that already went
+through `openDialog` moves**, which is what keeps the re-recording to the
+copies being replaced rather than to every sheet in the family.
+
+**Not converged, and recorded here so the next reader does not try.** The
+scroll model is two answers — bildhaft and vorlaut give `.sheet` a flex column
+and let `.sheet > .body` scroll, wochenwerk and mitreden let the whole dialog
+scroll. The flex form is better and moving it into `components.css` would touch
+every sheet in four products, including the ones this pass is not otherwise
+opening. It is worth doing and it is not worth doing *here*; §4 gains no entry
+because this is a deferral, not a blessing. Likewise `::backdrop`, which §4.11
+already holds open.
+
+---
+
+### 6.2 `@lautstark/design/svelte/Panel`
+
+```svelte
+<Panel section={…} state={…} group="settings" open={…} current={…}>…body…</Panel>
+```
+
+`section` is the heading's words, `state` the line beside it (omit it and no
+`.state` span is drawn — four panels across the family deliberately have none),
+`group` the `name` attribute, `current` the `aria-current` tint bildhaft uses
+for the live symbol source.
+
+```html
+<details class="panel" name="{group}" open>
+  <summary><span class="section">…</span><span class="state">…</span></summary>
+  <div class="body">…</div>
+</details>
+```
+
+**The body class is `.body`.** Four spellings today —
+`.panel__body` (wochenwerk), `.body` (mitreden, bildhaft), `.setting`
+(vorlaut) — and `components.css` has drawn `.panel > .body` since the panel
+went in. The two outliers move, and their padding moves with them: wochenwerk
+from `0 16px 16px` and vorlaut from `10px 16px 4px` to the shared
+`10px 16px 22px`. That is a visible change on two settings sheets and is
+re-recorded with the reason.
+
+**Vorlaut's `.setting` also carried a column layout** — `display:flex;
+flex-direction:column; gap:6px` — which the shared padding rule does not.
+That is content arrangement rather than the panel, so it goes where the content
+is: vorlaut's own bodies keep a wrapper for it, or the controls gain the gap
+themselves. It does not come into `components.css`, because one product wanting
+a six-pixel gap between its own controls is not a vocabulary.
+
+**`name="settings"` everywhere**, which all four already do. vorlaut's second
+sheet keeps `name="collection"`; two exclusive groups in one product is
+correct, and §3.5's argument is about one column at a time rather than about
+one name.
+
+**Arrival state is the caller's, and §3.11 says what it must be**: Sprache
+first and the only one open. wochenwerk opens **nothing** today, which is the
+one product out of compliance, and the convergence fixes it.
+
+**The re-fold is the bound-open products' problem, not the component's.** An
+always-mounted sheet must re-fold to the arrival state on every open, or it
+reopens showing whatever was left. vorlaut does this with an `$effect` keyed on
+a counter bumped at each open, and that is the right shape for any sheet held
+open with `bind:open`. A sheet built by `openSheet()` is new each time and
+needs none of it. The component carries neither; the two idioms differ here for
+a real reason and the difference belongs in the caller.
+
+---
+
+### 6.3 `@lautstark/design/svelte/Sidebar` (+ `Scrim`, `Reveal`, `TopBar`)
+
+**Three consumers, not four.** wochenwerk has no sidebar and no Sammlung: its
+page is a board, and the `.rail` in it is a decorative `aria-hidden` daypart
+strip that shares the name and nothing else. Recorded here because the name
+collision is the first thing a reader will trip on.
+
+**And the names move.** bildhaft's `.rail` is the *reveal* affordance;
+mitreden's `.rail` is the *column*. The shared spelling is `.sidebar` for the
+column and `.reveal` for the affordance — mitreden and vorlaut already agree on
+`.reveal`, and bildhaft and vorlaut already agree on `.sidebar`, so each
+product renames one thing.
+
+```svelte
+<Sidebar id="sidebar" {drawer} {collapsed} ondismiss={…} oncollapse={…} label={…}>
+  {#snippet brand()}…{/snippet}
+  {#snippet search()}…{/snippet}    <!-- mitreden and bildhaft; vorlaut omits it -->
+  {#snippet above()}…{/snippet}     <!-- bildhaft's Wortschatz list only -->
+  {#snippet primary()}…{/snippet}   <!-- the Sammlung list, or whatever replaces it -->
+  {#snippet foot()}…{/snippet}
+</Sidebar>
+```
+
+**`primary` is replaceable, not decorable.** bildhaft does not render the
+Sammlung list at all while a search is running — the hits take its place and
+the Wortschatz section is suppressed. A seam that only appends cannot say that,
+and a shared sidebar that cannot say it has one consumer fewer.
+
+**The scrim is bildhaft's**: `<button class="scrim" type="button"
+aria-label={…}>`, conditionally rendered. mitreden's is a `<div>` with two
+Svelte a11y rules suppressed and vorlaut's is `role="presentation"`; both are
+unreachable from a keyboard, and mitreden's own stylesheet comment records
+having already been bitten by a layer with no way out. A focusable dismiss is
+the only one of the three answers that works, so it is the one.
+
+**What the component adds that no product has today**, and it is uniform, which
+is why it is cheap to do once:
+
+- `aria-expanded` and `aria-controls` on every toggle — the reveal's, the
+  topbar's `☰`, the column's `‹` and the drawer's `✕`. Not one of the eleven
+  such buttons in the family carries either today.
+- **Escape closes the drawer**, focus moves into the drawer when it opens, and
+  returns to whatever opened it when it closes. No product does any of this.
+- The drawer's `✕` is always drawn and is hidden above the breakpoint.
+  bildhaft has no `✕` at all and its collapse chevron silently doubles as one
+  on a phone.
+
+**820px, and the remembered collapse is ignored below it, not consulted.** All
+three comply today by three different mechanisms — CSS-scoped, CSS-overridden,
+and branched in JavaScript. The component branches in JavaScript, off a live
+`matchMedia` subscription (bildhaft's shape), because that is the one of the
+three that makes the answer readable from the component rather than from the
+interaction of two stylesheets. §3.1's requirement is unchanged; what changes
+is that there is one implementation of it.
+
+**Arity and the open set stay props** — `open: Iterable<string>` and
+`onPick(id, additive)`, which is `drawCollections`' existing contract and which
+§4.1 and §4.2 already record as per product. mitreden is still the only caller
+that acts on `additive`, and its toggle semantics stay mitreden's.
+
+**Two changes to `drawCollections` come with this**, both `feat:`, because the
+Svelte sidebar cannot serve two of its three consumers without them:
+
+- **A list must be identifiable.** bildhaft draws two lists that both emit
+  `.collections__item`; three of its tests have already counted a Wortschatz
+  row as a Sammlung and one clicked it. The container takes a name and the rows
+  carry it.
+- **A row needs an anchor under it.** vorlaut inserts its page list after the
+  active row with `row.after(host)`, and it survives the redraw only because
+  the host node is created once and moved. A snippet before or after the whole
+  list cannot express that; `drawCollections` grows a per-row slot.
+
+**bildhaft's default is a bug, not a difference.** `defaultSettings()` returns
+`sidebarOpen: false`, so a fresh install boots collapsed, while mitreden and
+vorlaut both argue in comments that an absent preference means open. §1.3 says
+nothing about the default. It becomes open, in bildhaft's own repository, as
+part of its adoption.
+
+---
+
+### 6.4 `@lautstark/bildquelle/svelte/SymbolSearch`
+
+It goes to bildquelle rather than design because its subject is a provider: the
+search, the eight-state `ProviderStatus`, and the attribution line that is a
+licence condition rather than a courtesy. `TileGrid` and `Tile` go to design,
+because a grid of labelled picture buttons is furniture and two products drew
+it independently under the same two class names.
+
+```svelte
+<SymbolSearch {provider} {words} minimum={3} onpick={…}>
+  {#snippet before()}…{/snippet}   <!-- bildhaft's suggestions, vorlaut's home tile -->
+  {#snippet extra()}…{/snippet}    <!-- vorlaut's `act` button -->
+</SymbolSearch>
+```
+
+**The stale-answer guard is not optional.** bildhaft and vorlaut each hold a
+token incremented per search and drop an answer that is not the current one;
+**wochenwerk has none**, and two in-flight searches there land in whatever
+order they resolve. The component holds the token, so the product that was
+missing it stops being able to be missing it.
+
+**One minimum, and it is three characters with Enter as the override.**
+wochenwerk requires two, bildhaft none, vorlaut three. Vorlaut's is the
+argued one and its argument includes the escape hatch: Enter searches whatever
+has been typed, now, because somebody typing a two-letter word needs that.
+The debounce is 300ms.
+
+**Enter is search-now in the field and Fertig outside it.** The two products
+that handle Enter disagree — bildhaft treats it as Fertig everywhere except the
+field, vorlaut as search-now and never Fertig. Both halves are right about
+their own half: in a search field Enter means "look for this", and a dialog
+whose only Enter target is a search field otherwise closes on it. So the field
+claims Enter and calls `preventDefault`, and the sheet's own Enter handling
+sees the rest.
+
+**Escape in the field is taken back, everywhere.** `<input type="search">`
+swallows the first Escape to clear itself, so a sheet holding one ignores the
+first press. Vorlaut is the only product that noticed and the only one that
+fixes it. The fix is one listener and it belongs to `Sheet`, not to the search:
+an Escape whose target is a search input closes the sheet.
+
+**Roving-tabindex arrows**, vorlaut's, which is the only implementation and is
+delegated to the results box rather than per tile. Left and Right clamp;
+Up and Down are read off `offsetTop` rather than computed in fours, because a
+taller first tile breaks the arithmetic; all four arrows call `preventDefault`
+even when nothing moves, or the scroll box scrolls out from under the focused
+tile; Up off the top row returns to the field. The `{#each}` is keyed, which is
+what lets focus survive a redraw.
+
+**The credit line is computed from the source, not from the results.**
+wochenwerk derives it from what was found, so an empty result set shows no
+attribution; vorlaut derives it from the provider. The provider's is right — the
+obligation is about where the pictograms come from, and a search that found
+nothing has not stopped using ARASAAC.
+
+**Per product, and staying so:** bildhaft's stored suggestions and its METACOM
+twin captions, vorlaut's home tile and its `act` button, and wochenwerk's
+having no source picker because its source follows from whether a folder is
+connected.
+
+---
+
+### 6.5 `@lautstark/design/svelte/TitleField`
+
+One field, one debounced write, `@lautstark/design/rename` underneath
+unchanged. What it settles is the caret.
+
+**Three mechanisms become one prop.** mitreden reaches a component instance
+method through two levels of props; bildhaft sets a `$state` enum that an
+effect reads and acknowledges; vorlaut calls a module singleton. Bildhaft's is
+the shape — a rune saying which field is owed the caret, read by an effect that
+focuses, selects, and acks — because it is the only one that does not couple the
+producer to the consumer's identity, and because the ordering it needs (focus
+after the paint that put the new name in) is what runes give for free.
+
+`select` is a prop, true by default. The one field that wants it false is
+vorlaut's page head, whose invented name is a placeholder rather than a name,
+so there is nothing to select.
+
+**`refresh()` before focusing is free and becomes the rule.** mitreden does it;
+the other two do not. It is a no-op when the field already agrees, and it
+closes the window where "+ Neue Sammlung" has moved focus away and the guard
+would decline a later assignment.
+
+**Vorlaut's page head is the one rename field in the family still on a
+hand-rolled guard, and it is missing two of the three conditions**
+`refresh()` has: it declines while focused but not while a write is pending and
+not when the value already agrees. That is the in-flight-repaint bug
+`rename.js` was written for, still present in the product that found it. It
+adopts `TitleField`.
+
+Enter is `renameField`'s: prevent the default, blur, and let blur write, so
+there is one way out. **Escape is nobody's** — no product handles it, it does
+not revert, and it does not cancel a pending write. Left as it is, and named
+here so the absence is a decision rather than an oversight.
+
+---
+
+### 6.6 `@lautstark/design/svelte/Crop`
+
+One component, both call shapes. bildhaft's is already a Svelte component whose
+state is runes and whose redraw is `style:` directives; vorlaut's is a DOM
+factory adopted through the vanilla host. The component form wins and vorlaut's
+factory goes.
+
+The model, the constants and most of the comments are already the same file
+twice: `FRAME` 0.84, `CLOSEST` 4, the two-per-cent square tolerance, the
+`side * 0.04` keyboard step, the inverted drag mapping, the zoom about the
+centre. Several comment blocks are the same argument in the same order with
+"card" and "key" swapped, and one error string is verbatim identical.
+
+**What is genuinely per product is the output, and it stays a prop.** bildhaft
+preserves the source format and the source resolution and cuts on a
+`display-p3` canvas, because a print at the wrong gamut was measured there.
+Vorlaut always writes sRGB PNG capped at 512 pixels, because that is the
+device's format from the exchange spec. Neither is a default the other can
+take, so `cut()` takes an output policy: the type, the cap, and the colour
+space.
+
+Two fixes that fall out of writing it once:
+
+- **`touch-action: none`.** Vorlaut has it and says why — without it the first
+  drag with a finger scrolls the dialog instead of moving the picture.
+  bildhaft's `.crop` does not have it, though its draggable tiles do.
+- **`stopPropagation` after the arrow keys.** bildhaft stops them, so the
+  picker's own Enter handling does not see a keystroke meant for the picture;
+  vorlaut does not. Bildhaft's is right, and vorlaut has no Enter-as-Fertig for
+  it to have broken yet.
+
+---
+
+### 6.7 `@lautstark/sicherung/svelte/Rescue`
+
+Two implementations of "the database this build found is not one it can read;
+hand the person a file before anything is destroyed". Bildhaft's is the
+standard, on three counts the audit makes plainly:
+
+- **The count line.** "In der Datei stehen {n} Einträge" — the number is the
+  one fact in the sentence that could change somebody's mind about whether the
+  file is worth keeping, which is §1.7's argument for counting in a confirm.
+  Vorlaut has no count.
+- **`role="status"` on the said line**, present from the first paint and empty.
+  `showModal()` makes the page behind inert, so the toast reaches nobody —
+  §3.8's "a modal earns a second region" — and a region that arrives carrying
+  its message announces nothing.
+- **A failure path on discard.** Bildhaft catches, rolls its in-flight flag
+  back and reports. Vorlaut neither awaits nor catches.
+
+The disabled-until-saved rule is the enforcement in both and stays: the discard
+button is disabled until the file has been taken, and there is no second "are
+you sure", because that would be `showModal()` on `showModal()`.
+
+The field names converge on bildhaft's (`saved`, not `taken`) and the in-flight
+flag goes on the state where it can disable the download button too. The
+download name stays the product's — vorlaut dates its file and bildhaft does
+not, and neither is wrong.
+
+Vorlaut's module carries a second, unrelated errand — the sentence said after a
+*successful* upgrade — which is not part of this component and stays where it
+is.
+
+---
+
+### 6.8 The provider panels, beside the vanilla ones
+
+`@lautstark/sicherung/svelte/BackupPanel` and `./svelte/AblagePanel`,
+`@lautstark/bildquelle/svelte/MetacomPanel`,
+`@lautstark/stimmquelle/svelte/VoicePicker`. Each is the same panel as its
+vanilla twin: same options, same emitted markup, same words, same `WORDS`
+tables. The vanilla versions stay until no consumer is left.
+
+Three things the ports must not quietly change:
+
+- **`data-state` is `status.kind` verbatim.** Both the backup panel and the
+  METACOM panel write the kind straight onto the attribute, and
+  `components.css` styles the kinds by name. A mapping table in a port would
+  break the styling and hide a new kind. Per sicherung's release rules a new
+  kind is a major, for the stylesheet as much as for the package.
+- **Blocked is drawn, not removed.** The METACOM panel disables buttons it
+  cannot offer rather than dropping them, because all three products dropped
+  them and thereby moved the row under the pointer and sent keyboard focus to
+  the document.
+- **Who repaints.** The backup panel and the METACOM panel subscribe
+  themselves and hand back the unsubscribe; the voice picker owns an in-flight
+  job and disposes it; the ablage panel subscribes to nothing and has no
+  `dispose` at all. In Svelte the subscription is an `$effect` returning its
+  teardown, and **the ablage panel gains one**, because a component that can be
+  unmounted mid-flight is a different proposition from a node a page kept.
+
+**`lang` is read on every paint, and the asymmetry goes.** Three of the four
+panels take `lang` as a value *or* a function and read it per paint; the ablage
+panel resolves it once at construction, so a language switch there needs the
+panel rebuilt. In the Svelte versions `lang` is a prop and reactivity is the
+framework's, which removes the asymmetry without anybody deciding anything.
+
+---
+
+### 6.9 `@lautstark/stimmquelle/svelte/AzurePanel`
+
+**Three consumers, not two.** wochenwerk's and mitreden's are near-verbatim —
+the same 26-region datalist, the same three probe codes, the same two regexes,
+the same save rule. Vorlaut has one too; what the editor reads from a server
+environment variable is the *firmware's* key, in the vendored talker
+repository, and is a different thing entirely. Its own panel differs in storage
+(a `set` flag plus a four-character hint beside a secret) and in that its probe
+returns a code and no words — which is the seam bildquelle's `ProviderStatus`
+set and is the better half.
+
+It goes to stimmquelle, which owns Azure as a backend today and has no panel.
+
+**The placeholder holds the key, and that is the whole design.** The stored key
+sits in the placeholder, never in the value: a value can be revealed or
+resubmitted and a placeholder cannot. Three consequences follow and all three
+are required — the field starts empty on every draw, the save reads
+`typed || stored` so an untouched field means "keep the key it shows", and
+removal has to be its own button because clearing the field cannot mean it.
+
+The panel takes its words as props and returns codes, not sentences. The region
+list is a `<datalist>` and suggests rather than restricts, because a region
+newer than the list still works when typed and the region is what a rejected
+key usually turns out to be.
+
+Vorlaut's `local` gate is a vestige of a Python backend that no longer exists —
+the local backend hardcodes it true. It does not come into the shared panel.
+
+---
+
+### 6.10 The small pieces
+
+**`Vanilla` is the cheapest item in the whole extraction.** Four files,
+character-identical but for one token: wochenwerk and mitreden type the prop
+`HTMLElement`, bildhaft and vorlaut type it `Node`. Take `Node`, which is
+wider and is what `replaceChildren` accepts, and four files become one.
+
+**`Overflow` and `Dropdown`.** Eleven call sites, seven distinct class strings.
+Bildhaft's `ActionMenu` is the complete one — anchor, `type="button"`, both
+ARIA attributes in the markup, a name and a tooltip, and it imports `AddItem`
+from the package rather than redeclaring it — so it is the one promoted.
+Two things come with it:
+
+- **The ARIA is in the markup, not added at open.** `menuOn` sets
+  `aria-haspopup` and `aria-expanded` when a menu first opens, precisely
+  because some triggers had them and some did not. That makes wochenwerk's two
+  triggers correct only after the first press, which is not the state a reader
+  meets. The component carries both from the first paint.
+- **Vorlaut's collision handling comes too.** It is the only product that flips
+  the anchor upwards and caps the height so a long list stays inside
+  `.sheet > .body`. Nothing else has it and every product can hit it.
+
+**A `<select>` is not a dropdown.** The rule is written in three places and
+bildhaft's METACOM rendering chooser breaks it, with a comment saying so and
+naming the fix. Vorlaut has already converted the identical control — same
+list, same guard, same tri-state — so the migration target is a template rather
+than a design question. wochenwerk's repeat picker is the same violation in a
+product that ships its own `Dropdown` two directories away, and goes with it.
+
+**`ThemePicker`.** Four near-identical implementations over one shared runtime;
+what differs is a storage key, a label lookup and the summary's state text, so
+those are the props. Three of the four carry a near-identical comment arguing
+`role="group"` over `radiogroup` and crediting the same precedent, which is the
+strongest evidence in the audit that a control is ready to be shared.
+
+And a defect it closes: **wochenwerk never calls `initTheme`**. There is no
+boot snippet in its page and no subscription to the operating system's
+preference; the stored choice is applied only when somebody opens the settings
+panel and presses a button. The other three boot correctly. Adopting the shared
+picker includes adopting the boot.
+
+**`PlayButton` goes to stimmquelle, not design.** It hard-imports a speech
+preview and reports a reason string, which is a speech contract rather than a
+design one, and design takes no audio dependency. The evidence that it belongs
+there is already in stimmquelle: the voice picker draws the row wrapper whether
+or not a `hear` hook is passed, "so the day this page grows a sample player
+nothing else moves" — and this is that player. What stays in `components.css`
+is `.btn.quiet.icon.sm`, which it already draws.
+
+**`Row` is not extracted, and this is the entry saying why.** The audit lists
+it as `lead · title · state · ⋯` and exactly one product has that object:
+wochenwerk. Bildhaft's `.row` is a sentence card with an editable title and two
+explicit buttons and no overflow menu; mitreden's is `.item`, ordered by CSS,
+with a contenteditable line and an `<audio>` element; vorlaut has none — its
+list rows are `drawCollections`' and its nearest relative is a work head.
+The three share three class names and one of them, `.row__title`, is a
+read-only span in one product and an `<input>` in another.
+
+Promoting it would mean a shared component with one consumer, which is exactly
+what this repository's own bar exists to prevent: a rule moves into the shared
+layer when a **second** product demonstrably needs it. It does not, yet. What
+*is* shared and already extracted is what sits inside the row — the overflow
+menu, the buttons, the title field. Left here rather than in §4, because this
+is not a difference between products; it is one product having a thing.
+
+---
+
+### 6.11 `@lautstark/werkzeuge/reactive-text`
+
+mitreden's `words.svelte.ts` and vorlaut's `live.svelte.ts` are the same trick:
+a module-scope rune, `void <rune>;` as the first statement of `t()` so that
+reading it registers the dependency, then a delegate to the plain lookup. Both
+headers describe it in the same words and both state the same discipline —
+components import from here, everything else from the table.
+
+**A factory, not a singleton**, which is the shape `werkzeuge/src/changed.ts`
+already argues for in the same repository: what is shared is the shape, and a
+product that wants two has two. `reactiveText(lookup)` returns `{ t, touched }`,
+generic over the key type so mitreden keeps its typed `Key` and its `tn`, and
+counter-shaped so vorlaut keeps a signal it can fire from wherever the language
+actually moved.
+
+Vorlaut's file also carries the layout box, which is a different subject sharing
+a file and stays where it is.
+
+**This move needs werkzeuge to grow a Svelte peer dependency and ship the
+module as source**, because a `.svelte.ts` needs the Svelte compiler and
+werkzeuge builds with `tsc`, which would emit `$state(0)` as a call to an
+undefined identifier. The package already ships `src`; the export points there
+with a `svelte` condition, and `sideEffects: false` stays true.
+
+Neither wochenwerk nor bildhaft has one, and bildhaft decided deliberately not
+to: its language switch reloads the page. That stays its decision.
+
+---
+
+## 7. What this changed in design.md
 
 design.md is an audit of two products, written before vorlaut joined this
 concept. Four of its decisions were re-read against three and amended on
@@ -2121,7 +2802,7 @@ which is not the same as what is true now.
 
 ---
 
-## 7. A generated file may only contain what its inputs determine
+## 8. A generated file may only contain what its inputs determine
 
 No version, no commit sha, no date, no build number — nothing that changes when
 the thing it is derived from has not.
