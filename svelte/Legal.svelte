@@ -67,6 +67,8 @@
     pages,
     closeLabel,
     id,
+    closeId,
+    bodyId,
     class: extra,
     onclose,
     children,
@@ -85,6 +87,13 @@
      *  that rule says the id is load-bearing. Hence a prop, and hence the same
      *  prop on the sheet underneath. */
     id?: string;
+    /** Forwarded to the sheet underneath, for the same reason it takes them:
+     *  the suites are built on ids. mitreden adopted this component and lost
+     *  `#infoclose` and `#infobody`, which it had been writing onto the frame
+     *  by hand until `Sheet` grew the props — so a component that wraps `Sheet`
+     *  and does not forward them hands back the problem those props solved. */
+    closeId?: string;
+    bodyId?: string;
     /** Lands on the `<dialog>`. */
     class?: string;
     /** Called once, however it closed. */
@@ -109,6 +118,8 @@
   {id}
   class={extra}
   {closeLabel}
+  {closeId}
+  {bodyId}
   title={() => current?.title ?? ''}
   bind:body
   onclose={() => {
