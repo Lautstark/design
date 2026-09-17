@@ -1,3 +1,9 @@
+## [1.37.0](https://github.com/Lautstark/design/compare/v1.36.0...v1.37.0) (2026-09-17)
+
+### Features
+
+* **legal:** forward the ✕ and body ids to the sheet underneath ([c7378b9](https://github.com/Lautstark/design/commit/c7378b927c9476976a622485e14df5458cbb7d11))
+
 ## [1.36.0](https://github.com/Lautstark/design/compare/v1.35.0...v1.36.0) (2026-09-17)
 
 ### Features
