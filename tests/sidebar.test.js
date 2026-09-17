@@ -164,6 +164,61 @@ describe('Sidebar', () => {
     });
   });
 
+  describe('Escape, and the focus round trip', () => {
+    /* §6.3 promised both and the first build shipped neither. mitreden adopted
+       the component, found them missing and declined to write a product-local
+       copy — which was right: a copy in one of three products is the divergence
+       this extraction exists to end. These four cases are what the entry
+       claimed all along. */
+
+    it('dismisses on Escape while the drawer is up', () => {
+      stubMedia(true);
+      let asked = 0;
+      render(Sidebar, { closeLabel: 'Zu', drawer: true, ondismiss: () => { asked += 1; } });
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      flushSync();
+      expect(asked).toBe(1);
+    });
+
+    it('leaves Escape alone while it is a column', () => {
+      /* Up there the column is furniture, and Escape belongs to whatever the
+         person is actually working in — a sheet, a menu. Stealing it would be
+         worse than not having it. */
+      stubMedia(false);
+      let asked = 0;
+      render(Sidebar, { closeLabel: 'Zu', drawer: true, ondismiss: () => { asked += 1; } });
+      window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      flushSync();
+      expect(asked).toBe(0);
+    });
+
+    it('takes focus to the way out when the drawer opens', () => {
+      /* The ✕ rather than the first row: it is the way out, which is what
+         somebody just handed a layer needs to find, and Tab reaches the list
+         from there in one press. */
+      stubMedia(true);
+      const node = render(Sidebar, { closeLabel: 'Zu', drawer: false });
+      given.drawer = true;
+      flushSync();
+      expect(document.activeElement).toBe(node.querySelector('button'));
+    });
+
+    it('gives focus back to whatever opened it', () => {
+      stubMedia(true);
+      const opener = document.createElement('button');
+      document.body.append(opener);
+      opener.focus();
+      render(Sidebar, { closeLabel: 'Zu', drawer: false });
+      given.drawer = true;
+      flushSync();
+      expect(document.activeElement).not.toBe(opener);
+      given.drawer = false;
+      flushSync();
+      expect(document.activeElement).toBe(opener);
+      opener.remove();
+    });
+  });
+
   describe('the breakpoint', () => {
     it('subscribes to 820px, and to the one string the package exports', () => {
       render(Sidebar, { closeLabel: 'Zu' });

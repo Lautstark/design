@@ -151,11 +151,58 @@
   });
 
   const wired = $derived<Wired>({ 'aria-controls': id, 'aria-expanded': showing });
+
+  /* Escape, and the focus round trip. §6.3 promised both and the first build
+   * shipped neither; mitreden adopted the component, found them missing and
+   * declined to write a product-local copy, which was right — a copy in one of
+   * three products is the divergence this extraction exists to end.
+   *
+   * Only while the drawer is up, and only down there. Above the breakpoint the
+   * column is furniture: Escape belongs to whatever the person is actually
+   * working in, and stealing it from a sheet or a menu would be worse than not
+   * having it.
+   *
+   * `keydown` on the window rather than on the `<aside>`, because the point is
+   * the press that arrives while focus is *anywhere* — the scrim, the work
+   * behind it, the rows themselves. A listener on the column only answers
+   * presses the column already has. */
+  let closer: HTMLButtonElement | undefined = $state();
+  let opener: Element | null = null;
+
+  $effect(() => {
+    if (!narrow || !drawer) return;
+    const pressed = (event: KeyboardEvent): void => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      ondismiss?.();
+    };
+    window.addEventListener('keydown', pressed);
+    return () => window.removeEventListener('keydown', pressed);
+  });
+
+  /* Focus in when it opens, and back to whatever opened it when it closes.
+   *
+   * The `✕` is the target rather than the first row: it is the way out, which
+   * is what somebody who has just been handed a layer needs to be able to find,
+   * and Tab from there reaches the list in one press. Restoring is guarded on
+   * the opener still being in the document — a press that both opens the drawer
+   * and removes its own button is unlikely and would otherwise throw. */
+  $effect(() => {
+    if (!narrow || !drawer) return;
+    opener = document.activeElement;
+    closer?.focus();
+    return () => {
+      const back = opener;
+      opener = null;
+      if (back instanceof HTMLElement && back.isConnected) back.focus();
+    };
+  });
 </script>
 
 <aside {id} class="sidebar{drawer ? ' open' : ''}" aria-label={label}>
   <div class="sidebar__brand"
     >{@render brand?.(wired)}{#if narrow}<button
+        bind:this={closer}
         id={closeId}
         class="btn quiet icon"
         type="button"
