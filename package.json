@@ -63,6 +63,10 @@
       "types": "./docs/lib/collections.d.ts",
       "default": "./docs/lib/collections.js"
     },
+    "./crop": {
+      "types": "./docs/lib/crop.d.ts",
+      "default": "./docs/lib/crop.js"
+    },
     "./language": {
       "types": "./docs/lib/language.d.ts",
       "default": "./docs/lib/language.js"
@@ -122,6 +126,10 @@
     "./svelte/TopBar": {
       "svelte": "./svelte/TopBar.svelte",
       "default": "./svelte/TopBar.svelte"
+    },
+    "./svelte/Crop": {
+      "svelte": "./svelte/Crop.svelte",
+      "default": "./svelte/Crop.svelte"
     },
     "./svelte/sidebar": {
       "types": "./svelte/sidebar.d.ts",
