@@ -2201,6 +2201,55 @@ correct in the build and half-correct in dev. Declare
 `"peerDependencies": { "svelte": "^5" }` beside the condition, and add the
 directory to `files`.
 
+**A shipped component imports the package's published entry, never its own
+`src/`.** All three provider packages broke this, none of their suites could
+see it, and it blocked the adoption in all four apps for an afternoon. It is the
+most expensive thing this section did not say.
+
+The failure: a consumer holds the **published** type, because `exports` points
+at `dist` and `tsc` emits `#private;` for a class's private fields. A component
+importing `../src/index.js` holds a second, nominally distinct declaration of
+the same class, so **a product cannot pass its own object to its own
+component**:
+
+```
+Type 'Ablage' is missing the following properties from type 'Ablage':
+  #options, #folder, #status, #listeners, and 18 more.
+```
+
+Three things make it worse than a type error, and each was measured:
+
+- **The build succeeds and ships two copies.** Not only of the class — of every
+  module the components reach. Removing bildquelle's duplicate took **32,913
+  bytes** out of a consumer's bundle.
+- **It reaches the consumer's compiler options.** Pulling a package's `src/`
+  into a consumer's type program pulls in everything beside it; wochenwerk's
+  typecheck failed on a BigInt literal in a stimmquelle module it never uses,
+  and the only way through was raising that product's `target` from ES2017.
+- **The consumer-side workaround looks like a fix.** Two products got a green
+  typecheck by casting the identity away at the call sites, each with a comment
+  saying the package must fix it. Both backed it out. A cast there hides the
+  duplicate bundle and the `tsconfig` bill behind a green check.
+
+So: anything a consumer could be holding — a class, a status union, a provider
+interface, anything crossing a prop boundary — comes from the published entry.
+Something a consumer never holds may stay internal, and a `WORDS` table is the
+clear case; judge each import by "could a consumer be holding this?" rather than
+by a blanket rule. In practice a whole module usually moves anyway, because
+leaving one export behind buys the duplicate copy back for nothing.
+
+Two consequences, both paid once per package: `svelte-check` then needs `dist`,
+so the gate builds before it typechecks; and **the package's own tests must
+import the way a consumer does**, or they go on being blind. That last is the
+fix — the imports are the symptom. Each package now carries a guard asserting
+nothing under `svelte/` reaches outside it except into the published entry, and
+that guard fails with the rule rather than with the double-named type error
+nobody could read.
+
+Either spelling of the entry works and both are in use: `../dist/index.js`
+resolves directly, the package's own name resolves through `exports` exactly as
+a consumer's import does.
+
 **A `.svelte.ts` must not reach a `tsc` build.** werkzeuge and the three
 provider packages all build `src/` with `tsc`, which emits `$state(0)` as a
 call to an undefined identifier and cheerfully publishes it. Any rune module
