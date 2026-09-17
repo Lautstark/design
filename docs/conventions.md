@@ -2709,6 +2709,26 @@ bildhaft's rule has `border: none` and mitreden's does not. And no test would
 catch it, because the one that exists clicks a position. The component's scoped
 style carries the reset.
 
+**Built late, because the first build shipped the list above without the two
+that needed code.** The ARIA attributes are markup and went in; Escape and the
+focus round trip are behaviour and did not, and this entry went on claiming
+them. mitreden adopted the component, found them missing, and **declined to
+write a product-local copy** — which was right, and is the whole argument of
+this section: a copy in one of three products is the divergence the extraction
+exists to end. They are in the component as of v1.38.0.
+
+Two decisions inside them. Escape is claimed **only while the drawer is up and
+only below the breakpoint** — above it the column is furniture, and Escape
+belongs to whatever the person is working in; stealing it from a sheet or a menu
+would be worse than not having it. And the listener is on the window rather than
+on the `<aside>`, because the press that matters arrives while focus is
+anywhere — the scrim, the work behind it, the rows. A listener on the column
+only answers presses the column already has.
+
+Focus goes to the `✕` rather than to the first row: it is the way out, which is
+what somebody just handed a layer needs to find, and Tab reaches the list from
+there in one press.
+
 **820px, and the remembered collapse is ignored below it, not consulted.** The
 component subscribes to a live `matchMedia`. **But "one implementation" is not
 true for mitreden either way**, and the first draft said it was. Its
