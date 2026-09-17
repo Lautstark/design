@@ -69,11 +69,26 @@ settled in
   `.small` and `.faint` are bildhaft's vocabulary, not this package's, and
   conventions.md §4.12 says a module ships the rules for what it emits.
 - **`@lautstark/design/collections`** — the sidebar's Sammlung rows:
-  `drawCollections(container, {rows, open, onPick})`, with `.collections` in
-  components.css beside it. Carries the two things a row was getting wrong
+  `drawCollections(container, {rows, open, onPick, after})`, with `.collections`
+  in components.css beside it. Carries the two things a row was getting wrong
   separately — `aria-current` on the open one, and which modifier means "and
-  also this one" (conventions.md §4.2). The sidebar around the rows is not
-  here, because all three are genuinely different objects.
+  also this one" (conventions.md §4.2). `after` is one product's optional seam
+  for putting something of its own under a row, and it takes a **`Node`** the
+  helper re-parents with `.after()` rather than a snippet: appending an existing
+  node moves it, so whatever is mounted inside survives the list being redrawn
+  around it, and a snippet would be the remount that takes the keyboard out of
+  the list somebody is arrowing through. The sidebar's *column* is
+  `svelte/Sidebar` below; only the rows were ever this module's.
+- **`@lautstark/design/crop`** — cutting somebody's own picture down to a
+  square: the model's constants (`FRAME` 0.84, `CLOSEST` 4, the `side * 0.04`
+  arrow step), `loadSquare()` with the two-per-cent tolerance that decides
+  there is nothing to ask, and `cutSquare()`. The output is a policy of four
+  fields — `type` (a sentinel or a callback, because one product preserves the
+  *source* type and no MIME string can say that), `cap` (**nullable**: one
+  product is uncapped, because print must not upscale or downscale), `quality`
+  (0.92, JPEG only) and `colorSpace`. A symbol out of a source is never cropped
+  — that would be a derivative — so this hangs off the one path that already
+  keeps bytes.
 - **`@lautstark/design/css`** — the CSS contract's two helpers:
   `drawnClasses()` reads every class name `components.css` has a rule for, and
   `emittedClasses(root)` collects every class token a rendered module put on
@@ -129,6 +144,39 @@ settled in
     component with only the write would move those repaints to 400ms after
     typing stops. The caret request is one prop where the four had three
     mechanisms.
+  - **`svelte/Sidebar`**, **`svelte/Scrim`**, **`svelte/Reveal`**,
+    **`svelte/TopBar`** and **`svelte/sidebar`** — the column of Sammlungen and
+    the three things around it, for the three products that have one
+    (wochenwerk has none). `components.css` draws none of these four class
+    names, so the layout is in the components' own scoped styles — only the
+    declarations all three already agree on, because a scoped selector carries
+    the hash and out-specifies a product's plain rule. The sections are **one**
+    snippet: the `<h2>` is part of what a search swaps, and bildhaft's
+    `.sidebar__section--words` / `--collections` carry ten e2e selectors between
+    them. The collapse control stays the product's, inside its brand row, and is
+    handed the `aria-expanded`/`aria-controls` wiring; the component owns the
+    drawer's ✕, and draws it only below 820px, which is a live `matchMedia`
+    subscription rather than a number read once. The scrim is a focusable
+    `<button>` whose scoped style resets `border` — without it a user agent
+    draws a two-pixel frame around the whole viewport, and no test that clicks a
+    position can see it.
+  - **`svelte/Crop`** — the square, the slider and the two ways of moving them,
+    over `@lautstark/design/crop`. `cut()`, `close()` and `focus()` are instance
+    exports, because the product that had a DOM factory reached them through the
+    object it returned and a component returns nothing. It brings the two fixes
+    that fall out of writing it once: `touch-action: none`, which one product
+    lacked so the first drag with a finger scrolled the dialog, and
+    `stopPropagation` after the arrow keys, which the other lacked so the picker
+    saw a keystroke meant for the picture.
+  - **`svelte/Footer`** and **`svelte/Legal`** — the foot of the page and the
+    three pages it opens, over the `.footer` and `.linklike` rules
+    components.css already draws. The shell is shared and every word
+    in it is the product's: the links arrive as children and are wrapped in
+    nothing, because one product puts its four in a flex row and the other two
+    do not. `Legal` is one dialog with every page in it and the ones not showing
+    `hidden` — one product's markup is addressed by forty-one ids, several of
+    them e2e locators, so mounting a page at a time would make a locator resolve
+    or not depending on what happened to be open.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against

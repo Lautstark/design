@@ -2595,6 +2595,54 @@ the distinction that is the whole feature. **bildhaft needs none of this** and
 should not carry the API surface: the seam is optional and vorlaut is its only
 caller.
 
+**Built 2026-09-17, and four things this entry left open were settled in the
+writing.** They are here rather than in the code alone, because each is a
+decision somebody adopting the component will otherwise have to reverse-engineer.
+
+*The scoped style beats the product, not the other way round.* §6.0's caveat is
+about not relying on source order, and the direction that actually bites here is
+the opposite one: a scoped selector carries the hash class, so `.sidebar` in the
+component is 0-2-0 and out-specifies a product's plain `.sidebar` at 0-1-0. So
+the components carry only the declarations all three already agree on, character
+for character — and all three do agree on `.sidebar`'s six, `.sidebar__brand`'s
+four and `.reveal`'s five — while every value a product varies (the placement,
+the width, the overflow, every `z-index`, the transform the drawer slides on)
+stays out. Two consequences: `TopBar` and `Reveal` must own their own
+`@media (max-width: 820px)` rules, because a product's copy would lose to the
+component's base rule and its bar would never appear; and `.scrim[hidden]` and
+`.reveal[hidden]` go in the components, which is the one place the same
+specificity fact helps — vorlaut's stylesheet already records that the UA's
+`[hidden]` loses to those two class rules.
+
+*The drawer's `✕` is drawn below the breakpoint and not above it*, rather than
+drawn always and hidden by CSS. All three stylesheets say that today by id —
+`@media (min-width:821px) { #railclose { display: none } }` and vorlaut's
+`#sidebarClose` beside it — and the component knows the breakpoint anyway. The
+product's collapse control is the mirror image and stays the product's: it
+collapses a column, and below 820px there is no column.
+
+*The brand snippet receives a `wired` object* — `aria-controls` and
+`aria-expanded` — to spread onto the collapse control it draws. That is the
+whole of "the brand snippet receives what it needs": the wiring is the one part
+of that control which is about an element inside the component, and the same
+object reaches `Reveal`'s and `TopBar`'s brand snippets so all three say the
+same thing.
+
+*`showing` is a bindable output.* It is what the live `matchMedia` has already
+been applied to — `narrow ? drawer : !collapsed` — and `Reveal` and `TopBar` are
+mounted elsewhere on the page and cannot see it. `NARROW`, the query string, is
+exported as `@lautstark/design/svelte/sidebar` so the product's own stylesheet
+and helper are written against the same string rather than the same memory of
+it; a CSS file cannot read it, which is exactly why it is worth exporting.
+
+*`TopBar` owns its `☰` and `Reveal` does not.* All three bars have exactly one
+control, first, with the same class, the same tier and the same job, so only the
+glyph is a snippet (`☰` by default; two products draw an inline `<svg>`). The
+reveal's pair is a flex container whose composition this entry has already
+settled as the product's. The bar is a `<header>`, which is bildhaft's element
+— one product gains a `banner` landmark and none loses one, and all six
+`.topbar` selectors across the three are on the class alone.
+
 **bildhaft's default is a bug, not a difference** — `defaultSettings()` returns
 `sidebarOpen: false` while its own reader says an absent preference means open,
 and §1.3 says nothing about the default. It becomes open. **It is not free**:
@@ -2800,6 +2848,33 @@ scrolls the dialog; and **`stopPropagation` after the arrow keys**, which
 bildhaft has so the picker's Enter handling does not see a keystroke meant for
 the picture.
 
+**Built 2026-09-17, and this is how the handle arrives.** `cut()` and `close()`
+are **instance exports**, reached through `bind:this` — the mechanism
+`TitleField.flush()` already uses in this package, and the same bargain the
+sheet's settle closure makes. `focus()` comes with them, because bildhaft has
+it and a caller that has just swapped a picture for a choice has to put the
+caret in it.
+
+The model, the constants and the encoder are `@lautstark/design/crop`, beside
+`./rename` under `TitleField` and `./dialog` under `Sheet`: `cut()` is a canvas
+and an encoder with no markup in it, and `loadSquare()` — which decides whether
+there is anything to ask at all, and holds the two-per-cent square tolerance —
+runs before any of this is on screen. `Loaded` gains one field over bildhaft's,
+the source's own MIME, because that is what a `type` policy of `'source'`
+preserves and neither product's loader was carrying it to the cutter.
+
+The default policy is bildhaft's, on the grounds that it is the one that was
+reasoned about: `{ type: 'source', cap: null, quality: 0.92, colorSpace:
+'display-p3' }`. vorlaut passes three overrides, which is the shape of a policy
+rather than a disagreement.
+
+**What adopting it costs vorlaut is a layout change, not a detail.** Its
+surface goes inside the square preview box it already had and its slider goes
+under it in the column — two places rather than two siblings — and the
+component draws them as siblings. The row the slider sits in takes the
+product's own class name (`TitleField`'s bargain) so that `.crop__row`'s
+`margin-top` does not add to the gap of the grid vorlaut puts it in.
+
 ---
 
 ### 6.7 `@lautstark/sicherung/svelte/Rescue`
@@ -3004,6 +3079,94 @@ reaches a transform.
 
 Neither wochenwerk nor bildhaft has one, and bildhaft decided deliberately not
 to: its language switch reloads the page. That stays its decision.
+
+---
+
+### 6.12 `@lautstark/design/svelte/Footer` and `.../Legal`
+
+The two §6 lists but never gave an entry of their own. Written 2026-09-17,
+after reading the three real implementations, and the reconciliation is
+narrower than it looks — because most of a footer is not shareable and saying
+so is the entry.
+
+```svelte
+<Footer {id} credit={…} class={…}>…links…</Footer>
+
+<Legal bind:page {pages} {id} closeLabel={…} class={…} onclose={…}>
+  {#snippet children(key)}…{/snippet}
+</Legal>
+```
+
+**The shell is shared and every word in it is the product's.** bildhaft's
+attribution line is a licence condition and follows the source the open
+Sammlung is using; mitreden opens three dialogs and has no outward link at all;
+vorlaut has four, one of which is an anchor through its own outward-link guard.
+And what a footer may *claim* is governed by "prose that denies must also
+disclose" (§4.3), which is not a rule a shared component can keep on a
+product's behalf. So the links arrive as children, in the product's order, in
+the product's words.
+
+**`components.css` already draws `.footer`, `.footer a` and `.linklike`**, and
+its own comment says why the file has them at all: design.md's audit called the
+two footers "not comparable", then mitreden's rewrite grew legal pages, needed
+one after all, and built it by copying bildhaft's values with a comment saying
+so. What was left over after that is what the component is — the landmark, and
+the one line above the links.
+
+**The links are not wrapped.** bildhaft puts its four in a
+`<p class="footer__links">` with a 14px flex gap and the other two put their
+buttons straight into the `<footer>`, where `text-align: center` and the word
+space between them do the work. A wrapper in the component either nests two in
+bildhaft or moves the other two by ten pixels each, in footers that are
+photographed at a tolerance of zero. Same seam as §6.3's sections, same reason.
+
+**`.footer__credit` keeps its name and is not tidied up.** It has no rule
+anywhere — not here, not in bildhaft's own stylesheet — and its four pixels of
+separation are an inline style. It is load-bearing twice over regardless: it is
+a live e2e locator, and the footer it sits in is in a baseline. The margin
+moves into the component's scoped block, which is the same four pixels arriving
+by §4.12's mechanism; `components.css` still draws nothing for it, and should
+not, because one product has an attribution obligation and a shared sheet that
+drew the class would imply three do.
+
+**The credit is a string, not a snippet**, which is what lets the `{#if}` stay
+where bildhaft has it: the attribution is empty while no source is in force,
+and an empty paragraph above the links is a row of air. The same argument §6.2
+makes about the panel's empty state span, in an element that is photographed.
+
+**`Legal` is one dialog with every page in it**, over §6.1's `Sheet`. Two of
+the three already hold it that way — mitreden a `Page | null`, vorlaut a key
+and three `<section>`s — and bildhaft's three separate `openSheet` calls
+converge on them: three sheets differing only in their prose are three chances
+for one of them to be reachable and the others not, which is the failure both
+legal pages are required against.
+
+**Every section is drawn and the ones not showing are `hidden`**, which is
+vorlaut's shape and has to be. Its markup is *addressed*: `#aboutPage`,
+`#impressumPage`, `#privacyPage` and forty-one ids beneath them, several of
+them e2e locators. Mounting one page at a time takes the other two out of the
+document, so whether a locator resolves would depend on which page happened to
+be open. It costs the other two nothing — their bodies are one built HTML
+string each.
+
+**The accessible name is the current page's title**, through §6.1's thunk.
+`#legal` is the one dialog in the family with `aria-labelledby` and a
+`$derived` heading, deliberately, "so a reader that announces it says
+'Impressum' while the Impressum is showing". The thunk preserves exactly that.
+
+**From the top, every time.** The sheet keeps its scroll position and the
+privacy notice is long enough that reopening it half way down reads as a page
+that starts in the middle of a sentence. vorlaut's finding, and the only
+behaviour in either component that is not markup.
+
+**What it costs, and it is §6.1's bill rather than a new one.** mitreden's
+`#info` has no `.body` class on its body, so the shared `.sheet > .body`
+padding does not reach the prose, and its ✕ is `.btn.quiet.icon` where the
+frame's is `.btn.icon`. Both are in `info.png`, compared at a tolerance of
+zero. vorlaut's `#legal` has **no baseline at all**, so its ✕ tier and its
+`<strong>`-to-`<h2>` heading change are invisible to its suite — which §6.1
+already records, and which is worth repeating here because the footer is where
+somebody meets it.
 
 ---
 
