@@ -74,6 +74,61 @@ settled in
   separately — `aria-current` on the open one, and which modifier means "and
   also this one" (conventions.md §4.2). The sidebar around the rows is not
   here, because all three are genuinely different objects.
+- **`@lautstark/design/css`** — the CSS contract's two helpers:
+  `drawnClasses()` reads every class name `components.css` has a rule for, and
+  `emittedClasses(root)` collects every class token a rendered module put on
+  the page. The difference between them is conventions.md §4.12 as a test
+  rather than as prose, and sicherung, bildquelle and stimmquelle each carried
+  a character-identical copy saying it belonged here. `emittedClasses` skips
+  Svelte's scoping hash, which is on the element beside the real names and is
+  never a class anybody draws. The `KNOWN_MISSING` maps stay per package: they
+  are dated local exceptions with a reason each.
+- **[svelte/](svelte/)** — the components layer's second half, since 2026-09-17.
+  All four products are Svelte, so what they were retyping stopped being only
+  rules and started being markup: the same vanilla host in four repositories,
+  the same folded panel, the same sheet frame. They are raw `.svelte` sources
+  with no build step, compiled by the consumer's own plugin and exported behind
+  a `svelte` condition so the plugin compiles rather than pre-bundles them —
+  without it dev mode silently makes a second copy. conventions.md §6 is the
+  specification for all of them, one entry per component.
+  - **`svelte/Vanilla`** — the `display: contents` wrapper that lets a node
+    built outside Svelte, one of the family's shared panels, stand among
+    components.
+  - **`svelte/Panel`** — the folded panel, over the `.panel` rules
+    components.css has drawn since v1.7.0. `open` is two-way, and that is the
+    whole of why this is a component: `name=` is the platform's accordion, so
+    the browser removes another panel's `open` attribute directly and Svelte
+    never sees it — a one-way prop reopens the sheet with everything folded.
+  - **`svelte/Sheet`** and **`svelte/sheet`** — the one dialog idiom, both
+    openings: the component where the caller is markup, `openSheet` where it is
+    a controller module. Six hand-written dialogs in mitreden and vorlaut go
+    through it. `title` takes a thunk because one product renames its dialog on
+    every keystroke and five of its e2e cases find it by its current name;
+    `closeLabel` is required and falls back to nothing; `openSheet` returns a
+    handle and never a promise.
+  - **`svelte/TileGrid`** and **`svelte/Tile`** — the grid of labelled picture
+    buttons, over the `.picker__grid` / `.picker__item` rules that moved into
+    components.css with it. `aria-pressed` is a prop and not a default:
+    wochenwerk's tile toggles and should say so, bildhaft's closes the dialog
+    and must not.
+  - **`svelte/Overflow`** and **`svelte/Dropdown`** — the ⋯ and the labelled
+    picker, over `@lautstark/design/menu`. Eleven call sites and seven class
+    strings across the four products; bildhaft's is the shape. The ARIA is in
+    the markup from the first paint, not added at open; the anchor is a prop,
+    because wochenwerk's `Row` already supplies one and two nested anchors hang
+    the list off the wrong one; and vorlaut's collision handling comes with
+    them, which is the only implementation that flips the list upwards and caps
+    its height so a long one stays inside a sheet body.
+  - **`svelte/ThemePicker`** — light, dark, or whatever the machine is set to,
+    over `@lautstark/design/theme`. Four near-identical implementations, three
+    of which carry the same comment arguing `role="group"` over `radiogroup` —
+    the strongest evidence in the audit that a control is ready to be shared.
+  - **`svelte/TitleField`** — the work head's name field, over
+    `@lautstark/design/rename` unchanged. It keeps the `oninput` echo beside
+    the debounced write, because two products repaint on every keystroke and a
+    component with only the write would move those repaints to 400ms after
+    typing stops. The caret request is one prop where the four had three
+    mechanisms.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against
@@ -83,11 +138,16 @@ settled in
   says a module that emits class names ships the rules for them, and those two
   modules could not move here: each is built out of calls on its own package.
   The gallery imports it, and a product imports it beside its token file.
-- **[tests/](tests/)** — the five behaviour modules above, under vitest with
-  happy-dom. `npm test`. happy-dom rather than jsdom because jsdom has no
+- **[tests/](tests/)** — the behaviour modules and the components above, under
+  vitest with happy-dom. `npm test`, and `npm run typecheck` for `svelte-check`
+  over `svelte/`. happy-dom rather than jsdom because jsdom has no
   `HTMLDialogElement.showModal`, which would have left the one module whose
-  subject is the native `<dialog>` unrunnable. The generator's own CI job still
-  installs nothing; this is a second job.
+  subject is the native `<dialog>` unrunnable — and which is also what lets the
+  Sheet's open and close be asserted rather than inferred. The vitest config
+  needs `resolve: { conditions: ['browser'] }` or `mount()` throws
+  `lifecycle_function_unavailable` in every test at once, with a message that
+  says nothing about configuration. The generator's own CI job still installs
+  nothing; this is a second job.
 - **[docs/lib/](docs/lib/)** — the generator. Colour maths, the derivation, and the
   emitter. No dependencies.
 - **[products/](products/)** — one small JSON file per product.

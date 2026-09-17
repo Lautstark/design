@@ -64,11 +64,17 @@ jobs:
             exit 1
           }
 
-  # docs/lib/'s five behaviour modules: ./menu, ./dialog, ./rename, ./toast
-  # and ./collections. Each exists because three products got the same thing subtly
-  # wrong, and a change to one of them lands in all three at once behind a tag —
-  # which is the whole reason they are worth a runner and the colour maths is
-  # not the only thing checked here any more.
+  # docs/lib/'s behaviour modules — ./menu, ./dialog, ./rename, ./toast,
+  # ./collections, ./css — and since 2026-09-17 the components in svelte/. Each
+  # exists because three or four products got the same thing subtly wrong, and a
+  # change to one of them lands everywhere at once behind a tag — which is the
+  # whole reason they are worth a runner and the colour maths is not the only
+  # thing checked here any more.
+  #
+  # Every piece of Svelte tooling is in this job and none of it is in the audit
+  # above. That is the same line as before: the generator runs on a bare node,
+  # the products are protecting that property, and a component library must not
+  # quietly cost it.
   test:
     runs-on: ubuntu-latest
     steps:
@@ -82,5 +88,11 @@ jobs:
       # Only devDependencies: nothing here ships. The published package still
       # has no dependencies of its own, and `files` does not carry tests/.
       - run: npm ci
+
+      # svelte-check, over the components in svelte/ against this package's own
+      # declarations. The components ship as source, so nothing compiles them on
+      # the way out and this is the only place a type error in one is found
+      # before a consumer finds it.
+      - run: npm run typecheck
 
       - run: npm test

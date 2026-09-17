@@ -1,0 +1,28 @@
+{
+  /* This package ships source and has no compile step, and nothing here is
+     ever emitted: `noEmit` is not a convenience, it is the whole arrangement.
+     What the file is for is `svelte-check`, which typechecks the components in
+     svelte/ against this package's own `.d.ts` files — measured 2026-09-17: a
+     component calling a typed helper wrongly is reported across that boundary,
+     so `tsc`-for-src plus `svelte-check`-for-svelte is not a vacuous pair.
+
+     docs/lib/ is deliberately outside `include`. It is hand-written JavaScript
+     with hand-written declarations beside it (see the header of any `.d.ts`
+     here), and checking it would be a second, different job from the one this
+     file exists to do. */
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "Preserve",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["svelte"],
+    "strict": true,
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  "include": ["svelte/**/*.svelte", "svelte/**/*.ts", "docs/lib/*.d.ts"]
+}
