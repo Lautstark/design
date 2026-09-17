@@ -89,10 +89,16 @@ settled in
   the same folded panel, the same sheet frame. They are raw `.svelte` sources
   with no build step, compiled by the consumer's own plugin and exported behind
   a `svelte` condition so the plugin compiles rather than pre-bundles them —
-  without it dev mode silently makes a second copy. `@lautstark/design/svelte/Vanilla`
-  is the first: the `display: contents` wrapper that lets a node built outside
-  Svelte — one of the family's shared panels — stand among components.
-  conventions.md §6 is the specification for all of them.
+  without it dev mode silently makes a second copy. conventions.md §6 is the
+  specification for all of them, one entry per component.
+  - **`svelte/Vanilla`** — the `display: contents` wrapper that lets a node
+    built outside Svelte, one of the family's shared panels, stand among
+    components.
+  - **`svelte/Panel`** — the folded panel, over the `.panel` rules
+    components.css has drawn since v1.7.0. `open` is two-way, and that is the
+    whole of why this is a component: `name=` is the platform's accordion, so
+    the browser removes another panel's `open` attribute directly and Svelte
+    never sees it — a one-way prop reopens the sheet with everything folded.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against

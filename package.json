@@ -74,6 +74,10 @@
     "./svelte/Vanilla": {
       "svelte": "./svelte/Vanilla.svelte",
       "default": "./svelte/Vanilla.svelte"
+    },
+    "./svelte/Panel": {
+      "svelte": "./svelte/Panel.svelte",
+      "default": "./svelte/Panel.svelte"
     }
   },
   "peerDependencies": {
