@@ -1,3 +1,9 @@
+## [1.35.0](https://github.com/Lautstark/design/compare/v1.34.0...v1.35.0) (2026-09-17)
+
+### Features
+
+* **sheet:** an id for the ✕ and one for the body, which a suite should not reach past ([90b379d](https://github.com/Lautstark/design/commit/90b379d5d3ddcca3cae2d1f8e7c38a3b7d348dd3))
+
 ## [1.34.0](https://github.com/Lautstark/design/compare/v1.33.1...v1.34.0) (2026-09-17)
 
 ### Features
