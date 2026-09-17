@@ -99,6 +99,10 @@
       "svelte": "./svelte/Dropdown.svelte",
       "default": "./svelte/Dropdown.svelte"
     },
+    "./svelte/ThemePicker": {
+      "svelte": "./svelte/ThemePicker.svelte",
+      "default": "./svelte/ThemePicker.svelte"
+    },
     "./svelte/sheet": {
       "types": "./svelte/sheet.d.ts",
       "svelte": "./svelte/sheet.js",

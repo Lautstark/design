@@ -119,6 +119,10 @@ settled in
     the list off the wrong one; and vorlaut's collision handling comes with
     them, which is the only implementation that flips the list upwards and caps
     its height so a long one stays inside a sheet body.
+  - **`svelte/ThemePicker`** — light, dark, or whatever the machine is set to,
+    over `@lautstark/design/theme`. Four near-identical implementations, three
+    of which carry the same comment arguing `role="group"` over `radiogroup` —
+    the strongest evidence in the audit that a control is ready to be shared.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against
