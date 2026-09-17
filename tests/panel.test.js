@@ -61,6 +61,23 @@ describe('Panel', () => {
     expect([...node.querySelector('div').classList]).toEqual(['body', 'setting']);
   });
 
+  it('takes an id for the heading span and one for the body', () => {
+    /* vorlaut-editor adopted the panel and found five locators with nowhere to
+       go. Four were test hooks. The fifth was `#collectionLangPick`'s
+       `aria-labelledby`, pointing at the heading span — a real accessible name,
+       which without an id had to be rebuilt as an `aria-label` repeating the
+       same key. That is the one that settled this. */
+    const node = render({ section: 'Sprache', sectionId: 'languageSection', bodyId: 'symbolBody' });
+    expect(node.querySelector('.section').id).toBe('languageSection');
+    expect(node.querySelector('.body').id).toBe('symbolBody');
+  });
+
+  it('writes neither id as an empty attribute when neither is given', () => {
+    const node = render({ section: 'Sprache' });
+    expect(node.querySelector('.section').hasAttribute('id')).toBe(false);
+    expect(node.querySelector('.body').hasAttribute('id')).toBe(false);
+  });
+
   it('leaves .body a bare class when no class is given', () => {
     const node = render({ section: 'Sprache' });
     expect(node.querySelector('div').getAttribute('class')).toBe('body');

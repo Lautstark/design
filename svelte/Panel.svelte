@@ -54,6 +54,8 @@
   let {
     id,
     stateId,
+    sectionId,
+    bodyId,
     section,
     state,
     group = 'settings',
@@ -71,6 +73,16 @@
     /** The id of the `.state` span. `#voicestate`, `#azurestate` and
      *  `#datastate` are mitreden's mask locators. */
     stateId?: string;
+    /** The id of the `.section` span, and of the `.body`. Added after
+     *  vorlaut-editor adopted the panel and found five locators with nowhere to
+     *  go — four on the heading, one on the body. Four were test hooks, which
+     *  is reason enough on §6.0's argument; the fifth was not, and is the one
+     *  that settled this. `#collectionLangPick` pointed an `aria-labelledby` at
+     *  its heading span, so with no id the wire had to become an `aria-label`
+     *  repeating the same key. That is a real accessible name rebuilt out of a
+     *  missing prop, and the next one might not be noticed. */
+    sectionId?: string;
+    bodyId?: string;
     /** The heading. */
     section: string;
     /** The answer, in the heading — so the column reads as a list of answers
@@ -95,10 +107,10 @@
 
 <details {id} class="panel" name={group} bind:open>
   <summary aria-current={current ? 'true' : undefined}
-    ><span class="section">{section}</span>{#if state !== undefined}<span
+    ><span class="section" id={sectionId}>{section}</span>{#if state !== undefined}<span
         class="state"
         id={stateId}>{state}</span
       >{/if}</summary
   >
-  <div class={extra ? `body ${extra}` : 'body'}>{@render children?.()}</div>
+  <div id={bodyId} class={extra ? `body ${extra}` : 'body'}>{@render children?.()}</div>
 </details>

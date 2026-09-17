@@ -2429,7 +2429,28 @@ for them, and saying so is better than implying it was.
 **Nothing that already went through `openDialog` moves.** wochenwerk and
 bildhaft have no hand-written dialogs, so §6.1 costs them nothing.
 
-**Adopted, and the entry was short by two ids.** `Sheet` took an `id` for the
+**Adopted, and it cost two surfaces their focus without going red.** This is
+the one finding of the adoption that would have shipped. Three of vorlaut's
+bodies take focus when they mount — the picture column's search field, the
+talker's set card, the send sheet's last octet — and that used to be "after the
+sheet is shown", because `openDialog()` built and showed the dialog before any
+body existed. `Sheet` shows it from an `$effect`, and a child's effects run
+before its parent's, so all three were focusing inside a `display: none` dialog
+and `showModal()` then took focus to the ✕.
+
+**One of the three had an assertion and went red. The other two had none and
+would have regressed in silence** — a field that no longer takes the keyboard on
+open is exactly what a suite does not notice and a person notices within a
+second. Both gained one.
+
+The fix a product needs today is one `tick` between the frame being shown and
+the body reaching for focus. The fix the package owes is to stop the ordering
+being something a consumer has to know: a body that focuses on mount is the
+normal case for a sheet, not the exotic one. Until that lands, **a body that
+focuses at mount must wait a tick**, said here rather than left for the next
+product to find with an assertion it may not have written.
+
+**And the entry was short by two ids.** `Sheet` took an `id` for the
 `<dialog>` and none for the ✕ or the `.body`, and both are locators: mitreden
 finds `#infoclose`, `#setupclose` and `#colvoiceclose` and reads `#infobody`,
 and vorlaut clicks `#voiceClose` in fourteen places across six spec files.
@@ -2536,6 +2557,18 @@ margin is coupled to a 16px inline padding, which the shared rule also has; but
 its **bottom** padding goes 4px → 22px, putting 32px of dead air under a rule
 that had 14px, and that is asserted in e2e and visible in a baseline. It is a
 real change and it is budgeted, not hidden.
+
+**A `{#key}` may not wrap a panel that is a member of an accordion.** vorlaut
+found this rebuilding its collection sheet: destroying and recreating a
+`name="…"` member puts the old and the new one in the document together for an
+instant, the browser closes one of them, and the one it closed still has
+`bind:open` attached and writes `false` into the record the new one reads. That
+is this section's own bug through the other door — the browser writing the
+attribute behind Svelte's back — and the binding is what makes it reachable.
+Key the *body* rather than the panel: whatever the key exists to discard is
+content, and the accordion member should outlive it. Related and the same
+shape: binding an absent key of a record is binding `undefined` to a prop with
+a fallback, which Svelte refuses at boot, so seed the record.
 
 **`name="settings"` everywhere**, which all four already do. vorlaut's second
 sheet keeps `name="collection"`; two exclusive groups in one product is
