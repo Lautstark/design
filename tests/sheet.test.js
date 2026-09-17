@@ -70,6 +70,23 @@ describe('Sheet', () => {
     expect(render({ open: true, title: 'x', id: 'legal' }).id).toBe('legal');
   });
 
+  it('takes an id for the ✕ and one for the body, so a suite need not reach past it', () => {
+    /* mitreden locates #infoclose, #setupclose and #colvoiceclose and reads
+       #infobody; vorlaut clicks #voiceClose in fourteen places across six spec
+       files. Without these a product writes them onto the frame's own elements
+       after the fact, which works and is still a reach past the component —
+       mitreden did exactly that on 2026-09-17 and said so. */
+    const node = render({ open: true, title: 'x', closeId: 'infoclose', bodyId: 'infobody' });
+    expect(node.querySelector('.head > button').id).toBe('infoclose');
+    expect(node.querySelector('.body').id).toBe('infobody');
+  });
+
+  it('leaves both off when they are not given, rather than writing an empty one', () => {
+    const node = render({ open: true, title: 'x' });
+    expect(node.querySelector('.head > button').hasAttribute('id')).toBe(false);
+    expect(node.querySelector('.body').hasAttribute('id')).toBe(false);
+  });
+
   it('puts panels, wide and the caller\'s class on the dialog itself', () => {
     // Not on a wrapper: six of vorlaut's rules are direct-child selectors.
     const node = render({ open: true, title: 'x', panels: true, wide: true, class: 'sheet--page' });

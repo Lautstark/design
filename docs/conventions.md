@@ -577,6 +577,17 @@ destructive acts and a native `prompt()` for editing; it has neither now, and
 there is no `window.confirm`, `window.prompt` or `window.alert` left in any of
 the three.
 
+**Amended 2026-09-17, and it had been false for a while.** The rule about the
+promise above — resolve from the buttons with a `settled` guard, use `close`
+only for the dismissal paths — was being broken by mitreden's Anybook export,
+which settled from `close` alone and carried two comments arguing that one exit
+for every way out was the tidier shape. It is the shape this section already
+says hangs forever on a host that closes a dialog without firing the event. It
+was fixed while the sheet moved to the shared frame; the line is true again, and
+it is worth noticing that the divergence arrived *after* this line was written
+rather than before it, which is the failure mode the top of this document calls
+a line spent before it was read.
+
 vorlaut was recorded here as compliant and was not. Its set delete asked
 through `window.confirm` — one call site, in `src/editor-diy/editor.ts`, left
 behind when the rest of the product moved to `confirmDialog` — so the one
@@ -2331,12 +2342,12 @@ local one, which is a whole shape rather than a frame.
 to reach the region. **`openSheet` returns a handle and never a promise.** A
 caller that wants an answer settles its own promise from the foot's presses
 with a `settled` guard and uses `onClose` only for the dismissal paths, which
-is §3.4's rule. **mitreden's `askPenExport` does not do that** — it resolves
+is §3.4's rule. **mitreden's `askPenExport` did not do that** — it resolved
 from `close` alone, which §3.4 spells out as the shape that "hangs forever on
 any host that closes the dialog without firing it", and two comments in that
-file argue for it. §3.4's "Diverging: nobody" is false as of today and the pen
-export is owed a fix; this section does not get to call it a thing that keeps
-working.
+file argued for it. It settles from the foot's presses behind a `settled` guard
+as of 2026-09-17, with `onClose` covering only ✕, Escape and outside, and both
+comments are rewritten. §3.4's divergence line is true again.
 
 **Emitted markup**, identical for both openings:
 
@@ -2417,6 +2428,25 @@ for them, and saying so is better than implying it was.
 
 **Nothing that already went through `openDialog` moves.** wochenwerk and
 bildhaft have no hand-written dialogs, so §6.1 costs them nothing.
+
+**Adopted, and the entry was short by two ids.** `Sheet` took an `id` for the
+`<dialog>` and none for the ✕ or the `.body`, and both are locators: mitreden
+finds `#infoclose`, `#setupclose` and `#colvoiceclose` and reads `#infobody`,
+and vorlaut clicks `#voiceClose` in fourteen places across six spec files.
+mitreden adopted the frame first and wrote them on afterwards through the
+handle's own `dialog` — which works, because the frame declares no id on either
+element and so never renders over one, and is still a reach past the component.
+`closeId` and `bodyId` are props as of design v1.35.0, for the same reason `id`
+is.
+
+**And the fork this entry left open for `#setup` has been taken: the panels keep
+their colour by a rule that says so.** `#setup` takes the frame's `.body`, and
+mitreden's stylesheet hands back the only two things `.sheet > .body` sets —
+`color` and `font-size`, both inherited — as `inherit` rather than as two
+literals, so nothing under the region inherits anything it did not before and
+the rule cannot drift from the one it answers. That is pixel-neutrality by
+construction rather than by measurement, and `wo-alles-liegt.png` came back
+byte-identical on both platforms, which is what that shot is for.
 
 **Built, and one thing the entry did not foresee.** wochenwerk adopted the
 frame first and found it: `openSheet`'s contract is a piece of state handed to
