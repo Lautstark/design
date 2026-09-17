@@ -57,6 +57,28 @@
  * It does not draw the "+ Neue Sammlung" button under the list, the heading
  * over it, or the container itself. Those differ, and the container is the
  * caller's because the caller is what decides where in its sidebar this goes.
+ *
+ * ## The one seam, and why it takes a node rather than a snippet
+ *
+ * conventions.md §6.3. One product puts something of its own under a row: the
+ * pages of the open Sammlung, in vorlaut, which is a component the editor
+ * registered and the shell only finds a place for. `after` is that place.
+ *
+ * It takes a **`Node`**, and the helper re-parents it with `.after()`. That is
+ * the whole feature, and the distinction is the reason it exists: appending an
+ * existing node *moves* it, children and all, so whatever is mounted inside
+ * survives a redraw of the list around it. vorlaut's own comment is explicit
+ * that its host "is made once and moved, never rebuilt", because a remount on
+ * every commit "would take the keyboard out of the list somebody is arrowing
+ * through, on the very press that moved them" — and this list is redrawn from
+ * scratch on every change, which is what makes that a live risk rather than a
+ * worry. A Svelte snippet renders fresh content per row per paint and
+ * reproduces exactly the remount that comment forbids, which is why the seam is
+ * not one.
+ *
+ * It is optional, and one product is its only caller. bildhaft solved the
+ * problem this looks like — telling two lists of rows apart — product-side with
+ * two class hooks of its own, and must not pay for an API it does not use.
  */
 
 /** Empties `container` and draws one row per Sammlung.
@@ -66,7 +88,7 @@
  * products already repaint this whole list on every change and a list of a
  * handful of rows is not where a diff pays for itself.
  */
-export function drawCollections(container, { rows, open, onPick }) {
+export function drawCollections(container, { rows, open, onPick, after }) {
   const isOpen = open instanceof Set ? open : new Set(open ?? []);
   container.replaceChildren();
 
@@ -130,5 +152,15 @@ export function drawCollections(container, { rows, open, onPick }) {
       onPick(row.id, event.metaKey || event.ctrlKey);
     });
     container.appendChild(node);
+
+    /* Moved rather than drawn. `.after()` on a node that is already in a
+       document removes it from where it was and puts it here, so the caller's
+       element — and every component mounted into it — arrives intact. Asked for
+       every row and answered for the ones that have something, so the caller
+       never has to know which row is which by index. */
+    if (after) {
+      const extra = after(row);
+      if (extra) node.after(extra);
+    }
   }
 }
