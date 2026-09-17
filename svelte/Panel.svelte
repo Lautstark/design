@@ -32,6 +32,22 @@
    * margins instead and has a comment saying so, and bildhaft has no panel rule
    * at all. Two products want a gap and two do not, so the class is appended
    * and each product keeps its arrangement under its own name.
+   *
+   * ## The state span is drawn only when there is a state
+   *
+   * Both shapes are in the family today and the difference is measurable, so
+   * this follows the markup rather than tidying it. wochenwerk's and bildhaft's
+   * last panels carry `<span class="state"></span>` with nothing in it;
+   * mitreden's danger panel and three of vorlaut's carry no span at all, each
+   * with a comment saying why.
+   *
+   * Below 560px `.panel > summary` is a two-column grid, `.state` is forced to
+   * `grid-column: 1` and therefore onto a second row, and the row `gap` is 2px.
+   * So an empty span is not a no-op: it is a second row of nothing and two
+   * pixels of summary, on every panel whose state is unknowable. Drawing it
+   * unconditionally would move four panels in two products that have
+   * tolerance-zero baselines, for no gain. `undefined` means no span; `''`
+   * means an empty one, which is what the two products passing it already draw.
    */
   import type { Snippet } from 'svelte';
 
@@ -79,7 +95,10 @@
 
 <details {id} class="panel" name={group} bind:open>
   <summary aria-current={current ? 'true' : undefined}
-    ><span class="section">{section}</span><span class="state" id={stateId}>{state ?? ''}</span></summary
+    ><span class="section">{section}</span>{#if state !== undefined}<span
+        class="state"
+        id={stateId}>{state}</span
+      >{/if}</summary
   >
   <div class={extra ? `body ${extra}` : 'body'}>{@render children?.()}</div>
 </details>

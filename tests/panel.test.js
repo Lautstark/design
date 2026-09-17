@@ -51,7 +51,7 @@ describe('Panel', () => {
   it('takes an id, and an id for the state span', () => {
     // mitreden masks its baselines by these two, and vorlaut's unit test reads
     // the markup as text and matches /id="(\w+Panel)"/.
-    const node = render({ id: 'voicePanel', stateId: 'voicestate', section: 'Stimme' });
+    const node = render({ id: 'voicePanel', stateId: 'voicestate', section: 'Stimme', state: 'Kerstin' });
     expect(node.id).toBe('voicePanel');
     expect(node.querySelector('.state').id).toBe('voicestate');
   });
@@ -66,11 +66,20 @@ describe('Panel', () => {
     expect(node.querySelector('div').getAttribute('class')).toBe('body');
   });
 
-  it('draws an empty state span rather than none', () => {
-    // `.panel > summary` is a two-column grid and the chevron is placed against
-    // the second column. A missing span is a different layout, not a tidier one.
-    const node = render({ section: 'Löschen' });
-    expect(node.querySelector('.state').textContent).toBe('');
+  it('draws no state span when there is no state, and an empty one when there is', () => {
+    /* Both shapes are in the family and the difference is measurable, so this
+       follows the markup rather than tidying it. Below 560px `.panel > summary`
+       is a two-column grid, `.state` is forced to `grid-column: 1` and so onto a
+       second row, and the row gap is 2px — an empty span is a second row of
+       nothing and two pixels of summary. wochenwerk and bildhaft draw one;
+       mitreden's danger panel and three of vorlaut's draw none. */
+    expect(render({ section: 'Löschen' }).querySelector('.state')).toBeNull();
+  });
+
+  it('draws an empty state span when the state is an empty string', () => {
+    /* The other half of the pair, in its own case because `render` mounts into
+       the same body and a second one would be found behind the first. */
+    expect(render({ section: 'Löschen', state: '' }).querySelector('.state').textContent).toBe('');
   });
 
   it('marks the current panel with aria-current, and omits it otherwise', () => {
