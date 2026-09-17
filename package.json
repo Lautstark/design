@@ -65,6 +65,10 @@
     "./language": {
       "types": "./docs/lib/language.d.ts",
       "default": "./docs/lib/language.js"
+    },
+    "./css": {
+      "types": "./docs/lib/css.d.ts",
+      "default": "./docs/lib/css.js"
     }
   },
   "scripts": {

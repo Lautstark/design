@@ -74,6 +74,15 @@ settled in
   separately — `aria-current` on the open one, and which modifier means "and
   also this one" (conventions.md §4.2). The sidebar around the rows is not
   here, because all three are genuinely different objects.
+- **`@lautstark/design/css`** — the CSS contract's two helpers:
+  `drawnClasses()` reads every class name `components.css` has a rule for, and
+  `emittedClasses(root)` collects every class token a rendered module put on
+  the page. The difference between them is conventions.md §4.12 as a test
+  rather than as prose, and sicherung, bildquelle and stimmquelle each carried
+  a character-identical copy saying it belonged here. `emittedClasses` skips
+  Svelte's scoping hash, which is on the element beside the real names and is
+  never a class anybody draws. The `KNOWN_MISSING` maps stay per package: they
+  are dated local exceptions with a reason each.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against
