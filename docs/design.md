@@ -1806,3 +1806,24 @@ picture of the components exactly as a markdown table is a picture of the
 tokens. `docs/index.html` links `components.css` ahead of its own chrome, so
 the button it shows under any accent the picker can produce is the shipped
 button.
+
+**And since 2026-09-17 there is a second half to this file.** All four products
+are Svelte, so what they were retyping stopped being only rules and started
+being markup as well — the same sheet frame in four repositories, the same
+folded panel, the same sidebar in three, the same six-line vanilla host in four.
+Those are `@lautstark/design/svelte/*`: raw `.svelte` sources with no build
+step, compiled by the consumer's own plugin, exported behind a `svelte`
+condition so the plugin knows to compile rather than pre-bundle them.
+
+The division of labour with this file is the point, and it is the same bargain
+`components.css` already makes with `docs/lib/`. **The class vocabulary stays
+here**, because it is the agreement and because the vanilla panels the provider
+packages ship still emit it. What goes in a component's scoped `<style>` is
+that component's own arrangement, which travels with it by construction — which
+is conventions.md §4.12 ("a shared module that emits markup brings its CSS")
+becoming true for free rather than by anybody remembering it.
+
+`conventions.md` §6 is the specification: one entry per component, saying what
+it takes, what it draws, and which of the four products' answers it settles on.
+Read that before adding a component here, for the same reason §5 of this
+repository's CLAUDE.md says to grep this file before writing a rule.
