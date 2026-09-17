@@ -30,6 +30,7 @@
     "pins.js",
     "installcheck.mjs",
     "shadows.js",
+    "svelte",
     "CHANGELOG.md"
   ],
   "exports": {
@@ -69,21 +70,38 @@
     "./css": {
       "types": "./docs/lib/css.d.ts",
       "default": "./docs/lib/css.js"
+    },
+    "./svelte/Vanilla": {
+      "svelte": "./svelte/Vanilla.svelte",
+      "default": "./svelte/Vanilla.svelte"
+    }
+  },
+  "peerDependencies": {
+    "svelte": "^5"
+  },
+  "peerDependenciesMeta": {
+    "svelte": {
+      "optional": true
     }
   },
   "scripts": {
     "build": "node build.js",
     "check": "node build.js --check",
     "pins": "node pins.js",
+    "typecheck": "svelte-check --threshold warning",
     "test": "vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^7.0.0",
     "@semantic-release/git": "^11.0.1",
+    "@sveltejs/vite-plugin-svelte": "^7.3.0",
     "conventional-changelog-conventionalcommits": "^9.3.1",
     "happy-dom": "^20.11.6",
     "semantic-release": "^25.0.9",
+    "svelte": "^5.57.0",
+    "svelte-check": "^4.7.6",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },
   "engines": {

@@ -22,5 +22,5 @@ jobs:
       pull-requests: write
     uses: Lautstark/.github/.github/workflows/release.yml@main
     with:
-      gate: npm run check && npm test
+      gate: npm run check && npm run typecheck && npm test
     secrets: inherit
