@@ -2184,16 +2184,34 @@ travels with it by construction. What must *not* go there is a name the
 products already speak: `.btn`, `.field`, `.panel`, `.sheet`, `.collections__*`
 and the rest stay in `components.css`, because they are the agreement rather
 than one component's private arrangement. The CSS-contract tests in sicherung,
-bildquelle and stimmquelle are what hold that line, and they extend to the
-Svelte versions unchanged — `emittedClasses()` walks a DOM subtree and does not
-care how it was built.
+bildquelle and stimmquelle are what hold that line, and `emittedClasses()`
+walks a DOM subtree, so it does not care how the subtree was built.
+
+**It does care about one thing, and it was measured rather than assumed.** A
+component with a `<style>` block puts its scoping hash into `classList`
+alongside the real names — a panel emitted
+`["panel", "svelte-1fnslke", "section", "state", "body"]`. The hash has no
+selector in `components.css` and never will, so an unmodified contract test
+fails every Svelte panel that styles itself, and reports a hash as the missing
+class. `emittedClasses()` skips `/^svelte-[0-9a-z]+$/`, and that is the one
+change the three tests need. It belongs in the shared helper below rather than
+in three places.
+
+**And the test runner needs `resolve: { conditions: ['browser'] }`.** Without
+it vitest resolves svelte's `server` export, `mount()` throws
+`lifecycle_function_unavailable`, every test in the file fails at once, and the
+message says nothing about configuration. Written down because it costs an
+afternoon exactly once per package.
 
 **`drawnClasses()` comes home in the same pass.** All three packages carry a
 character-identical copy and all three say in their header that it belongs in
 design. A design release can carry it now, so it does: `@lautstark/design/css`
-exports `drawnClasses()` and `emittedClasses(root)`, and the three tests import
-them instead of redeclaring them. The `KNOWN_MISSING` maps stay per package —
-they are dated local exceptions, not shared knowledge.
+exports `drawnClasses()` and `emittedClasses(root)` — the latter with the
+scoping-hash filter above, which is precisely the kind of thing that should be
+learned once. The three tests import them instead of redeclaring them. The
+`KNOWN_MISSING` maps stay per package: they are dated local exceptions, not
+shared knowledge, and sicherung's guard test — which asserts its three
+exceptions are *still* undrawn — stays with them.
 
 **`aria-pressed` takes a boolean expression.** `components.css` selects
 `[aria-pressed="true"]`, and Svelte serialises a boolean to exactly that
