@@ -2418,6 +2418,34 @@ for them, and saying so is better than implying it was.
 **Nothing that already went through `openDialog` moves.** wochenwerk and
 bildhaft have no hand-written dialogs, so §6.1 costs them nothing.
 
+**Built, and one thing the entry did not foresee.** wochenwerk adopted the
+frame first and found it: `openSheet`'s contract is a piece of state handed to
+a body component, and the moment that state travels through a component
+boundary Svelte's development-mode ownership validator starts objecting to the
+body mutating it — `ownership_invalid_mutation`, once per mutation site.
+
+It is not a regression in the products and it is not shipped: the check is
+compiled out of the production bundle, and it was silent before only because
+`mount()` from a controller module has no parent component to own anything.
+What changed is that the imperative half now goes through one component on its
+way to `Sheet`, so there is an owner where there was none.
+
+Three things follow, and the third is the one to act on:
+
+- **A consumer cannot fix it.** The validator exempts a mutation on three
+  conditions and a body component can reach none of them; declaring the prop
+  `$bindable` in the child does not help, because the check reads the
+  *incoming* props descriptor rather than the child's declaration.
+- **It is console noise in `npm run dev` and in an e2e run, not behaviour.**
+  Nothing renders differently and the production bundle contains none of it.
+- **It is the package's to fix**, and the fix is to stop passing the state
+  across that boundary — mount the body, head and foot into the regions `Sheet`
+  has drawn, the way every product did before the extraction, so `Sheet` goes on
+  being the only file that knows what a sheet looks like while the state never
+  acquires an owner. Until that lands, every product adopting `openSheet` with a
+  body that writes to `s` will see the warnings, and the right response is to
+  recognise them rather than to work around them.
+
 **Not converged, and recorded so the next reader does not try.** The scroll
 model is two answers — bildhaft and vorlaut give `.sheet` a flex column and let
 `.sheet > .body` scroll, wochenwerk and mitreden let the whole dialog scroll.
