@@ -107,6 +107,27 @@
       "svelte": "./svelte/TitleField.svelte",
       "default": "./svelte/TitleField.svelte"
     },
+    "./svelte/Sidebar": {
+      "svelte": "./svelte/Sidebar.svelte",
+      "default": "./svelte/Sidebar.svelte"
+    },
+    "./svelte/Scrim": {
+      "svelte": "./svelte/Scrim.svelte",
+      "default": "./svelte/Scrim.svelte"
+    },
+    "./svelte/Reveal": {
+      "svelte": "./svelte/Reveal.svelte",
+      "default": "./svelte/Reveal.svelte"
+    },
+    "./svelte/TopBar": {
+      "svelte": "./svelte/TopBar.svelte",
+      "default": "./svelte/TopBar.svelte"
+    },
+    "./svelte/sidebar": {
+      "types": "./svelte/sidebar.d.ts",
+      "svelte": "./svelte/sidebar.js",
+      "default": "./svelte/sidebar.js"
+    },
     "./svelte/sheet": {
       "types": "./svelte/sheet.d.ts",
       "svelte": "./svelte/sheet.js",
