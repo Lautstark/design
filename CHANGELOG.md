@@ -1,3 +1,9 @@
+## [1.33.1](https://github.com/Lautstark/design/compare/v1.33.0...v1.33.1) (2026-09-17)
+
+### Bug Fixes
+
+* **panel:** no state span where a panel has no state, and two pixels say why ([c4591e6](https://github.com/Lautstark/design/commit/c4591e635eef0937dd42b900ee066ff2db9dbe3b))
+
 ## [1.33.0](https://github.com/Lautstark/design/compare/v1.32.0...v1.33.0) (2026-09-17)
 
 ### Features
