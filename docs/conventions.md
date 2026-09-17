@@ -3271,6 +3271,20 @@ down. mitreden says those two rules again one level deeper with
 product adopting `Legal` whose prose leans on `.sheet > .body > p` owes itself
 the same two lines.
 
+**And the deferral in §6.1 had a consequence, in the first product to meet
+it.** That entry left the scroll model unconverged — two products give `.sheet`
+a flex column and let `.sheet > .body` scroll, two let the whole dialog scroll —
+and called it a deferral rather than a blessing. `Legal` then reset the scroll
+on the body, which is right in the two products that scroll it and a **no-op**
+in the other two. wochenwerk found it with a 2024px notice inside an 860px
+dialog, where "from the top, every time" quietly meant nothing at all.
+
+It resets both as of v1.38.0, which costs one assignment on an element already
+at zero. The lesson is the one to carry: **a shared component may not assume
+which element scrolls while §6.1 leaves that per product.** A deferral is not
+free — it is a fact every later component has to be written around, and this is
+the first bill for it.
+
 **And a component that wraps `Sheet` forwards its ids.** `Legal` took
 `closeLabel` and `id` and neither `closeId` nor `bodyId`, so mitreden adopted it
 and lost `#infoclose` and `#infobody` — the two it had been writing onto the

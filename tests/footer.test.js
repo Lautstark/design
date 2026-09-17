@@ -123,6 +123,24 @@ describe('Legal', () => {
       .toEqual(['aboutPage', 'impressumPage', 'privacyPage']);
   });
 
+  it('sends both the body and the dialog back to the top, not only the body', () => {
+    /* Which of the two scrolls is a product decision this component does not
+       get to know: two products scroll `.sheet > .body`, two scroll the whole
+       dialog, and §6.1 records that fork as one it did not converge. wochenwerk
+       found it with a 2024px notice inside an 860px dialog, where "from the
+       top, every time" quietly meant nothing. */
+    render(Foot, {});
+    footer().querySelectorAll('.linklike')[1].click();
+    flushSync();
+    const body = dialog().querySelector('.body');
+    body.scrollTop = 120;
+    dialog().scrollTop = 140;
+    footer().querySelectorAll('.linklike')[2].click();
+    flushSync();
+    expect(body.scrollTop).toBe(0);
+    expect(dialog().scrollTop).toBe(0);
+  });
+
   it('forwards the ✕ and the body ids to the sheet underneath', () => {
     /* A component that wraps `Sheet` and does not forward these hands back the
        problem those props solved. mitreden adopted Legal and lost `#infoclose`
