@@ -99,6 +99,13 @@ settled in
     whole of why this is a component: `name=` is the platform's accordion, so
     the browser removes another panel's `open` attribute directly and Svelte
     never sees it — a one-way prop reopens the sheet with everything folded.
+  - **`svelte/Sheet`** and **`svelte/sheet`** — the one dialog idiom, both
+    openings: the component where the caller is markup, `openSheet` where it is
+    a controller module. Six hand-written dialogs in mitreden and vorlaut go
+    through it. `title` takes a thunk because one product renames its dialog on
+    every keystroke and five of its e2e cases find it by its current name;
+    `closeLabel` is required and falls back to nothing; `openSheet` returns a
+    handle and never a promise.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against

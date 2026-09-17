@@ -78,6 +78,15 @@
     "./svelte/Panel": {
       "svelte": "./svelte/Panel.svelte",
       "default": "./svelte/Panel.svelte"
+    },
+    "./svelte/Sheet": {
+      "svelte": "./svelte/Sheet.svelte",
+      "default": "./svelte/Sheet.svelte"
+    },
+    "./svelte/sheet": {
+      "types": "./svelte/sheet.d.ts",
+      "svelte": "./svelte/sheet.js",
+      "default": "./svelte/sheet.js"
     }
   },
   "peerDependencies": {
