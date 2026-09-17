@@ -111,6 +111,14 @@ settled in
     components.css with it. `aria-pressed` is a prop and not a default:
     wochenwerk's tile toggles and should say so, bildhaft's closes the dialog
     and must not.
+  - **`svelte/Overflow`** and **`svelte/Dropdown`** — the ⋯ and the labelled
+    picker, over `@lautstark/design/menu`. Eleven call sites and seven class
+    strings across the four products; bildhaft's is the shape. The ARIA is in
+    the markup from the first paint, not added at open; the anchor is a prop,
+    because wochenwerk's `Row` already supplies one and two nested anchors hang
+    the list off the wrong one; and vorlaut's collision handling comes with
+    them, which is the only implementation that flips the list upwards and caps
+    its height so a long one stays inside a sheet body.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against

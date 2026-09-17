@@ -190,6 +190,18 @@
    product to need it. */
 .menu-anchor.start > .menu { left: 0; right: auto; }
 
+/* Upward, where there is more room above the trigger than below it. The
+   measuring half is `svelte/fit.js`, which also writes the height cap and the
+   scroll that cap needs; this is the drawing half and it has to be here,
+   because `@lautstark/design/svelte/Overflow` emits the class and §4.12 says a
+   module that emits a class name ships the rule for it.
+
+   Without the flip, a menu near the foot of a sheet — vorlaut's eleven word
+   classes — is capped at nothing worth opening. vorlaut wrote both halves and
+   is still the only implementation of either; it comes here with the component
+   rather than staying behind it. */
+.menu-anchor--up > .menu { top: auto; bottom: calc(100% + 6px); }
+
 /* The trigger that opens one: a button with a chevron, because pressing it asks
    a question rather than doing the thing. mitreden wrote this first and said in
    the margin that it became shared the day a second product needed the same

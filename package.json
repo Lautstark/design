@@ -91,6 +91,14 @@
       "svelte": "./svelte/Tile.svelte",
       "default": "./svelte/Tile.svelte"
     },
+    "./svelte/Overflow": {
+      "svelte": "./svelte/Overflow.svelte",
+      "default": "./svelte/Overflow.svelte"
+    },
+    "./svelte/Dropdown": {
+      "svelte": "./svelte/Dropdown.svelte",
+      "default": "./svelte/Dropdown.svelte"
+    },
     "./svelte/sheet": {
       "types": "./svelte/sheet.d.ts",
       "svelte": "./svelte/sheet.js",
