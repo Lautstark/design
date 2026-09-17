@@ -55,6 +55,8 @@
   let {
     open = $bindable(false),
     id,
+    closeId,
+    bodyId,
     title,
     closeLabel,
     panels = false,
@@ -79,6 +81,16 @@
      *  `.sheet { width: … }` and the winner becomes bundle order, which §6.0
      *  forbids relying on. Hence a prop. */
     id?: string;
+    /** The ✕'s id, and the `.body`'s. Props for the same reason `id` is: the
+     *  suites are built on them. mitreden locates `#infoclose`, `#setupclose`
+     *  and `#colvoiceclose` and reads `#infobody`, and vorlaut clicks
+     *  `#voiceClose` in fourteen places across six spec files. Without these a
+     *  product writes them onto the frame's own elements after the fact, which
+     *  works — the frame declares no id on either, so nothing re-renders over
+     *  it — and is still a reach past the component. mitreden did exactly that
+     *  on 2026-09-17 and said the package was owed these two. */
+    closeId?: string;
+    bodyId?: string;
     /** The heading, and the accessible name. A thunk where it changes. */
     title: string | (() => string);
     /** The accessible name of the corner ✕. **Required**, and it does not fall
@@ -149,12 +161,13 @@
 >
   <div class="head"
     >{#if head}{@render head()}{:else}<h2>{named}</h2>{/if}<button
+      id={closeId}
       class="btn icon"
       type="button"
       aria-label={closeLabel}
       onclick={() => dialog?.close()}>✕</button
     ></div
   >
-  <div class="body" bind:this={body}>{@render children?.()}</div>
+  <div id={bodyId} class="body" bind:this={body}>{@render children?.()}</div>
   {#if foot}<div class="foot">{@render foot()}</div>{/if}
 </dialog>
