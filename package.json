@@ -131,6 +131,14 @@
       "svelte": "./svelte/Crop.svelte",
       "default": "./svelte/Crop.svelte"
     },
+    "./svelte/Footer": {
+      "svelte": "./svelte/Footer.svelte",
+      "default": "./svelte/Footer.svelte"
+    },
+    "./svelte/Legal": {
+      "svelte": "./svelte/Legal.svelte",
+      "default": "./svelte/Legal.svelte"
+    },
     "./svelte/sidebar": {
       "types": "./svelte/sidebar.d.ts",
       "svelte": "./svelte/sidebar.js",
