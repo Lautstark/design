@@ -1,3 +1,12 @@
+## [1.34.0](https://github.com/Lautstark/design/compare/v1.33.1...v1.34.0) (2026-09-17)
+
+### Features
+
+* ./svelte/Crop and ./crop, with the four-field output policy ([436a88a](https://github.com/Lautstark/design/commit/436a88a1e72ffaa21d8a6f5417121f8190e0397f))
+* ./svelte/Footer and ./svelte/Legal, whose content stays the product's ([62d7487](https://github.com/Lautstark/design/commit/62d7487cc64ca4d2383bd613ac635037c8f73f89)), closes [#info](https://github.com/Lautstark/design/issues/info) [#legal](https://github.com/Lautstark/design/issues/legal)
+* ./svelte/Sidebar, with Scrim, Reveal and TopBar around it ([9987755](https://github.com/Lautstark/design/commit/9987755bfe7a5060929bf08a7d88aef510332424))
+* **collections:** drawCollections takes a node to put under a row, not a snippet ([6f9698a](https://github.com/Lautstark/design/commit/6f9698a591f1e1613064fe2f7fa960fd77824589))
+
 ## [1.33.1](https://github.com/Lautstark/design/compare/v1.33.0...v1.33.1) (2026-09-17)
 
 ### Bug Fixes
