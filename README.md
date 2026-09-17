@@ -123,6 +123,12 @@ settled in
     over `@lautstark/design/theme`. Four near-identical implementations, three
     of which carry the same comment arguing `role="group"` over `radiogroup` —
     the strongest evidence in the audit that a control is ready to be shared.
+  - **`svelte/TitleField`** — the work head's name field, over
+    `@lautstark/design/rename` unchanged. It keeps the `oninput` echo beside
+    the debounced write, because two products repaint on every keystroke and a
+    component with only the write would move those repaints to 400ms after
+    typing stops. The caret request is one prop where the four had three
+    mechanisms.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against
