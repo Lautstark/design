@@ -63,6 +63,10 @@
       "types": "./docs/lib/collections.d.ts",
       "default": "./docs/lib/collections.js"
     },
+    "./crop": {
+      "types": "./docs/lib/crop.d.ts",
+      "default": "./docs/lib/crop.js"
+    },
     "./language": {
       "types": "./docs/lib/language.d.ts",
       "default": "./docs/lib/language.js"
@@ -106,6 +110,39 @@
     "./svelte/TitleField": {
       "svelte": "./svelte/TitleField.svelte",
       "default": "./svelte/TitleField.svelte"
+    },
+    "./svelte/Sidebar": {
+      "svelte": "./svelte/Sidebar.svelte",
+      "default": "./svelte/Sidebar.svelte"
+    },
+    "./svelte/Scrim": {
+      "svelte": "./svelte/Scrim.svelte",
+      "default": "./svelte/Scrim.svelte"
+    },
+    "./svelte/Reveal": {
+      "svelte": "./svelte/Reveal.svelte",
+      "default": "./svelte/Reveal.svelte"
+    },
+    "./svelte/TopBar": {
+      "svelte": "./svelte/TopBar.svelte",
+      "default": "./svelte/TopBar.svelte"
+    },
+    "./svelte/Crop": {
+      "svelte": "./svelte/Crop.svelte",
+      "default": "./svelte/Crop.svelte"
+    },
+    "./svelte/Footer": {
+      "svelte": "./svelte/Footer.svelte",
+      "default": "./svelte/Footer.svelte"
+    },
+    "./svelte/Legal": {
+      "svelte": "./svelte/Legal.svelte",
+      "default": "./svelte/Legal.svelte"
+    },
+    "./svelte/sidebar": {
+      "types": "./svelte/sidebar.d.ts",
+      "svelte": "./svelte/sidebar.js",
+      "default": "./svelte/sidebar.js"
     },
     "./svelte/sheet": {
       "types": "./svelte/sheet.d.ts",

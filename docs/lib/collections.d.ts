@@ -43,6 +43,26 @@ export interface CollectionRowsOpts {
    * at a time ignores it — vorlaut and bildhaft, for the reason §4.2 gives.
    */
   onPick(id: string, additive: boolean): void;
+  /**
+   * Something of the caller's, under this row.
+   *
+   * Asked for every row; return `null` — or nothing — for the ones with nothing
+   * to put there. What comes back is **re-parented**, with `.after()`, not
+   * drawn: appending a node that is already in a document moves it, so the
+   * element and everything mounted inside it survive the redraw of the list
+   * around them.
+   *
+   * That is the whole of why this is a `Node` and not a Svelte snippet
+   * (conventions.md §6.3). vorlaut is the only caller — the pages of the open
+   * Sammlung go under its row — and its host "is made once and moved, never
+   * rebuilt", because a remount on every commit would take the keyboard out of
+   * the list somebody is arrowing through. A snippet renders fresh content per
+   * row per paint and is exactly that remount.
+   *
+   * Optional, and left off by the two products that have nothing to put under a
+   * row: they get back the DOM they got before this field existed.
+   */
+  after?(row: CollectionRow): Node | null | undefined;
 }
 
 /**

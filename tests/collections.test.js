@@ -245,3 +245,77 @@ describe('pressing one', () => {
     expect(second).toEqual([{ id: 'c', additive: false }]);
   });
 });
+
+describe('the per-row seam', () => {
+  /* conventions.md §6.3. One product puts something of its own under a row —
+   * the pages of the open Sammlung — and the whole feature is that what it
+   * hands over is a `Node` the helper re-parents rather than content the helper
+   * draws. A Svelte snippet would render fresh per row per paint, which is a
+   * remount, which is what vorlaut's own comment forbids: it "would take the
+   * keyboard out of the list somebody is arrowing through, on the very press
+   * that moved them". So the case that matters is identity across a redraw. */
+
+  const withSeam = (rows, after) => {
+    drawCollections(host, { rows, open: ['b'], onPick: () => {}, after });
+  };
+
+  it('puts the node straight after the row that asked for it', () => {
+    const pages = document.createElement('div');
+    pages.id = 'pages';
+    withSeam(THREE, (row) => (row.id === 'b' ? pages : null));
+    expect(host.children[1].querySelector('.collections__name').textContent).toBe('Kinderzimmer');
+    expect(host.children[2]).toBe(pages);
+    expect(host.children).toHaveLength(4);
+  });
+
+  it('moves the same node rather than drawing a new one, and keeps what is in it', () => {
+    /* The reason the seam is a node. `.after()` on a node that is already in a
+       document removes it from where it was and puts it here, so the element
+       — and anything mounted into it — survives the list being thrown away and
+       rebuilt around it. */
+    const pages = document.createElement('div');
+    const inside = document.createElement('input');
+    pages.appendChild(inside);
+
+    withSeam(THREE, (row) => (row.id === 'b' ? pages : null));
+    withSeam(THREE, (row) => (row.id === 'b' ? pages : null));
+
+    expect(host.children[2]).toBe(pages);
+    expect(pages.firstChild).toBe(inside);
+    expect(host.querySelectorAll('input')).toHaveLength(1);
+  });
+
+  it('follows the row when a different one becomes the open one', () => {
+    const pages = document.createElement('div');
+    withSeam(THREE, (row) => (row.id === 'b' ? pages : null));
+    drawCollections(host, {
+      rows: THREE,
+      open: ['c'],
+      onPick: () => {},
+      after: (row) => (row.id === 'c' ? pages : null),
+    });
+    expect(host.children[3]).toBe(pages);
+    expect(host.children).toHaveLength(4);
+  });
+
+  it('asks every row and draws nothing for the ones that answer nothing', () => {
+    const asked = [];
+    withSeam(THREE, (row) => {
+      asked.push(row.id);
+      return null;
+    });
+    expect(asked).toEqual(['a', 'b', 'c']);
+    expect(host.children).toHaveLength(3);
+  });
+
+  it('leaves the list byte for byte what it was when nothing is passed', () => {
+    /* bildhaft must not pay for an API it does not use: it solved the problem
+       this looks like — telling two lists of rows apart — product-side, with
+       two class hooks that have no CSS rule and ten e2e selectors. */
+    drawCollections(host, { rows: THREE, open: ['b'], onPick: () => {} });
+    const without = host.innerHTML;
+    drawCollections(host, { rows: THREE, open: ['b'], onPick: () => {}, after: undefined });
+    expect(host.innerHTML).toBe(without);
+    expect(host.children).toHaveLength(3);
+  });
+});
