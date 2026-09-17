@@ -138,11 +138,16 @@ settled in
   says a module that emits class names ships the rules for them, and those two
   modules could not move here: each is built out of calls on its own package.
   The gallery imports it, and a product imports it beside its token file.
-- **[tests/](tests/)** — the five behaviour modules above, under vitest with
-  happy-dom. `npm test`. happy-dom rather than jsdom because jsdom has no
+- **[tests/](tests/)** — the behaviour modules and the components above, under
+  vitest with happy-dom. `npm test`, and `npm run typecheck` for `svelte-check`
+  over `svelte/`. happy-dom rather than jsdom because jsdom has no
   `HTMLDialogElement.showModal`, which would have left the one module whose
-  subject is the native `<dialog>` unrunnable. The generator's own CI job still
-  installs nothing; this is a second job.
+  subject is the native `<dialog>` unrunnable — and which is also what lets the
+  Sheet's open and close be asserted rather than inferred. The vitest config
+  needs `resolve: { conditions: ['browser'] }` or `mount()` throws
+  `lifecycle_function_unavailable` in every test at once, with a message that
+  says nothing about configuration. The generator's own CI job still installs
+  nothing; this is a second job.
 - **[docs/lib/](docs/lib/)** — the generator. Colour maths, the derivation, and the
   emitter. No dependencies.
 - **[products/](products/)** — one small JSON file per product.
