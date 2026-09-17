@@ -1,3 +1,9 @@
+## [1.38.1](https://github.com/Lautstark/design/compare/v1.38.0...v1.38.1) (2026-09-17)
+
+### Bug Fixes
+
+* **components:** the .field dropdown draws its chevron ([8265ea9](https://github.com/Lautstark/design/commit/8265ea98d3393ada8f8d29f3757e0be26696c308))
+
 ## [1.38.0](https://github.com/Lautstark/design/compare/v1.37.1...v1.38.0) (2026-09-17)
 
 ### Features
