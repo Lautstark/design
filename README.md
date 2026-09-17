@@ -106,6 +106,11 @@ settled in
     every keystroke and five of its e2e cases find it by its current name;
     `closeLabel` is required and falls back to nothing; `openSheet` returns a
     handle and never a promise.
+  - **`svelte/TileGrid`** and **`svelte/Tile`** — the grid of labelled picture
+    buttons, over the `.picker__grid` / `.picker__item` rules that moved into
+    components.css with it. `aria-pressed` is a prop and not a default:
+    wochenwerk's tile toggles and should say so, bildhaft's closes the dialog
+    and must not.
 - **[docs/components.css](docs/components.css)** — the components layer. The
   button tiers, fields, chips, the focus policy, the overflow menu, the sheet
   skeleton, the Sammlung rows and the message furniture, written once against

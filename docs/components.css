@@ -12,9 +12,14 @@
  * Two rules govern what is in here:
  *
  * - Only what the products demonstrably duplicated. Product layout — vorlaut's
- *   tile grid, mitreden's phrase list, bildhaft's print styles — is identity,
- *   not vocabulary, and stays home. So do list rows: separator-rows against
- *   cards is density, and density is per product (design.md §2).
+ *   board of keys, mitreden's phrase list, bildhaft's print styles — is
+ *   identity, not vocabulary, and stays home. So do list rows: separator-rows
+ *   against cards is density, and density is per product (design.md §2).
+ *   (This line used to say "vorlaut's tile grid", and the picker grid below is
+ *   not the exception it looks like: vorlaut's board is a layout of *keys*,
+ *   drawn once for that product. What moved here is the grid of labelled
+ *   picture buttons that wochenwerk and bildhaft wrote separately, in the same
+ *   words, under the same two class names.)
  *
  * - Colour comes only from the tokens. There is no literal in this file, so it
  *   renders contrast-checked under any accent the generator accepts.
@@ -295,6 +300,64 @@
 .sheet > .foot {
   display: flex; align-items: center; gap: 9px; justify-content: flex-end;
   border-top: 1px solid var(--line); margin-top: 18px; padding-top: 14px;
+}
+
+/* --------------------------------------------------------------- tile grid */
+
+/* A grid of labelled picture buttons: a symbol picker, a chosen-symbol row, a
+   list of things whose difference is a picture rather than a word.
+
+   wochenwerk (src/kalender.css) and bildhaft (src/styles/app.css) wrote this
+   separately, in the same declarations, under the same two class names — and
+   wochenwerk's copy says „bildhaft's picker, at this size", which is this
+   file's admission bar met in writing. Three differences between the two and
+   none of them is a disagreement: the tile's minimum width (84px against
+   102px), a `margin-top` bildhaft spends on the grid and wochenwerk does not,
+   and one pixel of vertical padding.
+
+   The width is the only one that is really per product, so it is the token.
+   `repeat(auto-fill, minmax(…, 1fr))` is what makes this a grid of squares
+   rather than a row that scrolls, and the figure in the minmax is what "at
+   this size" means; wochenwerk's tight variant is the same rule with a smaller
+   number, so a token is also what stops that being a second grid rule. The
+   margin above the grid stays with the page that puts it under something.
+
+   The BEM spelling is deliberate and is the one exception in this file. These
+   are the names both products already emit, and wochenwerk carries five more
+   `.picker__item` rules that stay home — the drag affordance, the carried
+   tile, the thumbnail size, the tight variant's hidden thumbnail, and the
+   dashed empty slot. Renaming here would orphan all five for nothing. */
+:where(.picker__grid) {
+  /* The smallest a tile may be before the row wraps. wochenwerk's tight
+     variant sets 56px; bildhaft, whose tiles hold a 82px picture, sets 102px. */
+  --tile-min: 84px;
+}
+.picker__grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--tile-min), 1fr)); gap: 8px;
+}
+/* `color` and `font` because this is a <button>: the user agent gives it
+   neither the page's colour nor the page's font, and a tile that reads in the
+   system UI font is the one thing about this control that looks unfinished.
+   wochenwerk's copy has both and bildhaft's leans on a reset elsewhere. */
+.picker__item {
+  display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 8px 6px;
+  border: none; border-radius: var(--radius-sm); background: var(--surface-2); color: var(--text);
+  font: inherit; cursor: pointer; transition: background .13s, box-shadow .13s;
+}
+.picker__item:hover { background: var(--surface-3); }
+/* A class rather than `[aria-pressed="true"]`, which is how `.chip` marks its
+   choice. The two controls are not the same question: a filter chip toggles and
+   says so, and half these tiles do not — bildhaft's close the dialog and hand
+   back an answer, so `aria-pressed` on them would announce a state they do not
+   have. Which of the two a tile is is the caller's to say. */
+.picker__item--active { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); }
+/* The label, and the reason a tile stays square. One long word without this is
+   a tile twice as wide as its neighbours, and `auto-fill` then re-lays the
+   whole grid around it. Verbatim in both products. What is not here is the
+   label's size and colour: wochenwerk uses `.small` and the page's colour,
+   bildhaft 12px and `--text-dim`, and that is a real difference. */
+.picker__item > span {
+  max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
 /* ------------------------------------------------------------------ text */

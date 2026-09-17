@@ -83,6 +83,14 @@
       "svelte": "./svelte/Sheet.svelte",
       "default": "./svelte/Sheet.svelte"
     },
+    "./svelte/TileGrid": {
+      "svelte": "./svelte/TileGrid.svelte",
+      "default": "./svelte/TileGrid.svelte"
+    },
+    "./svelte/Tile": {
+      "svelte": "./svelte/Tile.svelte",
+      "default": "./svelte/Tile.svelte"
+    },
     "./svelte/sheet": {
       "types": "./svelte/sheet.d.ts",
       "svelte": "./svelte/sheet.js",

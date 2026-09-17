@@ -1753,8 +1753,12 @@ the icon variant; fields and their labels; filter chips; the overflow menu and
 its anchoring geometry; the sheet skeleton with bildhaft's head/body/foot
 anatomy (§5 item 8 already adopted it for mitreden); empty states; the notice
 line and the toast; the two motion durations behind `prefers-reduced-motion`;
-the footer shell with its `.linklike` treatment; the segmented control; and
-the folded panel. §2
+the footer shell with its `.linklike` treatment; the segmented control; the
+folded panel; and, since 2026-09-17, the grid of labelled picture buttons that
+wochenwerk and bildhaft had each written for themselves, in the same
+declarations, under the same two class names — wochenwerk's copy says
+„bildhaft's picker, at this size", which is this file's admission bar met in
+writing. §2
 called the footers "not comparable" and it was right at the time; then
 mitreden's rewrite grew legal pages, needed a footer after all, and built it
 by copying bildhaft's values with a comment saying so, which is this file's
@@ -1765,8 +1769,10 @@ may claim is §4.3's disclosure rule.
 **What is not.** Anything §2 found to be a real difference rather than an
 accident. List rows — separator-rows against cards is density, and density is
 per product. What fills the third slot of the work head. Product layout:
-vorlaut's tile grid,
-mitreden's phrase list, bildhaft's print styles. And the dialog backdrop
+vorlaut's board of keys, mitreden's phrase list, bildhaft's print styles. (That
+board is what this line has always meant by "vorlaut's tile grid", and the
+picker grid above is not a reversal of it: one is a layout drawn once for one
+product, the other is the same eight declarations in two.) And the dialog backdrop
 weight, which §2 left unresolved (.6 opaque against .38 with blur) and a
 shared file must not settle by side effect.
 
