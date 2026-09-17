@@ -103,13 +103,25 @@
   } = $props();
 
   let body: HTMLElement | undefined = $state();
+  let dialog: HTMLDialogElement | undefined = $state();
 
   const current = $derived(pages.find((one) => one.key === page));
 
   /* Reading `page` is the subscription: a different page is a different scroll
-     position to throw away, and closing is not. */
+     position to throw away, and closing is not.
+   *
+   * Both elements, because which one scrolls is a product decision this
+   * component does not get to know. bildhaft and vorlaut give `.sheet` a flex
+   * column and let `.sheet > .body` scroll; wochenwerk and mitreden let the
+   * whole dialog scroll, which §6.1 records as a fork it deliberately did not
+   * converge. Resetting the body alone is therefore right in two products and a
+   * no-op in the other two — wochenwerk found it with a 2024px notice inside an
+   * 860px dialog, where "from the top, every time" quietly meant nothing.
+   * Setting both costs one assignment on an element already at zero. */
   $effect(() => {
-    if (page && body) body.scrollTop = 0;
+    if (!page) return;
+    if (body) body.scrollTop = 0;
+    if (dialog) dialog.scrollTop = 0;
   });
 </script>
 
@@ -122,6 +134,7 @@
   {bodyId}
   title={() => current?.title ?? ''}
   bind:body
+  bind:dialog
   onclose={() => {
     page = null;
     onclose?.();
