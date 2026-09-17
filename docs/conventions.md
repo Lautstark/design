@@ -3259,6 +3259,25 @@ zero. vorlaut's `#legal` has **no baseline at all**, so its ✕ tier and its
 already records, and which is worth repeating here because the footer is where
 somebody meets it.
 
+**Built, and it is not free for mitreden after all.** This entry said drawing
+every page at once costs the other two products nothing, because their bodies
+are one built HTML string each. That is true of the string and false of the
+box around it. `Legal`'s `<section>` sits between `.sheet > .body` and the
+prose, and `.sheet > .body > p` and `> p + p` are **child** combinators — so
+they stop reaching it, and each page's first paragraph, which sets only its own
+`margin-top` inline, gains the browser's 1em underneath and pushes the sheet
+down. mitreden says those two rules again one level deeper with
+`components.css`'s own values, and `info.png` then holds by construction. A
+product adopting `Legal` whose prose leans on `.sheet > .body > p` owes itself
+the same two lines.
+
+**And a component that wraps `Sheet` forwards its ids.** `Legal` took
+`closeLabel` and `id` and neither `closeId` nor `bodyId`, so mitreden adopted it
+and lost `#infoclose` and `#infobody` — the two it had been writing onto the
+frame by hand until `Sheet` grew the props to stop exactly that. Forwarded as of
+design v1.37.0. The general rule is worth more than the fix: a wrapper that
+hides a prop its own consumers need has not simplified anything, it has moved
+the reach one level up.
 ---
 
 ## 7. What this changed in design.md

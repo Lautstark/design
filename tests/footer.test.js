@@ -123,6 +123,16 @@ describe('Legal', () => {
       .toEqual(['aboutPage', 'impressumPage', 'privacyPage']);
   });
 
+  it('forwards the ✕ and the body ids to the sheet underneath', () => {
+    /* A component that wraps `Sheet` and does not forward these hands back the
+       problem those props solved. mitreden adopted Legal and lost `#infoclose`
+       and `#infobody` — the two ids it had been writing onto the frame by hand
+       until Sheet grew them. */
+    render(Foot, {});
+    expect(dialog().querySelector('.head > button').id).toBe('legalClose');
+    expect(dialog().querySelector('.body').id).toBe('legalBody');
+  });
+
   it('is closed, and the pages all hidden, until the footer opens one', () => {
     render(Foot, {});
     expect(dialog().open).toBe(false);

@@ -31,6 +31,6 @@
   </p>
 </Footer>
 
-<Legal bind:page pages={PAGES} id="legal" class="legal" closeLabel="Schließen">
+<Legal bind:page pages={PAGES} id="legal" class="legal" closeLabel="Schließen" closeId="legalClose" bodyId="legalBody">
   {#snippet children(key)}<p class="lead">{key}</p>{/snippet}
 </Legal>
