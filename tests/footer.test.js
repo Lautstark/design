@@ -141,6 +141,17 @@ describe('Legal', () => {
     expect(dialog().scrollTop).toBe(0);
   });
 
+  it('forwards the heading id too, which it did not at first', () => {
+    /* The same rule twice: Legal took closeId and bodyId when Sheet grew them,
+       and then Sheet grew titleId and Legal stopped there. mitreden found it —
+       its heading is still located structurally as `#info .head h2` because the
+       prop it wanted had no way through. */
+    render(Foot, {});
+    footer().querySelectorAll('.linklike')[0].click();
+    flushSync();
+    expect(dialog().querySelector('.head > h2').id).toBe('legalTitle');
+  });
+
   it('forwards the ✕ and the body ids to the sheet underneath', () => {
     /* A component that wraps `Sheet` and does not forward these hands back the
        problem those props solved. mitreden adopted Legal and lost `#infoclose`

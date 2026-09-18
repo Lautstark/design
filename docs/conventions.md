@@ -3390,6 +3390,20 @@ which element scrolls while §6.1 leaves that per product.** A deferral is not
 free — it is a fact every later component has to be written around, and this is
 the first bill for it.
 
+**And it happened twice more, in the two files that wrap the frame.** This rule
+is written below, and both offenders were written by the session that wrote it.
+`openSheet`'s options declared `id` and stopped, so **every product that opens
+sheets imperatively could not reach any of the three** — wochenwerk found it,
+where all five sheets go that way. And `Legal` took `closeId` and `bodyId` when
+`Sheet` grew them, then `Sheet` grew `titleId` and `Legal` stopped; mitreden
+found that one, and its heading is still located structurally as
+`#info .head h2` because the prop it wanted had no way through.
+
+Both forward all three as of v1.41.0. The lesson is not the fix — it is that a
+rule about wrappers is broken by the next wrapper unless somebody checks the
+wrappers, and a prop added to a component is only added to the products that
+reach it directly.
+
 **And a component that wraps `Sheet` forwards its ids.** `Legal` took
 `closeLabel` and `id` and neither `closeId` nor `bodyId`, so mitreden adopted it
 and lost `#infoclose` and `#infobody` — the two it had been writing onto the

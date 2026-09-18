@@ -51,6 +51,9 @@
 <Sheet
   open
   id={options.id}
+  titleId={options.titleId}
+  closeId={options.closeId}
+  bodyId={options.bodyId}
   title={options.title}
   closeLabel={options.closeLabel}
   panels={options.panels}
