@@ -67,6 +67,7 @@
     pages,
     closeLabel,
     id,
+    titleId,
     closeId,
     bodyId,
     class: extra,
@@ -92,6 +93,7 @@
      *  `#infoclose` and `#infobody`, which it had been writing onto the frame
      *  by hand until `Sheet` grew the props — so a component that wraps `Sheet`
      *  and does not forward them hands back the problem those props solved. */
+    titleId?: string;
     closeId?: string;
     bodyId?: string;
     /** Lands on the `<dialog>`. */
@@ -130,6 +132,7 @@
   {id}
   class={extra}
   {closeLabel}
+  {titleId}
   {closeId}
   {bodyId}
   title={() => current?.title ?? ''}

@@ -42,6 +42,16 @@ export interface SheetOptions<S> {
   /** vorlaut's `#legal` is 520px by an id selector, and that id is
    *  load-bearing — see conventions.md §6.1. */
   id?: string;
+  /** The heading's id, the ✕'s and the `.body`'s — forwarded to `Sheet`, which
+   *  takes all three because the suites are built on them. They are declared
+   *  here because an opener that hides a prop its own callers need has not
+   *  simplified anything, it has moved the reach one level up: §6.12 wrote that
+   *  rule about `Legal` and this file broke it in the same week. wochenwerk
+   *  found it — every one of its five sheets goes through `openSheet`, so
+   *  `titleId` was unreachable there however much it wanted one. */
+  titleId?: string;
+  closeId?: string;
+  bodyId?: string;
   /** A column of `<details>`, 900px. */
   panels?: boolean;
   /** A grid of cards, 1060px. */

@@ -240,4 +240,23 @@ describe('openSheet', () => {
     expect(handle).not.toBeInstanceOf(Promise);
     expect(typeof handle.close).toBe('function');
   });
+  it('openSheet forwards all three part ids, so the opener hides none of them', async () => {
+    /* wochenwerk found this: every one of its five sheets goes through
+       `openSheet`, so `titleId` was unreachable there however much it wanted
+       one — the options object declared `id` and stopped. §6.12 wrote the rule
+       about `Legal` hiding `closeId` and `bodyId`, and this opener broke the
+       same rule in the same week. An opener that hides a prop its callers need
+       has not simplified anything; it has moved the reach one level up. */
+    const { openSheet } = await import('../svelte/sheet.js');
+    const handle = openSheet({
+      title: 'Einstellungen', closeLabel: 'Zu', state: {}, body: Line,
+      titleId: 'settingsHeading', closeId: 'voiceClose', bodyId: 'settingsBody',
+    });
+    flushSync();
+    expect(handle.dialog.querySelector('.head > h2').id).toBe('settingsHeading');
+    expect(handle.dialog.querySelector('.head > button').id).toBe('voiceClose');
+    expect(handle.dialog.querySelector('.body').id).toBe('settingsBody');
+    handle.close();
+  });
+
 });
