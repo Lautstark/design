@@ -1,3 +1,9 @@
+## [1.40.1](https://github.com/Lautstark/design/compare/v1.40.0...v1.40.1) (2026-09-18)
+
+### Bug Fixes
+
+* openSheet and Legal forward the ids Sheet takes ([88ec9ee](https://github.com/Lautstark/design/commit/88ec9ee7cf9362979530db0c1281287b8cea095c)), closes [#info](https://github.com/Lautstark/design/issues/info)
+
 ## [1.40.0](https://github.com/Lautstark/design/compare/v1.39.0...v1.40.0) (2026-09-18)
 
 ### Features
