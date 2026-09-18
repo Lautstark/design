@@ -1660,11 +1660,11 @@ left to extract, and what the real risk turned out to be instead.
 | 5b | the Sammlung rows | `@lautstark/design/collections` | **S** | done |
 | 6 | the status line | `@lautstark/design/toast` | **S** | done |
 | 7 | the crop geometry | `@lautstark/design/crop` | **S–M** | **proposed** |
-| ~~5~~ | ~~the Sammlung shell~~ | — | — | **not doing** |
+| ~~5~~ | ~~the Sammlung shell~~ | the frame only: `@lautstark/design/svelte/Sidebar`, §6.3 | — | **not doing** the shell; the frame is done — amended 2026-09-18 below |
 | 7 | the download trigger, `touched()`, `downloadSlug`, `weighs` | `@lautstark/werkzeuge` | **S** — half a day | done |
-| ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | — | — | **not doing** |
-| 9 | the METACOM folder panel | `@lautstark/bildquelle/metacom-panel` | **M** | migrated — bildhaft, vorlaut-editor, wochenwerk import it (2026-09-16) |
-| 10 | the voice picker | `@lautstark/stimmquelle/voice-picker` | **M** | migrated — mitreden, vorlaut-editor, wochenwerk import it (2026-09-16) |
+| ~~8~~ | ~~`el()`, `debounce`/`throttle`~~ | `el()` in `@lautstark/werkzeuge/dom`, 1.2.0 | — | **not doing** — then done, then without a caller; amended 2026-09-18 below |
+| 9 | the METACOM folder panel | `@lautstark/bildquelle/metacom-panel` | **M** | migrated — bildhaft, vorlaut-editor, wochenwerk import it (2026-09-16); a Svelte component too since 2026-09-17, §6.8 |
+| 10 | the voice picker | `@lautstark/stimmquelle/voice-picker` | **M** | migrated — mitreden, vorlaut-editor, wochenwerk import it (2026-09-16); a Svelte component too since 2026-09-17, §6.8 |
 
 **1. The menu helper.** `menuOn` / `closeMenus` / `ItemOpts` / `AddItem` are
 already near-identical files in mitreden and vorlaut; bildhaft's `actionMenu` is
@@ -1833,6 +1833,20 @@ four. The one case that genuinely was shared is the rename field's timing, and
 it went to `@lautstark/design/rename` as 5a, where it could take the three
 failures those three copies were hiding with it.
 
+*Amended 2026-09-18.* Wrong about `el()`, and then right again for a reason the
+audit could not have offered. `@lautstark/werkzeuge/dom` shipped it at v1.2.0 on
+2026-09-02, and its README says what the measurement above missed: `el` *built*
+a node in two products and *fetched* one in a third, and a name that means
+opposite things in sibling repositories is the trap, not the thirty lines. So
+`el` makes and `byId` finds, and all four products took the pair the same day,
+the rename in mitreden included. The `debounce`/`throttle` half stands, and the
+README declines it in the same words. Then the Svelte move of 2026-09-16/17 took
+every caller with it: a component's markup is the template, so nothing builds an
+element and nothing looks one up by id. As of 2026-09-18 no product imports the
+module, and werkzeuge has a branch open to drop it. The row is struck through
+twice over, and the second strike is the one to carry — a DOM helper is a
+vanilla page's need, and none of the four has one left.
+
 **7. The crop geometry.** `@lautstark/design/crop`. **Proposed 2026-08-29, and
 not started: it wants the owner's agreement first.** `bildhaft/src/ui/crop.ts`
 and `vorlaut-editor/src/shell/crop.ts` are 551 lines between them and were read
@@ -1963,6 +1977,14 @@ literal, so the first arm has been unreachable since the search moved into the
 browser. A folder read in a browser has no keywords to have. Two answers where
 only one can ever print is not a line worth sharing.
 
+*Amended 2026-09-18.* The panel is a Svelte component as well,
+`@lautstark/bildquelle/svelte/MetacomPanel`, and §6.8 is its entry. Same
+options, same emitted markup, same words, same `WORDS` table. `data-state` is
+still `status.kind` verbatim, and blocked is still drawn rather than removed.
+The same three products import it; what they still take from the vanilla entry
+is the `MetacomAction` type. The vanilla panel stays until no consumer is left,
+which is §6.8's rule rather than this entry's.
+
 **10. The voice picker.** `@lautstark/stimmquelle/voice-picker`, published
 2026-09-03. Three products drew the same list — a field to narrow it with, the
 language pills, and rows carrying a name, four facts and a note — in three
@@ -2021,6 +2043,13 @@ others" on that board and "cannot be saved at all" in the product whose entire
 output is a recording. Same catalogue fact, opposite weights, so the module says
 neither and says the one sentence all three had already agreed on — the note
 about a voice that crams single words — in its own two languages.
+
+*Amended 2026-09-18.* A Svelte component as well,
+`@lautstark/stimmquelle/svelte/VoicePicker`, under §6.8 beside the METACOM
+panel. Same options, same emitted markup, same words; the in-flight job is the
+component's own, and `lang` is a prop. The same three products import it;
+vorlaut-editor still takes the `Pickable` type from the vanilla entry. What
+stays with the product is unchanged from the paragraph above.
 
 ### ~~5. The Sammlung shell~~ — and why it is not being extracted
 
@@ -2133,6 +2162,30 @@ evidenced: **what stopped the shell was never the rows.** It was the three
 sidebars, the DOM-ownership question and the layering disagreement. Two of
 those are gone; the third is the one that was actually load-bearing, and it is
 why what comes out is a shell and not a Sammlung.
+
+*Amended 2026-09-18.* Built, adopted, and the row above points at §6.3. The
+reopening says what changed the answer; this says what came of it. What was
+extracted is the furniture it named: the column, the drawer below 820px, the
+scrim, the reveal, the top bar, and the rows — those still through
+`@lautstark/design/collections`, with one seam added, a per-row `after` that
+takes a `Node` and moves it rather than drawing it, so vorlaut's page list can
+follow the open row without a remount. bildhaft, mitreden and vorlaut-editor
+import all four components. wochenwerk has no sidebar and imports none, which
+§6.3 says first.
+
+What was deliberately not extracted is the adapter, and the component's own
+props are the proof. `Sidebar` takes an id and a `closeId`, a label for the
+column and one for the `✕`, `drawer`, `collapsed`, a bindable `showing`,
+`ondismiss`, and four snippets. It has no `create`, no `rename`, no `remove`,
+no `count`, and nothing in it reads or writes a preference: `collapsed` arrives
+as a value, and the product keeps it where §1.3 says. So create-with-a-date-name
+is still the repo's in two products and the shell's in the third. The delete
+confirm is still each product's `<dialog>` under §1.7, asking the question §4.3
+says differs. "There is always one" is still each product's own, §1.9. And the
+collapse control is still the product's, drawn inside the brand snippet with
+the wiring the component hands it. Four call sites per product, mostly wording
+and storage, exactly as the entry said. What is gone is everything around them,
+and that was the L.
 
 ---
 
