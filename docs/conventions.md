@@ -3146,18 +3146,34 @@ one — wochenwerk's `Row` provides it, and a promoted component that anchors
 itself would nest two.
 
 **A `<select>` is not a dropdown**, and the rule is written in three places.
-bildhaft's METACOM rendering chooser and wochenwerk's repeat picker both break
-it. **But bildhaft's comment does not say so**: it argues about the *scope of
-sharing* — that sharing the control would mean sharing a menu component — and
-never calls it a violation or names a fix. The first draft claimed otherwise
+bildhaft's METACOM rendering chooser and wochenwerk's repeat picker were the two
+that broke it. **bildhaft's comment did not say so**: it argued about the *scope
+of sharing* — that sharing the control would mean sharing a menu component — and
+never called it a violation or named a fix. The first draft claimed otherwise
 and was wrong about a comment it quoted.
 
-Converting is not free anywhere. Four e2e cases across the two products drive
-these with `selectOption`, which only works against a `<select>`. And
-wochenwerk's existing `Dropdown` call site wraps the trigger in a `<label>`,
-which does not label a `<button>` — so `getByLabel` dies too, and that call
-site is not a template, it is the same latent defect untested. The shared
-Dropdown takes `aria-labelledby`.
+Converting was not free. Four e2e cases across the two products drove these with
+`selectOption`, which only works against a `<select>`, and all four were
+rewritten. wochenwerk's existing `Dropdown` call site wrapped its trigger in a
+`<label>`, which does not label a `<button>` — so `getByLabel` died there too,
+and that call site was not a template but the same latent defect untested. The
+shared Dropdown takes `aria-labelledby`, and both products use it.
+
+**Both are converted as of 2026-09-18, and this paragraph is history rather than
+a divergence.** It is left standing because the next reader will meet a
+`<select>` somewhere and deserves the argument and its price, not only the rule —
+and because the top of this document says a line describing a divergence that no
+longer exists is the kind that reads as settled and is the last place anybody
+looks. There is no `<select>` used for a choice in any of the four products.
+
+One thing the conversion measured and this entry did not predict: wochenwerk
+moved both its triggers to the `.field` variant rather than `.btn`, after
+measuring them in place. A `.btn` trigger is as wide as the word on it — 108px
+on „einmalig" — in a sheet where every other control starts at the same x and
+takes the column's 422px, and it sits in bold 14px on a visible border where the
+fields around it are regular 15px on none. It read as a command in a column of
+answers. That is what `field` is for, and it is also why `.field.dropdown` not
+drawing its chevron mattered.
 
 **`ThemePicker`.** Four near-identical implementations over one shared runtime;
 a storage key, a label lookup and the summary's state text are the props. Three
