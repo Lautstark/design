@@ -1,3 +1,9 @@
+## [1.39.0](https://github.com/Lautstark/design/compare/v1.38.1...v1.39.0) (2026-09-18)
+
+### Features
+
+* **title-field:** the attributes a field carries ([9b5fc5f](https://github.com/Lautstark/design/commit/9b5fc5fa995ae138cfbcd1fb0295951f3dc71e61))
+
 ## [1.38.1](https://github.com/Lautstark/design/compare/v1.38.0...v1.38.1) (2026-09-17)
 
 ### Bug Fixes
