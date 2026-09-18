@@ -2499,7 +2499,7 @@ normal case for a sheet, not the exotic one. Until that lands, **a body that
 focuses at mount must wait a tick**, said here rather than left for the next
 product to find with an assertion it may not have written.
 
-**And the entry was short by two ids.** `Sheet` took an `id` for the
+**And the entry was short by three ids.** `Sheet` took an `id` for the
 `<dialog>` and none for the ✕ or the `.body`, and both are locators: mitreden
 finds `#infoclose`, `#setupclose` and `#colvoiceclose` and reads `#infobody`,
 and vorlaut clicks `#voiceClose` in fourteen places across six spec files.
@@ -2507,7 +2507,14 @@ mitreden adopted the frame first and wrote them on afterwards through the
 handle's own `dialog` — which works, because the frame declares no id on either
 element and so never renders over one, and is still a reach past the component.
 `closeId` and `bodyId` are props as of design v1.35.0, for the same reason `id`
-is.
+is — and `titleId` as of v1.40.0, for a reason worth its own sentence. Without
+it a product that needs an id on the heading has to pass a `head` snippet
+reproducing the heading the component would have drawn: a snippet override
+existing for an attribute, which also silently takes the heading over, so the
+day the frame changes what a heading is, the products carrying one do not
+follow. mitreden had one and deleted it when the id turned out to be read by
+nothing; vorlaut has two, read in three e2e places, and they are the evidence.
+Ignored when `head` is given, since then the heading is the caller's anyway.
 
 **And the fork this entry left open for `#setup` has been taken: the panels keep
 their colour by a rule that says so.** `#setup` takes the frame's `.body`, and

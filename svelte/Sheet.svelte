@@ -56,6 +56,7 @@
     open = $bindable(false),
     id,
     closeId,
+    titleId,
     bodyId,
     title,
     closeLabel,
@@ -91,6 +92,13 @@
      *  on 2026-09-17 and said the package was owed these two. */
     closeId?: string;
     bodyId?: string;
+    /** The default `<h2>`'s id. Without it a product that needs one has to pass
+     *  a `head` snippet reproducing the heading the component would have drawn,
+     *  which is a snippet override existing for an attribute — mitreden had one
+     *  of those and deleted it when the id turned out to be read by nothing,
+     *  and vorlaut has two that are read in three places. Ignored when `head`
+     *  is given, since then the heading is the caller's. */
+    titleId?: string;
     /** The heading, and the accessible name. A thunk where it changes. */
     title: string | (() => string);
     /** The accessible name of the corner ✕. **Required**, and it does not fall
@@ -160,7 +168,7 @@
   onclose={closed}
 >
   <div class="head"
-    >{#if head}{@render head()}{:else}<h2>{named}</h2>{/if}<button
+    >{#if head}{@render head()}{:else}<h2 id={titleId}>{named}</h2>{/if}<button
       id={closeId}
       class="btn icon"
       type="button"

@@ -70,6 +70,23 @@ describe('Sheet', () => {
     expect(render({ open: true, title: 'x', id: 'legal' }).id).toBe('legal');
   });
 
+  it('takes an id for its heading, so a product need not reproduce the heading', () => {
+    /* vorlaut keeps `#settingsHeading` and `#collectionSheetHeading` alive with
+       a `head` snippet whose only content is the same `<h2>` the component would
+       have drawn — a snippet override existing for an attribute. Three e2e
+       places read them. mitreden had a third of the same shape and deleted it
+       once the id turned out to be read by nothing. */
+    const node = render({ open: true, title: 'Einstellungen', titleId: 'settingsHeading' });
+    const h2 = node.querySelector('.head > h2');
+    expect(h2.id).toBe('settingsHeading');
+    expect(h2.textContent).toBe('Einstellungen');
+  });
+
+  it('leaves the heading id off when it is not given', () => {
+    const node = render({ open: true, title: 'x' });
+    expect(node.querySelector('.head > h2').hasAttribute('id')).toBe(false);
+  });
+
   it('takes an id for the ✕ and one for the body, so a suite need not reach past it', () => {
     /* mitreden locates #infoclose, #setupclose and #colvoiceclose and reads
        #infobody; vorlaut clicks #voiceClose in fourteen places across six spec
