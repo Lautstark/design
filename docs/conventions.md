@@ -2945,6 +2945,19 @@ consumer's identity.
 `select` is a prop, true by default, false for vorlaut's page head whose
 invented name is a placeholder rather than a name.
 
+**And it carries the attributes a field carries.** bildhaft's sentence card was
+the one call site that could not adopt it: its field has a `maxlength` and a
+`title`, and two of its e2e cases read that title — one for its text and one for
+its absence. With no rest props both would have been dropped in silence, which
+is the worst shape a component gap can take: the adoption looks done and two
+attributes a suite was reading are quietly gone. Added in v1.39.0, with the
+eight attributes the component owns excluded from the type so a caller cannot
+take `class` or `aria-label` away from it by accident.
+
+bildhaft reported it and declined to adopt rather than dropping the two
+attributes, which is the same call mitreden made about `Sidebar`'s missing
+Escape. Both were right, and both are why the component changed instead.
+
 **`refresh()` before focusing is free and becomes the rule.** It is a no-op
 when the field already agrees, and it closes the window where a create button
 has moved focus away.

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { HTMLInputAttributes } from 'svelte/elements';
   /**
    * The work head's name field. conventions.md §6.5, over
    * `@lautstark/design/rename` unchanged.
@@ -54,6 +55,7 @@
     delay,
     caret,
     class: className = 'title-input',
+    ...rest
   }: {
     /** The stored name. Assigned into the field through `refresh()` and never
      *  directly — every product had a repaint that assigned it directly, which
@@ -85,7 +87,10 @@
     /** vorlaut's page head is `.pagehead__name`, not `.title-input`, and it
      *  carries its own id, placeholder and label with it. */
     class?: string;
-  } = $props();
+  } & Omit<
+    HTMLInputAttributes,
+    'value' | 'type' | 'class' | 'id' | 'placeholder' | 'aria-label' | 'oninput' | 'autocomplete'
+  > = $props();
 
   let input: HTMLInputElement;
   let naming: RenameField | undefined = $state(undefined);
@@ -135,4 +140,5 @@
   {placeholder}
   aria-label={label}
   {oninput}
+  {...rest}
 />
