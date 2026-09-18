@@ -162,4 +162,24 @@ describe('TitleField', () => {
     expect(node.value).toBe('Dienstag');
     expect(write).toHaveBeenCalledWith('Dienstag');
   });
+  it('carries the attributes a field carries, which is what Row needed', () => {
+    /* bildhaft's sentence card could not adopt this component: its field has a
+       `maxlength` and a `title`, and two e2e cases assert the title's text and
+       its absence. With no rest props both would have been dropped in silence —
+       the component would have looked adopted and quietly stopped carrying two
+       attributes a suite was reading. §6 answers that: change the component. */
+    const node = render({ value: '', write: () => {}, maxlength: 80, title: 'Getippt: „Hallo"' });
+    expect(node.getAttribute('maxlength')).toBe('80');
+    expect(node.getAttribute('title')).toBe('Getippt: „Hallo"');
+  });
+
+  it('keeps its own attributes out of the caller\'s reach', () => {
+    /* The type excludes the eight the component owns, so a caller cannot take
+       `class` or `aria-label` away from it by accident. This asserts the two
+       that would be worst to lose. */
+    const node = render({ value: '', write: () => {}, label: 'Name', class: 'row__title' });
+    expect(node.getAttribute('aria-label')).toBe('Name');
+    expect(node.className).toBe('row__title');
+  });
+
 });
