@@ -1,3 +1,9 @@
+## [1.40.0](https://github.com/Lautstark/design/compare/v1.39.0...v1.40.0) (2026-09-18)
+
+### Features
+
+* **sheet:** an id for the heading, so nobody reproduces the heading to get one ([76b707f](https://github.com/Lautstark/design/commit/76b707fe32bb634d3f244a56c315a7760b1e4b61))
+
 ## [1.39.0](https://github.com/Lautstark/design/compare/v1.38.1...v1.39.0) (2026-09-18)
 
 ### Features
