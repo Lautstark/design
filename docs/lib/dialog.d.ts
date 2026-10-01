@@ -56,7 +56,8 @@ export interface ConfirmOptions {
    * word here, and should be the one already printed on the button.
    */
   requireTyping?: string;
-  /** The line above that field, and its accessible name. */
+  /** The line above that field, and its accessible name. Without one, the
+   *  field is named by `body` and shows the word as its placeholder. */
   typingLabel?: string;
 }
 

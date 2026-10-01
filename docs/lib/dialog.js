@@ -178,11 +178,21 @@ export function confirmDialog(options) {
      * not a second question.
      */
     const wanted = options.requireTyping;
+    /* Named by the caller's line where there is one. Where there is not, the
+       field used to be named by the bare word and sat under an empty <p>: a
+       reader heard „löschen, edit text" with nothing saying what it was for,
+       and nobody looking saw what to type at all. Without a line of its own
+       the field is named by the question — options.body, which is what asked
+       for the word — and shows the word as its placeholder, so it is in view
+       and is read as the field's description. Still no word of this file's
+       own: both are the caller's. */
+    const prompt = options.typingLabel;
     const field = wanted
       ? make('input', {
           className: 'field',
           attrs: { type: 'text', autocomplete: 'off', autocapitalize: 'off',
-                   spellcheck: 'false', 'aria-label': options.typingLabel ?? wanted },
+                   spellcheck: 'false', 'aria-label': prompt ?? options.body,
+                   placeholder: prompt ? undefined : wanted },
         })
       : null;
     if (field) {
@@ -208,7 +218,8 @@ export function confirmDialog(options) {
       // being second-guessed by the module that depends on it.
       body: [
         make('p', { text: options.body }),
-        ...(field ? [make('p', { text: options.typingLabel ?? '' }), field] : []),
+        prompt && field ? make('p', { text: prompt }) : null,
+        field,
       ],
       footer: [
         // No spacer: components.css puts `justify-content: flex-end` on the

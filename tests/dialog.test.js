@@ -391,6 +391,24 @@ describe('confirmDialog with a word to type', () => {
     expect(document.activeElement).toBe(field());
   });
 
+  it('names the field by the line above it, and draws that line', () => {
+    void confirmDialog({ ...ASKED });
+    expect(field().getAttribute('aria-label')).toBe('Tipp „löschen“');
+    const lines = [...sheet().querySelectorAll('.body > p')].map((p) => p.textContent);
+    expect(lines).toEqual([WORDS.body, 'Tipp „löschen“']);
+  });
+
+  /* Without a line of its own the field used to sit under an empty <p> and be
+     named by the bare word, which says nothing about what it is for. */
+  it('without a line, draws no empty one and names the field by the question', () => {
+    const { typingLabel, ...bare } = ASKED;
+    void confirmDialog(bare);
+    const lines = [...sheet().querySelectorAll('.body > p')];
+    expect(lines.map((p) => p.textContent)).toEqual([WORDS.body]);
+    expect(field().getAttribute('aria-label')).toBe(WORDS.body);
+    expect(field().placeholder, 'the word is in view').toBe('löschen');
+  });
+
   it('draws no field at all when no word is asked for', () => {
     void confirmDialog({ ...WORDS });
     expect(field()).toBeNull();
