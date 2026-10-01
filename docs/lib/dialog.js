@@ -35,23 +35,9 @@
  * separate fields and neither falls back to the other.
  */
 
-/** Builds one element with attributes and children. Local, and deliberately
- *  small: the products each have their own element helper and this package
- *  cannot depend on any of them. */
-function make(tag, { className, text, attrs, on } = {}, ...children) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  for (const [name, value] of Object.entries(attrs ?? {})) {
-    if (value !== undefined && value !== null) node.setAttribute(name, String(value));
-  }
-  for (const [name, handler] of Object.entries(on ?? {})) node.addEventListener(name, handler);
-  for (const child of children) {
-    if (child === null || child === undefined || child === false) continue;
-    node.append(child);
-  }
-  return node;
-}
+/* Shared with language.js rather than copied, which it was until the two
+   copies disagreed about which children to skip. */
+import { make } from './make.js';
 
 /**
  * Dismissal by pressing outside the sheet.
