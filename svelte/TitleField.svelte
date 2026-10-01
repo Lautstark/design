@@ -99,6 +99,15 @@
     const made = renameField(input, (typed) => write(typed), delay === undefined ? {} : { delay });
     naming = made;
     return () => {
+      /* Flushed before it is let go, because `stop()` drops a pending write by
+         contract and a field that unmounts is not a field that was abandoned.
+         Escape closing the sheet the field is in, or a keyboard switch to
+         another Sammlung that redraws the work head, both take the field away
+         inside the debounce, and neither is guaranteed a blur on the way out —
+         a removed element does not reliably fire one. Without this the name
+         typed in the last 400ms was simply gone. flush() writes nothing when
+         nothing moved, so an untouched field still costs no write. */
+      void made.flush();
       made.stop();
       naming = undefined;
     };
