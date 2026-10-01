@@ -319,3 +319,57 @@ describe('the per-row seam', () => {
     expect(host.children).toHaveLength(3);
   });
 });
+
+describe('focus across a redraw', () => {
+  /* Every product redraws from onPick, so the row somebody has just pressed is
+   * the one the redraw throws away. Focus on an element that leaves the
+   * document falls to <body>, and from the keyboard that is picking a Sammlung
+   * and being thrown back to the top of the page. */
+  const redrawOnPick = (rows, after) => {
+    const draw = (open) => drawCollections(host, { rows, open: [open], onPick: (id) => draw(id), after });
+    draw('a');
+  };
+
+  it('stays on the row that was pressed', () => {
+    redrawOnPick(THREE);
+    items()[1].focus();
+    items()[1].click();
+    expect(items()[1].getAttribute('aria-current')).toBe('true');
+    expect(document.activeElement).toBe(items()[1]);
+  });
+
+  it('follows the row by id when the order moves under it', () => {
+    drawCollections(host, { rows: THREE, open: [], onPick: () => {} });
+    items()[2].focus();
+    drawCollections(host, { rows: [THREE[2], THREE[0], THREE[1]], open: [], onPick: () => {} });
+    expect(document.activeElement).toBe(items()[0]);
+    expect(nameOf(items()[0])).toBe('Garten');
+  });
+
+  it('lands on the neighbour when the focused row went away', () => {
+    drawCollections(host, { rows: THREE, open: [], onPick: () => {} });
+    items()[2].focus();
+    drawCollections(host, { rows: THREE.slice(0, 2), open: [], onPick: () => {} });
+    expect(document.activeElement).toBe(items()[1]);
+  });
+
+  it('keeps focus inside the seam\'s node, which leaves the document for a moment too', () => {
+    const pages = document.createElement('div');
+    const inside = document.createElement('button');
+    pages.appendChild(inside);
+    const after = (row) => (row.id === 'b' ? pages : null);
+    drawCollections(host, { rows: THREE, open: ['b'], onPick: () => {}, after });
+    inside.focus();
+    drawCollections(host, { rows: THREE, open: ['b'], onPick: () => {}, after });
+    expect(document.activeElement).toBe(inside);
+  });
+
+  it('does not pull focus in when it was somewhere else', () => {
+    const field = document.createElement('input');
+    document.body.appendChild(field);
+    drawCollections(host, { rows: THREE, open: [], onPick: () => {} });
+    field.focus();
+    drawCollections(host, { rows: THREE, open: ['a'], onPick: () => {} });
+    expect(document.activeElement).toBe(field);
+  });
+});

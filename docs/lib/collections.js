@@ -81,6 +81,11 @@
  * two class hooks of its own, and must not pay for an API it does not use.
  */
 
+/** Which Sammlung each drawn row is, read back by the next redraw to find the
+ *  row focus was on. A WeakMap rather than a data- attribute, so the DOM stays
+ *  byte for byte what it was for a product that never looks. */
+const drawnFor = new WeakMap();
+
 /** Empties `container` and draws one row per Sammlung.
  *
  * `container` should carry `.collections`; the rows are its children and it is
@@ -90,7 +95,32 @@
  */
 export function drawCollections(container, { rows, open, onPick, after }) {
   const isOpen = open instanceof Set ? open : new Set(open ?? []);
+
+  /* Where focus was, so the redraw can put it back.
+   *
+   * Every product redraws from onPick, so the row somebody has just pressed
+   * is the one replaceChildren() takes out from under them, and a focused
+   * element that leaves the document drops focus to <body>. With a mouse
+   * nobody notices; from the keyboard, picking a Sammlung threw the next Tab
+   * back to the top of the page, and a screen reader heard nothing about the
+   * row it had just opened. The seam's node is moved rather than redrawn,
+   * but it leaves the document for the same moment and loses focus the same
+   * way, which is what vorlaut's "never rebuilt" comment was protecting.
+   *
+   * Two answers, in order: the element itself, if it is still in the
+   * document after the redraw (a node under `after`); otherwise the row with
+   * the same id; otherwise the row now at the same place, so a row that went
+   * away leaves focus on its neighbour rather than on nothing. Only when
+   * focus was in this list to begin with — a redraw caused by something else
+   * must not pull the caret out of whatever field it is in. */
+  const had = document.activeElement;
+  const focused = had && had !== container && container.contains(had) ? had : null;
+  const before = [...container.children].filter((node) => drawnFor.has(node));
+  const wasRow = focused ? before.indexOf(focused) : -1;
+  const wasId = wasRow >= 0 ? drawnFor.get(focused) : undefined;
+
   container.replaceChildren();
+  const drawn = [];
 
   for (const row of rows) {
     const node = document.createElement('button');
@@ -152,6 +182,8 @@ export function drawCollections(container, { rows, open, onPick, after }) {
       onPick(row.id, event.metaKey || event.ctrlKey);
     });
     container.appendChild(node);
+    drawnFor.set(node, row.id);
+    drawn.push(node);
 
     /* Moved rather than drawn. `.after()` on a node that is already in a
        document removes it from where it was and puts it here, so the caller's
@@ -163,4 +195,11 @@ export function drawCollections(container, { rows, open, onPick, after }) {
       if (extra) node.after(extra);
     }
   }
+
+  if (!focused) return;
+  const again = focused.isConnected
+    ? focused
+    : drawn.find((node) => drawnFor.get(node) === wasId)
+      ?? (wasRow >= 0 ? drawn[Math.min(wasRow, drawn.length - 1)] : undefined);
+  again?.focus();
 }
