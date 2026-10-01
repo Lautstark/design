@@ -35,8 +35,10 @@ settled in
 - **`@lautstark/design/menu`** — the overflow menu's behaviour, beside the CSS
   that draws it: `menuOn(trigger, build)`, `closeMenus()`, and the item options
   whose field names stopped two copies of this function meaning opposite things
-  by the same third argument. Importing it attaches two document listeners, so
-  that a press outside or Escape closes whatever is open.
+  by the same third argument. Importing it attaches nothing: while a menu is
+  open, two window listeners close it on a press outside or on Escape, and
+  they go when it does. Closing touches only the menu `menuOn` drew and the
+  trigger that opened it.
 - **`@lautstark/design/dialog`** — the modal sheet's behaviour: `openDialog`,
   `confirmDialog`, and the press-outside dismissal the platform does not give.
   Every word comes from the caller, including "Cancel" and the name of the ✕,
