@@ -989,10 +989,10 @@ mitreden's `--muted` is `--text-dim`; it has no `--text-faint` and hard-codes on
 | token | meaning |
 | --- | --- |
 | `--accent` | the brand fill. The one saturated colour on the screen. |
-| `--accent-ink` | text placed **on** `--accent`. Must clear 4.5:1 against it. |
-| `--accent-strong` | the accent adjusted so it is legible **as text on `--bg`**. On a dark ground it may equal `--accent`; on a light one it must be darkened. |
+| `--accent-ink` | text placed **on** `--accent`. Must clear 4.5:1 against it, and against `--accent-hover`, which is under it whenever the pointer is. |
+| `--accent-strong` | the accent adjusted so it is legible **as text** on every ground it is drawn on: `--bg`, `--accent-soft`, and `--surface`/`--surface-2`, where the menu and the sheet put it. On a dark ground it may equal `--accent`; on a light one it must be darkened. |
 | `--accent-soft` | an accent-tinted plane: the current item, an accent notice. |
-| `--accent-hover` | the accent under the pointer. An explicit value, **not** `filter: brightness()` — that shifts hue on a saturated accent, and it cannot darken on a light ground, which is the direction a light scheme needs. |
+| `--accent-hover` | the accent under the pointer. An explicit value, **not** `filter: brightness()` — that shifts hue on a saturated accent, and it cannot darken. It steps *away from `--accent-ink`*, lighter under a dark ink and darker under a light one, so the label never reads worse under the pointer than at rest. |
 | `--danger` | the destructive colour, as text and as a fill. |
 | `--danger-ink` | text placed **on** `--danger`. Exists for the same reason `--accent-ink` does, and is the token most likely to be missed: a filled destructive button is usually built once, in whichever scheme its author was looking at, with `color: #fff` hardcoded. That survives a dark `--danger` on a light ground and fails a light one on a dark ground. bildhaft shipped exactly that — white on salmon, 2.48:1, on the button that deletes everything — and it was invisible in every screenshot because the button was only ever viewed in light mode. If a product has a filled destructive control and two schemes, it needs this token. |
 | `--danger-soft` | a danger-tinted plane: the hover behind a destructive menu item. |
@@ -1589,13 +1589,19 @@ right answer for a placeholder and the wrong answer for body text.
   `--surface-2` — *not* `--bg`. `--surface-2` is the fill of every field and the
   tightest ground either really sits on. This is exactly the distinction the ported
   value missed: it measured 3.92:1 where it was checked and 3.18:1 where it printed.
-- **Solved against the accent:** `--accent-ink` and `--danger-ink`, at 6:1 rather
-  than the 4.5 minimum, because they carry a primary action's label at small size.
+- **Solved against the accent:** `--accent-ink` and `--danger-ink`, aiming at 6:1
+  rather than the 4.5 minimum, because they carry a primary action's label at small
+  size. Not every hue can reach 6 — wochenwerk's blue gets 4.78 from the better of
+  black and white — so 6 is the aim and 4.5 the audited floor, on the fill and on
+  `--accent-hover`.
   Both directions are tried and the winner kept — a saturated orange or purple takes
   near-black, a deep blue would take white, and hardcoding either is precisely how
   the 2.48:1 button happened.
-- **Solved against the tighter of two grounds:** `--accent-strong`, which labels
-  both `--bg` and `--accent-soft` and can pass on one while failing on the other.
+- **Solved against every ground it is drawn on:** `--accent-strong`, which labels
+  `--bg`, `--accent-soft`, and the menu and sheet on `--surface` and `--surface-2`,
+  and can pass on one while failing on another. It used to be solved against the
+  tighter of `--bg` and `--accent-soft` alone, judged by the unsolved accent; the
+  checked menu item read 3.06:1 in wochenwerk's dark scheme as a result.
 
 `--accent` itself is never adjusted. It is what the product declared.
 
