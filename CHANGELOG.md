@@ -1,3 +1,16 @@
+## [1.40.2](https://github.com/Lautstark/design/compare/v1.40.1...v1.40.2) (2026-10-01)
+
+### Bug Fixes
+
+* **collections:** a redraw puts focus back where it was ([5895454](https://github.com/Lautstark/design/commit/58954541b55367e5c42fdd9106d668dfc06ddcee))
+* **crop:** a second pointer no longer strands the first one's listeners ([7e3b7c5](https://github.com/Lautstark/design/commit/7e3b7c5a437a79fba307fc52112866a2bca5710c))
+* **dialog:** a word to type without typingLabel gets a name and no empty line ([faf1357](https://github.com/Lautstark/design/commit/faf1357379ad24dde7796559185b856406ea85fb))
+* **language:** refresh moves aria-pressed instead of redrawing the row ([7d0c751](https://github.com/Lautstark/design/commit/7d0c7516ae211083432f6f5167187454de91a404))
+* **menu:** closing a menu touches only the menu it opened ([052b54a](https://github.com/Lautstark/design/commit/052b54a5a9b1c134e53983cbfa49e764a7b472af))
+* **pins:** report a pin with no ref, and npm's bare shorthand, as loose ([707352d](https://github.com/Lautstark/design/commit/707352d437f5feec12038ace0d7dea3b3f5888be))
+* **shadows:** read the rule after an at-rule instead of skipping it ([61ba9ea](https://github.com/Lautstark/design/commit/61ba9ea5fb107e174fc2cf9694d27b732111c956))
+* **title-field:** write a pending rename when the field is taken away ([81fce34](https://github.com/Lautstark/design/commit/81fce34b0c326422a73a8c7e6721f43a85e2e32c))
+
 ## [1.40.1](https://github.com/Lautstark/design/compare/v1.40.0...v1.40.1) (2026-09-18)
 
 ### Bug Fixes
