@@ -404,6 +404,66 @@ describe('Crop', () => {
     });
   });
 
+  describe('dragging', () => {
+    const pointer = (type, pointerId, clientX = 0) => {
+      box().dispatchEvent(new PointerEvent(type, {
+        pointerId, clientX, clientY: 0, button: 0, pointerType: 'touch', bubbles: true,
+      }));
+      flushSync();
+    };
+
+    /* happy-dom lays nothing out, and the drag divides by the box's width. */
+    const measured = () => {
+      Object.defineProperty(box(), 'clientWidth', { value: 100, configurable: true });
+      box().setPointerCapture = () => {};
+    };
+
+    it('ends a drag on lost capture, so the box is never left shut', () => {
+      render();
+      measured();
+      pointer('pointerdown', 1, 0);
+      pointer('lostpointercapture', 1, 0);
+      pointer('pointerdown', 2, 0);
+      pointer('pointermove', 2, -10);
+      expect(placed().left).toBeLessThan(-6);
+    });
+
+    it('moves the square with the pointer', () => {
+      render();
+      measured();
+      pointer('pointerdown', 1, 0);
+      pointer('pointermove', 1, -10);
+      pointer('pointerup', 1, -10);
+      expect(placed().left).toBeLessThan(-6);
+    });
+
+    /* A second finger used to take the drag over, after which the first
+       finger's stop returned early and never took its listeners off - one
+       more set left on the box for every two-finger touch. */
+    it('follows the first pointer and ignores a second, leaving nothing behind', () => {
+      render();
+      measured();
+      let added = 0;
+      let removed = 0;
+      const add = box().addEventListener.bind(box());
+      const remove = box().removeEventListener.bind(box());
+      box().addEventListener = (...args) => { added += 1; add(...args); };
+      box().removeEventListener = (...args) => { removed += 1; remove(...args); };
+
+      pointer('pointerdown', 1, 0);
+      pointer('pointerdown', 2, 0);
+      pointer('pointermove', 2, -10);
+      expect(placed().left, 'the second finger moves nothing').toBeCloseTo(-6, 6);
+      pointer('pointermove', 1, -10);
+      expect(placed().left, 'the first one still drags').toBeLessThan(-6);
+      pointer('pointerup', 1, -10);
+      pointer('pointerup', 2, -10);
+
+      expect(added).toBe(4);
+      expect(removed, 'every listener a drag added went with it').toBe(added);
+    });
+  });
+
   it('zooms about the square’s own centre', () => {
     /* A corner is one line shorter and sends whatever has just been centred
        sliding off towards the bottom right, so the slider would undo every

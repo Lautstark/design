@@ -143,9 +143,17 @@
    * out as it opens, and a width read while building is the width of nothing
    * yet. FRAME is in the conversion because a source pixel is measured against
    * the square, not against the box around it.
+   *
+   * One pointer at a time. A second finger used to overwrite `dragging`, after
+   * which the first finger's own `stop` saw an id that was no longer the
+   * current one and returned early - so its three listeners were never taken
+   * off, and every two-finger touch on the picture left another set behind.
+   * The second pointer is ignored instead: a square has one position, and two
+   * fingers both trying to set it is not a gesture this box offers.
    */
-  let dragging = 0;
+  let dragging: number | null = null;
   function down(event: PointerEvent): void {
+    if (dragging !== null) return;
     if (event.button !== 0 && event.pointerType === 'mouse') return;
     const perPixel = side / (box.clientWidth * FRAME);
     const fromX = event.clientX;
@@ -165,14 +173,21 @@
     };
     const stop = (ended: PointerEvent): void => {
       if (ended.pointerId !== dragging) return;
-      dragging = 0;
+      dragging = null;
       box.removeEventListener('pointermove', move);
       box.removeEventListener('pointerup', stop);
       box.removeEventListener('pointercancel', stop);
+      box.removeEventListener('lostpointercapture', stop);
     };
     box.addEventListener('pointermove', move);
     box.addEventListener('pointerup', stop);
     box.addEventListener('pointercancel', stop);
+    /* Now that a drag in progress shuts the box to every other pointer, a drag
+       that never hears its pointerup would shut it for good. Losing capture
+       is the one ending every browser reports however the pointer went, so it
+       ends the drag too; after a pointerup it arrives second and finds
+       nothing to do. */
+    box.addEventListener('lostpointercapture', stop);
   }
 
   /*
