@@ -162,6 +162,31 @@ describe('TitleField', () => {
     expect(node.value).toBe('Dienstag');
     expect(write).toHaveBeenCalledWith('Dienstag');
   });
+
+  /* Escape closing the sheet the field is in, or a keyboard switch to another
+     Sammlung, takes the field away inside the debounce with no blur to write
+     on the way out. stop() drops a pending write by contract, so the teardown
+     has to flush before it. */
+  it('writes what is owed when it is taken away inside the debounce', () => {
+    const write = vi.fn();
+    const node = render({ value: 'Montag', write });
+    type(node, 'Dienstag');
+    unmount(app);
+    app = undefined;
+    vi.advanceTimersByTime(1000);
+    expect(write).toHaveBeenCalledTimes(1);
+    expect(write).toHaveBeenCalledWith('Dienstag');
+  });
+
+  it('writes nothing when it is taken away untouched', () => {
+    const write = vi.fn();
+    render({ value: 'Montag', write });
+    unmount(app);
+    app = undefined;
+    vi.advanceTimersByTime(1000);
+    expect(write).not.toHaveBeenCalled();
+  });
+
   it('carries the attributes a field carries, which is what Row needed', () => {
     /* bildhaft's sentence card could not adopt this component: its field has a
        `maxlength` and a `title`, and two e2e cases assert the title's text and

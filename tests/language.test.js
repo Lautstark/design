@@ -56,6 +56,23 @@ describe('which one is in force', () => {
     expect(buttons(picker).map((b) => b.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
   });
 
+  /* The usual caller refreshes from inside choose(). The row used to be
+     redrawn, which replaced the button just pressed and dropped focus to
+     <body> - switching language from the keyboard threw the next Tab back to
+     the top of the page. */
+  it('keeps focus on the button that was pressed, refreshed from choose', () => {
+    let now = 'de';
+    const picker = build({ current: () => now, choose: (code) => { now = code; picker.refresh(); } });
+    document.body.append(picker.node);
+    const en = buttons(picker)[1];
+    en.focus();
+    en.click();
+    expect(buttons(picker)[1], 'the same button, not a new one').toBe(en);
+    expect(document.activeElement).toBe(en);
+    expect(en.getAttribute('aria-pressed')).toBe('true');
+    picker.node.remove();
+  });
+
   it('says false rather than nothing on the ones not chosen', () => {
     // An absent aria-pressed is not "not pressed", it is unreadable.
     expect(buttons(build())[1].hasAttribute('aria-pressed')).toBe(true);

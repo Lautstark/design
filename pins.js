@@ -35,8 +35,16 @@ const strict = process.argv.includes('--strict');
 /* The pin this family's rule asks for: an exact tag, on a repository in the
    org. A range or a branch is a finding in itself, not an unparseable line —
    both mean an install can move the build, which is the thing the rule exists
-   to prevent. */
-const PIN = /^github:Lautstark\/([^#]+)#(.+)$/;
+   to prevent.
+
+   So is no ref at all, which is the worst of them: `github:Lautstark/design`
+   installs whatever the default branch says that day. This pattern used to
+   require the `#`, and npm's bare `Lautstark/design#main` shorthand (which it
+   reads as GitHub) lacked the `github:` it also required — so both were
+   skipped as "not a pin of ours" and passed --strict without a word. The
+   prefix and the ref are both optional now, and a missing ref is reported as
+   loose like any other ref that is not a tag. */
+const PIN = /^(?:github:)?Lautstark\/([^#/\s]+)(?:#(.*))?$/;
 const TAG = /^v\d+\.\d+\.\d+$/;
 
 const parse = (tag) => tag.replace(/^v/, '').split('.').map(Number);
@@ -65,7 +73,7 @@ const rows = [];
 for (const [name, spec] of Object.entries(declared)) {
   const found = PIN.exec(spec ?? '');
   if (!found) continue;
-  const [, repo, ref] = found;
+  const [, repo, ref = ''] = found;
 
   if (!TAG.test(ref)) {
     // Not "cannot read this" — a range or a branch is the finding.
@@ -95,7 +103,7 @@ const width = Math.max(...rows.map((r) => r.name.length));
 for (const row of rows) {
   const detail = row.state === 'behind' ? `${row.ref} → ${row.latest} available`
     : row.state === 'current' ? `${row.ref}`
-      : `${row.ref} (${row.state})`;
+      : `${row.ref || 'no ref'} (${row.state})`;
   const mark = row.state === 'current' ? '✓' : row.state === 'behind' ? '↑' : '?';
   console.log(`  ${mark} ${row.name.padEnd(width)}  ${detail}`);
 }
@@ -116,7 +124,7 @@ for (const row of behind)
 
 for (const row of loose)
   annotate('A shared package is not pinned to a tag',
-    `${row.name} resolves "${row.ref}", so an install can move what the build is `
+    `${row.name} resolves ${row.ref ? `"${row.ref}"` : 'the default branch'}, so an install can move what the build is `
     + 'made of. The family pins exact release tags.');
 
 /* The all-clear is only the all-clear when every row was actually answered.

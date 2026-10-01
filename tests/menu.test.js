@@ -289,9 +289,29 @@ describe('dismissal', () => {
     expect(() => closeMenus()).not.toThrow();
   });
 
-  it('clears aria-expanded on every trigger it finds', () => {
+  it('clears aria-expanded on the trigger that opened it', () => {
     open();
     closeMenus();
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
+  });
+
+  /* It used to clear every [aria-expanded="true"] in the document and remove
+   * every .menu, which reached TopBar's ☰ and the sidebar's collapse control:
+   * choosing an item from a row's ⋯ while the drawer was open told a screen
+   * reader the drawer had collapsed. What menuOn opened is all it may close. */
+  it('leaves other disclosure controls and other .menu elements alone', () => {
+    const burger = document.createElement('button');
+    burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-controls', 'side');
+    const drawn = document.createElement('div');
+    drawn.className = 'menu';
+    document.body.append(burger, drawn);
+
+    open();
+    items()[0].click();
+
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(burger.getAttribute('aria-expanded'), 'the drawer is still open').toBe('true');
+    expect(drawn.isConnected, 'a .menu this file did not draw').toBe(true);
   });
 });

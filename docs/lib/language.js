@@ -50,23 +50,13 @@
  * product's own vocabulary.
  */
 
+import { make } from './make.js';
+
 /** What each language calls itself, in itself. Not a translation table. */
 export const NAMES = {
   de: 'Deutsch',
   en: 'English',
 };
-
-function make(tag, { className, text, attrs, on } = {}, ...children) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text !== undefined) node.textContent = text;
-  for (const [name, value] of Object.entries(attrs ?? {})) {
-    if (value !== undefined && value !== null) node.setAttribute(name, String(value));
-  }
-  for (const [name, handler] of Object.entries(on ?? {})) node.addEventListener(name, handler);
-  for (const child of children) if (child) node.append(child);
-  return node;
-}
 
 /**
  * Builds the picker and hands it back with a way to repaint it.
@@ -74,21 +64,31 @@ function make(tag, { className, text, attrs, on } = {}, ...children) {
  * `refresh` exists because two of the three products change language without
  * reloading: the pressed button has to move, and the caller is the only one that
  * knows when the change has landed.
+ *
+ * The buttons are drawn once and `refresh` only moves `aria-pressed`. It used to
+ * redraw the row, and the usual caller refreshes from inside `choose` — so the
+ * button somebody had just pressed was replaced under them and focus fell to
+ * <body>: a keyboard user switching language was thrown back to the top of the
+ * page by the act of switching, and a screen reader announced nothing about
+ * the choice it had just made. The set of languages is fixed when the picker is
+ * built, so nothing but the pressed state ever had to move.
  */
 export function languagePicker({ languages, current, choose, label, names }) {
   const called = { ...NAMES, ...(names ?? {}) };
-  const node = make('div', { className: 'segmented', attrs: { role: 'group', 'aria-label': label } });
+  const buttons = languages.map((code) => make('button', {
+    /* The code itself where the name is unknown, deliberately: a two-letter
+       button somebody can still press beats a blank one, and it names the gap
+       for whoever adds the language. */
+    text: called[code] ?? code,
+    attrs: { type: 'button' },
+    on: { click: () => choose(code) },
+  }));
+  const node = make('div', { className: 'segmented', attrs: { role: 'group', 'aria-label': label } },
+    ...buttons);
 
   function refresh() {
     const now = current();
-    node.replaceChildren(...languages.map((code) => make('button', {
-      /* The code itself where the name is unknown, deliberately: a two-letter
-         button somebody can still press beats a blank one, and it names the gap
-         for whoever adds the language. */
-      text: called[code] ?? code,
-      attrs: { type: 'button', 'aria-pressed': String(code === now) },
-      on: { click: () => choose(code) },
-    })));
+    languages.forEach((code, at) => buttons[at].setAttribute('aria-pressed', String(code === now)));
   }
 
   refresh();

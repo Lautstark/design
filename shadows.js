@@ -54,17 +54,55 @@ const SHARED = join(ROOT, 'node_modules', '@lautstark', 'design', 'docs', 'compo
    for a rule. components.css is more comment than CSS by line count. */
 const stripComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
 
+/**
+ * The selector of every style rule a stylesheet draws at the top level or
+ * inside at-rules only - `@media`, `@supports`, `@layer` - in order.
+ *
+ * A walk with a stack rather than a split on `}`. The split read whatever stood
+ * between one `}` and the next `{` as a selector and skipped it whole if it had
+ * an `@` in it, which is a guess about where the at-rule ends that came out
+ * wrong twice: `@import "x.css"; .btn {` is one such stretch, and so is
+ * `@media (…) { .btn {`, the first rule inside every media query. Both rules
+ * were never read, so a product whose stylesheet opens with an @import, or
+ * that redraws a shared class first thing in a media query, was told it
+ * shadowed nothing. Here an at-rule ends where CSS says it does - a statement
+ * at its `;`, a block's prelude at its `{` - and only the at-rule is dropped.
+ *
+ * A style rule nested inside another style rule is not returned: `.a { .b {} }`
+ * is `.a .b`, which is aimed, for the same reason an ancestor is below.
+ */
+function selectors(css) {
+  const found = [];
+  /* One entry per open brace: true where it opened a style rule. */
+  const open = [];
+  let since = 0;
+  for (let at = 0; at < css.length; at += 1) {
+    const char = css[at];
+    /* Past a quoted string whole: `content: "{"` is not a block. */
+    if (char === '"' || char === "'") {
+      const end = css.indexOf(char, at + 1);
+      at = end === -1 ? css.length : end;
+    } else if (char === ';') since = at + 1;
+    else if (char === '}') { open.pop(); since = at + 1; }
+    else if (char === '{') {
+      const prelude = css.slice(since, at).trim();
+      const style = !prelude.startsWith('@');
+      if (style && !open.includes(true)) found.push(prelude);
+      open.push(style);
+      since = at + 1;
+    }
+  }
+  return found;
+}
+
 /** Classes a stylesheet draws as the bare, last part of a selector. */
 function drawn(css) {
   const found = new Map();
-  /* Split on the braces rather than matching around them: a selector is
-     whatever stands between the end of the last rule and the next `{`, and an
-     anchored regex missed nearly all of them - it reported zero classes on a
-     file with fifty, and then said everything was fine. A count of zero is not
-     a clean bill of health, which is why the caller refuses to believe one. */
-  for (const chunk of stripComments(css).split('}')) {
-    const block = chunk.slice(0, chunk.indexOf('{'));
-    if (chunk.indexOf('{') === -1 || block.includes('@')) continue;
+  /* Not an anchored regex either: one of those missed nearly all of them - it
+     reported zero classes on a file with fifty, and then said everything was
+     fine. A count of zero is not a clean bill of health, which is why the
+     caller refuses to believe one. */
+  for (const block of selectors(stripComments(css))) {
     for (const selector of block.split(',')) {
       const parts = selector.trim().split(/\s+|(?=>)/).filter(Boolean);
       /* An ancestor means the rule was aimed, and an aimed rule is a decision

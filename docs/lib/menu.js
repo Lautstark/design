@@ -41,6 +41,21 @@
 /** The trigger the open menu belongs to, so focus has somewhere to go back to. */
 let opener = null;
 
+/**
+ * The list menuOn drew, and the only one closeMenus() takes away.
+ *
+ * It used to remove every `.menu` in the document and set every
+ * `[aria-expanded="true"]` to false, which was the same thing as long as the
+ * only expanded control on a page was a menu trigger. It stopped being the same
+ * thing when TopBar's ☰ and the sidebar's collapse control started carrying a
+ * live aria-expanded of their own: opening a row's ⋯ while the drawer was open
+ * told a screen reader the drawer had collapsed, and nothing put it back. A
+ * `.menu` drawn statically by a page (the gallery draws one to show what it
+ * looks like) went the same way. What this file opened is the whole of what it
+ * may close.
+ */
+let current = null;
+
 /** The items worth landing on. A disabled one is skipped, not stepped through. */
 const rows = (menu) => [...menu.querySelectorAll('button:not(:disabled)')];
 
@@ -48,18 +63,18 @@ const rows = (menu) => [...menu.querySelectorAll('button:not(:disabled)')];
 export function closeMenus() {
   removeEventListener('click', onPress);
   removeEventListener('keydown', onEscape, true);
-  for (const menu of document.querySelectorAll('.menu')) {
+  if (current) {
     // Focus returns to the trigger only when it was inside the menu to begin
     // with. Escape and an activated item both arrive here with focus in the
     // list, and both want it back on the button that opened it; a click
     // somewhere else on the page arrives here too, and pulling focus back
     // would yank it out of whatever that click just gave it to.
-    if (menu.contains(document.activeElement)) opener?.focus();
-    menu.remove();
+    if (current.contains(document.activeElement)) opener?.focus();
+    current.remove();
   }
+  opener?.setAttribute('aria-expanded', 'false');
+  current = null;
   opener = null;
-  for (const button of document.querySelectorAll('[aria-expanded="true"]'))
-    button.setAttribute('aria-expanded', 'false');
 }
 
 /**
@@ -167,6 +182,7 @@ export function menuOn(button, build) {
 
   menu.addEventListener('keydown', stepMenu);
   button.parentNode?.appendChild(menu);
+  current = menu;
   opener = button;
   // Focus goes in, or the menu is only open in the drawing: a reader left on
   // the trigger is told the list expanded and then has nothing to read, and a
