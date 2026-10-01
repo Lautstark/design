@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
 
       # Fail before anything else if the tag and package.json disagree. The
       # products read the version out of package.json once installed, so a
@@ -82,7 +82,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: '22'
+          node-version: '24'
           cache: npm
 
       # Only devDependencies: nothing here ships. The published package still
