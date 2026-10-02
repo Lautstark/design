@@ -131,7 +131,7 @@ export function deriveScheme(accent, scheme, opts = {}) {
   const [accentL] = hexToOklch(accent);
 
   /* --accent-soft first: --accent-strong is solved against it as well as against
-     --bg, so it has to exist by then. */
+     the planes, so it has to exist by then. */
   t['accent-soft'] = oklchToHex(dark ? [0.245, 0.035, hue] : [0.963, 0.030, hue]);
 
   /*
@@ -140,9 +140,15 @@ export function deriveScheme(accent, scheme, opts = {}) {
    * saturated orange or purple takes near-black, a deep blue would take white,
    * and hardcoding either is how the 2.48:1 button happened.
    *
-   * The bar is 6:1 rather than the 4.5 AA minimum. This is the one pairing that
-   * carries a primary action's label, it is often set small and semibold, and
-   * every hand-authored ink in the family independently landed near 6.2.
+   * It is solved for 6:1 rather than the 4.5 AA minimum. This is the one
+   * pairing that carries a primary action's label, it is often set small and
+   * semibold, and every hand-authored ink in the family independently landed
+   * near 6.2. Not every hue can give 6: wochenwerk's blue sits where black and
+   * white both fall short of it, and takes the better of the two at 4.78:1.
+   * So 6 is what the solve aims for and what bildhaft, mitreden and vorlaut
+   * get; 4.5 is the floor the audit holds every accent to, on the fill and on
+   * its hover, which is what a person's pointer is resting on when they read
+   * the label. tests/derive.test.js measures both numbers for every product.
    */
   const ink = (target) => {
     const lo = solveContrast([0.30, Math.min(accentC, 0.06), hue], accent, target, -1);
@@ -152,18 +158,46 @@ export function deriveScheme(accent, scheme, opts = {}) {
   t['accent-ink'] = ink(6.0);
 
   /*
-   * --accent-strong: the accent legible as TEXT. Solved against whichever of
-   * --bg and --accent-soft is tighter, because it labels both — an accent-tinted
-   * row uses --accent-soft behind --accent-strong, and a value solved only
-   * against --bg can fail there. On a dark ground the accent frequently clears
-   * both already, and the token table allows it to equal --accent.
+   * --accent-strong: the accent legible as TEXT, and solved against every
+   * ground it is drawn on. --bg is the page; --accent-soft is behind it on an
+   * accent-tinted row, a chip, a notice; --surface is the menu and the sheet,
+   * where it marks the checked item and the current panel; --surface-2 is the
+   * same menu row under the pointer.
+   *
+   * It used to be solved against whichever of --bg and --accent-soft the
+   * *unsolved* accent read worse on, and nothing else. Two things were wrong
+   * with that. The menu and the sheet sit on --surface, which in dark is a
+   * step lighter than --bg, so a checked menu item read 3.06:1 in wochenwerk's
+   * dark scheme and 4.18:1 in vorlaut's while every audited pair passed. And
+   * the choice of ground was made on the starting colour, not the answer: when
+   * the accent lies beyond both grounds the comparison inverts as the solve
+   * walks past them, and the ground it chose stops being the tight one. Asking
+   * the candidate at every step against all four is the same as solving
+   * against the tightest, without having to know in advance which that is.
+   *
+   * On a dark ground the accent frequently clears all four already, and the
+   * token table allows it to equal --accent.
    */
-  const strongGround = contrast(accent, t.bg) <= contrast(accent, t['accent-soft']) ? t.bg : t['accent-soft'];
-  t['accent-strong'] = solveContrast([accentL, accentC, hue], strongGround, 4.5, dark ? +1 : -1);
+  t['accent-strong'] = solveContrast([accentL, accentC, hue],
+    [t.bg, t['accent-soft'], t.surface, t['surface-2']], 4.5, dark ? +1 : -1);
 
-  /* --accent-hover: an explicit value, never filter: brightness(), which shifts
-     hue on a saturated accent and cannot darken — the direction light needs. */
-  t['accent-hover'] = oklchToHex([accentL + (dark ? 0.06 : -0.045), accentC, hue]);
+  /*
+   * --accent-hover: an explicit value, never filter: brightness(), which shifts
+   * hue on a saturated accent and cannot darken — the direction a light ink
+   * needs.
+   *
+   * The step is away from the ink, whichever way that is. It used to be darker
+   * in light and lighter in dark regardless, and the ink is printed on the
+   * hover too: wochenwerk's light primary button takes a dark ink, so darkening
+   * the fill under the pointer took its label from 4.78:1 to 3.93:1 — the one
+   * moment somebody is about to press it. Moving away from the ink can only
+   * widen the gap the ink was solved for, so the hover is never the weaker of
+   * the two. The sizes are the ones each scheme already had.
+   */
+  const inkIsDarker = hexToOklch(t['accent-ink'])[0] < accentL;
+  const step = dark ? 0.06 : 0.045;
+  t['accent-hover'] = oklchToHex([
+    Math.min(1, Math.max(0, accentL + (inkIsDarker ? step : -step))), accentC, hue]);
 
   /* Danger, the same three roles on the fixed red, at the same 6:1 as accent. */
   t.danger = solveContrast([dark ? 0.70 : 0.52, 0.16, DANGER_HUE], t.bg, 6.0, dark ? +1 : -1);
@@ -197,8 +231,14 @@ export function auditScheme(t, opts = {}) {
     ['--text-faint', '--surface-2', t['text-faint'], t['surface-2'], 4.5],
     ['--text-faint', '--bg', t['text-faint'], t.bg, 4.5],
     ['--accent-ink', '--accent', t['accent-ink'], t.accent, 4.5],
+    // The label of a primary button under the pointer. See --accent-hover.
+    ['--accent-ink', '--accent-hover', t['accent-ink'], t['accent-hover'], 4.5],
     ['--accent-strong', '--bg', t['accent-strong'], t.bg, 4.5],
     ['--accent-strong', '--accent-soft', t['accent-strong'], t['accent-soft'], 4.5],
+    // The checked menu item and the current panel, at rest and under the
+    // pointer. See --accent-strong.
+    ['--accent-strong', '--surface', t['accent-strong'], t.surface, 4.5],
+    ['--accent-strong', '--surface-2', t['accent-strong'], t['surface-2'], 4.5],
     ['--danger', '--bg', t.danger, t.bg, 4.5],
     ['--danger-ink', '--danger', t['danger-ink'], t.danger, 4.5],
     ['--text', '--surface-3', t.text, t['surface-3'], 7.0],

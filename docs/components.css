@@ -499,8 +499,10 @@
    worst, all three products, both schemes) and --text under the pointer (7.57:1
    over --surface-3 at worst). Taking the plate's own ink instead, which the
    Compose port does, is right on a touch screen that has no hover and not
-   available here: --accent-strong over --surface-3 measures 2.88:1 in vorlaut's
-   dark scheme, so an ink ✕ would have nowhere legible to go. */
+   available here: --accent-strong is not solved against --surface-3 and
+   measures 3.73:1 over it in wochenwerk's dark scheme (2.88:1 in vorlaut's
+   before it was solved against --surface and --surface-2 too), so an ink ✕
+   would have nowhere legible to go. */
 .notice > .btn.quiet:hover:not(:disabled) { background: var(--surface-3); }
 
 .toast {

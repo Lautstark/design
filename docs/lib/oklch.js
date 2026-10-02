@@ -130,16 +130,25 @@ export function contrast(hexA, hexB) {
  *
  * Returns the first passing colour, or the endpoint if the hue simply cannot
  * get there — callers check the ratio afterwards rather than trusting it.
+ *
+ * `ground` may be a list, for a colour drawn on more than one plane: the walk
+ * then stops at the first colour that clears every one of them. That is the
+ * same as clearing the one it reads worst on, and it is asked of the candidate
+ * at each step rather than decided once from the starting colour — which one is
+ * tightest can change as the colour moves, and choosing it up front is how
+ * --accent-strong came to be solved against the wrong one.
  */
 export function solveContrast([L, C, H], ground, target, dir) {
+  const grounds = Array.isArray(ground) ? ground : [ground];
+  const clears = (hex) => grounds.every((g) => contrast(hex, g) >= target);
   const limit = dir > 0 ? 1 : 0;
   let best = oklchToHex([L, C, H]);
-  if (contrast(best, ground) >= target) return best;
+  if (clears(best)) return best;
 
   for (let i = 1; i <= 100; i++) {
     const l = L + dir * (Math.abs(limit - L) * i) / 100;
     const hex = oklchToHex([l, C, H]);
-    if (contrast(hex, ground) >= target) return hex;
+    if (clears(hex)) return hex;
     best = hex;
   }
   return best;
