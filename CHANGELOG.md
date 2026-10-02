@@ -1,3 +1,9 @@
+## [1.40.3](https://github.com/Lautstark/design/compare/v1.40.2...v1.40.3) (2026-10-02)
+
+### Bug Fixes
+
+* **tokens:** solve accent-strong on every ground, step the hover away from the ink ([74819c7](https://github.com/Lautstark/design/commit/74819c71d331074001d7e317236becb78aadd8eb)), closes [#be3e00](https://github.com/Lautstark/design/issues/be3e00) [#ba3d00](https://github.com/Lautstark/design/issues/ba3d00) [#ff6b35](https://github.com/Lautstark/design/issues/ff6b35) [#ff855c](https://github.com/Lautstark/design/issues/ff855c) [#ef5c23](https://github.com/Lautstark/design/issues/ef5c23) [#ff875f](https://github.com/Lautstark/design/issues/ff875f) [#ef7db9](https://github.com/Lautstark/design/issues/ef7db9) [#ffa6d2](https://github.com/Lautstark/design/issues/ffa6d2) [#7652d3](https://github.com/Lautstark/design/issues/7652d3) [#7450d0](https://github.com/Lautstark/design/issues/7450d0) [#9b7bff](https://github.com/Lautstark/design/issues/9b7bff) [#ae99ff](https://github.com/Lautstark/design/issues/ae99ff) [#8e6def](https://github.com/Lautstark/design/issues/8e6def) [#a78fff](https://github.com/Lautstark/design/issues/a78fff) [#4d81ff](https://github.com/Lautstark/design/issues/4d81ff) [#7ca5ff](https://github.com/Lautstark/design/issues/7ca5ff) [#2f60e5](https://github.com/Lautstark/design/issues/2f60e5) [#4b7fff](https://github.com/Lautstark/design/issues/4b7fff)
+
 ## [1.40.2](https://github.com/Lautstark/design/compare/v1.40.1...v1.40.2) (2026-10-01)
 
 ### Bug Fixes
