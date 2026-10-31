@@ -1,3 +1,9 @@
+## [1.43.0](https://github.com/Lautstark/design/compare/v1.42.0...v1.43.0) (2026-10-31)
+
+### Features
+
+* **components:** .voice[aria-current] draws the chosen voice alone, for VoicePicker's folded list ([c07fd59](https://github.com/Lautstark/design/commit/c07fd5908e4606a152054049f7f0c8dfdb58c4d8))
+
 ## [1.42.0](https://github.com/Lautstark/design/compare/v1.41.0...v1.42.0) (2026-10-31)
 
 ### Features
