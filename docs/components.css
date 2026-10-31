@@ -881,6 +881,12 @@
 .where[data-state="saving"] .dot,
 .where[data-state="conflicted"] .dot { background: var(--accent-strong); }
 .where.bad .dot { background: var(--danger); }
+/* The same box for a source rather than a folder (2026-10-31): bildquelle's
+   METACOM folder and stimmquelle's Azure connection. `ready` is a source that
+   answers and `loading` one being read in, both accent-strong as above;
+   anything else is off and faint. `.bad` stays the one that stopped answering. */
+.where[data-state="ready"] .dot,
+.where[data-state="loading"] .dot { background: var(--accent-strong); }
 
 /* A menu row that needs a second line to say what it does — „fügt hinzu,
    überschreibt nie" is the difference between a person reading a backup in
@@ -1175,3 +1181,65 @@
 @media (prefers-reduced-motion: reduce) {
   .btn, .chip, .menu button, .linklike, .field, .collections__item { transition: none; }
 }
+
+/* ------------------------------------------------------------- answers --- */
+
+/* One question with a few answers, each a card: „Welche Bilder?" with ARASAAC
+   and METACOM under it, bildquelle's SymbolePanel (2026-10-31). It replaced
+   two panels side by side and a button reading „Als Standard verwenden", which
+   asked a person to understand „Standardquelle" before they could pick.
+
+   - **`.answer`, not `.choice`:** wochenwerk and vorlaut-editor already draw
+     a `.choice` of their own, and a global rule would restyle both.
+   - **A native radio in a `<label>`.** Arrow keys, one tab stop for the group
+     and the checked state come from the platform. The card is drawn off
+     `:has(input:checked)`, never a class.
+   - **`.off` is an answer that is not available yet**, e.g. METACOM before its
+     folder is chosen. It is a `<div>` with no radio in it, so it cannot be
+     picked, and its one button sets it up. A dashed edge says "not yet", not
+     "broken".
+   - **`.answer__more`** is what unfolds under an answer while it is set up.
+   - **A `.menu-anchor` in the corner** holds the answer's own actions, as on
+     `.where`. */
+.answers { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.answer {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 10px; row-gap: 1px;
+  align-items: start; padding: 10px 12px;
+  border: 1.5px solid var(--line); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); cursor: pointer;
+}
+.answer:hover:not(.off) { background: var(--surface-2); }
+.answer:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.answer:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.answer > input[type="radio"] {
+  grid-row: 1 / span 2; width: 16px; height: 16px; margin: 2px 0 0;
+  accent-color: var(--accent-strong); cursor: pointer;
+}
+.answer > b { grid-column: 2; font-size: 14px; font-weight: 600; }
+.answer__note { grid-column: 2; font-size: 13px; color: var(--text-dim); }
+.answer > .menu-anchor { grid-column: 3; grid-row: 1 / span 2; align-self: start; margin: -4px -6px 0 0; }
+.answer.off {
+  grid-template-columns: minmax(0, 1fr); cursor: default;
+  border-style: dashed; background: var(--surface-2);
+}
+.answer.off > * { grid-column: 1; }
+.answer__tag {
+  display: inline-block; margin-left: 6px; padding: 0 8px;
+  border-radius: var(--radius-pill); background: var(--surface-3);
+  font-size: 11.5px; font-weight: 600; color: var(--text-dim); vertical-align: 1px;
+}
+.answer .acts { margin-top: 8px; }
+.answer__more {
+  grid-column: 1 / -1; display: grid; gap: 10px;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line);
+  font-size: 14px; cursor: default;
+}
+.answer__more p { margin: 0; }
+.answer__more .acts { margin-top: 0; align-items: center; }
+
+/* How far something long has got: a folder of nine thousand pictures being
+   read in. A `<div role="progressbar">` around one span, because a native
+   `<progress>` is drawn by the operating system and cannot follow the tokens. */
+.meter { height: 6px; border-radius: var(--radius-pill); background: var(--surface-3); overflow: hidden; }
+.meter > span { display: block; height: 100%; width: 0; background: var(--accent-strong); }
+@media (prefers-reduced-motion: no-preference) { .meter > span { transition: width .2s; } }
