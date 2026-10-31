@@ -1,3 +1,9 @@
+## [1.42.0](https://github.com/Lautstark/design/compare/v1.41.0...v1.42.0) (2026-10-31)
+
+### Features
+
+* **components:** .answers for one question with a few answers, .meter, and the source states on .where ([f244849](https://github.com/Lautstark/design/commit/f2448494b309aa1254b4250bdd0f3ffbf4604b4e))
+
 ## [1.41.0](https://github.com/Lautstark/design/compare/v1.40.3...v1.41.0) (2026-10-31)
 
 ### Features
