@@ -863,6 +863,40 @@
 .where b { font-size: 13px; font-weight: 600; }
 .where.bad { border-color: var(--danger); }
 
+/* @lautstark/sicherung's DatenPanel (2026-10-31): the box is the whole panel's
+   answer, so the `⋯` that holds every other action sits in its corner, and a
+   dot says the one thing the `.standing` dot says — is it being kept? Same
+   three colours and the same reasons as `.standing` above: accent-strong while
+   the folder is written, danger when it is not and you would not know, faint
+   for "only in this browser", which you were told in words. */
+.where:has(> .menu-anchor) { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; }
+.where:has(> .menu-anchor) > :not(.menu-anchor) { grid-column: 1; }
+.where > .menu-anchor { grid-column: 2; grid-row: 1 / span 2; align-self: start; margin: -4px -6px 0 0; }
+.where .dot {
+  display: inline-block; width: 8px; height: 8px; margin-right: 8px;
+  border-radius: var(--radius-pill); background: var(--text-faint);
+  transform: translateY(-1px);
+}
+.where[data-state="idle"] .dot,
+.where[data-state="saving"] .dot,
+.where[data-state="conflicted"] .dot { background: var(--accent-strong); }
+.where.bad .dot { background: var(--danger); }
+
+/* A menu row that needs a second line to say what it does — „fügt hinzu,
+   überschreibt nie" is the difference between a person reading a backup in
+   and not daring to. The menu widens to a reading width for it instead of
+   running one line off the sheet. */
+.menu:has(.menu__note) { width: min(310px, calc(100vw - 48px)); }
+.menu:has(.menu__note) button { white-space: normal; }
+.menu__note { display: block; margin-top: 1px; font-size: 12px; line-height: 1.4; color: var(--text-faint); }
+.menu button.danger .menu__note { color: inherit; opacity: .8; }
+
+/* Why any of this matters, folded: three short reasons for whoever asks, and
+   nothing in the way of whoever does not. */
+.where-why { font-size: 13px; color: var(--text-dim); }
+.where-why summary { cursor: pointer; color: var(--text); width: fit-content; }
+.where-why ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 3px; }
+
 /* Consent, under the folder it is about. */
 .where-share { display: grid; gap: 6px; }
 .where-panel .check { display: flex; align-items: center; gap: 9px; font-size: 13px; cursor: pointer; }
