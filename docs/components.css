@@ -1037,8 +1037,13 @@
   background: none; color: var(--text);
 }
 .voice:hover { background: var(--surface-2); }
-.voice[aria-checked="true"] { background: var(--accent-soft); }
-.voice[aria-checked="true"] .voice__name { color: var(--accent-strong); font-weight: 650; }
+.voice[aria-checked="true"],
+.voice[aria-current="true"] { background: var(--accent-soft); }
+.voice[aria-checked="true"] .voice__name,
+.voice[aria-current="true"] .voice__name { color: var(--accent-strong); font-weight: 650; }
+/* The chosen voice alone, while VoicePicker's `folded` list is put away: a
+   `<p>`, because it reports the choice and is pressed for nothing. */
+.voice[aria-current="true"] { margin: 0; cursor: default; }
 .voice__name { font-size: 14.5px; }
 /* Where it comes from, what it speaks, whose voice it is, and what it costs —
    the four facts a bare list of names withheld, on the line under the name.
