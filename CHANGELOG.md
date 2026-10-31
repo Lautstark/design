@@ -1,3 +1,9 @@
+## [1.41.0](https://github.com/Lautstark/design/compare/v1.40.3...v1.41.0) (2026-10-31)
+
+### Features
+
+* **components:** „Deine Daten“ — the dot and the ⋯ in the .where box, menu rows with a note under them, and the folded „Warum?“ ([5f47578](https://github.com/Lautstark/design/commit/5f475784dbdad23dd52ec11b11f34c2448c4b3b9))
+
 ## [1.40.3](https://github.com/Lautstark/design/compare/v1.40.2...v1.40.3) (2026-10-02)
 
 ### Bug Fixes
